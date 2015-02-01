@@ -1,0 +1,1409 @@
+desc: (none)
+cmd: ./cribavalgrind
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1693308
+mem_heap_B=4
+mem_heap_extra_B=12
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=1734174
+mem_heap_B=272
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=detailed
+n7: 272 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 144 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 144 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n1: 144 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n1: 144 0x804FF0C: loop_speculator::speculate(void*&, std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >, std::vector<void*, std::allocator<void*> >) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 144 0x804A230: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n1: 88 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 88 0x804FE41: loop_speculator::speculate(void*&, std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >, std::vector<void*, std::allocator<void*> >) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 88 0x804A230: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n1: 24 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 24 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 24 0x804FF5E: loop_speculator::speculate(void*&, std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >, std::vector<void*, std::allocator<void*> >) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 24 0x804A230: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n0: 4 0x804A1AE: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n1: 4 0x804D44E: std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 4 0x8049FA2: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n1: 4 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 4 0x8049FEA: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n0: 4 0x804A106: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+#-----------
+snapshot=3
+#-----------
+time=1793803
+mem_heap_B=2904
+mem_heap_extra_B=808
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=1829780
+mem_heap_B=4928
+mem_heap_extra_B=1040
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=1884147
+mem_heap_B=7332
+mem_heap_extra_B=1748
+mem_stacks_B=0
+heap_tree=detailed
+n10: 7332 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 3936 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 3936 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 3936 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 3936 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 3936 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 3936 0x425173C: clone (clone.S:130)
+ n1: 1008 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1008 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1008 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n1: 864 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 864 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 144 0x804FF0C: loop_speculator::speculate(void*&, std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >, std::vector<void*, std::allocator<void*> >) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 144 0x804A230: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n2: 704 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 704 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 704 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 420 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 420 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 420 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 420 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 420 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 420 0x425173C: clone (clone.S:130)
+ n1: 320 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 320 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 320 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 320 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 320 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 320 0x425173C: clone (clone.S:130)
+ n1: 320 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 320 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 320 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 320 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 320 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 320 0x425173C: clone (clone.S:130)
+ n2: 240 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 160 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 120 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 120 in 2 places, all below massif's threshold (01.00%)
+   n0: 40 in 1 place, below massif's threshold (01.00%)
+  n0: 80 in 2 places, all below massif's threshold (01.00%)
+ n1: 168 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 168 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 144 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 144 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 1 place, below massif's threshold (01.00%)
+ n1: 160 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 160 in 2 places, all below massif's threshold (01.00%)
+ n0: 56 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=6
+#-----------
+time=1921673
+mem_heap_B=8932
+mem_heap_extra_B=2196
+mem_stacks_B=0
+heap_tree=detailed
+n10: 8932 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5088 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 5088 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 5088 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 5088 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 5088 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 5088 0x425173C: clone (clone.S:130)
+ n1: 1008 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1008 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1008 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n1: 864 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 864 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 144 0x804FF0C: loop_speculator::speculate(void*&, std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >, std::vector<void*, std::allocator<void*> >) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 144 0x804A230: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n2: 704 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 704 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 704 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 660 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 660 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 660 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 660 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 660 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 660 0x425173C: clone (clone.S:130)
+ n1: 424 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 424 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 424 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 424 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 424 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 424 0x425173C: clone (clone.S:130)
+ n1: 424 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 424 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 424 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 424 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 424 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 424 0x425173C: clone (clone.S:130)
+ n2: 240 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 160 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 120 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 120 in 2 places, all below massif's threshold (01.00%)
+   n0: 40 in 1 place, below massif's threshold (01.00%)
+  n0: 80 in 2 places, all below massif's threshold (01.00%)
+ n1: 168 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 168 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 144 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 144 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 1 place, below massif's threshold (01.00%)
+ n1: 160 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 160 in 2 places, all below massif's threshold (01.00%)
+ n0: 56 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=7
+#-----------
+time=1970230
+mem_heap_B=10764
+mem_heap_extra_B=2428
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=2034201
+mem_heap_B=13548
+mem_heap_extra_B=3220
+mem_stacks_B=0
+heap_tree=detailed
+n10: 13548 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 7776 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 7776 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 7776 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7776 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7776 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7776 0x425173C: clone (clone.S:130)
+ n2: 1408 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1408 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 1408 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 1152 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1152 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1152 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n1: 1152 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 1152 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 720 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 480 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 360 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 240 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 240 in 2 places, all below massif's threshold (01.00%)
+    n0: 120 in 1 place, below massif's threshold (01.00%)
+   n0: 120 in 1 place, below massif's threshold (01.00%)
+  n0: 240 in 2 places, all below massif's threshold (01.00%)
+ n1: 648 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 648 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 648 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 648 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 648 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 648 0x425173C: clone (clone.S:130)
+ n1: 648 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 648 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 648 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 648 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 648 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 648 0x425173C: clone (clone.S:130)
+ n2: 480 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 240 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 240 in 2 places, all below massif's threshold (01.00%)
+  n1: 240 0x804EEC6: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 240 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 240 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+ n1: 420 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 420 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 420 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 420 0x8049D5E: initialize(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 420 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 420 0x425173C: clone (clone.S:130)
+ n1: 240 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 240 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 216 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 216 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 1 place, below massif's threshold (01.00%)
+ n0: 56 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=9
+#-----------
+time=2069187
+mem_heap_B=14420
+mem_heap_extra_B=3548
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=2130639
+mem_heap_B=2024
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=2165140
+mem_heap_B=5680
+mem_heap_extra_B=304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=2209990
+mem_heap_B=11856
+mem_heap_extra_B=632
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=2250447
+mem_heap_B=15048
+mem_heap_extra_B=936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=2319352
+mem_heap_B=25720
+mem_heap_extra_B=1416
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=2364656
+mem_heap_B=28576
+mem_heap_extra_B=1912
+mem_stacks_B=0
+heap_tree=detailed
+n5: 28576 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 13536 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 576 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 576 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 576 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 576 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 576 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 576 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 576 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 272 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=16
+#-----------
+time=2408051
+mem_heap_B=30172
+mem_heap_extra_B=2452
+mem_stacks_B=0
+heap_tree=detailed
+n6: 30172 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 13536 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 576 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 1632 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1632 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 1632 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1632 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1632 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1632 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 420 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 420 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 340 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 340 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 340 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 340 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 80 in 1 place, below massif's threshold (01.00%)
+ n0: 392 in 15 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=17
+#-----------
+time=2475635
+mem_heap_B=32324
+mem_heap_extra_B=3172
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=2527850
+mem_heap_B=34196
+mem_heap_extra_B=3804
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=2590380
+mem_heap_B=35948
+mem_heap_extra_B=4452
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=2632028
+mem_heap_B=37060
+mem_heap_extra_B=4836
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=2668008
+mem_heap_B=37968
+mem_heap_extra_B=5152
+mem_stacks_B=0
+heap_tree=detailed
+n8: 37968 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 13536 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 576 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5760 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 5760 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 5760 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 5760 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 5760 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 5760 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2600 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2600 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1400 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1400 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1400 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1400 0x425173C: clone (clone.S:130)
+   n2: 1200 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1200 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1200 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1200 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 752 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 752 in 4 places, all below massif's threshold (01.00%)
+ n2: 724 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 720 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 720 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 720 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 720 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n0: 404 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=22
+#-----------
+time=2718530
+mem_heap_B=38804
+mem_heap_extra_B=5596
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=2778205
+mem_heap_B=40332
+mem_heap_extra_B=6076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=2825232
+mem_heap_B=41592
+mem_heap_extra_B=6464
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=2861827
+mem_heap_B=42524
+mem_heap_extra_B=6828
+mem_stacks_B=0
+heap_tree=detailed
+n8: 42524 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 13536 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 576 0x804A286: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 6912 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 6912 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 6912 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 6912 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 6912 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 6912 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 4580 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 4580 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 3140 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 3140 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 3140 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 3140 0x425173C: clone (clone.S:130)
+   n2: 1440 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1440 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1440 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1440 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 1500 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1488 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1488 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1488 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1488 0x425173C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n2: 1496 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1280 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1280 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1280 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1280 0x425173C: clone (clone.S:130)
+  n0: 216 in 3 places, all below massif's threshold (01.00%)
+ n0: 308 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=26
+#-----------
+time=2912294
+mem_heap_B=43360
+mem_heap_extra_B=7176
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=2955688
+mem_heap_B=43384
+mem_heap_extra_B=7384
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=3001048
+mem_heap_B=37624
+mem_heap_extra_B=7064
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=3046408
+mem_heap_B=31864
+mem_heap_extra_B=6744
+mem_stacks_B=0
+heap_tree=detailed
+n8: 31864 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7008 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 7008 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 7008 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 5520 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 5520 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 4060 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+   n2: 1460 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 1892 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1888 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1504 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 384 in 3 places, all below massif's threshold (01.00%)
+ n1: 1872 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1872 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1872 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 1872 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n0: 68 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=30
+#-----------
+time=3085122
+mem_heap_B=30576
+mem_heap_extra_B=6680
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=3155452
+mem_heap_B=32912
+mem_heap_extra_B=6792
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=3191237
+mem_heap_B=34540
+mem_heap_extra_B=7300
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=3226300
+mem_heap_B=35988
+mem_heap_extra_B=7748
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=3278850
+mem_heap_B=38232
+mem_heap_extra_B=8408
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=3313920
+mem_heap_B=39708
+mem_heap_extra_B=8876
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=3366778
+mem_heap_B=41960
+mem_heap_extra_B=9536
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=3410412
+mem_heap_B=43820
+mem_heap_extra_B=10052
+mem_stacks_B=0
+heap_tree=detailed
+n10: 43820 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14784 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 14784 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 14784 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7776 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7776 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7776 0x425173C: clone (clone.S:130)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 12672 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 1408 0x804C2AD: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7140 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7140 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 4060 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+   n3: 3080 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1620 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1620 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1620 0x425173C: clone (clone.S:130)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2592 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2592 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 264 in 3 places, all below massif's threshold (01.00%)
+ n2: 1900 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n2: 1896 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1504 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 392 in 3 places, all below massif's threshold (01.00%)
+ n1: 1440 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1440 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 1440 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 864 0x804C33E: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 576 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 680 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 680 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 680 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 648 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 648 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 648 0x425173C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n1: 680 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 680 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 680 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 648 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 648 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 648 0x425173C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n0: 36 in 14 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=38
+#-----------
+time=3460324
+mem_heap_B=45932
+mem_heap_extra_B=10628
+mem_stacks_B=0
+heap_tree=detailed
+n10: 45932 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 16320 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 16320 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 16320 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 9312 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 9312 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 9312 0x425173C: clone (clone.S:130)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 12672 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 1408 0x804C2AD: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7460 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7460 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 4060 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+   n3: 3400 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1940 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1940 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1940 0x425173C: clone (clone.S:130)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2592 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2592 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 264 in 3 places, all below massif's threshold (01.00%)
+ n2: 1900 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n2: 1896 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1504 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 392 in 3 places, all below massif's threshold (01.00%)
+ n1: 1440 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1440 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 1440 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 864 0x804C33E: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 576 0x804BE75: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 808 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 808 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 808 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 776 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 776 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 776 0x425173C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n1: 808 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 808 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 808 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 776 0x8049A85: initialize_c(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 776 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 776 0x425173C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n0: 36 in 14 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=39
+#-----------
+time=3495983
+mem_heap_B=37800
+mem_heap_extra_B=8048
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=3549234
+mem_heap_B=34160
+mem_heap_extra_B=7240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=3585005
+mem_heap_B=35688
+mem_heap_extra_B=7680
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=3619816
+mem_heap_B=37172
+mem_heap_extra_B=8140
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=3672105
+mem_heap_B=39272
+mem_heap_extra_B=8736
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=3726625
+mem_heap_B=43464
+mem_heap_extra_B=8992
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=3762455
+mem_heap_B=44992
+mem_heap_extra_B=9448
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=3797397
+mem_heap_B=46004
+mem_heap_extra_B=9796
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=3834482
+mem_heap_B=46656
+mem_heap_extra_B=10088
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=3902966
+mem_heap_B=57048
+mem_heap_extra_B=12216
+mem_stacks_B=0
+heap_tree=detailed
+n10: 57048 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 19712 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 8448 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 8448 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 12960 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 12960 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 12960 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n1: 5952 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 5952 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 5952 0x425173C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7080 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7080 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 5340 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+    n1: 1280 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1280 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1280 0x425173C: clone (clone.S:130)
+   n2: 1740 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 280 in 3 places, all below massif's threshold (01.00%)
+ n1: 4608 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 4608 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 4608 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 4032 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 4032 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 3120 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n3: 3120 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 744 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 744 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 2660 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2656 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+   n1: 768 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 768 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 768 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2656 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2208 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+   n1: 704 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 704 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 704 0x425173C: clone (clone.S:130)
+  n0: 448 in 3 places, all below massif's threshold (01.00%)
+ n2: 2100 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 1220 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 780 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 780 in 3 places, all below massif's threshold (01.00%)
+   n0: 440 in 2 places, all below massif's threshold (01.00%)
+  n0: 880 in 2 places, all below massif's threshold (01.00%)
+ n2: 1700 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 960 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 960 in 3 places, all below massif's threshold (01.00%)
+  n0: 740 in 2 places, all below massif's threshold (01.00%)
+ n0: 452 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=49
+#-----------
+time=3940320
+mem_heap_B=53712
+mem_heap_extra_B=10576
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=3975853
+mem_heap_B=55148
+mem_heap_extra_B=10972
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=4010392
+mem_heap_B=70020
+mem_heap_extra_B=12060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=4019315
+mem_heap_B=71600
+mem_heap_extra_B=13008
+mem_stacks_B=0
+heap_tree=detailed
+n10: 71600 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 28160 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 16896 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 16896 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 12960 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 12960 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 12960 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n1: 5952 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 5952 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 5952 0x425173C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 9216 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 9216 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 9216 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 8640 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 8640 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 5820 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 5820 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 4360 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+    n0: 300 in 1 place, below massif's threshold (01.00%)
+   n2: 1460 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 0 in 3 places, all below massif's threshold (01.00%)
+ n1: 3888 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n3: 3888 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 1512 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 1512 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3160 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 1900 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1240 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 1240 in 3 places, all below massif's threshold (01.00%)
+   n0: 660 in 2 places, all below massif's threshold (01.00%)
+  n0: 1260 in 2 places, all below massif's threshold (01.00%)
+ n2: 2740 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2736 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+   n1: 848 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 848 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 848 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2736 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2288 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+   n0: 784 in 1 place, below massif's threshold (01.00%)
+  n0: 448 in 3 places, all below massif's threshold (01.00%)
+ n2: 2500 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1420 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 1420 in 3 places, all below massif's threshold (01.00%)
+  n0: 1080 in 2 places, all below massif's threshold (01.00%)
+ n0: 420 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=53
+#-----------
+time=4054525
+mem_heap_B=64980
+mem_heap_extra_B=11364
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=4089483
+mem_heap_B=67668
+mem_heap_extra_B=11652
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=4123985
+mem_heap_B=69248
+mem_heap_extra_B=11944
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=4159557
+mem_heap_B=70056
+mem_heap_extra_B=12216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=4195050
+mem_heap_B=70772
+mem_heap_extra_B=12500
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=4229573
+mem_heap_B=71352
+mem_heap_extra_B=12728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=4264252
+mem_heap_B=72024
+mem_heap_extra_B=12936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=4285536
+mem_heap_B=72460
+mem_heap_extra_B=13100
+mem_stacks_B=0
+heap_tree=detailed
+n10: 72460 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 11264 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 13536 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 13824 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 13824 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 13824 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n1: 6816 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 6816 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 6816 0x425173C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7200 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7200 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 5560 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+    n1: 1500 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1500 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1500 0x425173C: clone (clone.S:130)
+   n2: 1640 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 180 in 3 places, all below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 2328 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3424 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 2928 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+   n1: 1424 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1424 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1424 0x425173C: clone (clone.S:130)
+  n0: 496 in 3 places, all below massif's threshold (01.00%)
+ n2: 3396 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 3392 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+   n1: 1504 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1660 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1000 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 1000 in 3 places, all below massif's threshold (01.00%)
+  n0: 660 in 2 places, all below massif's threshold (01.00%)
+ n1: 1320 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 1320 in 3 places, all below massif's threshold (01.00%)
+ n0: 292 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=61
+#-----------
+time=4315131
+mem_heap_B=73148
+mem_heap_extra_B=13332
+mem_stacks_B=0
+heap_tree=detailed
+n10: 73148 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 11264 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 13536 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 13920 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 13920 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 13920 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n1: 6912 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 6912 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 6912 0x425173C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7520 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7520 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 5860 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+    n1: 1800 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1800 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1800 0x425173C: clone (clone.S:130)
+   n2: 1660 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 200 in 3 places, all below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 2328 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3616 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 3024 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1520 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1520 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1520 0x425173C: clone (clone.S:130)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 592 in 3 places, all below massif's threshold (01.00%)
+ n2: 3556 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 3552 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+   n1: 1664 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1664 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1664 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1660 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1000 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 1000 in 3 places, all below massif's threshold (01.00%)
+  n0: 660 in 2 places, all below massif's threshold (01.00%)
+ n1: 1320 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 1320 in 3 places, all below massif's threshold (01.00%)
+ n0: 212 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=62
+#-----------
+time=4345163
+mem_heap_B=73824
+mem_heap_extra_B=13576
+mem_stacks_B=0
+heap_tree=peak
+n10: 73824 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 11264 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x40405C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 13536 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 14016 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 14016 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n3: 14016 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 7008 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n1: 7008 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 7008 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425173C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7860 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 7860 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 6180 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 4060 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 4060 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 4060 0x425173C: clone (clone.S:130)
+    n1: 2120 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 2120 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 2120 0x425173C: clone (clone.S:130)
+   n2: 1680 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1460 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+     n1: 1460 0x403FE97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425173C: clone (clone.S:130)
+    n0: 220 in 3 places, all below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 2328 0x804B5A6: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3744 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 3008 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1504 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+   n1: 1504 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1504 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1504 0x425173C: clone (clone.S:130)
+  n0: 736 in 3 places, all below massif's threshold (01.00%)
+ n2: 3716 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n2: 3712 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n1: 1888 0x80497B5: get_primes(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1888 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425173C: clone (clone.S:130)
+   n1: 1824 0x80494E5: get_primes_and_sleep(void*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+    n1: 1824 0x403FE97: start_thread (pthread_create.c:304)
+     n0: 1824 0x425173C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1660 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n1: 1000 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+   n0: 1000 in 3 places, all below massif's threshold (01.00%)
+  n0: 660 in 2 places, all below massif's threshold (01.00%)
+ n1: 1320 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (in /home/gabriel/Escritorio/Version Final/cribavalgrind)
+  n0: 1320 in 3 places, all below massif's threshold (01.00%)
+ n0: 164 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=63
+#-----------
+time=4406589
+mem_heap_B=73944
+mem_heap_extra_B=13680
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=4441771
+mem_heap_B=69480
+mem_heap_extra_B=13432
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=4476925
+mem_heap_B=65016
+mem_heap_extra_B=13184
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=4512079
+mem_heap_B=60552
+mem_heap_extra_B=12936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=4607208
+mem_heap_B=60560
+mem_heap_extra_B=12944
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=4641741
+mem_heap_B=43324
+mem_heap_extra_B=7636
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=4676389
+mem_heap_B=14620
+mem_heap_extra_B=2076
+mem_stacks_B=0
+heap_tree=empty

@@ -1,0 +1,992 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/math.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* math.c 
+        -:    2:*  perform basic mathematical operations on data
+        -:    3:* return values to memory locations
+        -:    4:*  uses floating point contagion
+        -:    5:*  defined ops
+        -:    6:*   add  a b  a <= a+b
+        -:    7:*   sub  a b  a <= a - b
+        -:    8:*   mul  a b  a <= a*b
+        -:    9:*   div  a b  a <= a/b
+        -:   10:*   fix  a    a <= (int) a   (drops the fraction for atomdata)
+        -:   11:*   sqrt a    a <= sqrt a  (becomes a float !!!)
+        -:   12:*   nop  a    just echo the value
+        -:   13:*   mov  a b  a <= b
+        -:   14:*   randf a   put a random variable 0-<1. in a
+        -:   15:*   max  a b   a <= max( a b )
+        -:   16:*   min  a b   b <= min( a b )
+        -:   17:*   serial a res atom   move the serial number of the atom
+        -:   18:*                       into a  (res, atom are like 100 ca)
+        -:   19:*   index a i    move the serial number of the i'th atom into a
+        -:   20:*
+        -:   21:*   linmin  search the atom.<dx,dy,dz> direction for a minimum
+        -:   22:*   je a b label:  jump to label if equal
+        -:   23:*   jne a b label:  jump to label if  not equal
+        -:   24:*   jl a b label:  jump to label if  a < b
+        -:   25:*   jg a b label:  jump to label if  a > b
+        -:   26:*   jes a string label: jump to label: if a->label == string  
+        -:   27:*   jnes a string label: jump to label: if a->label != string  
+        -:   28:*        label:  is a label within the current script file
+        -:   29:*                which may be within the current loop
+        -:   30:*                the j<elg> commands will rewind the input file
+        -:   31:*                and search for label: 
+        -:   32:*
+        -:   33:*
+        -:   34:*   data types
+        -:   35:*   imeadiate    e.g. a number like 3.14159
+        -:   36:*   variable     e.g. a name  like pi
+        -:   37:*   atomdata    serial.<x,y,z,fx,fy,fz,dx,dy,dz,vx,vy,vz,q,a,b,m,chi,jaa>
+        -:   38:*		serial may be a variable
+        -:   39:*		valid format atoms with non-extant serial numbers will be
+        -:   40:*		ignored and the operation will silently not happen
+        -:   41:*		this allows sums over discontinous atom ranges
+        -:   42:*
+        -:   43:*
+        -:   44:*  routines defined in this module
+        -:   45:*
+        -:   46:*	math()  does the work
+        -:   47:* 	getatomdata() returns a float * or null for an atomdata
+        -:   48:*	validatom()  returns nonzero when atomdata format is valid 
+        -:   49:*   
+        -:   50:*/
+        -:   51:/* header from variable.c
+        -:   52:*
+        -:   53:* variable storage and retreival routines for AMMP
+        -:   54:*
+        -:   55:* using scope rules for structuring
+        -:   56:*
+        -:   57:*
+        -:   58:*  variables are stored in linked list form
+        -:   59:*
+        -:   60:*   get_f_variable( char *name, float *fvalue )
+        -:   61:*   get_i_variable( char *name,  int *ivalue )
+        -:   62:*	returns variable who matches name (all lower case )
+        -:   63:*   set_f_variable( char *name, float fvalue )
+        -:   64:*   set_i_variable( char *name, int ivalue )
+        -:   65:*	sets variable who matches name (all lower case )
+        -:   66:*   match_variable( char *name ) returns pointer to name if there NULL if not
+        -:   67:*   dump_variable(FILE *output  )
+        -:   68:*	 dumps variables to  file 
+        -:   69:*/
+        -:   70:/*
+        -:   71:*  copyright 1992 1993 Robert W. Harrison
+        -:   72:*  
+        -:   73:*  This notice may not be removed
+        -:   74:*  This program may be copied for scientific use
+        -:   75:*  It may not be sold for profit without explicit
+        -:   76:*  permission of the author(s) who retain any
+        -:   77:*  commercial rights including the right to modify 
+        -:   78:*  this notice
+        -:   79:*/
+        -:   80:
+        -:   81:
+        -:   82:#define ANSI 1
+        -:   83:#include <stdio.h>
+        -:   84:#include <ctype.h>
+        -:   85:#include <string.h>
+        -:   86:#include <math.h>
+        -:   87:#ifdef ANSI
+        -:   88:#include <stdlib.h>
+        -:   89:#endif
+        -:   90://#include "ammp.h"
+        -:   91:#include "variable.c"
+        -:   92:#define NUM_SIG 6
+        -:   93:#define NUM_TOT 7
+        -:   94:#define INTEGER 0
+        -:   95:#define FLOAT 1
+        -:   96:/*typedef struct{
+        -:   97:	int type;
+        -:   98:	char name[NUM_TOT];
+        -:   99:	union{  float f; int i;} value;
+        -:  100:	void *next;
+        -:  101:	}  VARIABLE;*/
+        -:  102:/* next define is from ammp.c */
+        -:  103:#define TOKENLENGTH 80 
+        -:  104:
+        -:  105:#define ATOMDATA 0
+        -:  106:#define IMEADIATE 1
+        -:  107:#define VARDATA 2
+        -:  108:
+        -:  109:/* SPEC: add function proto to make some compilers whine less jh/9/21/99 */
+        -:  110:int math_findlabel (FILE *, char *);
+        -:  111:
+        -:  112:/* the potentials are defined in eval.c */
+        -:  113:extern int (*potentials[10])(float*, float),(*forces[10])(float),nused;
+        -:  114:
+        -:  115:
+        -:  116:/*	math_match_atom(char* atomname, ATOM * ap)
+        -:  117:*
+        -:  118:*  find if the atomname is part of the atom .name field
+        -:  119:*  as in atomname = "ca" and ap->name = arg.ca
+        -:  120:*
+        -:  121:*/
+function _Z15math_match_atomPcP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  122:int math_match_atom(char *who, ATOM *ap)
+        -:  123:{
+        -:  124:	char *cp;
+    #####:  125:	cp = & ap->name[0];
+    #####:  126:	while( *cp != '.' )
+branch  0 never executed
+branch  1 never executed
+        -:  127:	{
+    #####:  128:	if( *cp == '\0') return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  129:	cp++;
+        -:  130:	}
+    #####:  131:	cp++;
+        -:  132:/*	printf(" >%s< >%s<\n",cp,who);
+        -:  133:*/
+    #####:  134:	if( strcmp( who,cp ) == 0 )
+branch  0 never executed
+branch  1 never executed
+    #####:  135:	{ return 1; }
+    #####:  136:	return 0; 
+        -:  137:}
+        -:  138:
+        -:  139:
+function _Z4mathPA80_cPfPiP8_IO_FILES4_i called 13 returned 100% blocks executed 28%
+       13:  140:int math(char tokens[][TOKENLENGTH], float fvalue [], int ivalue[], FILE* ip, FILE* op, int echo)
+        -:  141:#ifdef ESV
+        -:  142:#define tokens (*tokens)
+        -:  143:#endif
+        -:  144:{
+        -:  145:int adata,bdata;
+        -:  146:int atype, btype;
+        -:  147:float *foutpointer,*fp,fa,fb,randf();
+        -:  148:int *ioutpointer,ia,ib;
+        -:  149:VARIABLE *vp,*vos,*match_variable(char*);
+        -:  150:float *getatomdata(char*); /* return the address of the atomdata if valid */
+        -:  151:int validatom(char*); /* return 0 iff not a valid atomdata format */
+        -:  152:
+        -:  153:/*SPEC don't declare set_f_variable here, do it in ammp.h jh/9/21/99 */
+        -:  154:/* int set_f_variable(), set_i_variable(); */
+        -:  155:int set_i_variable(char*, int); 
+        -:  156:
+        -:  157:int a_number(),tisint(char*);
+        -:  158:ATOM *ap,*a_next(int),*a_m_serial(int);
+        -:  159:int i,j;
+        -:  160:float a_l2_f(),a_max_f(),a_max_d();
+        -:  161:float linmin(int (*[10])(float*, float), int, float); /* defined in optimist.c */
+        -:  162:/* set some default variables */
+       13:  163:set_i_variable( "numatm",a_number());
+call    0 returned 100%
+call    1 returned 100%
+       13:  164:set_f_variable( "l2f",a_l2_f());
+call    0 returned 100%
+call    1 returned 100%
+       13:  165:set_f_variable( "lmaxf",a_max_f());
+call    0 returned 100%
+call    1 returned 100%
+        -:  166:/*
+        -:  167:*   set_f_variable( char *name, float fvalue )
+        -:  168:*   set_i_variable( char *name, int ivalue )
+        -:  169:*/
+        -:  170:/* type the variables */
+        -:  171:NEW_AVAR:
+       13:  172:	if( (vp = match_variable(&tokens[1][0])) != NULL)
+call    0 returned 100%
+branch  1 taken 23% (fallthrough)
+branch  2 taken 77%
+        -:  173:	{
+        3:  174:	adata = VARDATA;
+        3:  175:	atype = vp->type;
+        3:  176:	vos = vp;
+        3:  177:	if( atype == FLOAT){ fa = vp->value.f;}
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        3:  178:	foutpointer  = &vp->value.f;
+        3:  179:	if( atype == INTEGER){ia = vp->value.i; }
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        3:  180:	ioutpointer = &vp->value.i;
+        3:  181:	goto AFOUND;
+        -:  182:	}
+       10:  183:	if( (foutpointer = getatomdata(&tokens[1][0])) != NULL)
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  184:	{
+    #####:  185:	adata = ATOMDATA;
+    #####:  186:	atype = FLOAT;
+    #####:  187:	fa = *foutpointer;
+    #####:  188:	goto AFOUND;
+        -:  189:	}
+       10:  190:	if( validatom(&tokens[1][0]) != 0 ) return( 1);
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+       10:  191:	foutpointer = NULL; /* shouldn't change it but this is safe */
+       10:  192:	adata = IMEADIATE;
+       10:  193:	fa = fvalue[1];
+       10:  194:	ia = ivalue[1];
+       10:  195:	atype = FLOAT;
+       10:  196:	if( tisint( &tokens[1][0]) == 1) atype = INTEGER;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  197:/*
+        -:  198:	if( tisint( &tokens[1][0]) == 1)printf(" INTEGER "); 
+        -:  199:	printf(">%s<\n",&tokens[1][0]);
+        -:  200:*/
+        -:  201:AFOUND:
+       13:  202:	if( (vp = match_variable(&tokens[2][0])) != NULL)
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  203:	{
+        -:  204:/*	bdata = VARDATA;
+        -:  205:*/
+    #####:  206:	btype = vp->type;
+    #####:  207:	if( btype == FLOAT) fb = vp->value.f;
+branch  0 never executed
+branch  1 never executed
+    #####:  208:	if( btype == INTEGER) ib = vp->value.i; 
+branch  0 never executed
+branch  1 never executed
+        -:  209:	goto BFOUND;
+        -:  210:	}
+       13:  211:	if( (fp = getatomdata(&tokens[2][0])) != NULL)
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  212:	{
+        -:  213:/*	bdata = ATOMDATA;
+        -:  214:*/
+    #####:  215:	btype = FLOAT;
+    #####:  216:	fb = *fp;
+    #####:  217:	goto BFOUND;
+        -:  218:	}
+       13:  219:	if( validatom(&tokens[2][0]) != 0 ) return( 1);
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  220: /*	bdata = IMEADIATE;
+        -:  221: */
+       13:  222:	fb = fvalue[2];
+       13:  223:	ib = ivalue[2];
+       13:  224:	btype = FLOAT;
+       13:  225:	if( tisint( &tokens[2][0]) == 1) btype = INTEGER;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:  226:/*
+        -:  227:	if( tisint( &tokens[2][0]) == 1)printf(" INTEGER "); 
+        -:  228:	printf(">%s<\n",&tokens[2][0]);
+        -:  229:*/
+        -:  230:BFOUND:
+        -:  231:/*  make the converted data */
+       13:  232:	if( atype == FLOAT) ia = (int)fa;
+branch  0 taken 77% (fallthrough)
+branch  1 taken 23%
+       13:  233:	if( atype == INTEGER) fa = (float)ia;
+branch  0 taken 23% (fallthrough)
+branch  1 taken 77%
+       13:  234:	if( btype == FLOAT) ib = (int)fb;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+       13:  235:	if( btype == INTEGER) fb = (float)ib;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  236:/* is it a defined command ? */
+       13:  237:	if( strcmp( &tokens[0][0], "add" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  238:	{
+    #####:  239:	if( atype == FLOAT) fa = fa + fb;
+branch  0 never executed
+branch  1 never executed
+    #####:  240:	if( atype == INTEGER) ia = ia + ib;
+branch  0 never executed
+branch  1 never executed
+        -:  241:	goto GOOD_OP;
+        -:  242:	}
+       13:  243:	if( strcmp( &tokens[0][0], "sub" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  244:	{
+    #####:  245:	if( atype == FLOAT) fa = fa - fb;
+branch  0 never executed
+branch  1 never executed
+    #####:  246:	if( atype == INTEGER) ia = ia - ib;
+branch  0 never executed
+branch  1 never executed
+        -:  247:	goto GOOD_OP;
+        -:  248:	}
+       13:  249:	if( strcmp( &tokens[0][0], "mul" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  250:	{
+    #####:  251:	if( atype == FLOAT) fa = fa * fb;
+branch  0 never executed
+branch  1 never executed
+    #####:  252:	if( atype == INTEGER) ia = ia * ib;
+branch  0 never executed
+branch  1 never executed
+        -:  253:	goto GOOD_OP;
+        -:  254:	}
+       13:  255:	if( strcmp( &tokens[0][0], "div" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  256:	{
+    #####:  257:	if( atype == FLOAT) fa = fa / fb;
+branch  0 never executed
+branch  1 never executed
+    #####:  258:	if( atype == INTEGER) ia = ia / ib;
+branch  0 never executed
+branch  1 never executed
+        -:  259:	goto GOOD_OP;
+        -:  260:	}
+       13:  261:	if( strcmp( &tokens[0][0], "fix" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  262:	{
+    #####:  263:	if( adata == ATOMDATA ) {
+branch  0 never executed
+branch  1 never executed
+    #####:  264:		ia = (int)fa;
+    #####:  265:		*foutpointer = (float)ia;
+    #####:  266:		if( echo  ) fprintf(op,"%d \n",ia);
+branch  0 never executed
+branch  1 never executed
+    #####:  267:		return(1);
+        -:  268:			}
+    #####:  269:	if( atype == FLOAT) {atype = INTEGER; ia = (int)fa;}
+branch  0 never executed
+branch  1 never executed
+        -:  270:	goto GOOD_OP;
+        -:  271:	}
+       13:  272:	if( strcmp( &tokens[0][0], "sqrt" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  273:	{
+    #####:  274:	if( adata == ATOMDATA ) {
+branch  0 never executed
+branch  1 never executed
+    #####:  275:		if( fa > 0.)
+branch  0 never executed
+branch  1 never executed
+    #####:  276:		*foutpointer = sqrt(fa);
+        -:  277:		else
+    #####:  278:		*foutpointer = -sqrt(-fa);
+    #####:  279:		if( echo  ) fprintf(op,"%f \n",*foutpointer);
+branch  0 never executed
+branch  1 never executed
+    #####:  280:		return(1);
+        -:  281:			}
+    #####:  282:		atype = FLOAT;
+    #####:  283:		if( fa > 0) fa = sqrt(fa);
+branch  0 never executed
+branch  1 never executed
+    #####:  284:		else fa = -sqrt(-fa);
+        -:  285:	goto GOOD_OP;
+        -:  286:	}
+       13:  287:	if( strcmp(&tokens[0][0],"linmin") == 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  288:	{
+    #####:  289:	fa = 0.;
+    #####:  290:	fa = linmin(potentials,nused, sqrt(a_max_d()) );
+call    0 never executed
+call    1 never executed
+    #####:  291:	if( echo) fprintf(op,"%f step to minimum\n",fa);
+branch  0 never executed
+branch  1 never executed
+    #####:  292:	a_inc_d(fa);
+call    0 never executed
+    #####:  293:	goto GOOD_OP;
+        -:  294:	}
+       13:  295:	if( strcmp( &tokens[0][0], "nop" ) == 0 )
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  296:	{
+        -:  297:	goto GOOD_OP;
+        -:  298:	}
+       13:  299:	if( strcmp( &tokens[0][0], "mov" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  300:	{
+    #####:  301:	ia = ib;
+    #####:  302:	fa = fb;
+    #####:  303:	atype = btype;
+    #####:  304:	goto GOOD_OP;
+        -:  305:	}
+       13:  306:	if( strcmp( &tokens[0][0], "max" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  307:	{
+    #####:  308:	if( atype == FLOAT && fa < fb) fa = fb;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  309:	if( atype == INTEGER && ia < ib) ia = ib;
+branch  0 never executed
+branch  1 never executed
+        -:  310:	goto GOOD_OP;
+        -:  311:	}
+       13:  312:	if( strcmp( &tokens[0][0], "min" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  313:	{
+    #####:  314:	if( atype == FLOAT && fa > fb) fa = fb;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  315:	if( atype == INTEGER && ia > ib) ia = ib;
+branch  0 never executed
+branch  1 never executed
+        -:  316:	goto GOOD_OP;
+        -:  317:	}
+       13:  318:	if( strcmp( &tokens[0][0], "randf" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  319:	{
+    #####:  320:	atype = FLOAT;
+        -:  321://	fa = randf( -1 );
+    #####:  322:	fa= randf();
+call    0 never executed
+    #####:  323:	goto GOOD_OP;
+        -:  324:	}
+       13:  325:	if( strcmp( &tokens[0][0], "serial" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  326:	{
+    #####:  327:	ia = 100*ib-1;
+    #####:  328:	j = ia + 100;
+    #####:  329:	i = -1;
+    #####:  330:	while( (ap = a_next(i)) != NULL )
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  331:	{
+    #####:  332:	i = 1;
+    #####:  333:	if( ap->serial > ia && ap->serial < j)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  334:	if( math_match_atom(&tokens[3][0],ap) != 0 ){
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  335:	atype = INTEGER;
+    #####:  336:	ia = ap->serial;
+    #####:  337:	goto GOOD_OP;
+        -:  338:	}
+        -:  339:	}
+    #####:  340:	ia = -1; /* never a serial number */
+    #####:  341:	atype = INTEGER;
+    #####:  342:	goto GOOD_OP;
+        -:  343:	}
+       13:  344:	if( strcmp( &tokens[0][0], "index" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  345:	{
+    #####:  346:	ap = a_next(-1);
+call    0 never executed
+    #####:  347:	for( i=0; i< ib; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  348:	 ap = a_next(i); 
+call    0 never executed
+    #####:  349:	 ia = ap->serial;
+    #####:  350:	 atype = INTEGER;
+    #####:  351:	 goto GOOD_OP;
+        -:  352:	}
+       13:  353:	if( strcmp( &tokens[0][0], "jes" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  354:	{
+    #####:  355:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  356:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  357:	ap = a_m_serial( ia ); if( ap == NULL) return 1;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  358:	if( strcmp( &ap->name[0], &tokens[2][0]) == 0)
+branch  0 never executed
+branch  1 never executed
+        -:  359:		{
+    #####:  360:	     rewind(ip);
+call    0 never executed
+    #####:  361:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  362:	    }
+        -:  363:	goto GOOD_OP;
+        -:  364:	}
+       13:  365:	if( strcmp( &tokens[0][0], "jnes" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  366:	{
+    #####:  367:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  368:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  369:	ap = a_m_serial( ia ); 
+call    0 never executed
+    #####:  370:	if( ap == NULL) {
+branch  0 never executed
+branch  1 never executed
+    #####:  371:	     rewind(ip);
+call    0 never executed
+    #####:  372:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+    #####:  373:		goto GOOD_OP;
+        -:  374:		}
+    #####:  375:	if( strcmp( &ap->name[0], &tokens[2][0]) != 0)
+branch  0 never executed
+branch  1 never executed
+        -:  376:		{
+    #####:  377:	     rewind(ip);
+call    0 never executed
+    #####:  378:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  379:	    }
+        -:  380:	goto GOOD_OP;
+        -:  381:	}
+       13:  382:	if( strcmp( &tokens[0][0], "jne" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  383:	{
+    #####:  384:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  385:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  386:	if( (atype == INTEGER && ia != ib ) ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  387:	    (atype == FLOAT && fa != fb ) )
+        -:  388:	    {
+    #####:  389:	     rewind(ip);
+call    0 never executed
+    #####:  390:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  391:	    }
+        -:  392:	goto GOOD_OP;
+        -:  393:	}
+       13:  394:	if( strcmp( &tokens[0][0], "je" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  395:	{
+    #####:  396:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  397:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  398:	if( (atype == INTEGER && ia == ib ) ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  399:	    (atype == FLOAT && fa == fb ) )
+        -:  400:	    {
+    #####:  401:	     rewind(ip);
+call    0 never executed
+    #####:  402:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  403:	    }
+        -:  404:	goto GOOD_OP;
+        -:  405:	}
+       13:  406:	if( strcmp( &tokens[0][0], "jg" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  407:	{
+    #####:  408:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  409:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  410:	if( (atype == INTEGER && ia > ib ) ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  411:	    (atype == FLOAT && fa > fb ) )
+        -:  412:	    {
+    #####:  413:	     rewind(ip);
+call    0 never executed
+    #####:  414:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  415:	    }
+        -:  416:	goto GOOD_OP;
+        -:  417:	}
+       13:  418:	if( strcmp( &tokens[0][0], "jl" ) == 0 )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  419:	{
+    #####:  420:	if( tokens[3][0] == '\0')
+branch  0 never executed
+branch  1 never executed
+    #####:  421:	{ aaerror("label: required for a jump \n"); goto GOOD_OP;}
+call    0 never executed
+    #####:  422:	if( (atype == INTEGER && ia < ib ) ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  423:	    (atype == FLOAT && fa < fb ) )
+        -:  424:	    {
+    #####:  425:	     rewind(ip);
+call    0 never executed
+    #####:  426:	    math_findlabel( ip,&tokens[3][0]);
+call    0 never executed
+        -:  427:	    }
+        -:  428:	goto GOOD_OP;
+        -:  429:	}
+       13:  430:return(-1);
+        -:  431:/* if found we jump here */
+        -:  432:GOOD_OP:
+        -:  433:
+        -:  434:	/*if( tisvariable(&tokens[1][0] ) && tokens[1][0] != '\0' && adata == IMEADIATE )
+        -:  435:		{set_i_variable(&tokens[1][0],0); adata = VARDATA;
+        -:  436:		vos = match_variable(&tokens[1][0]); 
+        -:  437:		foutpointer = &vos->value.f;
+        -:  438:		ioutpointer = &vos->value.i;}*/
+        -:  439:
+    #####:  440:	if( adata != IMEADIATE )
+branch  0 never executed
+branch  1 never executed
+        -:  441:	{
+    #####:  442:	if( adata == VARDATA) vos->type = atype;	
+branch  0 never executed
+branch  1 never executed
+    #####:  443:	if( adata == ATOMDATA ){
+branch  0 never executed
+branch  1 never executed
+    #####:  444:			if( atype == INTEGER){atype = FLOAT;}
+branch  0 never executed
+branch  1 never executed
+        -:  445:				}
+    #####:  446:	if( atype == FLOAT && foutpointer != NULL) *foutpointer = fa;
+branch  0 never executed
+branch  1 never executed
+    #####:  447:	if( atype == INTEGER && ioutpointer != NULL) *ioutpointer = ia;
+branch  0 never executed
+branch  1 never executed
+        -:  448:	}
+    #####:  449:	if( echo && atype == INTEGER ) fprintf(op,"%d \n",ia);
+branch  0 never executed
+branch  1 never executed
+    #####:  450:	if( echo && atype == FLOAT ) fprintf(op,"%f \n",fa);
+branch  0 never executed
+branch  1 never executed
+    #####:  451:	return( 1);
+        -:  452:#ifdef ESV
+        -:  453:#undef tokens
+        -:  454:#endif
+        -:  455:}
+        -:  456:/* int validatom()
+        -:  457:*  given a string return 0 if it is not of the form
+        -:  458:*  stuff.<x y z fx fy fz dx dy dz vx vy vz q a b m chi jaa na>
+        -:  459:*  these being the valid atomdata parameters 
+        -:  460:*  returns 1 to 19 for x y z fx fy fz dx dy dz vx vy vz q a b m chi jaa na
+        -:  461:*  so we don't have to lex again
+        -:  462:*/
+function _Z9validatomPc called 46 returned 100% blocks executed 20%
+       46:  463:int validatom(char *who)
+        -:  464:{
+        -:  465:char *cp,*pp,*cp1,*cp2,*cp3;
+        -:  466:int i;
+       46:  467:	cp = who;
+       46:  468:	i = 0;
+      152:  469:	while ( *cp != '\0')
+branch  0 taken 57%
+branch  1 taken 43% (fallthrough)
+        -:  470:	{
+       60:  471:	if( *cp == '.') {i++;  pp = cp;}
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+       60:  472:	cp++;
+        -:  473:	}
+       46:  474:	if( i != 1) return (0 ); /* there can only be one '.' */
+branch  0 taken 87% (fallthrough)
+branch  1 taken 13%
+        6:  475:	cp = pp ; cp++;
+        -:  476:/* now we check the tailing characters */
+        6:  477:	cp1 = cp; cp1++;
+        6:  478:	cp2 = cp1; cp2++;  
+        6:  479:	cp3 = cp2; cp3++;  
+        6:  480:	if( *cp1 == '\0')
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  481:	{
+    #####:  482:	if( *cp == 'x') return (1);
+branch  0 never executed
+branch  1 never executed
+    #####:  483:	if( *cp == 'y') return (2);
+branch  0 never executed
+branch  1 never executed
+    #####:  484:	if( *cp == 'z') return (3);
+branch  0 never executed
+branch  1 never executed
+    #####:  485:	if( *cp == 'q') return (13);
+branch  0 never executed
+branch  1 never executed
+    #####:  486:	if( *cp == 'a') return (14);
+branch  0 never executed
+branch  1 never executed
+    #####:  487:	if( *cp == 'b') return (15);
+branch  0 never executed
+branch  1 never executed
+    #####:  488:	if( *cp == 'm') return (16);
+branch  0 never executed
+branch  1 never executed
+    #####:  489:	return (0);
+        -:  490:	}
+        6:  491:	if( *cp2 == '\0')
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  492:	{
+    #####:  493:	if( *cp == 'f') {
+branch  0 never executed
+branch  1 never executed
+    #####:  494:	if( *cp1 == 'x') return (4);
+branch  0 never executed
+branch  1 never executed
+    #####:  495:	if( *cp1 == 'y') return (5);
+branch  0 never executed
+branch  1 never executed
+    #####:  496:	if( *cp1 == 'z') return (6);
+branch  0 never executed
+branch  1 never executed
+        -:  497:			}
+    #####:  498:	if( *cp == 'd' ){
+branch  0 never executed
+branch  1 never executed
+    #####:  499:	if( *cp1 == 'x') return (7);
+branch  0 never executed
+branch  1 never executed
+    #####:  500:	if( *cp1 == 'y') return (8);
+branch  0 never executed
+branch  1 never executed
+    #####:  501:	if( *cp1 == 'z') return (9);
+branch  0 never executed
+branch  1 never executed
+        -:  502:			}
+    #####:  503:	if( *cp == 'v' ){
+branch  0 never executed
+branch  1 never executed
+    #####:  504:	if( *cp1 == 'x') return (10);
+branch  0 never executed
+branch  1 never executed
+    #####:  505:	if( *cp1 == 'y') return (11);
+branch  0 never executed
+branch  1 never executed
+    #####:  506:	if( *cp1 == 'z') return (12);
+branch  0 never executed
+branch  1 never executed
+        -:  507:			}
+    #####:  508:	if( *cp == 'n' ) {
+branch  0 never executed
+branch  1 never executed
+    #####:  509:		if( *cp1 =='a') return 19;
+branch  0 never executed
+branch  1 never executed
+        -:  510:			}
+        -:  511:	}
+        6:  512:	if( *cp3 == '\0')
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  513:	{
+    #####:  514:	if( *cp == 'c' && *cp1 == 'h' && *cp2 == 'i') return 17;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+    #####:  515:	if( *cp == 'j' && *cp1 == 'a' && *cp2 == 'a') return 18;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  516:	}
+        6:  517:	return (0);	
+        -:  518:}
+        -:  519:/* float *getatomdata() returns a float * or null for an atomdata
+        -:  520:*/
+function _Z11getatomdataPc called 23 returned 100% blocks executed 7%
+       23:  521:float *getatomdata(char *who)
+        -:  522:{
+        -:  523:int validatom(char*);
+        -:  524:int i,j;
+        -:  525:char aser[TOKENLENGTH],*cp;
+        -:  526:ATOM *ap,*a_m_serial(int);
+        -:  527:VARIABLE *vp,*match_variable(char*);
+        -:  528:static float fx,fy,fz;
+       23:  529:	i = validatom( who );
+call    0 returned 100%
+       23:  530:	if( i == 0 ) return ( NULL ); /* if not the right format it aint one */
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  531:	
+    #####:  532:	cp = who; j = 0;
+    #####:  533:	while( *cp != '.') 
+branch  0 never executed
+branch  1 never executed
+    #####:  534:	{ aser[j++] = *cp; cp++; }
+    #####:  535:	aser[j] = '\0';
+    #####:  536:	if( (vp = match_variable(aser)) == NULL)
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  537:	{ j = atoi(aser); } else { 
+    #####:  538:		if( vp ->type == INTEGER) j = vp->value.i;
+branch  0 never executed
+branch  1 never executed
+    #####:  539:		if( vp ->type == FLOAT) j = (int)vp->value.f;
+branch  0 never executed
+branch  1 never executed
+        -:  540:				}
+    #####:  541:	ap = a_m_serial(j);
+call    0 never executed
+    #####:  542:	if( ap == NULL) return( NULL );
+branch  0 never executed
+branch  1 never executed
+    #####:  543:	if( i == 1 ) return ( &ap->x );
+branch  0 never executed
+branch  1 never executed
+    #####:  544:	if( i == 2 ) return ( &ap->y );
+branch  0 never executed
+branch  1 never executed
+    #####:  545:	if( i == 3 ) return ( &ap->z );
+branch  0 never executed
+branch  1 never executed
+    #####:  546:	if( i == 4 ) { fx = ap->fx ; return( &fx);}
+branch  0 never executed
+branch  1 never executed
+    #####:  547:	if( i == 5 ) { fy = ap->fy ; return(&fy);}
+branch  0 never executed
+branch  1 never executed
+    #####:  548:	if( i == 6 ) { fz = ap->fz ; return(&fz);}
+branch  0 never executed
+branch  1 never executed
+    #####:  549:	if( i == 7 ) return ( &ap->dx );
+branch  0 never executed
+branch  1 never executed
+    #####:  550:	if( i == 8 ) return ( &ap->dy );
+branch  0 never executed
+branch  1 never executed
+    #####:  551:	if( i == 9 ) return ( &ap->dz );
+branch  0 never executed
+branch  1 never executed
+    #####:  552:	if( i == 10 ) return ( &ap->vx );
+branch  0 never executed
+branch  1 never executed
+    #####:  553:	if( i == 11 ) return ( &ap->vy );
+branch  0 never executed
+branch  1 never executed
+    #####:  554:	if( i == 12 ) return ( &ap->vz );
+branch  0 never executed
+branch  1 never executed
+    #####:  555:	if( i == 13 ) return ( &ap->q );
+branch  0 never executed
+branch  1 never executed
+    #####:  556:	if( i == 14 ) return ( &ap->a );
+branch  0 never executed
+branch  1 never executed
+    #####:  557:	if( i == 15 ) return ( &ap->b );
+branch  0 never executed
+branch  1 never executed
+    #####:  558:	if( i == 16 ) return ( &ap->mass );
+branch  0 never executed
+branch  1 never executed
+    #####:  559:	if( i == 17 ) return ( &ap->chi );
+branch  0 never executed
+branch  1 never executed
+    #####:  560:	if( i == 18 ) return ( &ap->jaa );
+branch  0 never executed
+branch  1 never executed
+        -:  561:/*
+        -:  562:	if( i == 19 ) return ( &ap->na );
+        -:  563:*/
+    #####:  564:	return (NULL );
+        -:  565:}
+        -:  566:/*	   
+        -:  567:*	    math_findlabel(FILE * ip, char *label);
+        -:  568:* search a file for label:
+        -:  569:*  if label doesn't end in : add it
+        -:  570:*
+        -:  571:*/
+        -:  572:/* SPEC use modern-style arg declaration, to match proto jh/9/22/99 */
+function _Z14math_findlabelP8_IO_FILEPc called 0 returned 0% blocks executed 0%
+    #####:  573:int math_findlabel( FILE *fp, char *label)
+        -:  574:{
+        -:  575:char *cp,*lp;
+        -:  576:char llabel[TOKENLENGTH];
+        -:  577:char myline[TOKENLENGTH]; /* since label is no longer than TOKENLENGTH we can skip such lines */
+        -:  578:int  inmyline;
+        -:  579:int i;
+        -:  580:char ac;
+        -:  581:
+    #####:  582:cp = label;
+    #####:  583:lp  = &llabel[0];
+    #####:  584:	while( *cp != '\0')
+branch  0 never executed
+branch  1 never executed
+        -:  585:	{
+    #####:  586:		*lp = *cp ; lp++; cp ++;
+        -:  587:	}
+    #####:  588:	cp = lp; cp--;
+    #####:  589:	if( *cp != ':'){ *lp = ':'; lp++;}
+branch  0 never executed
+branch  1 never executed
+    #####:  590:	*lp = '\0';
+        -:  591:/* now one char at a time scan ip for a blank */
+    #####:  592:	inmyline = 0;
+    #####:  593:	lp  = &llabel[0];
+    #####:  594:	while( (i= fgetc( fp )) != EOF )
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  595:	{
+    #####:  596:	ac = (char)i;
+    #####:  597:	if( !isspace((int) ac) )
+branch  0 never executed
+branch  1 never executed
+        -:  598:	{
+    #####:  599:	if( ac == ';')
+branch  0 never executed
+branch  1 never executed
+        -:  600:	{
+    #####:  601:	myline[inmyline] = '\0';
+        -:  602:/*	printf(">%s<\n",&myline[0]);
+        -:  603:*/
+    #####:  604:	if( strcmp( lp,&myline[0]) == 0 ) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  605:	inmyline = 0;
+        -:  606:	}else{
+    #####:  607:	if( inmyline > TOKENLENGTH) inmyline = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  608:	myline[inmyline++] = ac;
+        -:  609:	}
+        -:  610:	}
+        -:  611:	}
+        -:  612:
+    #####:  613:	return 0;
+        -:  614:}

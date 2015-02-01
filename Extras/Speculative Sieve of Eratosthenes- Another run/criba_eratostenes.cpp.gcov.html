@@ -1,0 +1,408 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - cribalcov.info - /home/gabriel/Escritorio/Version Final/criba_eratostenes.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../index.html">top level</a> - <a href="index.html">home/gabriel/Escritorio/Version Final</a> - criba_eratostenes.cpp<span style="font-size: 80%;"> (source / <a href="criba_eratostenes.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">cribalcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">154</td>
+            <td class="headerCovTableEntry">154</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">159</td>
+            <td class="headerCovTableEntry">272</td>
+            <td class="headerCovTableEntryLo">58.5 %</td>
+          </tr>
+          <tr><td><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &lt;iostream&gt;</a>
+<span class="lineNum">       2 </span>                :            : #include &lt;time.h&gt;
+<span class="lineNum">       3 </span>                :            : #include &lt;sys/time.h&gt;
+<span class="lineNum">       4 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">       5 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       6 </span>                :            : #include &lt;cmath&gt;
+<span class="lineNum">       7 </span>                :            : #include &quot;TLS_Lib.h&quot;
+<span class="lineNum">       8 </span>                :            : using namespace std;
+<span class="lineNum">       9 </span>                :            : 
+<span class="lineNum">      10 </span>                :            : /*Este programa compara el rendimiento de la especulación de lazos vs. la iteración no especulativa. 
+<span class="lineNum">      11 </span>                :            : Para ello se implementa la Criba de Eratostenes, evaluando si 100 números son primos.
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :            : La versión especulativa consiste divide el problema en dos secciones, una primera especulación utilizada
+<span class="lineNum">      14 </span>                :            : para inicializar el vector, y una segunda que calcula los números primos. Para la extracción del paralelismo
+<span class="lineNum">      15 </span>                :            : se utilizó solo el lazo externo del método, asignándose cada iteración de este a una hebra distinta. Por este
+<span class="lineNum">      16 </span>                :            : motivo este programa ejemplo carece de escalabilidad: el sistema no podrá proveer un mayor número de hebras, de hecho
+<span class="lineNum">      17 </span>                :            : 100 son bastantes hebras que pedir a un sistema común (por la forma del algoritmo, en realidad se le pedirá poco menos de la
+<span class="lineNum">      18 </span>                :            : mitad).
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : En una primera corrida el rendimiento del programa tradicional es similar al especulativo, esto es de
+<span class="lineNum">      21 </span>                :            : esperar puesto que el programa tradicional consiste exclusivamente de operaciones de lecturas y escrituras sobre la
+<span class="lineNum">      22 </span>                :            : data compartida. La versión especulativa realiza estas operaciones en un modo casi tan secuencial como el del programa
+<span class="lineNum">      23 </span>                :            : base, y además le añade el sobrecosto de la gestión del modelo, por todo esto las ventajas del paralelismo no son tan evidentes,
+<span class="lineNum">      24 </span>                :            : aunque por lo general el rendimiento de la especulación supera al tradicional. 
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            : Una evidente mejora del rendimiento se observaría si el lazo externo incluyese una carga adicional que no involucrase operaciones 
+<span class="lineNum">      27 </span>                :            : estrictas sobre la data compartida. A fin de observar un caso semejante se realizó una segunda corrida del método anterior, 
+<span class="lineNum">      28 </span>                :            : introduciendo una operación sleep(1) al final de cada iteración del lazo exterior. En el caso especulativo esta carga se solapa 
+<span class="lineNum">      29 </span>                :            : entre las varias hebras, por lo cual se observará un rendimiento notablemente superior al caso secuencial. 
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :            :  */
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : typedef struct {
+<span class="lineNum">      34 </span>                :            :         int             secs;
+<span class="lineNum">      35 </span>                :            :         int             usecs;
+<span class="lineNum">      36 </span>                :            : 
+<a name="37"><span class="lineNum">      37 </span>                :            : } TIME_DIFF;</a>
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :<span class="lineCov">          4 : TIME_DIFF * my_difftime (struct timeval * start, struct timeval * end)</span>
+<span class="lineNum">      40 </span>                :            : {
+<span class="lineNum">      41 </span>                :<span class="lineCov">          4 :         TIME_DIFF * diff = (TIME_DIFF *) malloc ( sizeof (TIME_DIFF) );</span>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          4 :         if (start-&gt;tv_sec == end-&gt;tv_sec) {</span>
+<span class="lineNum">      44 </span>                :<span class="lineCov">          2 :                 diff-&gt;secs = 0;</span>
+<span class="lineNum">      45 </span>                :<span class="lineCov">          2 :                 diff-&gt;usecs = end-&gt;tv_usec - start-&gt;tv_usec;</span>
+<span class="lineNum">      46 </span>                :            :         }
+<span class="lineNum">      47 </span>                :            :         else {
+<span class="lineNum">      48 </span>                :<span class="lineCov">          2 :                 diff-&gt;usecs = 1000000 - start-&gt;tv_usec;</span>
+<span class="lineNum">      49 </span>                :<span class="lineCov">          2 :                 diff-&gt;secs = end-&gt;tv_sec - (start-&gt;tv_sec + 1);</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">          2 :                 diff-&gt;usecs += end-&gt;tv_usec;</span>
+<span class="lineNum">      51 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :                 if (diff-&gt;usecs &gt;= 1000000) {</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">          2 :                         diff-&gt;usecs -= 1000000;</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">          2 :                         diff-&gt;secs += 1;</span>
+<span class="lineNum">      54 </span>                :            :                 }
+<span class="lineNum">      55 </span>                :            :         }
+<span class="lineNum">      56 </span>                :            :         
+<span class="lineNum">      57 </span>                :<span class="lineCov">          4 :         return diff;</span>
+<a name="58"><span class="lineNum">      58 </span>                :            : }</a>
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :<span class="lineCov">          1 : loop_speculator b, c;</span>
+<a name="61"><span class="lineNum">      61 </span>                :            : int num_primes=100;</a>
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>                :<span class="lineCov">         10 : void* initialize (void* arg){</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">         10 :         int base=(((int)arg)-1)*(num_primes/10);</span>
+<span class="lineNum">      65 </span>                :<span class="lineCov">         10 :         int tope=((int)arg)*(num_primes/10);</span>
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :<span class="lineCov">         10 :         bool aux2=true;</span>
+<span class="lineNum">      68 </span>        [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">        110 :         for (int i=base; i&lt;tope; i++){</span>
+<span class="lineNum">      69 </span>                :<span class="lineCov">        100 :                 bool* aux=((bool*&amp;)b.get_shared_data()+i);</span>
+<span class="lineNum">      70 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 100 times"> + </span>]:<span class="lineCov">        100 :                 while (b.write_data((bool*&amp;)aux, (bool*)aux2)!=0){</span>
+<span class="lineNum">      71 </span>                :            :                 }
+<span class="lineNum">      72 </span>                :            :         }
+<span class="lineNum">      73 </span>                :<span class="lineCov">         10 :         b.commit();</span>
+<a name="74"><span class="lineNum">      74 </span>                :<span class="lineCov">         10 : };</span></a>
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :<span class="lineCov">         10 : void* initialize_c (void* arg){</span>
+<span class="lineNum">      77 </span>                :<span class="lineCov">         10 :         int base=(((int)arg)-1)*(num_primes/10);</span>
+<span class="lineNum">      78 </span>                :<span class="lineCov">         10 :         int tope=((int)arg)*(num_primes/10);</span>
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :<span class="lineCov">         10 :         bool aux2=true;</span>
+<span class="lineNum">      81 </span>        [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">        110 :         for (int i=base; i&lt;tope; i++){</span>
+<span class="lineNum">      82 </span>                :<span class="lineCov">        100 :                 bool* aux=((bool*&amp;)c.get_shared_data()+i);</span>
+<span class="lineNum">      83 </span>                :<span class="lineCov">        100 :                 c.write_data((bool*&amp;)aux, (bool*)aux2);</span>
+<span class="lineNum">      84 </span>                :            :         }
+<span class="lineNum">      85 </span>                :<span class="lineCov">         10 :         c.commit();</span>
+<a name="86"><span class="lineNum">      86 </span>                :<span class="lineCov">         10 : };</span></a>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineCov">         98 : void* get_primes (void* arg){</span>
+<span class="lineNum">      89 </span>                :<span class="lineCov">         98 :         bool aux2=false;</span>
+<span class="lineNum">      90 </span>        [<span class="branchCov" title="Branch 1 was taken 276 times"> + </span><span class="branchCov" title="Branch 2 was taken 98 times"> + </span>]:<span class="lineCov">        374 :         for (int j=2; j&lt;ceil((float)num_primes/(int)arg); j++){</span>
+<span class="lineNum">      91 </span>                :<span class="lineCov">        276 :                 bool* aux=((bool*&amp;)b.get_shared_data()+(j*(int)arg));</span>
+<span class="lineNum">      92 </span>                :<span class="lineCov">        276 :                 b.write_data((bool*&amp;)aux, (bool*)aux2);</span>
+<span class="lineNum">      93 </span>                :            :         }
+<span class="lineNum">      94 </span>                :<span class="lineCov">         98 :         b.commit();</span>
+<a name="95"><span class="lineNum">      95 </span>                :<span class="lineCov">         98 : }</span></a>
+<span class="lineNum">      96 </span>                :            : 
+<span class="lineNum">      97 </span>                :<span class="lineCov">         98 : void* get_primes_and_sleep (void* arg){</span>
+<span class="lineNum">      98 </span>                :<span class="lineCov">         98 :         bool aux2=false;</span>
+<span class="lineNum">      99 </span>        [<span class="branchCov" title="Branch 1 was taken 276 times"> + </span><span class="branchCov" title="Branch 2 was taken 98 times"> + </span>]:<span class="lineCov">        374 :         for (int j=2; j&lt;ceil((float)num_primes/(int)arg); j++){</span>
+<span class="lineNum">     100 </span>                :<span class="lineCov">        276 :                 bool* aux=((bool*&amp;)c.get_shared_data()+(j*(int)arg));</span>
+<span class="lineNum">     101 </span>                :<span class="lineCov">        276 :                 c.write_data((bool*&amp;)aux, (bool*)aux2);</span>
+<span class="lineNum">     102 </span>                :            :         }
+<span class="lineNum">     103 </span>                :<span class="lineCov">         98 :         c.commit();</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">         98 :         sleep(1);</span>
+<span class="lineNum">     105 </span>                :<span class="lineCov">         98 : }</span>
+<span class="lineNum">     106 </span>                :            : 
+<a name="107"><span class="lineNum">     107 </span>                :            : </a>
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>                :<span class="lineCov">          1 : int main()</span>
+<span class="lineNum">     110 </span>                :            : {
+<span class="lineNum">     111 </span>                :            : 
+<span class="lineNum">     112 </span>                :            :         struct timeval myTVstart, myTVend;
+<span class="lineNum">     113 </span>                :            :         TIME_DIFF *     difference;
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>                :<span class="lineCov">          1 :         bool vector_primos[num_primes];</span>
+<span class="lineNum">     117 </span>                :<span class="lineCov">          1 :         bool* argumento=&amp;vector_primos[0];</span>
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         script_vector auxiliar;</span>
+<span class="lineNum">     120 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.push_back(initialize); //Función a pasar para primera iteración</span>
+<span class="lineNum">     121 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          2 :         vector &lt;void*&gt; constA;</span>
+<span class="lineNum">     122 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.push_back((void*)1); //Argumento de primera iteración.</span>
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio del Programa&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     125 </span>                :            : 
+<span class="lineNum">     126 </span>                :            :         //En primer lugar se inicializará el vector: 
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio del cálculo especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     129 </span>                :            : 
+<span class="lineNum">     130 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVstart, NULL);</span>
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         b.speculate((void*&amp;)argumento, auxiliar, constA); //Se manda a especular con solo la primera iteración.</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">     133 </span>                :            :         //Lo siguiente corresponderá al código pre-especulativo.
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         10 :         for (int i=2; i&lt;(num_primes/10)+1; i++){</span>
+<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          9 :                 b.append(initialize, (void*)i); //Se añaden las demás iteraciones y argumentos. </span>
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>                :            :         //Cada iteración inicializará 10 posiciones del vector.
+<span class="lineNum">     139 </span>                :            :         
+<span class="lineNum">     140 </span>                :            :         }
+<span class="lineNum">     141 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         b.commit(); //Se marca que la sección pre-especulativa ha terminado.</span>
+<span class="lineNum">     142 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         b.get_results(); //Se piden los resultados de la especulación.</span>
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>                :            :         //La segunda fase especulativa consiste en determinar los números que no son primos.
+<span class="lineNum">     145 </span>                :            :         //Lo siguiente corresponderá al código pre-especulativo.
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.clear();</span>
+<span class="lineNum">     148 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.push_back(get_primes); //Función a pasar para la primera iteración</span>
+<span class="lineNum">     149 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.clear();</span>
+<span class="lineNum">     150 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.push_back((void*)2); //Argumento de primera iteración.</span>
+<span class="lineNum">     151 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         b.speculate((void*&amp;)argumento, auxiliar, constA); //Se manda a especular con solo la primera iteración.</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">     152 </span>        [<span class="branchCov" title="Branch 0 was taken 97 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         98 :         for (int i=3; i&lt;num_primes; i++){</span>
+<span class="lineNum">     153 </span>        [<span class="branchCov" title="Branch 0 was taken 97 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         97 :                 b.append(get_primes, (void*)i); //Se añaden las demás iteraciones y argumentos.</span>
+<span class="lineNum">     154 </span>                :            :         }
+<span class="lineNum">     155 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         b.commit();//Se marca que la sección pre-especulativa ha terminado.</span>
+<span class="lineNum">     156 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         b.get_results();  //Se piden los resultados de le especulación.</span>
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVend, NULL);</span>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Fin del cálculo especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     161 </span>                :            : 
+<span class="lineNum">     162 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Primos calculados especulativamente: &quot;&lt;&lt;endl;</span>
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){</span>
+<span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">         98 :                 if (vector_primos[i]){</span>
+<span class="lineNum">     166 </span>[<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">         25 :                                 cout&lt;&lt;&quot; &quot;&lt;&lt;i;</span>
+<span class="lineNum">     167 </span>                :            :                 }
+<span class="lineNum">     168 </span>                :            :         }
+<span class="lineNum">     169 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;endl;</span>
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>                :<span class="lineCov">          1 :         difference = my_difftime (&amp;myTVstart, &amp;myTVend);</span>
+<span class="lineNum">     172 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         printf (&quot;Duración de la especulación (incluye wall-clock time): %d.%d segundos.\n&quot;, difference-&gt;secs, difference-&gt;usecs);</span>
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>                :<span class="lineCov">          1 :         free (difference);</span>
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :            :         //Ahora se realiza el método no especulativo...
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio del cálculo no especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     180 </span>                :            : 
+<span class="lineNum">     181 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVstart, NULL);</span>
+<span class="lineNum">     182 </span>                :            : 
+<span class="lineNum">     183 </span>        [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">        101 :         for (int i=0; i&lt;num_primes; i++){</span>
+<span class="lineNum">     184 </span>                :<span class="lineCov">        100 :                 vector_primos[i]=true; //Inicialización.</span>
+<span class="lineNum">     185 </span>                :            :         }
+<span class="lineNum">     186 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){ //Dterminación de números no primos.</span>
+<span class="lineNum">     187 </span>        [<span class="branchCov" title="Branch 1 was taken 276 times"> + </span><span class="branchCov" title="Branch 2 was taken 98 times"> + </span>]:<span class="lineCov">        374 :                 for (int j=2; j&lt;ceil((float)num_primes/i); j++){</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">        276 :                         vector_primos[j*i]=false; </span>
+<span class="lineNum">     189 </span>                :            :                 }
+<span class="lineNum">     190 </span>                :            :         }
+<span class="lineNum">     191 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVend, NULL);</span>
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Fin del cálculo no especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     194 </span>                :            : 
+<span class="lineNum">     195 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Primos calculados no especulativamente: &quot;&lt;&lt;endl;   </span>
+<span class="lineNum">     196 </span>                :            : 
+<span class="lineNum">     197 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){</span>
+<span class="lineNum">     198 </span>        [<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">         98 :                 if (vector_primos[i]){</span>
+<span class="lineNum">     199 </span>[<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">         25 :                                 cout&lt;&lt;&quot; &quot;&lt;&lt;i;</span>
+<span class="lineNum">     200 </span>                :            :                 }
+<span class="lineNum">     201 </span>                :            :         }
+<span class="lineNum">     202 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;endl;</span>
+<span class="lineNum">     203 </span>                :            : 
+<span class="lineNum">     204 </span>                :<span class="lineCov">          1 :         difference = my_difftime (&amp;myTVstart, &amp;myTVend);</span>
+<span class="lineNum">     205 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         printf (&quot;Duración del método no especulativo (incluye wall-clock time): %d.%d segundos.\n&quot;, difference-&gt;secs, difference-&gt;usecs);</span>
+<span class="lineNum">     206 </span>                :            : 
+<span class="lineNum">     207 </span>                :<span class="lineCov">          1 :         free (difference);</span>
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Como es de esperar, el rendimiento del programa tradicional es casi similar al del programa especulativo (en algunos casos el especulativo puede superar por poco al tradicional).&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     211 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;\n \nA continuación evaluaremos el mismo programa pero añadiendole una carga adicional a cada iteración del lazo externo&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     212 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Esta carga representa operaciones que no involucran la data compartida, y que pueden ser cálculos temporales por iteración&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     213 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;del lazo externo. La carga se implementó como una invocación a sleep(1) al final de cada iteración del lazo externo.\n&quot;&lt;&lt;endl;          </span>
+<span class="lineNum">     214 </span>                :            : 
+<span class="lineNum">     215 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.clear();</span>
+<span class="lineNum">     216 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.clear();</span>
+<span class="lineNum">     217 </span>                :            : 
+<span class="lineNum">     218 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.push_back(initialize_c); //Función a pasar para primera iteración</span>
+<span class="lineNum">     219 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.push_back((void*)1); //Argumento de primera iteración.</span>
+<span class="lineNum">     220 </span>                :            : 
+<span class="lineNum">     221 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Segunda Corrida del Programa&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     222 </span>                :            : 
+<span class="lineNum">     223 </span>                :            :         //En primer lugar se inicializará el vector: 
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio del cálculo especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVstart, NULL);</span>
+<span class="lineNum">     228 </span>                :            : 
+<span class="lineNum">     229 </span>                :            :         //Se usa otro especulador, para que el tiempo del reseteo del modelo no entre en el calculo.
+<span class="lineNum">     230 </span>                :            : 
+<span class="lineNum">     231 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         c.speculate((void*&amp;)argumento, auxiliar, constA); //Se manda a especular con solo la primera iteración.</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">     232 </span>                :            :         //Lo siguiente corresponderá al código pre-especulativo.
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>        [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         10 :         for (int i=2; i&lt;(num_primes/10)+1; i++){</span>
+<span class="lineNum">     235 </span>        [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          9 :                 c.append(initialize_c, (void*)i); //Se añaden las demás iteraciones y argumentos. </span>
+<span class="lineNum">     236 </span>                :            : 
+<span class="lineNum">     237 </span>                :            :         //Cada iteración inicializará 10 posiciones del vector.
+<span class="lineNum">     238 </span>                :            :         
+<span class="lineNum">     239 </span>                :            :         }
+<span class="lineNum">     240 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         c.commit(); //Se marca que la sección pre-especulativa ha terminado.</span>
+<span class="lineNum">     241 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         c.get_results();  //Se piden los resultados de le especulación.</span>
+<span class="lineNum">     242 </span>                :            : 
+<span class="lineNum">     243 </span>                :            :         //La segunda fase especulativa consiste en determinar los números que no son primos.
+<span class="lineNum">     244 </span>                :            :         //Lo siguiente corresponderá al código pre-especulativo.
+<span class="lineNum">     245 </span>                :            : 
+<span class="lineNum">     246 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.clear();</span>
+<span class="lineNum">     247 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         auxiliar.push_back(get_primes_and_sleep); //Función a pasar para la primera iteración</span>
+<span class="lineNum">     248 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.clear();</span>
+<span class="lineNum">     249 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         constA.push_back((void*)2); //Argumento de primera iteración.</span>
+<span class="lineNum">     250 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio segunda especulaciòn...&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     251 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         c.speculate((void*&amp;)argumento, auxiliar, constA); //Se manda a especular con solo la primera iteración.</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 9 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 12 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span>]
+<span class="lineNum">     252 </span>        [<span class="branchCov" title="Branch 0 was taken 97 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         98 :         for (int i=3; i&lt;num_primes; i++){</span>
+<span class="lineNum">     253 </span>        [<span class="branchCov" title="Branch 0 was taken 97 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         97 :                 c.append(get_primes_and_sleep, (void*)i); //Se añaden las demás iteraciones y argumentos.</span>
+<span class="lineNum">     254 </span>                :            :         }
+<span class="lineNum">     255 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         c.commit();//Se marca que la sección pre-especulativa ha terminado.</span>
+<span class="lineNum">     256 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         c.get_results();  //Se piden los resultados de le especulación.</span>
+<span class="lineNum">     257 </span>                :            : 
+<span class="lineNum">     258 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVend, NULL);</span>
+<span class="lineNum">     259 </span>                :            : 
+<span class="lineNum">     260 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Fin del cálculo especulativo.&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     261 </span>                :            : 
+<span class="lineNum">     262 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Primos calculados especulativamente: &quot;&lt;&lt;endl;</span>
+<span class="lineNum">     263 </span>                :            : 
+<span class="lineNum">     264 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){</span>
+<span class="lineNum">     265 </span>        [<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">         98 :                 if (vector_primos[i]){</span>
+<span class="lineNum">     266 </span>[<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">         25 :                                 cout&lt;&lt;&quot; &quot;&lt;&lt;i;</span>
+<span class="lineNum">     267 </span>                :            :                 }
+<span class="lineNum">     268 </span>                :            :         }
+<span class="lineNum">     269 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;endl;</span>
+<span class="lineNum">     270 </span>                :            : 
+<span class="lineNum">     271 </span>                :<span class="lineCov">          1 :         difference = my_difftime (&amp;myTVstart, &amp;myTVend);</span>
+<span class="lineNum">     272 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         printf (&quot;Duración de la especulación (incluye wall-clock time): %d.%d segundos.\n&quot;, difference-&gt;secs, difference-&gt;usecs);</span>
+<span class="lineNum">     273 </span>                :            : 
+<span class="lineNum">     274 </span>                :<span class="lineCov">          1 :         free (difference);</span>
+<span class="lineNum">     275 </span>                :            : 
+<span class="lineNum">     276 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Ahora se realizará el método no especulativo, lo que puede llevar un par de minutos&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     277 </span>                :            : 
+<span class="lineNum">     278 </span>                :            :         //Ahora se realiza el método no especulativo...
+<span class="lineNum">     279 </span>                :            : 
+<span class="lineNum">     280 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Inicio del cálculo no especulativo&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     281 </span>                :            : 
+<span class="lineNum">     282 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVstart, NULL);</span>
+<span class="lineNum">     283 </span>                :            : 
+<span class="lineNum">     284 </span>        [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">        101 :         for (int i=0; i&lt;num_primes; i++){</span>
+<span class="lineNum">     285 </span>                :<span class="lineCov">        100 :                 vector_primos[i]=true; //Inicialización.</span>
+<span class="lineNum">     286 </span>                :            :         }
+<span class="lineNum">     287 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){ //Determinación de números no primos.</span>
+<span class="lineNum">     288 </span>        [<span class="branchCov" title="Branch 1 was taken 276 times"> + </span><span class="branchCov" title="Branch 2 was taken 98 times"> + </span>]:<span class="lineCov">        374 :                 for (int j=2; j&lt;ceil((float)num_primes/i); j++){</span>
+<span class="lineNum">     289 </span>                :<span class="lineCov">        276 :                         vector_primos[j*i]=false; </span>
+<span class="lineNum">     290 </span>                :            :                 }
+<span class="lineNum">     291 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         98 :                 sleep(1);</span>
+<span class="lineNum">     292 </span>                :            :         }
+<span class="lineNum">     293 </span>                :<span class="lineCov">          1 :         gettimeofday (&amp;myTVend, NULL);</span>
+<span class="lineNum">     294 </span>                :            : 
+<span class="lineNum">     295 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Fin del cálculo no especulativo&quot;&lt;&lt;endl;</span>
+<span class="lineNum">     296 </span>                :            : 
+<span class="lineNum">     297 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;Primos calculados no especulativamente: &quot;&lt;&lt;endl;   </span>
+<span class="lineNum">     298 </span>                :            : 
+<span class="lineNum">     299 </span>        [<span class="branchCov" title="Branch 0 was taken 98 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         99 :         for (int i=2; i&lt;num_primes; i++){</span>
+<span class="lineNum">     300 </span>        [<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">         98 :                 if (vector_primos[i]){</span>
+<span class="lineNum">     301 </span>[<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 25 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">         25 :                                 cout&lt;&lt;&quot; &quot;&lt;&lt;i;</span>
+<span class="lineNum">     302 </span>                :            :                 }
+<span class="lineNum">     303 </span>                :            :         }
+<span class="lineNum">     304 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;endl;       </span>
+<span class="lineNum">     305 </span>                :            : 
+<span class="lineNum">     306 </span>                :<span class="lineCov">          1 :         difference = my_difftime (&amp;myTVstart, &amp;myTVend);</span>
+<span class="lineNum">     307 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         printf (&quot;Duración del método no especulativo (incluye wall-clock time): %d,%d segundos.\n&quot;, difference-&gt;secs, difference-&gt;usecs);</span>
+<span class="lineNum">     308 </span>                :            : 
+<span class="lineNum">     309 </span>                :<span class="lineCov">          1 :         free (difference);</span>
+<span class="lineNum">     310 </span>                :            : 
+<span class="lineNum">     311 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          1 :         cout&lt;&lt;&quot;La ventaja más notoria de la especulación, aún bajo las limitaciones de esta implementación, proviene de permitir el solapamiento de todas las operaciones sobre data no compartida.&quot;&lt;&lt;endl;</span>
+<a name="312"><span class="lineNum">     312 </span>                :            : </a>
+<span class="lineNum">     313 </span>                :            :         
+<span class="lineNum">     314 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          3 : }</span>
+<span class="lineNum">     315 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

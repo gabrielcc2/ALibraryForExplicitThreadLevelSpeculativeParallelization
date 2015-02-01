@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/qsortx.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - qsortx.c<span style="font-size: 80%;"> (source / <a href="qsortx.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">74</td>
+            <td class="headerCovTableEntry">75</td>
+            <td class="headerCovTableEntryHi">98.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">56</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntryHi">96.6 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* @(#)qsort.c  4.2 (Berkeley) 3/9/83 */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : #define         THRESH          4       /* threshold for insertion */
+<span class="lineNum">       5 </span>                :            : #define         MTHRESH         6       /* threshold for median */
+<span class="lineNum">       6 </span>                :            : 
+<span class="lineNum">       7 </span>                :            : int     qsz;                    /* size of each record */
+<span class="lineNum">       8 </span>                :            : int     thresh;                 /* THRESHold in chars */
+<span class="lineNum">       9 </span>                :            : int     mthresh;                /* MTHRESHold in chars */
+<a name="10"><span class="lineNum">      10 </span>                :            : </a>
+<span class="lineNum">      11 </span>                :            : 
+<span class="lineNum">      12 </span>                :<span class="lineCov">         48 : qsortx(base, n, size)</span>
+<span class="lineNum">      13 </span>                :            :     char        *base;
+<span class="lineNum">      14 </span>                :            :     int n;
+<span class="lineNum">      15 </span>                :            :     int size;
+<span class="lineNum">      16 </span>                :            : {
+<span class="lineNum">      17 </span>                :            :     register char c, *i, *j, *lo, *hi;
+<span class="lineNum">      18 </span>                :            :     char *min, *max;
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>        [<span class="branchCov" title="Branch 0 was taken 48 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         48 :     if (n &lt;= 1)</span>
+<span class="lineNum">      21 </span>                :            :         return;
+<span class="lineNum">      22 </span>                :<span class="lineCov">         48 :     qsz = size;</span>
+<span class="lineNum">      23 </span>                :<span class="lineCov">         48 :     thresh = qsz * THRESH;</span>
+<span class="lineNum">      24 </span>                :<span class="lineCov">         48 :     mthresh = qsz * MTHRESH;</span>
+<span class="lineNum">      25 </span>                :<span class="lineCov">         48 :     max = base + n * qsz;</span>
+<span class="lineNum">      26 </span>        [<span class="branchCov" title="Branch 0 was taken 48 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         48 :     if (n &gt;= THRESH) {</span>
+<span class="lineNum">      27 </span>                :<span class="lineCov">         48 :         qst(base, max);</span>
+<span class="lineNum">      28 </span>                :<span class="lineCov">         48 :         hi = base + thresh;</span>
+<span class="lineNum">      29 </span>                :            :     } else {
+<span class="lineNum">      30 </span>                :<span class="lineNoCov">          0 :         hi = max;</span>
+<span class="lineNum">      31 </span>                :            :     }
+<span class="lineNum">      32 </span>                :            :     /*
+<span class="lineNum">      33 </span>                :            :      * First put smallest element, which must be in the first THRESH, in
+<span class="lineNum">      34 </span>                :            :      * the first position as a sentinel.  This is done just by searching
+<span class="lineNum">      35 </span>                :            :      * the first THRESH elements (or the first n if n &lt; THRESH), finding
+<span class="lineNum">      36 </span>                :            :      * the min, and swapping it into the first position.
+<span class="lineNum">      37 </span>                :            :      */
+<span class="lineNum">      38 </span>        [<span class="branchCov" title="Branch 0 was taken 144 times"> + </span><span class="branchCov" title="Branch 1 was taken 48 times"> + </span>]:<span class="lineCov">        192 :     for (j = lo = base; (lo += qsz) &lt; hi; )</span>
+<span class="lineNum">      39 </span>        [<span class="branchCov" title="Branch 1 was taken 23 times"> + </span><span class="branchCov" title="Branch 2 was taken 121 times"> + </span>]:<span class="lineCov">        144 :         if (comparex(j, lo) &gt; 0)</span>
+<span class="lineNum">      40 </span>                :<span class="lineCov">         23 :             j = lo;</span>
+<span class="lineNum">      41 </span>        [<span class="branchCov" title="Branch 0 was taken 17 times"> + </span><span class="branchCov" title="Branch 1 was taken 31 times"> + </span>]:<span class="lineCov">         48 :     if (j != base) {</span>
+<span class="lineNum">      42 </span>                :            :         /* swap j into place */
+<span class="lineNum">      43 </span>        [<span class="branchCov" title="Branch 0 was taken 68 times"> + </span><span class="branchCov" title="Branch 1 was taken 17 times"> + </span>]:<span class="lineCov">         85 :         for (i = base, hi = base + qsz; i &lt; hi; ) {</span>
+<span class="lineNum">      44 </span>                :<span class="lineCov">         68 :             c = *j;</span>
+<span class="lineNum">      45 </span>                :<span class="lineCov">         68 :             *j++ = *i;</span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">         68 :             *i++ = c;</span>
+<span class="lineNum">      47 </span>                :            :         }
+<span class="lineNum">      48 </span>                :            :     }
+<span class="lineNum">      49 </span>                :            :     /*
+<span class="lineNum">      50 </span>                :            :      * With our sentinel in place, we now run the following hyper-fast
+<span class="lineNum">      51 </span>                :            :      * insertion sort.  For each remaining element, min, from [1] to [n-1],
+<span class="lineNum">      52 </span>                :            :      * set hi to the index of the element AFTER which this one goes.
+<span class="lineNum">      53 </span>                :            :      * Then, do the standard insertion sort shift on a character at a time
+<span class="lineNum">      54 </span>                :            :      * basis for each element in the frob.
+<span class="lineNum">      55 </span>                :            :      */
+<span class="lineNum">      56 </span>        [<span class="branchCov" title="Branch 0 was taken 6452 times"> + </span><span class="branchCov" title="Branch 1 was taken 48 times"> + </span>]:<span class="lineCov">       6500 :     for (min = base; (hi = min += qsz) &lt; max; ) {</span>
+<span class="lineNum">      57 </span>        [<span class="branchCov" title="Branch 1 was taken 1424 times"> + </span><span class="branchCov" title="Branch 2 was taken 6452 times"> + </span>]:<span class="lineCov">       7876 :         while (comparex(hi -= qsz, min) &gt; 0)</span>
+<span class="lineNum">      58 </span>                :            :                 /* void */;
+<span class="lineNum">      59 </span>        [<span class="branchCov" title="Branch 0 was taken 1189 times"> + </span><span class="branchCov" title="Branch 1 was taken 5263 times"> + </span>]:<span class="lineCov">       6452 :         if ((hi += qsz) != min) {</span>
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 0 was taken 4756 times"> + </span><span class="branchCov" title="Branch 1 was taken 1189 times"> + </span>]:<span class="lineCov">       5945 :             for (lo = min + qsz; --lo &gt;= min; ) {</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">       4756 :                 c = *lo;</span>
+<span class="lineNum">      62 </span>        [<span class="branchCov" title="Branch 0 was taken 5696 times"> + </span><span class="branchCov" title="Branch 1 was taken 4756 times"> + </span>]:<span class="lineCov">      10452 :                 for (i = j = lo; (j -= qsz) &gt;= hi; i = j)</span>
+<span class="lineNum">      63 </span>                :<span class="lineCov">       5696 :                     *i = *j;</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">       4756 :                 *i = c;</span>
+<span class="lineNum">      65 </span>                :            :             }
+<span class="lineNum">      66 </span>                :            :         }
+<span class="lineNum">      67 </span>                :            :     }
+<span class="lineNum">      68 </span>                :            : }
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :            : /*
+<span class="lineNum">      71 </span>                :            :  * qst:
+<span class="lineNum">      72 </span>                :            :  * Do a quicksort
+<span class="lineNum">      73 </span>                :            :  * First, find the median element, and put that one in the first place as the
+<span class="lineNum">      74 </span>                :            :  * discriminator.  (This &quot;median&quot; is just the median of the first, last and
+<span class="lineNum">      75 </span>                :            :  * middle elements).  (Using this median instead of the first element is a big
+<span class="lineNum">      76 </span>                :            :  * win).  Then, the usual partitioning/swapping, followed by moving the
+<span class="lineNum">      77 </span>                :            :  * discriminator into the right place.  Then, figure out the sizes of the two
+<span class="lineNum">      78 </span>                :            :  * partions, do the smaller one recursively and the larger one via a repeat of
+<span class="lineNum">      79 </span>                :            :  * this code.  Stopping when there are less than THRESH elements in a partition
+<span class="lineNum">      80 </span>                :            :  * and cleaning up with an insertion sort (in our caller) is a huge win.
+<span class="lineNum">      81 </span>                :            :  * All data swaps are done in-line, which is space-losing but time-saving.
+<span class="lineNum">      82 </span>                :            :  * (And there are only three places where this is done).
+<a name="83"><span class="lineNum">      83 </span>                :            :  */</a>
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :<span class="lineCov">        811 : qst(base, max)</span>
+<span class="lineNum">      86 </span>                :            :     char *base, *max;
+<span class="lineNum">      87 </span>                :            : {
+<span class="lineNum">      88 </span>                :            :     register char c, *i, *j, *jj;
+<span class="lineNum">      89 </span>                :            :     register int ii;
+<span class="lineNum">      90 </span>                :            :     char *mid, *tmp;
+<span class="lineNum">      91 </span>                :            :     int lo, hi;
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>                :            :     /*
+<span class="lineNum">      94 </span>                :            :      * At the top here, lo is the number of characters of elements in the
+<span class="lineNum">      95 </span>                :            :      * current partition.  (Which should be max - base).
+<span class="lineNum">      96 </span>                :            :      * Find the median of the first, last, and middle element and make
+<span class="lineNum">      97 </span>                :            :      * that the middle element.  Set j to largest of first and middle.
+<span class="lineNum">      98 </span>                :            :      * If max is larger than that guy, then it's that guy, else compare
+<span class="lineNum">      99 </span>                :            :      * max with loser of first and take larger.  Things are set up to
+<span class="lineNum">     100 </span>                :            :      * prefer the middle, then the first in case of ties.
+<span class="lineNum">     101 </span>                :            :      */
+<span class="lineNum">     102 </span>                :<span class="lineCov">        811 :     lo = max - base;            /* number of elements as chars */</span>
+<span class="lineNum">     103 </span>                :            :     do  {
+<span class="lineNum">     104 </span>                :<span class="lineCov">       2244 :         mid = i = base + qsz * ((lo / qsz) &gt;&gt; 1);</span>
+<span class="lineNum">     105 </span>        [<span class="branchCov" title="Branch 0 was taken 1551 times"> + </span><span class="branchCov" title="Branch 1 was taken 693 times"> + </span>]:<span class="lineCov">       2244 :         if (lo &gt;= mthresh) {</span>
+<span class="lineNum">     106 </span>        [<span class="branchCov" title="Branch 1 was taken 602 times"> + </span><span class="branchCov" title="Branch 2 was taken 949 times"> + </span>]:<span class="lineCov">       1551 :             j = (comparex((jj = base), i) &gt; 0 ? jj : i);</span>
+<span class="lineNum">     107 </span>        [<span class="branchCov" title="Branch 1 was taken 775 times"> + </span><span class="branchCov" title="Branch 2 was taken 776 times"> + </span>]:<span class="lineCov">       1551 :             if (comparex(j, (tmp = max - qsz)) &gt; 0) {</span>
+<span class="lineNum">     108 </span>                :            :                 /* switch to first loser */
+<span class="lineNum">     109 </span>        [<span class="branchCov" title="Branch 0 was taken 340 times"> + </span><span class="branchCov" title="Branch 1 was taken 435 times"> + </span>]:<span class="lineCov">        775 :                 j = (j == jj ? i : jj);</span>
+<span class="lineNum">     110 </span>        [<span class="branchCov" title="Branch 1 was taken 388 times"> + </span><span class="branchCov" title="Branch 2 was taken 387 times"> + </span>]:<span class="lineCov">        775 :                 if (comparex(j, tmp) &lt; 0)</span>
+<span class="lineNum">     111 </span>                :<span class="lineCov">        388 :                     j = tmp;</span>
+<span class="lineNum">     112 </span>                :            :             }
+<span class="lineNum">     113 </span>        [<span class="branchCov" title="Branch 0 was taken 855 times"> + </span><span class="branchCov" title="Branch 1 was taken 696 times"> + </span>]:<span class="lineCov">       1551 :             if (j != i) {</span>
+<span class="lineNum">     114 </span>                :<span class="lineCov">        855 :                 ii = qsz;</span>
+<span class="lineNum">     115 </span>                :            :                 do {
+<span class="lineNum">     116 </span>                :<span class="lineCov">       3420 :                     c = *i;</span>
+<span class="lineNum">     117 </span>                :<span class="lineCov">       3420 :                     *i++ = *j;</span>
+<span class="lineNum">     118 </span>                :<span class="lineCov">       3420 :                     *j++ = c;</span>
+<span class="lineNum">     119 </span>        [<span class="branchCov" title="Branch 0 was taken 2565 times"> + </span><span class="branchCov" title="Branch 1 was taken 855 times"> + </span>]:<span class="lineCov">       3420 :                 } while (--ii);</span>
+<span class="lineNum">     120 </span>                :            :             }
+<span class="lineNum">     121 </span>                :            :         }
+<span class="lineNum">     122 </span>                :            :         /*
+<span class="lineNum">     123 </span>                :            :          * Semi-standard quicksort partitioning/swapping
+<span class="lineNum">     124 </span>                :            :          */
+<span class="lineNum">     125 </span>                :<span class="lineCov">       2244 :         for (i = base, j = max - qsz; ; ) {</span>
+<span class="lineNum">     126 </span>[<span class="branchCov" title="Branch 0 was taken 17513 times"> + </span><span class="branchCov" title="Branch 1 was taken 3872 times"> + </span>][<span class="branchCov" title="Branch 3 was taken 10305 times"> + </span><span class="branchCov" title="Branch 4 was taken 7208 times"> + </span>]:<span class="lineCov">      21385 :             while (i &lt; mid &amp;&amp; comparex(i, mid) &lt;= 0)</span>
+<span class="lineNum">     127 </span>                :<span class="lineCov">      10305 :                 i += qsz;</span>
+<span class="lineNum">     128 </span>        [<span class="branchCov" title="Branch 0 was taken 17032 times"> + </span><span class="branchCov" title="Branch 1 was taken 4172 times"> + </span>]:<span class="lineCov">      21204 :             while (j &gt; mid) {</span>
+<span class="lineNum">     129 </span>        [<span class="branchCov" title="Branch 1 was taken 10124 times"> + </span><span class="branchCov" title="Branch 2 was taken 6908 times"> + </span>]:<span class="lineCov">      17032 :                 if (comparex(mid, j) &lt;= 0) {</span>
+<span class="lineNum">     130 </span>                :<span class="lineCov">      10124 :                     j -= qsz;</span>
+<span class="lineNum">     131 </span>                :<span class="lineCov">      10124 :                     continue;</span>
+<span class="lineNum">     132 </span>                :            :                 }
+<span class="lineNum">     133 </span>                :<span class="lineCov">       6908 :                 tmp = i + qsz;  /* value of i after swap */</span>
+<span class="lineNum">     134 </span>        [<span class="branchCov" title="Branch 0 was taken 1628 times"> + </span><span class="branchCov" title="Branch 1 was taken 5280 times"> + </span>]:<span class="lineCov">       6908 :                 if (i == mid) {</span>
+<span class="lineNum">     135 </span>                :            :                     /* j &lt;-&gt; mid, new mid is j */
+<span class="lineNum">     136 </span>                :<span class="lineCov">       1628 :                     mid = jj = j;</span>
+<span class="lineNum">     137 </span>                :            :                 } else {
+<span class="lineNum">     138 </span>                :            :                     /* i &lt;-&gt; j */
+<span class="lineNum">     139 </span>                :<span class="lineCov">       5280 :                     jj = j;</span>
+<span class="lineNum">     140 </span>                :<span class="lineCov">       5280 :                     j -= qsz;</span>
+<span class="lineNum">     141 </span>                :            :                 }
+<span class="lineNum">     142 </span>                :            :                 goto swap;
+<span class="lineNum">     143 </span>                :            :             }
+<span class="lineNum">     144 </span>        [<span class="branchCov" title="Branch 0 was taken 1928 times"> + </span><span class="branchCov" title="Branch 1 was taken 2244 times"> + </span>]:<span class="lineCov">       4172 :             if (i == mid) {</span>
+<span class="lineNum">     145 </span>                :            :                 break;
+<span class="lineNum">     146 </span>                :            :             } else {
+<span class="lineNum">     147 </span>                :            :                 /* i &lt;-&gt; mid, new mid is i */
+<span class="lineNum">     148 </span>                :<span class="lineCov">       1928 :                 jj = mid;</span>
+<span class="lineNum">     149 </span>                :<span class="lineCov">       1928 :                 tmp = mid = i;  /* value of i after swap */</span>
+<span class="lineNum">     150 </span>                :<span class="lineCov">       1928 :                 j -= qsz;</span>
+<span class="lineNum">     151 </span>                :            :             }
+<span class="lineNum">     152 </span>                :            :     swap:
+<span class="lineNum">     153 </span>                :<span class="lineCov">       8836 :             ii = qsz;</span>
+<span class="lineNum">     154 </span>                :            :             do  {
+<span class="lineNum">     155 </span>                :<span class="lineCov">      35344 :                 c = *i;</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">      35344 :                 *i++ = *jj;</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">      35344 :                 *jj++ = c;</span>
+<span class="lineNum">     158 </span>        [<span class="branchCov" title="Branch 0 was taken 26508 times"> + </span><span class="branchCov" title="Branch 1 was taken 8836 times"> + </span>]:<span class="lineCov">      35344 :             } while (--ii);</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov">       8836 :             i = tmp;</span>
+<span class="lineNum">     160 </span>                :<span class="lineCov">       8836 :         }</span>
+<span class="lineNum">     161 </span>                :            :         /*
+<span class="lineNum">     162 </span>                :            :          * Look at sizes of the two partitions, do the smaller
+<span class="lineNum">     163 </span>                :            :          * one first by recursion, then do the larger one by
+<span class="lineNum">     164 </span>                :            :          * making sure lo is its size, base and max are update
+<span class="lineNum">     165 </span>                :            :          * correctly, and branching back.  But only repeat
+<span class="lineNum">     166 </span>                :            :          * (recursively or by branching) if the partition is
+<span class="lineNum">     167 </span>                :            :          * of at least size THRESH.
+<span class="lineNum">     168 </span>                :            :          */
+<span class="lineNum">     169 </span>                :<span class="lineCov">       2244 :         i = (j = mid) + qsz;</span>
+<span class="lineNum">     170 </span>        [<span class="branchCov" title="Branch 0 was taken 1217 times"> + </span><span class="branchCov" title="Branch 1 was taken 1027 times"> + </span>]:<span class="lineCov">       2244 :         if ((lo = j - base) &lt;= (hi = max - i)) {</span>
+<span class="lineNum">     171 </span>        [<span class="branchCov" title="Branch 0 was taken 414 times"> + </span><span class="branchCov" title="Branch 1 was taken 803 times"> + </span>]:<span class="lineCov">       1217 :             if (lo &gt;= thresh)</span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">        414 :                 qst(base, j);</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">       1217 :             base = i;</span>
+<span class="lineNum">     174 </span>                :<span class="lineCov">       1217 :             lo = hi;</span>
+<span class="lineNum">     175 </span>                :            :         } else {
+<span class="lineNum">     176 </span>        [<span class="branchCov" title="Branch 0 was taken 349 times"> + </span><span class="branchCov" title="Branch 1 was taken 678 times"> + </span>]:<span class="lineCov">       1027 :             if (hi &gt;= thresh)</span>
+<span class="lineNum">     177 </span>                :<span class="lineCov">        349 :                 qst(i, max);</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">       1027 :             max = j;</span>
+<span class="lineNum">     179 </span>                :            :         }
+<span class="lineNum">     180 </span>        [<span class="branchCov" title="Branch 0 was taken 1433 times"> + </span><span class="branchCov" title="Branch 1 was taken 811 times"> + </span>]:<span class="lineCov">       2244 :     } while (lo &gt;= thresh);</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">        811 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

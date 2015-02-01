@@ -1,0 +1,1264 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/atoms.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* atoms.c
+        -:    2:*
+        -:    3:* collection of routines to service atom memory storage
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of atoms, with the associated forces, and misc consts
+        -:    9:*
+        -:   10:* routines
+        -:   11:*  atom - adds an atom to the table
+        -:   12:*  a_m_serial returns pointer to ATOM structure for matching serial
+        -:   13:*  a_next  gets next atom in line
+        -:   14:*  a_f_zero  zeros force (fx..) entries
+        -:   15:*  a_d_zero  zeros dx entries
+        -:   16:*  a_v_zero zeros velocity entries 
+        -:   17:*  a_number  returns number of atoms
+        -:   18:* (this could be table driven but what the hell memories cheap)
+        -:   19:*
+        -:   20:*  a_readvelocity( serial,vx,vy,vz) sets the velocities
+        -:   21:*  dump_atom,dump_velocity,dump_force dump the information
+        -:   22:*/
+        -:   23:/*
+        -:   24:*  copyright 1992 Robert W. Harrison
+        -:   25:*  
+        -:   26:*  This notice may not be removed
+        -:   27:*  This program may be copied for scientific use
+        -:   28:*  It may not be sold for profit without explicit
+        -:   29:*  permission of the author(s) who retain any
+        -:   30:*  commercial rights including the right to modify 
+        -:   31:*  this notice
+        -:   32:*/
+        -:   33:
+        -:   34:#define ANSI 1
+        -:   35:/* misc includes - ANSI and some are just to be safe */
+        -:   36:#include <stdio.h>
+        -:   37:#include <ctype.h>
+        -:   38:#include <math.h>
+        -:   39:#include <string.h>
+        -:   40:#ifdef ANSI
+        -:   41:#include <stdlib.h>
+        -:   42:#endif
+        -:   43://#include "ammp.h"
+        -:   44:/* ATOM structure contains a serial number for indexing into
+        -:   45:* arrays and the like (a Hessian)
+        -:   46:* but otherwise is self-contained. Note the hooks for Non-bonded potentials
+        -:   47:*/
+        -:   48:#define ALONG sizeof(ATOM)
+        -:   49:
+        -:   50:ATOM *first = NULL;
+        -:   51:ATOM *last = NULL;
+        -:   52:static int atomNUMBER=0,atomUPDATE=0;
+        -:   53:/* function atom adds an atom to the atom list
+        -:   54:* returns 1 if ok
+        -:   55:* returns 0 if not
+        -:   56:* passed the atomic data (at least the initial values )
+        -:   57:* allocates the new memory, initializes it and
+        -:   58:* returns
+        -:   59:*/
+function _Z4atomfffiffffPc called 38328 returned 100% blocks executed 93%
+    38328:   60:int atom(float x, float y, float z, int serial, float q, float a, float b, float mass, char* name )
+        -:   61:	{
+        -:   62:	int i;
+        -:   63:	static int highest=-1,lowest=-1;
+        -:   64:	ATOM *new_p, *a_m_serial(int);
+        -:   65:	char *ctemp;
+    38328:   66:	new_p = NULL;
+    38328:   67:	if( highest >= serial && lowest <= serial) new_p = a_m_serial( serial);
+branch  0 taken 75% (fallthrough)
+branch  1 taken 25%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+call    4 returned 100%
+    38328:   68:	if( new_p == NULL)
+branch  0 taken 25% (fallthrough)
+branch  1 taken 75%
+        -:   69:	{
+     9582:   70:	if( ( new_p = (ATOM*) malloc( ALONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   71:	{
+    #####:   72:	return 0;
+        -:   73:	}
+     9582:   74:	new_p ->dontuse = 0;
+     9582:   75:	new_p ->dontuse = 1;
+     9582:   76:	new_p ->excluded[0] = new_p;
+     9582:   77:	new_p -> active = 1;
+   316206:   78:	for( i=0; i< NEXCLUDE; i++)
+branch  0 taken 97%
+branch  1 taken 3% (fallthrough)
+   306624:   79:	 new_p->exkind[i] = 0;
+     9582:   80:	new_p->next = NULL;
+        -:   81:	}
+        -:   82:	/* initialize the pointers */
+    38328:   83:	if( first == NULL){ first = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+        1:   84:	highest = serial; lowest = serial; }
+    38328:   85:	if( last == NULL) last = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+    38328:   86:	new_p ->x = x;
+    38328:   87:	new_p ->y = y;
+    38328:   88:	new_p ->z = z;
+    38328:   89:	new_p ->fx = 0.;
+    38328:   90:	new_p ->fy = 0.;
+    38328:   91:	new_p ->fz = 0.;
+    38328:   92:	new_p ->dx = 0.;
+    38328:   93:	new_p ->dy = 0.;
+    38328:   94:	new_p ->dz = 0.;
+    38328:   95:	new_p ->vx = 0.;
+    38328:   96:	new_p ->vy = 0.;
+    38328:   97:	new_p ->vz = 0.;
+    38328:   98:	new_p ->jaa = -1;	new_p->chi = -1;
+        -:   99:/* for reinterpolates */
+    38328:  100:	new_p ->px = 10e10;
+    38328:  101:	new_p ->py = 10e10;
+    38328:  102:	new_p ->pz = 10e10;
+        -:  103:/*	
+        -:  104:	new_p ->qx = 10e10;
+        -:  105:	new_p ->qy = 10e10;
+        -:  106:	new_p ->qz = 10e10;
+        -:  107:*/
+    38328:  108:	new_p ->q = q;
+    38328:  109:	new_p ->a = a;
+    38328:  110:	new_p ->b = b;
+    38328:  111:	new_p ->serial = serial;
+    38328:  112:	new_p ->mass = mass;
+   273588:  113:	for(i=0;i<8; i++)
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  114:	{
+   271640:  115:		new_p->name[i] = *name;
+   271640:  116:		new_p->name[i+1] = '\0';
+   271640:  117:		if( *name == '\0') break;
+branch  0 taken 87% (fallthrough)
+branch  1 taken 13%
+   235260:  118:		name++;
+        -:  119:	}
+    38328:  120:	if( new_p->next == NULL)
+branch  0 taken 25% (fallthrough)
+branch  1 taken 75%
+        -:  121:	{
+     9582:  122:	new_p -> next = new_p;
+     9582:  123:	last -> next = new_p;
+     9582:  124:	last = new_p;
+        -:  125:	}
+    38328:  126:	atomUPDATE = 1;
+    38328:  127:	if( highest < serial ) highest = serial;
+branch  0 taken 25% (fallthrough)
+branch  1 taken 75%
+    38328:  128:	if( lowest > serial ) lowest = serial;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    38328:  129:	return 1;
+        -:  130:	}
+        -:  131:/* function a_number() 
+        -:  132:* returns number of atoms defined
+        -:  133:*  this is just atomNUMBER if atomUPDATE == 0 
+        -:  134:*  other wise just figure it out 
+        -:  135:*/
+function _Z8a_numberv called 42650 returned 100% blocks executed 89%
+    42650:  136:int a_number()
+        -:  137:{
+        -:  138:	ATOM *ap; 
+    42650:  139:	if( atomUPDATE )
+branch  0 taken 76% (fallthrough)
+branch  1 taken 24%
+        -:  140:	{
+    32347:  141:	atomUPDATE = 0;
+    32347:  142:	atomNUMBER = 0;
+    32347:  143:	if( first == NULL ) return 0 ;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    32347:  144:	ap = first;
+281903207:  145:	while(1)
+        -:  146:	{
+281935554:  147:		if( ap->next == NULL) break;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+281935554:  148:		atomNUMBER++;
+281935554:  149:		if( ap->next == ap ) break;
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+281903207:  150:		ap = (ATOM*) ap->next;
+        -:  151:	}
+        -:  152:	}
+    42650:  153:	return atomNUMBER;
+        -:  154:}
+        -:  155:/* function a_m_serial( serial )
+        -:  156:* returns NULL on error or returns the address of the ATOM
+        -:  157:* which matches serial
+        -:  158:* cute?
+        -:  159:*/
+function _Z10a_m_seriali called 159140 returned 100% blocks executed 95%
+   159140:  160:ATOM *a_m_serial(int serial)
+        -:  161:{
+        -:  162:     static ATOM *ap = NULL;
+        -:  163:	static ATOM *lastmatched = NULL;
+        -:  164:	int i , n, a_number();
+   159140:  165:	if( atomUPDATE) n= a_number();
+branch  0 taken 20% (fallthrough)
+branch  1 taken 80%
+call    2 returned 100%
+   126793:  166:	else n = atomNUMBER;
+        -:  167:
+   159140:  168:	ap = first; /* static pointer is hook for more efficient search */
+   159140:  169:     if( ap == NULL) return NULL;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   159140:  170:	if( lastmatched == NULL ) lastmatched = first;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+        -:  171:		
+   159140:  172:	if( serial == lastmatched->serial) return lastmatched;
+branch  0 taken 7% (fallthrough)
+branch  1 taken 93%
+   147648:  173:	if( serial > lastmatched->serial) ap = lastmatched;
+branch  0 taken 80% (fallthrough)
+branch  1 taken 20%
+ 67442901:  174:	for( i=0; i< n; i++ )
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  175:     {
+ 67442896:  176:      if( ap-> serial == serial) {lastmatched = ap;return ap;}
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+ 67295253:  177:      if( ap == ap->next)ap = first ;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+ 67295248:  178:      else ap = (ATOM*) ap->next;
+        -:  179:     }
+        5:  180:     return NULL;
+        -:  181:}
+        -:  182:/* function a_next( flag )
+        -:  183:* returns NULL on error or last atom
+        -:  184:* then steps to the next
+        -:  185:* cute?
+        -:  186:* flag <= 0 starts it off
+        -:  187:*/
+function _Z6a_nexti called 97674324 returned 100% blocks executed 90%
+ 97674324:  188:ATOM *a_next( int flag)
+        -:  189:{
+        -:  190:     static ATOM *ap = NULL;
+ 97674324:  191:     if( ap == NULL) ap = first ; 
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+ 97674324:  192:     if( ap == NULL) return NULL;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+ 97674324:  193:	if( flag <= 0){ ap = first; return ap;} 
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+ 97664131:  194:      if( ap == ap->next) return NULL;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+ 97659133:  195:      ap = (ATOM*) ap->next;
+ 97659133:  196:      return ap;
+        -:  197:}
+        -:  198:/* function a_f_zero()
+        -:  199:* zeros the forces in each atom element
+        -:  200:*/
+        -:  201:/* return is 0 on error 1 iff OK */
+function _Z8a_f_zerov called 1002 returned 100% blocks executed 86%
+     1002:  202:int a_f_zero()
+        -:  203:{
+        -:  204:	ATOM *ap;
+     1002:  205:	ap = first;
+  9600162:  206:	while(1)
+        -:  207:	{
+  9601164:  208:	if( ap->next == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  9601164:  209:	 ap -> fx = 0.; ap -> fy = 0.; ap -> fz = 0.;
+  9601164:  210:	 if( ap == ap->next) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  9600162:  211:	 ap = (ATOM*) ap->next;
+        -:  212:	}
+        -:  213:}
+        -:  214:/* function a_d_zero()
+        -:  215:* zeros the dx,dy,dz storage for each atom element 
+        -:  216:*/
+        -:  217:/* return is 0 on error 1 iff OK */
+function _Z8a_d_zerov called 0 returned 0% blocks executed 0%
+    #####:  218:int a_d_zero()
+        -:  219:{
+        -:  220:	ATOM *ap;
+    #####:  221:	ap = first;
+    #####:  222:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  223:	while(1)
+        -:  224:	{
+    #####:  225:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  226:	 ap -> dx = 0.; ap -> dy = 0.; ap -> dz = 0.;
+    #####:  227:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  228:	 ap = (ATOM*) ap->next;
+        -:  229:	}
+        -:  230:}
+        -:  231:/* function a_g_zero()
+        -:  232:* zeros the velocities in each atom element
+        -:  233:*/
+        -:  234:/* return is 0 on error 1 iff OK */
+function _Z8a_g_zerov called 0 returned 0% blocks executed 0%
+    #####:  235:int a_g_zero()
+        -:  236:{
+        -:  237:	ATOM *ap;
+    #####:  238:	ap = first;
+    #####:  239:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  240:	while(1)
+        -:  241:	{
+    #####:  242:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  243:	 ap -> gx = 0.; ap -> gy = 0.; ap -> gz = 0.;
+    #####:  244:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  245:	 ap = (ATOM*) ap->next;
+        -:  246:	}
+        -:  247:}
+        -:  248:/* function a_v_zero()
+        -:  249:* zeros the velocities in each atom element
+        -:  250:*/
+        -:  251:/* return is 0 on error 1 iff OK */
+function _Z8a_v_zerov called 0 returned 0% blocks executed 0%
+    #####:  252:int a_v_zero()
+        -:  253:{
+        -:  254:	ATOM *ap;
+    #####:  255:	ap = first;
+    #####:  256:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  257:	while(1)
+        -:  258:	{
+    #####:  259:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  260:	 ap -> vx = 0.; ap -> vy = 0.; ap -> vz = 0.;
+    #####:  261:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  262:	 ap = (ATOM*) ap->next;
+        -:  263:	}
+        -:  264:}
+        -:  265:/* function a_inc_f( lambda )
+        -:  266:*  moves the atoms lambda times the forces
+        -:  267:*/
+function _Z7a_inc_ff called 0 returned 0% blocks executed 0%
+    #####:  268:int a_inc_f(float lambda)
+        -:  269:{
+        -:  270:	ATOM *ap;
+    #####:  271:	ap = first;
+    #####:  272:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  273:	while(1)
+        -:  274:	{
+    #####:  275:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  276:	 ap -> x += ap->fx*lambda;
+    #####:  277:	 ap->y += ap->fy*lambda; ap->z += ap->fz*lambda;
+    #####:  278:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  279:	 ap = (ATOM*) ap->next;
+        -:  280:	}
+        -:  281:}
+        -:  282:/* function a_inc_d( lambda )
+        -:  283:*  moves the atoms lambda times the dx
+        -:  284:*/
+        -:  285:/*SPEC use modern style decl, not K&R, to avoid compiler warnings jh/9/24/99 */
+function _Z7a_inc_df called 0 returned 0% blocks executed 0%
+    #####:  286:int a_inc_d( float lambda )
+        -:  287:{
+        -:  288:	ATOM *ap;
+    #####:  289:	ap = first;
+    #####:  290:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  291:	while(1)
+        -:  292:	{
+    #####:  293:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  294:	 ap -> x += ap->dx*lambda;
+    #####:  295:	 ap->y += ap->dy*lambda; ap->z += ap->dz*lambda;
+    #####:  296:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  297:	 ap = (ATOM*) ap->next;
+        -:  298:	}
+        -:  299:}
+        -:  300:/* function a_inc_v( lambda )
+        -:  301:*  moves the atoms lambda times the velocities
+        -:  302:*/
+function _Z7a_inc_vf called 0 returned 0% blocks executed 0%
+    #####:  303:int a_inc_v(float lambda)
+        -:  304:{
+        -:  305:	ATOM *ap;
+    #####:  306:	ap = first;
+    #####:  307:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  308:	while(1)
+        -:  309:	{
+    #####:  310:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  311:	 ap -> x += ap->vx*lambda;
+    #####:  312:	 ap->y += ap->vy*lambda; ap->z += ap->vz*lambda;
+    #####:  313:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  314:	 ap = (ATOM*) ap->next;
+        -:  315:	}
+        -:  316:}
+        -:  317:/* function a_ftodx( lambda )
+        -:  318:*  moves the atom force components to the dx slots
+        -:  319:* with a scale factor.
+        -:  320:*/
+        -:  321:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z7a_ftodxff called 0 returned 0% blocks executed 0%
+    #####:  322:int a_ftodx( float lambda, float lamold )
+        -:  323:{
+        -:  324:	ATOM *ap;
+    #####:  325:	ap = first;
+    #####:  326:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  327:	while(1)
+        -:  328:	{
+    #####:  329:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  330:	 ap -> dx =ap->dx*lamold+ ap->fx*lambda;
+    #####:  331:	 ap->dy =ap->dy*lamold+ ap->fy*lambda;
+    #####:  332:	 ap->dz =ap->dz*lamold+ ap->fz*lambda;
+    #####:  333:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  334:	 ap = (ATOM*) ap->next;
+        -:  335:	}
+        -:  336:}
+        -:  337:/* function a_ftogx( lambda,lamold )
+        -:  338:*  moves the atom force components to the gx slots
+        -:  339:* with a scale factor.
+        -:  340:*/
+function _Z7a_ftogxff called 0 returned 0% blocks executed 0%
+    #####:  341:int a_ftogx(float lambda,float lamold)
+        -:  342:{
+        -:  343:	ATOM *ap;
+    #####:  344:	ap = first;
+    #####:  345:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  346:	while(1)
+        -:  347:	{
+    #####:  348:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  349:	 ap->gx = ap->gx*lamold +  ap->fx*lambda;
+    #####:  350:	 ap->gy = ap->gy*lamold +  ap->fy*lambda;
+    #####:  351:	 ap->gz = ap->gz*lamold +  ap->fz*lambda;
+    #####:  352:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  353:	 ap = (ATOM*) ap->next;
+        -:  354:	}
+        -:  355:}
+        -:  356:/* function a_ftovx( lambda,lamold )
+        -:  357:*  moves the atom force components to the vx slots
+        -:  358:* with a scale factor.
+        -:  359:*/
+function _Z7a_ftovxff called 0 returned 0% blocks executed 0%
+    #####:  360:int a_ftovx(float lambda,float lamold)
+        -:  361:{
+        -:  362:	ATOM *ap;
+    #####:  363:	ap = first;
+    #####:  364:	if( ap == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  365:	while(1)
+        -:  366:	{
+    #####:  367:	if( ap->next == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  368:	 ap->vx = ap->vx*lamold +  ap->fx*lambda;
+    #####:  369:	 ap->vy = ap->vy*lamold +  ap->fy*lambda;
+    #####:  370:	 ap->vz = ap->vz*lamold +  ap->fz*lambda;
+    #####:  371:	 if( ap == ap->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  372:	 ap = (ATOM*) ap->next;
+        -:  373:	}
+        -:  374:}
+        -:  375:/* function a_max_f() 
+        -:  376:* returns the maximum l2 metric of a force on an atom
+        -:  377:*/
+function _Z7a_max_fv called 16 returned 100% blocks executed 90%
+       16:  378:float a_max_f()
+        -:  379:{
+        -:  380:	float l2norm ,l2max;
+        -:  381:	ATOM *ap;
+       16:  382:	ap = first;
+       16:  383:	l2max = -1.;
+       16:  384:	if( ap == NULL) return l2max;
+branch  0 taken 6% (fallthrough)
+branch  1 taken 94%
+   143715:  385:	while(1)
+        -:  386:	{
+   143730:  387:	if( ap->next == NULL) return l2max;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   143730:  388:	l2norm = ap->fx*ap->fx;
+   143730:  389:	l2norm += ap->fy*ap->fy;
+   143730:  390:	l2norm += ap->fz*ap->fz;
+   143730:  391:	if( l2norm > l2max )
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+       80:  392:		l2max = l2norm;
+   143730:  393:	 if( ap == ap->next) return l2max;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+   143715:  394:	 ap = (ATOM*) ap->next;
+        -:  395:	}
+        -:  396:}
+        -:  397:/* function a_max_d() 
+        -:  398:* returns the maximum l2 metric of a displacement of an atom
+        -:  399:*/
+function _Z7a_max_dv called 0 returned 0% blocks executed 0%
+    #####:  400:float a_max_d()
+        -:  401:{
+        -:  402:	float l2norm ,l2max;
+        -:  403:	ATOM *ap;
+    #####:  404:	ap = first;
+    #####:  405:	l2max = -1.;
+    #####:  406:	if( ap == NULL) return l2max;
+branch  0 never executed
+branch  1 never executed
+    #####:  407:	while(1)
+        -:  408:	{
+    #####:  409:	if( ap->next == NULL) return l2max;
+branch  0 never executed
+branch  1 never executed
+    #####:  410:	l2norm = ap->dx*ap->dx;
+    #####:  411:	l2norm += ap->dy*ap->dy;
+    #####:  412:	l2norm += ap->dz*ap->dz;
+    #####:  413:	if( l2norm > l2max )
+branch  0 never executed
+branch  1 never executed
+    #####:  414:		l2max = l2norm;
+    #####:  415:	 if( ap == ap->next) return l2max;
+branch  0 never executed
+branch  1 never executed
+    #####:  416:	 ap = (ATOM*) ap->next;
+        -:  417:	}
+        -:  418:}
+        -:  419:/* function a_l2_f(  )
+        -:  420:*  return l2 norm of the forces
+        -:  421:*/
+function _Z6a_l2_fv called 16 returned 100% blocks executed 89%
+       16:  422:float a_l2_f(  )
+        -:  423:{
+        -:  424:	ATOM *ap;
+        -:  425:	float l2;
+       16:  426:	ap = first;
+       16:  427:	if( ap == NULL) return 0.;
+branch  0 taken 6% (fallthrough)
+branch  1 taken 94%
+       15:  428:	l2 = 0.;
+   143715:  429:	while(1)
+        -:  430:	{
+   143730:  431:	if( ap->next == NULL) return -l2;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   143730:  432:	l2 += ap->fx*ap->fx ;
+   143730:  433:	l2 += ap->fy*ap->fy ;
+   143730:  434:	l2 += ap->fz*ap->fz ;
+   143730:  435:	 if( ap == ap->next) return l2;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+   143715:  436:	 ap = (ATOM*) ap->next;
+        -:  437:	}
+        -:  438:}
+        -:  439:/* function a_l2_g(  )
+        -:  440:*  return l2 norm of the velocities
+        -:  441:*/
+function _Z6a_l2_gv called 0 returned 0% blocks executed 0%
+    #####:  442:float a_l2_g(  )
+        -:  443:{
+        -:  444:	ATOM *ap;
+        -:  445:	float l2;
+    #####:  446:	ap = first;
+    #####:  447:	if( ap == NULL) return 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  448:	l2 = 0.;
+    #####:  449:	while(1)
+        -:  450:	{
+    #####:  451:	if( ap->next == NULL) return -l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  452:	l2 += ap->gx*ap->gx ;
+    #####:  453:	l2 += ap->gy*ap->gy ;
+    #####:  454:	l2 += ap->gz*ap->gz ;
+    #####:  455:	 if( ap == ap->next) return l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  456:	 ap = (ATOM*) ap->next;
+        -:  457:	}
+        -:  458:}
+        -:  459:/* function a_l2_v(  )
+        -:  460:*  return l2 norm of the velocities
+        -:  461:*/
+function _Z6a_l2_vv called 0 returned 0% blocks executed 0%
+    #####:  462:float a_l2_v(  )
+        -:  463:{
+        -:  464:	ATOM *ap;
+        -:  465:	float l2;
+    #####:  466:	ap = first;
+    #####:  467:	if( ap == NULL) return 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  468:	l2 = 0.;
+    #####:  469:	while(1)
+        -:  470:	{
+    #####:  471:	if( ap->next == NULL) return -l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  472:	l2 += ap->vx*ap->vx ;
+    #####:  473:	l2 += ap->vy*ap->vy ;
+    #####:  474:	l2 += ap->vz*ap->vz ;
+    #####:  475:	 if( ap == ap->next) return l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  476:	 ap = (ATOM*) ap->next;
+        -:  477:	}
+        -:  478:}
+        -:  479:/* function a_l2_d(  )
+        -:  480:*  return l2 norm of the dx terms
+        -:  481:*/
+function _Z6a_l2_dv called 0 returned 0% blocks executed 0%
+    #####:  482:float a_l2_d(  )
+        -:  483:{
+        -:  484:	ATOM *ap;
+        -:  485:	float l2;
+    #####:  486:	ap = first;
+    #####:  487:	if( ap == NULL) return 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  488:	l2 = 0.;
+    #####:  489:	while(1)
+        -:  490:	{
+    #####:  491:	if( ap->next == NULL) return -l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  492:	l2 += ap->dx*ap->dx ;
+    #####:  493:	l2 += ap->dy*ap->dy ;
+    #####:  494:	l2 += ap->dz*ap->dz ;
+    #####:  495:	 if( ap == ap->next) return l2;
+branch  0 never executed
+branch  1 never executed
+    #####:  496:	 ap = (ATOM*) ap->next;
+        -:  497:	}
+        -:  498:}
+        -:  499:/* routine dump_atoms
+        -:  500:* this function outputs the atomic parameters
+        -:  501:* and does it in a simple form
+        -:  502:*  atom x,y,z,serial,name,q,a,b,mass
+        -:  503:* where atom is the string atom
+        -:  504:* the rest is just free format
+        -:  505:*/
+        -:  506:/*SPEC use modern declaration to match function proto jh/9/22/99 */
+function _Z10dump_atomsP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  507:void dump_atoms( FILE *where )
+        -:  508:{
+        -:  509:	ATOM *a,*ap;
+        -:  510:	ATOM *bonded[20];
+        -:  511:	int i ,j ;
+        -:  512:	void dump_excludes(FILE*);
+    #####:  513:	a = first;
+        -:  514:
+    #####:  515:	if( a == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  516:	while( (a->next != a)  )
+branch  0 never executed
+branch  1 never executed
+        -:  517:	{
+    #####:  518:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  519:	fprintf( where,"atom %f %f %f %d %s %f %f %f %f ;\n",
+        -:  520:		a->x,a->y,a->z,a->serial,a->name,a->q,a->a,a->b,
+    #####:  521:		a->mass );
+    #####:  522:	if( a->chi > 0 && a->jaa > 0)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  523:	fprintf( where,"mompar %d %f %f;\n",
+    #####:  524:		a->serial,a->chi,a->jaa);
+    #####:  525:	if( !a->active) fprintf(where," inactive %d ;\n", a->serial);
+branch  0 never executed
+branch  1 never executed
+    #####:  526:		a = (ATOM*) a->next;
+        -:  527:	}
+    #####:  528:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  529:	fprintf( where,"atom %f %f %f %d %s %f %f %f %f ;\n",
+        -:  530:		a->x,a->y,a->z,a->serial,a->name,a->q,a->a,a->b,
+    #####:  531:		a->mass );
+    #####:  532:	if( a->chi > 0 && a->jaa > 0)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  533:	fprintf( where,"mompar %d %f %f;\n",
+    #####:  534:		a->serial,a->chi,a->jaa);
+    #####:  535:	if( !a->active) fprintf(where," inactive %d ;\n", a->serial);
+branch  0 never executed
+branch  1 never executed
+        -:  536:/* all of the atoms have been dumped so now dump the excludes */
+    #####:  537:	dump_excludes(where);
+call    0 never executed
+        -:  538:} /* end of dump atoms */
+        -:  539:/* routine dump_excludes( FILE *where )
+        -:  540:*  write out all of the excludes */
+        -:  541:/*SPEC use modern declaration to match function proto jh/9/22/99 */
+function _Z13dump_excludesP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  542:void dump_excludes( FILE *where )
+        -:  543:{
+        -:  544:	ATOM *a,*ap,*a_next(int);
+        -:  545:	int istailored;
+        -:  546:	int get_i_variable(char*);
+        -:  547:	int numatm,a_number();
+        -:  548:	int i,j;
+        -:  549:
+        -:  550:/*
+        -:  551:	istailored = 0;
+        -:  552:	istailored = get_i_variable("numtail");
+        -:  553:	if( istailored <= 0 ) return;
+        -:  554:*/
+        -:  555:
+    #####:  556:	numatm = a_number();
+call    0 never executed
+    #####:  557:	if( numatm <= 0 ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  558:
+    #####:  559:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  560:	{
+    #####:  561:	a = a_next(i);
+call    0 never executed
+    #####:  562:		for( j=0; j< a->dontuse; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  563:		{
+    #####:  564:		if( a->exkind[j] > 0) {
+branch  0 never executed
+branch  1 never executed
+    #####:  565:		ap = (ATOM*) a->excluded[j];
+    #####:  566:		if( ap->serial > a->serial)
+branch  0 never executed
+branch  1 never executed
+        -:  567:		fprintf( where," tailor exclude %d %d ;\n",
+    #####:  568:		a->serial, ap->serial);
+        -:  569:/*
+        -:  570:		if( ap->serial < a->serial)
+        -:  571:		fprintf( where," tailor exclude %d %d ;\n",
+        -:  572:		a->serial, ap->serial);
+        -:  573:*/
+        -:  574:					}
+        -:  575:		}
+        -:  576:	}
+        -:  577:}/* end of dump_excludes */
+        -:  578:/* routine dump_velocity
+        -:  579:* this function outputs the atomic parameters
+        -:  580:* and does it in a simple form
+        -:  581:*  velocity serial vx,vy,vz
+        -:  582:* where atom is the string atom
+        -:  583:* the rest is just free format
+        -:  584:*/
+        -:  585:/*SPEC use modern declaration to match function proto jh/9/22/99 */
+function _Z13dump_velocityP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  586:void dump_velocity( FILE *where )
+        -:  587:{
+        -:  588:	ATOM *a;
+    #####:  589:	a = first;
+    #####:  590:	if( a == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  591:	while( (a->next != a)  )
+branch  0 never executed
+branch  1 never executed
+        -:  592:	{
+    #####:  593:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  594:	fprintf( where,"velocity %d %f %f %f ;\n",
+    #####:  595:		a->serial,a->vx,a->vy,a->vz );
+    #####:  596:		a = (ATOM*) a->next;
+        -:  597:	}
+    #####:  598:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  599:	fprintf( where,"velocity %d %f %f %f ;\n",
+    #####:  600:		a->serial,a->vx,a->vy,a->vz );
+        -:  601:}
+        -:  602:/* int a_readvelocity( serial,vx,vy,vz)
+        -:  603:*  update the velocity field of the atom structure
+        -:  604:*/
+function _Z14a_readvelocityifff called 38328 returned 100% blocks executed 80%
+    38328:  605:int a_readvelocity(int serial, float vx, float vy, float vz)
+        -:  606:{
+        -:  607:	ATOM *ap,*a_m_serial(int);
+    38328:  608:	ap = a_m_serial( serial);
+call    0 returned 100%
+    38328:  609:	if( ap == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    38328:  610:	ap ->vx = vx;
+    38328:  611:	ap ->vy = vy;
+    38328:  612:	ap ->vz = vz;
+    38328:  613:	return 1;
+        -:  614:}
+        -:  615:/* routine dump_force
+        -:  616:* this function outputs the atomic parameters
+        -:  617:* and does it in a simple form
+        -:  618:*  force serial x,y,z,fx,fy,fz
+        -:  619:* where atom is the string atom
+        -:  620:* the rest is just free format
+        -:  621:*/
+        -:  622:/*SPEC use modern declaration to match function proto jh/9/22/99 */
+function _Z10dump_forceP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  623:void dump_force( FILE *where )
+        -:  624:{
+        -:  625:	ATOM *a;
+    #####:  626:	a = first;
+    #####:  627:	if( a == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  628:	while( (a->next != a)  )
+branch  0 never executed
+branch  1 never executed
+        -:  629:	{
+    #####:  630:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  631:	fprintf( where,"force %d %f %f %f %f %f %f ;\n",
+    #####:  632:		a->serial,a->x,a->y,a->z,a->fx,a->fy,a->fz );
+    #####:  633:		a = (ATOM*) a->next;
+        -:  634:	}
+    #####:  635:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+        -:  636:	fprintf( where,"force %d %f %f %f %f %f %f ;\n",
+    #####:  637:		a->serial,a->x,a->y,a->z,a->fx,a->fy,a->fz );
+        -:  638:}
+        -:  639:/* routine dump_pdb
+        -:  640:* this function outputs the atomic parameters
+        -:  641:* in pdb format
+        -:  642:*
+        -:  643:* res_mod is used when encoding atoms to serial
+        -:  644:*  code is  (residue_number-1) * res_mod + (atom_number-1)
+        -:  645:*   the -1 is FORTRAN style uugh!!!  (i.e.  zero is not allowed number)
+        -:  646:*
+        -:  647:*  residue name and atom name are dot coded as
+        -:  648:*   wat.oh
+        -:  649:*
+        -:  650:* other codes are possible, but this is what we chose for the moment
+        -:  651:*/
+        -:  652:/*SPEC use modern declaration to match function proto jh/9/22/99 */
+function _Z8dump_pdbP8_IO_FILEi called 0 returned 0% blocks executed 0%
+    #####:  653:void dump_pdb( FILE *where, int res_mod )
+        -:  654:{
+        -:  655:	ATOM *a;
+        -:  656:	char *np,resid[5],atid[5];
+        -:  657:	int i,ires,iatom;
+    #####:  658:	a = first;
+    #####:  659:	iatom = 0;
+    #####:  660:	if( a == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  661:	if( res_mod == 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  662:	{
+    #####:  663:		aaerror( " need a non-zero residue modulus in dump_pdb\n");
+call    0 never executed
+    #####:  664:		return ;
+        -:  665:	}
+    #####:  666:	while( (a->next != a)  )
+branch  0 never executed
+branch  1 never executed
+        -:  667:	{
+    #####:  668:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  669:		iatom++;
+        -:  670:/*		ires = a->serial/res_mod +1 ; */
+    #####:  671:		ires = a->serial/res_mod  ;
+    #####:  672:		np = a->name;
+    #####:  673:		while( strcmp(np,"sna.rkq") == 0)
+branch  0 never executed
+branch  1 never executed
+    #####:  674:		{ a= (ATOM*) a->next;
+    #####:  675:		if( a->next == NULL ) return; ires = a->serial/res_mod;
+branch  0 never executed
+branch  1 never executed
+    #####:  676:		np = a->name; }
+    #####:  677:		for( i=0; i<5;i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  678:		{ if(*np != '.')
+branch  0 never executed
+branch  1 never executed
+    #####:  679:			{ if( islower(*np)) {resid[i] = toupper(*np);}
+branch  0 never executed
+branch  1 never executed
+    #####:  680:				else{ resid[i] = *np;}}
+    #####:  681:			else{ resid[i] = '\0'; break; }
+    #####:  682:			if( *np == '\0') break;
+branch  0 never executed
+branch  1 never executed
+    #####:  683:			np++;
+        -:  684:			}
+    #####:  685:		if( *np == '.') np++;
+branch  0 never executed
+branch  1 never executed
+    #####:  686:		for( i=0; i<5;i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  687:		{ if(*np != '.')
+branch  0 never executed
+branch  1 never executed
+    #####:  688:			{ if( islower(*np)){ atid[i] = toupper(*np);}
+branch  0 never executed
+branch  1 never executed
+    #####:  689:				else{ atid[i] = *np;}}
+    #####:  690:			else{ atid[i] = '\0'; break; }
+    #####:  691:			if( *np == '\0' ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:  692:			np++;
+        -:  693:			}
+        -:  694:/* brookhaven format ,(sort of) */
+        -:  695:/*
+        -:  696:	fprintf(where,
+        -:  697:	"ATOM  %5d %-4s%c%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+        -:  698:	iatom,atid,' ',resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  699:*/
+    #####:  700:	if( atid[0] == 'H')
+branch  0 never executed
+branch  1 never executed
+        -:  701:	fprintf(where,
+        -:  702:	"ATOM  %5d %-4s%c%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+    #####:  703:	iatom,atid,' ',resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  704:		else
+        -:  705:	fprintf(where,
+        -:  706:	"ATOM  %5d  %-4s%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+    #####:  707:	iatom,atid,resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  708:
+    #####:  709:		a = (ATOM*) a->next;
+        -:  710:	}
+    #####:  711:	if( a->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  712:	iatom++;
+    #####:  713:	ires = a->serial/res_mod ;
+    #####:  714:	np = a->name;
+    #####:  715:	if( strcmp(np,"sna.rkq") != 0)
+branch  0 never executed
+branch  1 never executed
+        -:  716:	{
+    #####:  717:	for( i=0; i<5;i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  718:	{ if(*np != '.')
+branch  0 never executed
+branch  1 never executed
+    #####:  719:		{ if( islower(*np)){ resid[i] = toupper(*np);}
+branch  0 never executed
+branch  1 never executed
+    #####:  720:			else{ resid[i] = *np;}}
+    #####:  721:		else{ resid[i] = '\0'; break; }
+    #####:  722:		if( *np == '\0') break;
+branch  0 never executed
+branch  1 never executed
+    #####:  723:		np++;
+        -:  724:		}
+    #####:  725:		if( *np == '.') np++;
+branch  0 never executed
+branch  1 never executed
+    #####:  726:	for( i=0; i<5;i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  727:	{ if(*np != '.')
+branch  0 never executed
+branch  1 never executed
+    #####:  728:		{if( islower(*np)){ atid[i] = toupper(*np);}
+branch  0 never executed
+branch  1 never executed
+    #####:  729:			else{ atid[i] = *np;}}
+    #####:  730:		else{ atid[i] = '\0'; break; }
+    #####:  731:		if( *np == '\0' ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:  732:		np++;
+        -:  733:		}
+        -:  734:/* brookhaven format ,(sort of) */
+        -:  735:/*
+        -:  736:	fprintf(where,
+        -:  737:	"ATOM  %5d %-4s%c%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+        -:  738:	iatom,atid,' ',resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  739:*/
+    #####:  740:	if( atid[0] == 'H')
+branch  0 never executed
+branch  1 never executed
+        -:  741:	fprintf(where,
+        -:  742:	"ATOM  %5d %-4s%c%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+    #####:  743:	iatom,atid,' ',resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  744:		else
+        -:  745:	fprintf(where,
+        -:  746:	"ATOM  %5d  %-4s%-3s  %4d    %8.3f%8.3f%8.3f%6.2f%6.2f\n",
+    #####:  747:	iatom,atid,resid,ires,a->x,a->y,a->z,1.,10.);
+        -:  748:	}/* end of if for SNARK.Q */
+        -:  749:	fprintf(where,"END   \n");
+        -:  750:}
+        -:  751:/* function a_pr_beta() 
+        -:  752:* a_pr_beta() returns the Poliak Ribeire beta
+        -:  753:* for conjugate gradients
+        -:  754:*
+        -:  755:*/
+function _Z9a_pr_betav called 0 returned 0% blocks executed 0%
+    #####:  756:float a_pr_beta()
+        -:  757:{
+        -:  758:	float a,b;
+        -:  759:	ATOM *ap;
+    #####:  760:	ap = first;
+    #####:  761:	a = 0.; b = 0.; 	
+    #####:  762:	if( ap == NULL) return a;
+branch  0 never executed
+branch  1 never executed
+    #####:  763:	while(1)
+        -:  764:	{
+    #####:  765:	if( ap->next == NULL) return 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  766:	 a += ap->fx*ap->fx;
+    #####:  767:	 a += ap->fy*ap->fy;
+    #####:  768:	 a += ap->fz*ap->fz;
+    #####:  769:	 a -= ap->gx*ap->fx;
+    #####:  770:	 a -= ap->gy*ap->fy;
+    #####:  771:	 a -= ap->gz*ap->fz;
+    #####:  772:	 b += ap->gx*ap->gx;
+    #####:  773:	 b += ap->gy*ap->gy;
+    #####:  774:	 b += ap->gz*ap->gz;
+    #####:  775:	 if( ap == ap->next) 
+branch  0 never executed
+branch  1 never executed
+        -:  776:	 {
+    #####:  777:	if( b  <= 1.e-5) { a = 0.; b = 1.;}
+branch  0 never executed
+branch  1 never executed
+    #####:  778:	 return a/b;
+        -:  779:	 } 
+    #####:  780:	 ap = (ATOM*) ap->next;
+        -:  781:	}
+        -:  782:}
+        -:  783:/* inactivate ( i1,i2 )
+        -:  784:*  i2  == 0 just do i 1 
+        -:  785:*  else do the range from i1 to i2 
+        -:  786:*
+        -:  787:* set the active flag in the atoms to 0 and
+        -:  788:* turn them off
+        -:  789:*/
+function _Z19inactivate_non_zeroii called 0 returned 0% blocks executed 0%
+    #####:  790:int inactivate_non_zero (int i1,int i2)
+        -:  791:{
+        -:  792:int upper, lower;
+        -:  793:ATOM *ap,*a_m_serial(int),*a_next(int);
+        -:  794:int i ,numatm,a_number();
+        -:  795:
+    #####:  796:	if( i2 == 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  797:	{
+    #####:  798:	ap = a_m_serial( i1) ;
+call    0 never executed
+    #####:  799:	if( ap != NULL)
+branch  0 never executed
+branch  1 never executed
+    #####:  800:	ap -> active = 0;
+    #####:  801:	return 0;
+        -:  802:	}
+        -:  803:
+    #####:  804:	upper = i2; lower = i1;
+    #####:  805:	if( i2 < i1 ) { lower = i2; upper = i1;}
+branch  0 never executed
+branch  1 never executed
+        -:  806:
+    #####:  807:	numatm = a_number();
+call    0 never executed
+    #####:  808:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  809:	{
+    #####:  810:	ap = a_next(i);
+call    0 never executed
+    #####:  811:	if( ap->serial >= lower && ap->serial <= upper)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  812:	if( ap->x != 0. && ap->y != 0. && ap->z != 0.)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+    #####:  813:	   ap->active = 0;
+        -:  814:	}
+    #####:  815:	return 0;
+        -:  816:}
+        -:  817:/* inactivate ( i1,i2 )
+        -:  818:*  i2  == 0 just do i 1 
+        -:  819:*  else do the range from i1 to i2 
+        -:  820:*
+        -:  821:* set the active flag in the atoms to 0 and
+        -:  822:* turn them off
+        -:  823:*/
+function _Z10inactivateii called 0 returned 0% blocks executed 0%
+    #####:  824:int inactivate (int i1, int i2)
+        -:  825:{
+        -:  826:int upper, lower;
+        -:  827:ATOM *ap,*a_m_serial(int),*a_next(int);
+        -:  828:int i ,numatm,a_number();
+        -:  829:
+    #####:  830:	if( i2 == 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  831:	{
+    #####:  832:	ap = a_m_serial( i1) ;
+call    0 never executed
+    #####:  833:	if( ap != NULL)
+branch  0 never executed
+branch  1 never executed
+    #####:  834:	ap -> active = 0;
+    #####:  835:	return 0;
+        -:  836:	}
+        -:  837:
+    #####:  838:	upper = i2; lower = i1;
+    #####:  839:	if( i2 < i1 ) { lower = i2; upper = i1;}
+branch  0 never executed
+branch  1 never executed
+        -:  840:
+    #####:  841:	numatm = a_number();
+call    0 never executed
+    #####:  842:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  843:	{
+    #####:  844:	ap = a_next(i);
+call    0 never executed
+    #####:  845:	if( ap->serial >= lower && ap->serial <= upper)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  846:	   ap->active = 0;
+        -:  847:	}
+    #####:  848:	return 0;
+        -:  849:}
+        -:  850:/* activate ( i1,i2 )
+        -:  851:*  i2  == 0 just do i 1 
+        -:  852:*  else do the range from i1 to i2 
+        -:  853:*
+        -:  854:* set the active flag in the atoms to 1 and
+        -:  855:* turn them on
+        -:  856:*/
+function _Z8activateii called 0 returned 0% blocks executed 0%
+    #####:  857:int activate (int i1, int i2)
+        -:  858:{
+        -:  859:int upper, lower;
+        -:  860:ATOM *ap,*a_m_serial(int),*a_next(int);
+        -:  861:int i ,numatm,a_number();
+        -:  862:
+    #####:  863:	if( i2 == 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  864:	{
+    #####:  865:	ap = a_m_serial( i1) ;
+call    0 never executed
+    #####:  866:	if( ap != NULL)
+branch  0 never executed
+branch  1 never executed
+    #####:  867:	ap -> active = 1;
+    #####:  868:	return 0;
+        -:  869:	}
+        -:  870:
+    #####:  871:	upper = i2; lower = i1;
+    #####:  872:	if( i2 < i1 ) { lower = i2; upper = i1;}
+branch  0 never executed
+branch  1 never executed
+        -:  873:
+    #####:  874:	numatm = a_number();
+call    0 never executed
+    #####:  875:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  876:	{
+    #####:  877:	ap = a_next(i);
+call    0 never executed
+    #####:  878:	if( ap->serial >= lower && ap->serial <= upper)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  879:	   ap->active = 1;
+        -:  880:	}
+    #####:  881:	return 0;
+        -:  882:}
+        -:  883:/* a_inactive_f_zero()
+        -:  884:* loop through the atoms and zero the inactive forces 
+        -:  885:*/
+        -:  886:/* SPEC call it void so that compilers won't complain jh/9/21/99 */
+function _Z17a_inactive_f_zerov called 1093 returned 100% blocks executed 88%
+     1093:  887:void a_inactive_f_zero()
+        -:  888:{
+        -:  889:	int i ,numatom,a_number();
+        -:  890:	ATOM *ap,*a_next(int);
+     1093:  891:	numatom = a_number();
+call    0 returned 100%
+ 10474219:  892:	for( i=0; i< numatom ; i++)
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  893:	{
+ 10473126:  894:	ap = a_next(i);
+call    0 returned 100%
+ 10473126:  895:	if( ap->active == 0)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  896:	{  ap->fx = 0.; ap->fy = 0.; ap->fz = 0.; }
+        -:  897:	}
+     1093:  898:}

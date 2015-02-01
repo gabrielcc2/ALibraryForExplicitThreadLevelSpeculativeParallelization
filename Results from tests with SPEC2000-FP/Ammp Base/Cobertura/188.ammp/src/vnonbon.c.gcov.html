@@ -1,0 +1,788 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 188.ammp/src/vnonbon.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">188.ammp/src</a> - vnonbon.c<span style="font-size: 80%;"> (source / <a href="vnonbon.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">117</td>
+            <td class="headerCovTableEntry">251</td>
+            <td class="headerCovTableEntryLo">46.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">114</td>
+            <td class="headerCovTableEntryLo">31.6 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* vnonbon.c</a>
+<span class="lineNum">       2 </span>                :            : *
+<span class="lineNum">       3 </span>                :            : * collection of routines to service nonbonded potentials
+<span class="lineNum">       4 </span>                :            : *
+<span class="lineNum">       5 </span>                :            : * POOP (Poor-mans Object Oriented Programming) using scope rules
+<span class="lineNum">       6 </span>                :            : *
+<span class="lineNum">       7 </span>                :            : * the routines for potential value, force and (eventually) second
+<span class="lineNum">       8 </span>                :            : * derivatives are here also
+<span class="lineNum">       9 </span>                :            : *
+<span class="lineNum">      10 </span>                :            : * force and 2nd derivative routines assume zero'd arrays for output
+<span class="lineNum">      11 </span>                :            : * this allows for parralellization if needed (on a PC?)
+<span class="lineNum">      12 </span>                :            : *
+<span class="lineNum">      13 </span>                :            : * forces are symmetric - so we don't have to mess around with
+<span class="lineNum">      14 </span>                :            : * s matrices and the like.
+<span class="lineNum">      15 </span>                :            : *
+<span class="lineNum">      16 </span>                :            : * note that the non-bonded information is in the ATOM structures 
+<span class="lineNum">      17 </span>                :            : *
+<span class="lineNum">      18 </span>                :            : *
+<span class="lineNum">      19 </span>                :            : * attempts at vectorization
+<span class="lineNum">      20 </span>                :            : */
+<span class="lineNum">      21 </span>                :            : /*
+<span class="lineNum">      22 </span>                :            : *  copyright 1992, 1993 Robert W. Harrison
+<span class="lineNum">      23 </span>                :            : *  
+<span class="lineNum">      24 </span>                :            : *  This notice may not be removed
+<span class="lineNum">      25 </span>                :            : *  This program may be copied for scientific use
+<span class="lineNum">      26 </span>                :            : *  It may not be sold for profit without explicit
+<span class="lineNum">      27 </span>                :            : *  permission of the author(s) who retain any
+<span class="lineNum">      28 </span>                :            : *  commercial rights including the right to modify 
+<span class="lineNum">      29 </span>                :            : *  this notice
+<span class="lineNum">      30 </span>                :            : */
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : /* SPEC add function proto to reduce compiler warnings jh/9/21/99 */
+<span class="lineNum">      33 </span>                :            : void a_inactive_f_zero ();
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : #define ANSI 1
+<span class="lineNum">      36 </span>                :            : /* misc includes - ANSI and some are just to be safe */
+<span class="lineNum">      37 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">      38 </span>                :            : #include &lt;ctype.h&gt;
+<span class="lineNum">      39 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      40 </span>                :            : #ifdef ANSI
+<span class="lineNum">      41 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      42 </span>                :            : #endif
+<span class="lineNum">      43 </span>                :            : #include &quot;ammp.h&quot;
+<span class="lineNum">      44 </span>                :            : /* ATOM structure contains a serial number for indexing into
+<span class="lineNum">      45 </span>                :            : * arrays and the like (a Hessian)
+<span class="lineNum">      46 </span>                :            : * but otherwise is self-contained. Note the hooks for Non-nonboned potentials
+<span class="lineNum">      47 </span>                :            : */
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :            : /* v_nonbon()
+<span class="lineNum">      50 </span>                :            : * this function sums up the potentials
+<span class="lineNum">      51 </span>                :            : * for the atoms defined in the nonbon data structure.
+<span class="lineNum">      52 </span>                :            : */
+<a name="53"><span class="lineNum">      53 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">      54 </span>                :            : * V is the potential */
+<span class="lineNum">      55 </span>                :<span class="lineCov">       1005 : int fv_update_nonbon(  lambda )</span>
+<span class="lineNum">      56 </span>                :            :         float lambda;
+<span class="lineNum">      57 </span>                :            : {
+<span class="lineNum">      58 </span>                :            :         float r,r0,xt,yt,zt;
+<span class="lineNum">      59 </span>                :            :         float k,k1,k2,k3,k4,k5;
+<span class="lineNum">      60 </span>                :            :         float ka3,ka2;
+<span class="lineNum">      61 </span>                :            :         float kb3,kb2;
+<span class="lineNum">      62 </span>                :            :         float get_f_variable();
+<span class="lineNum">      63 </span>                :            :         int inbond,inangle,i;
+<span class="lineNum">      64 </span>                :            :         ATOM *a1,*a2,*bonded[10],*angled[10];
+<span class="lineNum">      65 </span>                :            :         ATOM *a_next( ); /* returns first ATOM when called with -1 */
+<span class="lineNum">      66 </span>                :            :         int (*indexes)[],inindex,in;
+<span class="lineNum">      67 </span>                :            :         int a_number();
+<span class="lineNum">      68 </span>                :            :         int ii,j,jj,imax,inclose;
+<span class="lineNum">      69 </span>                :            :         float (*vector)[];
+<span class="lineNum">      70 </span>                :            : /*      float (*vecold)[];
+<span class="lineNum">      71 </span>                :            : */
+<span class="lineNum">      72 </span>                :            :         ATOM *close[NCLOSE],*(*atomall)[];
+<span class="lineNum">      73 </span>                :            :         float mxdq,dielectric,mxcut; 
+<span class="lineNum">      74 </span>                :            :         static float dielecold = -1.;
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :            : 
+<span class="lineNum">      77 </span>                :<span class="lineCov">       1005 :         mxdq = get_f_variable(&quot;mxdq&quot;);</span>
+<span class="lineNum">      78 </span>                :            : /*      if( mxdq &lt; 0.) mxdq = 0.;
+<span class="lineNum">      79 </span>                :            : */
+<span class="lineNum">      80 </span>                :<span class="lineCov">       1005 :         mxcut = get_f_variable(&quot;mxcut&quot;);</span>
+<span class="lineNum">      81 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>]:<span class="lineCov">       1005 :         if( mxcut &lt; 0.) mxcut= 5.;</span>
+<span class="lineNum">      82 </span>        [<span class="branchCov" title="Branch 0 was taken 1005 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       1005 :         if( mxdq &gt; 0.) mxdq = mxdq*mxdq;</span>
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :<span class="lineCov">       1005 :         dielectric = get_f_variable(&quot;dielec&quot;);</span>
+<span class="lineNum">      85 </span>        [<span class="branchCov" title="Branch 0 was taken 1005 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       1005 :         if( dielectric &lt; 1.) dielectric = 1.;</span>
+<span class="lineNum">      86 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1004 times"> + </span>]:<span class="lineCov">       1005 :         if( dielecold != dielectric)</span>
+<span class="lineNum">      87 </span>                :            :         {
+<span class="lineNum">      88 </span>                :<span class="lineCov">          1 :          dielecold = dielectric;</span>
+<span class="lineNum">      89 </span>                :<span class="lineCov">          1 :         mxdq = -1.;</span>
+<span class="lineNum">      90 </span>                :            :         }
+<span class="lineNum">      91 </span>                :<span class="lineCov">       1005 :         dielectric = 332.17752/dielectric;</span>
+<span class="lineNum">      92 </span>                :            :         
+<span class="lineNum">      93 </span>                :            : /*  get the number of atoms and allocate the memory for the array space */
+<span class="lineNum">      94 </span>                :<span class="lineCov">       1005 :         i = a_number();</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">       1005 :         vector = malloc( 4*i*sizeof(float) );</span>
+<span class="lineNum">      96 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>]:<span class="lineCov">       1005 :         if( vector == NULL) </span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;cannot allocate memory in v_nonbon\n&quot;); return 0;}</span>
+<span class="lineNum">      98 </span>                :            : /*
+<span class="lineNum">      99 </span>                :            :         vecold = malloc( 4*i*sizeof(float) );
+<span class="lineNum">     100 </span>                :            :         if( vecold == NULL) 
+<span class="lineNum">     101 </span>                :            :         { aaerror(&quot;cannot allocate memory in v_nonbon\n&quot;); return 0;}
+<span class="lineNum">     102 </span>                :            : */
+<span class="lineNum">     103 </span>                :<span class="lineCov">       1005 :         atomall = malloc( i*sizeof(ATOM *) );</span>
+<span class="lineNum">     104 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>]:<span class="lineCov">       1005 :         if( atomall == NULL)</span>
+<span class="lineNum">     105 </span>                :<span class="lineNoCov">          0 :         {aaerror(&quot;cannot allocate memory in v_nonbon\n&quot;); return 0;}</span>
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :<span class="lineCov">       1005 :         imax = a_number();</span>
+<span class="lineNum">     108 </span>        [<span class="branchCov" title="Branch 0 was taken 9629910 times"> + </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>]:<span class="lineCov">    9630915 :         for( i=0; i&lt; imax; i++)</span>
+<span class="lineNum">     109 </span>                :            :         {
+<span class="lineNum">     110 </span>                :<span class="lineCov">    9629910 :                 (*atomall)[i] = a_next(i);</span>
+<span class="lineNum">     111 </span>                :            :         }
+<span class="lineNum">     112 </span>                :            : /* first check if anyone's moved and update the lists */
+<span class="lineNum">     113 </span>                :            : /* note that this must be a look-ahead rather than
+<span class="lineNum">     114 </span>                :            : *  look back search because
+<span class="lineNum">     115 </span>                :            : * we cannot update -&gt;px until we've used that atom !!! */
+<span class="lineNum">     116 </span>        [<span class="branchCov" title="Branch 0 was taken 9253060 times"> + </span><span class="branchCov" title="Branch 1 was taken 917 times"> + </span>]:<span class="lineCov">    9253977 :         for( ii=0; ii&lt; imax; ii++)</span>
+<span class="lineNum">     117 </span>                :            :         {
+<span class="lineNum">     118 </span>                :<span class="lineCov">    9253060 :         a1 = (*atomall)[ii];</span>
+<span class="lineNum">     119 </span>                :<span class="lineCov">    9253060 :         xt = a1-&gt;dx*lambda +a1-&gt;x - a1-&gt;px;</span>
+<span class="lineNum">     120 </span>                :<span class="lineCov">    9253060 :         yt = a1-&gt;dy*lambda +a1-&gt;y - a1-&gt;py;</span>
+<span class="lineNum">     121 </span>                :<span class="lineCov">    9253060 :         zt = a1-&gt;dz*lambda +a1-&gt;z - a1-&gt;pz;</span>
+<span class="lineNum">     122 </span>                :<span class="lineCov">    9253060 :         r = xt*xt + yt*yt + zt*zt;</span>
+<span class="lineNum">     123 </span>        [<span class="branchCov" title="Branch 0 was taken 9252972 times"> + </span><span class="branchCov" title="Branch 1 was taken 88 times"> + </span>]:<span class="lineCov">    9253060 :         if( r &gt; mxdq ) goto DOIT;</span>
+<span class="lineNum">     124 </span>                :            :         }
+<span class="lineNum">     125 </span>                :            :         
+<span class="lineNum">     126 </span>                :<span class="lineCov">        917 :         free( vector);</span>
+<span class="lineNum">     127 </span>                :            : /*      free( vecold);
+<span class="lineNum">     128 </span>                :            : */
+<span class="lineNum">     129 </span>                :<span class="lineCov">        917 :         free (atomall);</span>
+<span class="lineNum">     130 </span>                :<span class="lineCov">        917 :         return 1;</span>
+<span class="lineNum">     131 </span>                :            : DOIT:
+<span class="lineNum">     132 </span>                :<span class="lineCov">         88 :         xt = get_f_variable(&quot;mmbox&quot;);</span>
+<span class="lineNum">     133 </span>        [<span class="branchCov" title="Branch 0 was taken 88 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         88 :         if( xt &gt; 0.)</span>
+<span class="lineNum">     134 </span>                :<span class="lineCov">         88 :         { free(vector); free(atomall); mm_fv_update_nonbon(lambda); return 1;}</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :         indexes = malloc( imax* sizeof(int) );</span>
+<span class="lineNum">     136 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( indexes == NULL ){</span>
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :         aaerror(&quot; cannot allocate memory in fv_update\n&quot;);</span>
+<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :         return 0;}</span>
+<span class="lineNum">     139 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( ii=0; ii&lt; imax; ii++)</span>
+<span class="lineNum">     140 </span>                :            :         {
+<span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :         a1 = (*atomall)[ii];</span>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; VP = 0.;</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; dpx = 0.;</span>
+<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; dpy = 0.;</span>
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; dpz = 0.;</span>
+<span class="lineNum">     146 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qxx = 0.;</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qxy = 0.;</span>
+<span class="lineNum">     148 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qxz = 0.;</span>
+<span class="lineNum">     149 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qyy = 0.;</span>
+<span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qyz = 0.;</span>
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :         a1 -&gt; qzz = 0.;</span>
+<span class="lineNum">     152 </span>                :            : #ifdef CUBIC
+<span class="lineNum">     153 </span>                :            :         a1 -&gt; qxxx = 0.;
+<span class="lineNum">     154 </span>                :            :         a1 -&gt; qxxy = 0.;
+<span class="lineNum">     155 </span>                :            :         a1 -&gt; qxxz = 0.;
+<span class="lineNum">     156 </span>                :            :         a1 -&gt; qxyy = 0.;
+<span class="lineNum">     157 </span>                :            :         a1 -&gt; qxyz = 0.;
+<span class="lineNum">     158 </span>                :            :         a1 -&gt; qxzz = 0.;
+<span class="lineNum">     159 </span>                :            :         a1 -&gt; qyyy = 0.;
+<span class="lineNum">     160 </span>                :            :         a1 -&gt; qyyz = 0.;
+<span class="lineNum">     161 </span>                :            :         a1 -&gt; qyzz = 0.;
+<span class="lineNum">     162 </span>                :            :         a1 -&gt; qzzz = 0.;
+<span class="lineNum">     163 </span>                :            : #endif
+<span class="lineNum">     164 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( j=0; j&lt; NCLOSE; j++) </span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :                 a1-&gt;close[j] = NULL;</span>
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :            :         }
+<span class="lineNum">     168 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( ii=0; ii&lt;  imax; ii++)</span>
+<span class="lineNum">     169 </span>                :            :         { /* if this is met we update the expansion for this atom */
+<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :         a1 = (*atomall)[ii];</span>
+<span class="lineNum">     171 </span>                :<span class="lineNoCov">          0 :         inclose = 0;</span>
+<span class="lineNum">     172 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( lambda != 0.)</span>
+<span class="lineNum">     173 </span>                :            :         {
+<span class="lineNum">     174 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( i=ii+1; i&lt; imax; i++)</span>
+<span class="lineNum">     175 </span>                :            :         {
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 :         a2 = (*atomall)[i];</span>
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :         j = i*4;</span>
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :         (*vector)[j  ] = a2-&gt;x - a1-&gt;x + lambda*(a2-&gt;dx -a1-&gt;dx);</span>
+<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :         (*vector)[j+1] = a2-&gt;y - a1-&gt;y + lambda*(a2-&gt;dy -a1-&gt;dy);</span>
+<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :         (*vector)[j+2] = a2-&gt;z - a1-&gt;z + lambda*(a2-&gt;dz -a1-&gt;dz);</span>
+<span class="lineNum">     181 </span>                :            :         }
+<span class="lineNum">     182 </span>                :            :         }else {
+<span class="lineNum">     183 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( i=ii+1; i&lt; imax; i++)</span>
+<span class="lineNum">     184 </span>                :            :         {
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :         a2 = (*atomall)[i];</span>
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :         j = i*4;</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :         (*vector)[j  ] = a2-&gt;x - a1-&gt;x ;</span>
+<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :         (*vector)[j+1] = a2-&gt;y - a1-&gt;y ;</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :         (*vector)[j+2] = a2-&gt;z - a1-&gt;z ;</span>
+<span class="lineNum">     190 </span>                :            :         }
+<span class="lineNum">     191 </span>                :            :         } /* end of difference position into vector loops */
+<span class="lineNum">     192 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( i=ii+1; i&lt; imax; i++)</span>
+<span class="lineNum">     193 </span>                :            :         {
+<span class="lineNum">     194 </span>                :<span class="lineNoCov">          0 :                 j = i*4;</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :                 (*vector)[j+3] = sqrt((*vector)[j]*(*vector)[j] +</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :                                  (*vector)[j+1]*(*vector)[j+1] +</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :                                  (*vector)[j+2]*(*vector)[j+2]);</span>
+<span class="lineNum">     198 </span>                :            :         }
+<span class="lineNum">     199 </span>                :            : /* add the new components */
+<span class="lineNum">     200 </span>                :            : /* first extract indexes */
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :         inindex = 0;</span>
+<span class="lineNum">     202 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( i=ii+1; i&lt; imax; i++)</span>
+<span class="lineNum">     203 </span>                :            :         {
+<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :         a2 = (*atomall)[i];</span>
+<span class="lineNum">     205 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( j=0; j&lt; a1-&gt;dontuse; j++)</span>
+<span class="lineNum">     206 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         { if( a2 == a1-&gt;excluded[j]) goto SKIPNEW;}</span>
+<span class="lineNum">     207 </span>                :<span class="lineNoCov">          0 :         j = i*4;</span>
+<span class="lineNum">     208 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (*vector)[j+3] &gt; mxcut || inclose &gt; NCLOSE)</span>
+<span class="lineNum">     209 </span>                :            :         {
+<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :         (*indexes)[inindex++] = i;</span>
+<span class="lineNum">     211 </span>                :            :         }else {
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :         a1-&gt;close[inclose++] = (*atomall)[i];</span>
+<span class="lineNum">     213 </span>                :            :         }
+<span class="lineNum">     214 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( inclose == NCLOSE)</span>
+<span class="lineNum">     215 </span>                :            :         {
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :         aaerror(</span>
+<span class="lineNum">     217 </span>                :            :         &quot; fv_update_nonbon&gt; too many atoms increase NCLOSE or decrease mxcut&quot;);
+<span class="lineNum">     218 </span>                :            :         }
+<span class="lineNum">     219 </span>                :<span class="lineNoCov">          0 : SKIPNEW:   i = i;</span>
+<span class="lineNum">     220 </span>                :            :         }
+<span class="lineNum">     221 </span>                :            :         /* and then use them */
+<span class="lineNum">     222 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( in=0; in&lt; inindex; in++)</span>
+<span class="lineNum">     223 </span>                :            :         {
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :         i = (*indexes)[in];</span>
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :         a2 = (*atomall)[i];</span>
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :         j = i*4;</span>
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 :         r0 = one/(*vector)[j+3];  </span>
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :         r = r0*r0;</span>
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :         r = r*r*r; /* r0^-6 */</span>
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :         xt = a1-&gt;q*a2-&gt;q*dielectric*r0;</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :         yt = a1-&gt;a*a2-&gt;a*r;</span>
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :         zt = a1-&gt;b*a2-&gt;b*r*r;</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :         k = xt - yt + zt;</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :         xt = xt*r0; yt = yt*r0; zt = zt*r0;</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :         k1 = xt - yt*six + zt*twelve;</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :         xt = xt*r0; yt = yt*r0; zt = zt*r0;</span>
+<span class="lineNum">     237 </span>                :            :         /*
+<span class="lineNum">     238 </span>                :            :         k2 = xt*three; ka2 = - yt*6*8; kb2 =  zt*12*14;
+<span class="lineNum">     239 </span>                :            :         */
+<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :         k2 = xt*three; ka2 = - yt*48.; kb2 =  zt*168.;</span>
+<span class="lineNum">     241 </span>                :            : #ifdef CUBIC
+<span class="lineNum">     242 </span>                :            :         xt = xt*r0; yt = yt*r0; zt = zt*r0;
+<span class="lineNum">     243 </span>                :            :         k3 = -xt*5*3; ka3 =   yt*6*8*10 ; kb3 =  -zt*12*14*16;
+<span class="lineNum">     244 </span>                :            : #endif
+<span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :         k1 = -k1;</span>
+<span class="lineNum">     246 </span>                :<span class="lineNoCov">          0 :         xt = (*vector)[j]*r0 ;</span>
+<span class="lineNum">     247 </span>                :<span class="lineNoCov">          0 :         yt = (*vector)[j+1]*r0 ;</span>
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :         zt = (*vector)[j+2] *r0;</span>
+<span class="lineNum">     249 </span>                :            :         /*
+<span class="lineNum">     250 </span>                :            :         xt = (*vector)[j] ;
+<span class="lineNum">     251 </span>                :            :         yt = (*vector)[j+1] ;
+<span class="lineNum">     252 </span>                :            :         zt = (*vector)[j+2] ;
+<span class="lineNum">     253 </span>                :            :         */
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :         a1-&gt;VP += k;</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :         a2-&gt;dpx -= k1*xt;</span>
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 :         a1-&gt;dpx += k1*xt;</span>
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :         a2-&gt;dpy -= k1*yt;</span>
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :         a1-&gt;dpy += k1*yt;</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :         a2-&gt;dpz -= k1*zt;</span>
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :         a1-&gt;dpz += k1*zt;</span>
+<span class="lineNum">     261 </span>                :            : /*  note that xt has the 1/r in it so k2*xt*xt is 1/r^5 */
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qxx -= k2*(xt*xt - third) + ka2*(xt*xt - eightth) + kb2*(xt*xt-fourteenth) ;</span>
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qxx -= k2*(xt*xt - third) + ka2*(xt*xt - eightth) + kb2*(xt*xt-fourteenth) ;</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qxy -= (k2+ka2+kb2)*yt*xt;</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qxy -= (k2+ka2+kb2)*yt*xt;</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qxz -= (k2+ka2+kb2)*zt*xt;</span>
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qxz -= (k2+ka2+kb2)*zt*xt;</span>
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qyy -= k2*(yt*yt - third) + ka2*(yt*yt - eightth) + kb2*(yt*yt-fourteenth) ;</span>
+<span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qyy -= k2*(yt*yt - third) + ka2*(yt*yt - eightth) + kb2*(yt*yt-fourteenth) ;</span>
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qyz -= (k2+ka2+kb2)*yt*zt;</span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qyz -= (k2+ka2+kb2)*yt*zt;</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :         a2-&gt;qzz -= k2*(zt*zt - third) + ka2*(zt*zt - eightth) + kb2*(zt*zt-fourteenth) ;</span>
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :         a1-&gt;qzz -= k2*(zt*zt - third) + ka2*(zt*zt - eightth) + kb2*(zt*zt-fourteenth) ;</span>
+<span class="lineNum">     274 </span>                :            : #ifdef CUBIC
+<span class="lineNum">     275 </span>                :            :         a2-&gt;qxxx -= k3*(xt*xt*xt - xt*( 9./15 )) ;
+<span class="lineNum">     276 </span>                :            :         a2-&gt;qxxx -= ka3*(xt*xt*xt - xt*( 24./80 )) ;
+<span class="lineNum">     277 </span>                :            :         a2-&gt;qxxx -= kb3*(xt*xt*xt - xt*( 42./(14*16))); 
+<span class="lineNum">     278 </span>                :            :         a1-&gt;qxxx += k3*(xt*xt*xt - xt*( 9./15 )) ;
+<span class="lineNum">     279 </span>                :            :         a1-&gt;qxxx += ka3*(xt*xt*xt - xt*( 24./80 )) ;
+<span class="lineNum">     280 </span>                :            :         a1-&gt;qxxx += kb3*(xt*xt*xt - xt*( 42./(14*16))); 
+<span class="lineNum">     281 </span>                :            :         a2-&gt;qxxy -= k3*(yt*xt*xt - yt*( 6./ 15));
+<span class="lineNum">     282 </span>                :            :         a2-&gt;qxxy -= ka3*(yt*xt*xt - yt*( 11./ 80));
+<span class="lineNum">     283 </span>                :            :         a2-&gt;qxxy -= kb3*(yt*xt*xt - yt*( 17./ (14*16)));
+<span class="lineNum">     284 </span>                :            :         a1-&gt;qxxy += k3*(yt*xt*xt - yt*( 6./ 15));
+<span class="lineNum">     285 </span>                :            :         a1-&gt;qxxy += ka3*(yt*xt*xt - yt*( 11./ 80));
+<span class="lineNum">     286 </span>                :            :         a1-&gt;qxxy += kb3*(yt*xt*xt - yt*( 17./ (14*16)));
+<span class="lineNum">     287 </span>                :            :         a2-&gt;qxxz -= k3*(zt*xt*xt - zt*( 6./ 15));
+<span class="lineNum">     288 </span>                :            :         a2-&gt;qxxz -= ka3*(zt*xt*xt - zt*( 11./ 80));
+<span class="lineNum">     289 </span>                :            :         a2-&gt;qxxz -= kb3*(zt*xt*xt - zt*( 17./ (14*16)));
+<span class="lineNum">     290 </span>                :            :         a1-&gt;qxxz += k3*(zt*xt*xt - zt*( 6./ 15));
+<span class="lineNum">     291 </span>                :            :         a1-&gt;qxxz += ka3*(zt*xt*xt - zt*( 11./ 80));
+<span class="lineNum">     292 </span>                :            :         a1-&gt;qxxz += kb3*(zt*xt*xt - zt*( 17./ (14*16)));
+<span class="lineNum">     293 </span>                :            :         a2-&gt;qxyy -= k3*(yt*yt*xt - xt*( 6./ 15));
+<span class="lineNum">     294 </span>                :            :         a2-&gt;qxyy -= ka3*(yt*yt*xt - xt*( 11./ 80));
+<span class="lineNum">     295 </span>                :            :         a2-&gt;qxyy -= kb3*(yt*yt*xt - xt*( 17./ (14*16)));
+<span class="lineNum">     296 </span>                :            :         a1-&gt;qxyy += k3*(yt*yt*xt - xt*( 6./ 15));
+<span class="lineNum">     297 </span>                :            :         a1-&gt;qxyy += ka3*(yt*yt*xt - xt*( 11./ 80));
+<span class="lineNum">     298 </span>                :            :         a1-&gt;qxyy += kb3*(yt*yt*xt - xt*( 17./ (14*16)));
+<span class="lineNum">     299 </span>                :            :         a2-&gt;qxyz -= (k3+ka3+kb3)*yt*zt*xt;
+<span class="lineNum">     300 </span>                :            :         a1-&gt;qxyz += (k3+ka3+kb3)*yt*zt*xt;
+<span class="lineNum">     301 </span>                :            :         a2-&gt;qxzz -= k3*(zt*zt*xt - xt*( 6./ 15));
+<span class="lineNum">     302 </span>                :            :         a2-&gt;qxzz -= ka3*(zt*zt*xt - xt*( 11./ 80));
+<span class="lineNum">     303 </span>                :            :         a2-&gt;qxzz -= kb3*(zt*zt*xt - xt*( 17./ (14*16)));
+<span class="lineNum">     304 </span>                :            :         a1-&gt;qxzz += k3*(zt*zt*xt - xt*( 6./ 15));
+<span class="lineNum">     305 </span>                :            :         a1-&gt;qxzz += ka3*(zt*zt*xt - xt*( 11./ 80));
+<span class="lineNum">     306 </span>                :            :         a1-&gt;qxzz += kb3*(zt*zt*xt - xt*( 17./ (14*16)));
+<span class="lineNum">     307 </span>                :            :         a2-&gt;qyyy -= k3*(yt*yt*yt - yt*( 9./15 )) ;
+<span class="lineNum">     308 </span>                :            :         a2-&gt;qyyy -= ka3*(yt*yt*yt - yt*( 24./80 )) ;
+<span class="lineNum">     309 </span>                :            :         a2-&gt;qyyy -= kb3*(yt*yt*yt - yt*( 42./(14*16))); 
+<span class="lineNum">     310 </span>                :            :         a1-&gt;qyyy += k3*(yt*yt*yt - yt*( 9./15 )) ;
+<span class="lineNum">     311 </span>                :            :         a1-&gt;qyyy += ka3*(yt*yt*yt - yt*( 24./80 )) ;
+<span class="lineNum">     312 </span>                :            :         a1-&gt;qyyy += kb3*(yt*yt*yt - yt*( 42./(14*16))); 
+<span class="lineNum">     313 </span>                :            :         a2-&gt;qyyz -= k3*(yt*yt*zt - zt*( 6./ 15));
+<span class="lineNum">     314 </span>                :            :         a2-&gt;qyyz -= ka3*(yt*yt*zt - zt*( 11./ 80));
+<span class="lineNum">     315 </span>                :            :         a2-&gt;qyyz -= kb3*(yt*yt*zt - zt*( 17./ (14*16)));
+<span class="lineNum">     316 </span>                :            :         a1-&gt;qyyz += k3*(yt*yt*zt - zt*( 6./ 15));
+<span class="lineNum">     317 </span>                :            :         a1-&gt;qyyz += ka3*(yt*yt*zt - zt*( 11./ 80));
+<span class="lineNum">     318 </span>                :            :         a1-&gt;qyyz += kb3*(yt*yt*zt - zt*( 17./ (14*16)));
+<span class="lineNum">     319 </span>                :            :         a2-&gt;qyzz -= k3*(zt*zt*yt - yt*( 6./ 15));
+<span class="lineNum">     320 </span>                :            :         a2-&gt;qyzz -= ka3*(zt*zt*yt - yt*( 11./ 80));
+<span class="lineNum">     321 </span>                :            :         a2-&gt;qyzz -= kb3*(zt*zt*yt - yt*( 17./ (14*16)));
+<span class="lineNum">     322 </span>                :            :         a1-&gt;qyzz += k3*(zt*zt*yt - yt*( 6./ 15));
+<span class="lineNum">     323 </span>                :            :         a1-&gt;qyzz += ka3*(zt*zt*yt - yt*( 11./ 80));
+<span class="lineNum">     324 </span>                :            :         a1-&gt;qyzz += kb3*(zt*zt*yt - yt*( 17./ (14*16)));
+<span class="lineNum">     325 </span>                :            :         a2-&gt;qzzz -= k3*(zt*zt*zt - zt*( 9./15 )) ;
+<span class="lineNum">     326 </span>                :            :         a2-&gt;qzzz -= ka3*(zt*zt*zt - zt*( 24./80 )) ;
+<span class="lineNum">     327 </span>                :            :         a2-&gt;qzzz -= kb3*(zt*zt*zt - zt*( 42./(14*16))); 
+<span class="lineNum">     328 </span>                :            :         a1-&gt;qzzz += k3*(zt*zt*zt - zt*( 9./15 )) ;
+<span class="lineNum">     329 </span>                :            :         a1-&gt;qzzz += ka3*(zt*zt*zt - zt*( 24./80 )) ;
+<span class="lineNum">     330 </span>                :            :         a1-&gt;qzzz += kb3*(zt*zt*zt - zt*( 42./(14*16))); 
+<span class="lineNum">     331 </span>                :            : #endif
+<span class="lineNum">     332 </span>                :            : 
+<span class="lineNum">     333 </span>                :            : /* debugging
+<span class="lineNum">     334 </span>                :            :         j = i *4;
+<span class="lineNum">     335 </span>                :            :         fprintf(stderr,&quot; mxcut %f %f inclose %d who %d \n&quot;,mxcut,(*vector)[j+3],inclose,(*atomall)[i]-&gt;serial);
+<span class="lineNum">     336 </span>                :            :         fprintf(stderr,&quot; vector %f %f %f \n&quot;, (*vector)[j],(*vector)[j+1],(*vector)[j+2]);
+<span class="lineNum">     337 </span>                :            : */
+<span class="lineNum">     338 </span>                :            :         }/* end of loop i */
+<span class="lineNum">     339 </span>                :            : /* merge the non-bond mxcut lists */
+<span class="lineNum">     340 </span>                :            :         /* SPEC remove following line which causes compiler warnings.
+<span class="lineNum">     341 </span>                :            :          * The line was a no-op anyway, since double equals is a 
+<span class="lineNum">     342 </span>                :            :          * compare.  The author of AMMP says that we should
+<span class="lineNum">     343 </span>                :            :          * NOT change it to a single equals, as that would &quot;cause a
+<span class="lineNum">     344 </span>                :            :          * failure under certain odd conditions.  The actual array is
+<span class="lineNum">     345 </span>                :            :          * preinitialized above to NULL and is filled during these
+<span class="lineNum">     346 </span>                :            :          * routines&quot; - jh/9/24/99 */
+<span class="lineNum">     347 </span>                :            :         /* a1-&gt;close[inclose] == NULL; */
+<span class="lineNum">     348 </span>                :            : /* set the position */
+<span class="lineNum">     349 </span>                :<span class="lineNoCov">          0 :         a1-&gt;px = a1-&gt;dx*lambda + a1-&gt;x;</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :         a1-&gt;py = a1-&gt;dy*lambda + a1-&gt;y;</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :         a1-&gt;pz = a1-&gt;dz*lambda + a1-&gt;z;</span>
+<span class="lineNum">     352 </span>                :            : 
+<span class="lineNum">     353 </span>                :            :         }  /* end of ii loop */
+<span class="lineNum">     354 </span>                :            :         
+<span class="lineNum">     355 </span>                :<span class="lineNoCov">          0 :         a_inactive_f_zero();</span>
+<span class="lineNum">     356 </span>                :            : 
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 :         free( indexes);</span>
+<span class="lineNum">     358 </span>                :<span class="lineNoCov">          0 :         free( vector);</span>
+<span class="lineNum">     359 </span>                :            : /*      free( vecold);
+<span class="lineNum">     360 </span>                :            : */
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :         free (atomall);</span>
+<span class="lineNum">     362 </span>                :<span class="lineCov">       1005 :         return 1;</span>
+<span class="lineNum">     363 </span>                :            : 
+<span class="lineNum">     364 </span>                :            : }
+<span class="lineNum">     365 </span>                :            : 
+<span class="lineNum">     366 </span>                :            : 
+<span class="lineNum">     367 </span>                :            : /* f_nonbon()
+<span class="lineNum">     368 </span>                :            : *
+<span class="lineNum">     369 </span>                :            : * f_nonbon increments the forces in the atom structures by the force
+<span class="lineNum">     370 </span>                :            : * due to the nonbon components.  NOTE THE WORD increment.
+<span class="lineNum">     371 </span>                :            : * the forces should first be zero'd.
+<span class="lineNum">     372 </span>                :            : * if not then this code will be invalid.  THIS IS DELIBERATE.
+<span class="lineNum">     373 </span>                :            : * on bigger (and better?) machines the different potential terms
+<span class="lineNum">     374 </span>                :            : * may be updated at random or in parrellel, if we assume that this routine
+<a name="375"><span class="lineNum">     375 </span>                :            : * will initialize the forces then we can't do this.</a>
+<span class="lineNum">     376 </span>                :            : */
+<span class="lineNum">     377 </span>                :<span class="lineCov">       1002 : int f_nonbon(lambda)</span>
+<span class="lineNum">     378 </span>                :            : float lambda;
+<span class="lineNum">     379 </span>                :            : /*  returns 0 if error, 1 if OK */
+<span class="lineNum">     380 </span>                :            : {
+<span class="lineNum">     381 </span>                :            :         float ux,uy,uz;
+<span class="lineNum">     382 </span>                :            :         float k,r,r0,xt,yt,zt;
+<span class="lineNum">     383 </span>                :            :         float lcutoff,cutoff,get_f_variable();
+<span class="lineNum">     384 </span>                :            :         int inbond,inangle,i,test;
+<span class="lineNum">     385 </span>                :            :         ATOM *a1,*a2,*bonded[10],*angled[10];
+<span class="lineNum">     386 </span>                :            :         ATOM *a_next( ); /* returns first ATOM when called with -1 */
+<span class="lineNum">     387 </span>                :            :         int a_number(),inbuffer,imax;
+<span class="lineNum">     388 </span>                :            :         float (*buffer)[];
+<span class="lineNum">     389 </span>                :            :         int invector,atomsused,ii,jj;
+<span class="lineNum">     390 </span>                :            :         float (*vector)[];
+<span class="lineNum">     391 </span>                :            :         ATOM *(*atms)[],*(*atomall)[];
+<span class="lineNum">     392 </span>                :            :         float dielectric;
+<span class="lineNum">     393 </span>                :            :         float fx,fy,fz;
+<span class="lineNum">     394 </span>                :            :         float xt2,xt3,xt4;
+<span class="lineNum">     395 </span>                :            :         float yt2,yt3,yt4;
+<span class="lineNum">     396 </span>                :            :         float zt2,zt3,zt4;
+<span class="lineNum">     397 </span>                :            : 
+<span class="lineNum">     398 </span>                :            : /* first update the lists 
+<span class="lineNum">     399 </span>                :            : *  this routine checks if any atom has
+<span class="lineNum">     400 </span>                :            : *   broken the mxdq barrier and updates the
+<span class="lineNum">     401 </span>                :            : * forces, potentials and expansions thereof */
+<span class="lineNum">     402 </span>                :<span class="lineCov">       1002 :         fv_update_nonbon( lambda);</span>
+<span class="lineNum">     403 </span>                :            : 
+<span class="lineNum">     404 </span>                :<span class="lineCov">       1002 :         dielectric = get_f_variable(&quot;dielec&quot;);</span>
+<span class="lineNum">     405 </span>        [<span class="branchCov" title="Branch 0 was taken 1002 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       1002 :         if( dielectric &lt; 1.) dielectric = 1.;</span>
+<span class="lineNum">     406 </span>                :<span class="lineCov">       1002 :         dielectric = 332.17752/dielectric;</span>
+<span class="lineNum">     407 </span>                :            : 
+<span class="lineNum">     408 </span>                :            : /*  get the number of atoms and allocate the memory for the array space */
+<span class="lineNum">     409 </span>                :<span class="lineCov">       1002 :         i = a_number();</span>
+<span class="lineNum">     410 </span>                :<span class="lineCov">       1002 :         atomall = malloc( i*sizeof(ATOM *) );</span>
+<span class="lineNum">     411 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1002 times"> + </span>]:<span class="lineCov">       1002 :         if( atomall == NULL)</span>
+<span class="lineNum">     412 </span>                :<span class="lineNoCov">          0 :         {aaerror(&quot;cannot allocate memory in f_nonbon&quot;); return 0;}</span>
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>                :<span class="lineCov">       1002 :         imax = a_number();</span>
+<span class="lineNum">     415 </span>        [<span class="branchCov" title="Branch 0 was taken 9601164 times"> + </span><span class="branchCov" title="Branch 1 was taken 1002 times"> + </span>]:<span class="lineCov">    9602166 :         for( i=0; i&lt; imax; i++)</span>
+<span class="lineNum">     416 </span>                :            :         {
+<span class="lineNum">     417 </span>                :<span class="lineCov">    9601164 :                 (*atomall)[i] = a_next(i);</span>
+<span class="lineNum">     418 </span>                :            :         }
+<span class="lineNum">     419 </span>        [<span class="branchCov" title="Branch 0 was taken 9601164 times"> + </span><span class="branchCov" title="Branch 1 was taken 1002 times"> + </span>]:<span class="lineCov">    9602166 :         for( i= 0; i&lt; imax; i++)</span>
+<span class="lineNum">     420 </span>                :            :         {
+<span class="lineNum">     421 </span>                :<span class="lineCov">    9601164 :         fx = 0.; fy = 0.; fz = 0.;</span>
+<span class="lineNum">     422 </span>                :<span class="lineCov">    9601164 :                 a1 = (*atomall)[i];</span>
+<span class="lineNum">     423 </span>                :<span class="lineCov">    9601164 :         xt = a1-&gt;dx*lambda +a1-&gt;x - a1-&gt;px;</span>
+<span class="lineNum">     424 </span>                :<span class="lineCov">    9601164 :         yt = a1-&gt;dy*lambda +a1-&gt;y - a1-&gt;py;</span>
+<span class="lineNum">     425 </span>                :<span class="lineCov">    9601164 :         zt = a1-&gt;dz*lambda +a1-&gt;z - a1-&gt;pz;</span>
+<span class="lineNum">     426 </span>                :            : 
+<span class="lineNum">     427 </span>                :            : 
+<span class="lineNum">     428 </span>                :<span class="lineCov">   19202328 :         fx = (a1-&gt;qxx*xt + a1-&gt;qxy*yt</span>
+<span class="lineNum">     429 </span>                :<span class="lineCov">    9601164 :                         + a1-&gt;qxz*zt) ;</span>
+<span class="lineNum">     430 </span>                :<span class="lineCov">   19202328 :         fy = (a1-&gt;qxy*xt + a1-&gt;qyy*yt</span>
+<span class="lineNum">     431 </span>                :<span class="lineCov">    9601164 :                         + a1-&gt;qyz*zt) ;</span>
+<span class="lineNum">     432 </span>                :<span class="lineCov">   19202328 :         fz = (a1-&gt;qxz*xt + a1-&gt;qyz*yt</span>
+<span class="lineNum">     433 </span>                :<span class="lineCov">    9601164 :                         + a1-&gt;qzz*zt) ;</span>
+<span class="lineNum">     434 </span>                :            : #ifdef CUBIC
+<span class="lineNum">     435 </span>                :            :         xt2 = xt*xt; yt2 = yt*yt; zt2 = zt*zt;
+<span class="lineNum">     436 </span>                :            :         fx += a1-&gt;qxxx*xt2/2. + a1-&gt;qxxy*xt*yt + a1-&gt;qxxz*xt*zt
+<span class="lineNum">     437 </span>                :            :                 + a1-&gt;qxyy*yt/2. + a1-&gt;qxyz*yt*zt + a1-&gt;qxzz*zt2/2.;
+<span class="lineNum">     438 </span>                :            :         fy += a1-&gt;qxxy*xt2/2. + a1-&gt;qxyy*xt*yt + a1-&gt;qxyz*xt*zt
+<span class="lineNum">     439 </span>                :            :                 + a1-&gt;qyyy*yt/2. + a1-&gt;qyyz*yt*zt + a1-&gt;qyzz*zt2/2.;
+<span class="lineNum">     440 </span>                :            :         fz += a1-&gt;qxxz*xt2/2. + a1-&gt;qxyz*xt*yt + a1-&gt;qxzz*xt*zt
+<span class="lineNum">     441 </span>                :            :                 + a1-&gt;qyyz*yt/2. + a1-&gt;qyzz*yt*zt + a1-&gt;qzzz*zt2/2.;
+<span class="lineNum">     442 </span>                :            : #endif
+<span class="lineNum">     443 </span>                :            : #ifdef QUARTIC
+<span class="lineNum">     444 </span>                :            :         xt3 = xt*xt2; yt3 = yt*yt2; zt3 = zt*zt2;
+<span class="lineNum">     445 </span>                :            :         fx +=  a1-&gt;qxxxx*xt3/6. + a1-&gt;qxxxy*xt2*yt/2. + a1-&gt;qxxxz*xt2*zt/2.
+<span class="lineNum">     446 </span>                :            :                 + a1-&gt;qxxyy*xt*yt/2. + a1-&gt;qxxyz*xt*yt*zt + a1-&gt;qxxzz*xt*zt2/2.
+<span class="lineNum">     447 </span>                :            :                 + a1-&gt;qxyyy*yt3/6. + a1-&gt;qxyyz*yt2*zt/2. + a1-&gt;qxyzz*yt*zt2/2.
+<span class="lineNum">     448 </span>                :            :                 + a1-&gt;qxzzz*zt3/6.;
+<span class="lineNum">     449 </span>                :            :         fy +=  a1-&gt;qxxxy*xt3/6. + a1-&gt;qxxyy*xt2*yt/2. + a1-&gt;qxxyz*xt2*zt/2.
+<span class="lineNum">     450 </span>                :            :                 + a1-&gt;qxyyy*xt*yt/2. + a1-&gt;qxyyz*xt*yt*zt + a1-&gt;qxyzz*xt*zt2/2.
+<span class="lineNum">     451 </span>                :            :                 + a1-&gt;qyyyy*yt3/6. + a1-&gt;qyyyz*yt2*zt/2. + a1-&gt;qyyzz*yt*zt2/2.
+<span class="lineNum">     452 </span>                :            :                 + a1-&gt;qyzzz*zt3/6.;
+<span class="lineNum">     453 </span>                :            :         fz +=  a1-&gt;qxxxz*xt3/6. + a1-&gt;qxxyz*xt2*yt/2. + a1-&gt;qxxzz*xt2*zt/2.
+<span class="lineNum">     454 </span>                :            :                 + a1-&gt;qxyyz*xt*yt/2. + a1-&gt;qxyzz*xt*yt*zt + a1-&gt;qxzzz*xt*zt2/2.
+<span class="lineNum">     455 </span>                :            :                 + a1-&gt;qyyyz*yt3/6. + a1-&gt;qyyzz*yt2*zt/2. + a1-&gt;qyzzz*yt*zt2/2.
+<span class="lineNum">     456 </span>                :            :                 + a1-&gt;qzzzz*zt3/6.;
+<span class="lineNum">     457 </span>                :            : #endif
+<span class="lineNum">     458 </span>                :            : #ifdef QUINTIC
+<span class="lineNum">     459 </span>                :            :         xt4 = xt*xt3; yt4 = yt*yt3; zt4 = zt*zt3;
+<span class="lineNum">     460 </span>                :            :         fx += a1-&gt;qxxxxx*xt4/24. + a1-&gt;qxxxxy*xt3*yt/6. + a1-&gt;qxxxxz*xt3*zt/6.
+<span class="lineNum">     461 </span>                :            :                 + a1-&gt;qxxxyy*xt2*yt2/4. + a1-&gt;qxxxyz*xt2*yt*zt/2. + a1-&gt;qxxxzz*xt2*zt2/4.
+<span class="lineNum">     462 </span>                :            :                 + a1-&gt;qxxyyy*xt*yt3/6. + a1-&gt;qxxyyz*xt*yt2*zt/2. + a1-&gt;qxxyzz*xt*yt*zt2/2.
+<span class="lineNum">     463 </span>                :            :                 + a1-&gt;qxxzzz*xt*zt3/6. + a1-&gt;qxyyyy*yt4/24. + a1-&gt;qxyyyz*yt3*zt/6. 
+<span class="lineNum">     464 </span>                :            :                 + a1-&gt;qxyyzz*yt2*zt2/4. + a1-&gt;qxyzzz*yt*zt3/6. + a1-&gt;qxzzzz*zt4/24.;
+<span class="lineNum">     465 </span>                :            :         fy += a1-&gt;qxxxxy*xt4/24. + a1-&gt;qxxxyy*xt3*yt/6. + a1-&gt;qxxxyz*xt3*zt/6.
+<span class="lineNum">     466 </span>                :            :                 + a1-&gt;qxxyyy*xt2*yt2/4. + a1-&gt;qxxyyz*xt2*yt*zt/2. + a1-&gt;qxxyzz*xt2*zt2/4.
+<span class="lineNum">     467 </span>                :            :                 + a1-&gt;qxyyyy*xt*yt3/6. + a1-&gt;qxyyyz*xt*yt2*zt/2. + a1-&gt;qxyyzz*xt*yt*zt2/2.
+<span class="lineNum">     468 </span>                :            :                 + a1-&gt;qxyzzz*xt*zt3/6. + a1-&gt;qyyyyy*yt4/24. + a1-&gt;qyyyyz*yt3*zt/6. 
+<span class="lineNum">     469 </span>                :            :                 + a1-&gt;qyyyzz*yt2*zt2/4. + a1-&gt;qyyzzz*yt*zt3/6. + a1-&gt;qyzzzz*zt4/24.;
+<span class="lineNum">     470 </span>                :            :         fz += a1-&gt;qxxxxz*xt4/24. + a1-&gt;qxxxyz*xt3*yt/6. + a1-&gt;qxxxzz*xt3*zt/6.
+<span class="lineNum">     471 </span>                :            :                 + a1-&gt;qxxyyz*xt2*yt2/4. + a1-&gt;qxxyzz*xt2*yt*zt/2. + a1-&gt;qxxzzz*xt2*zt2/4.
+<span class="lineNum">     472 </span>                :            :                 + a1-&gt;qxyyyz*xt*yt3/6. + a1-&gt;qxyyzz*xt*yt2*zt/2. + a1-&gt;qxyzzz*xt*yt*zt2/2.
+<span class="lineNum">     473 </span>                :            :                 + a1-&gt;qxzzzz*xt*zt3/6. + a1-&gt;qyyyyz*yt4/24. + a1-&gt;qyyyzz*yt3*zt/6. 
+<span class="lineNum">     474 </span>                :            :                 + a1-&gt;qyyzzz*yt2*zt2/4. + a1-&gt;qyzzzz*yt*zt3/6. + a1-&gt;qzzzzz*zt4/24.;
+<span class="lineNum">     475 </span>                :            : #endif
+<span class="lineNum">     476 </span>                :<span class="lineCov">    9601164 :         a1-&gt;fx += fx  + a1-&gt;dpx;</span>
+<span class="lineNum">     477 </span>                :<span class="lineCov">    9601164 :         a1-&gt;fy += fy  + a1-&gt;dpy;</span>
+<span class="lineNum">     478 </span>                :<span class="lineCov">    9601164 :         a1-&gt;fz += fz  + a1-&gt;dpz;</span>
+<span class="lineNum">     479 </span>                :            : /* do the close atoms */
+<span class="lineNum">     480 </span>        [<span class="branchCov" title="Branch 0 was taken 315166181 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">  315166181 :         for( jj=0; jj&lt; NCLOSE; jj++)</span>
+<span class="lineNum">     481 </span>        [<span class="branchCov" title="Branch 0 was taken 305565017 times"> + </span><span class="branchCov" title="Branch 1 was taken 9601164 times"> + </span>]:<span class="lineCov">  315166181 :         { if( a1-&gt;close[jj] == NULL) break; }</span>
+<span class="lineNum">     482 </span>        [<span class="branchCov" title="Branch 0 was taken 305565017 times"> + </span><span class="branchCov" title="Branch 1 was taken 9601164 times"> + </span>]:<span class="lineCov">  315166181 :         for( ii=0; ii&lt; jj;ii++)</span>
+<span class="lineNum">     483 </span>                :            :         {
+<span class="lineNum">     484 </span>                :<span class="lineCov">  305565017 :         a2 = a1-&gt;close[ii]; </span>
+<span class="lineNum">     485 </span>                :            : /* note ux is backwards from below */
+<span class="lineNum">     486 </span>                :<span class="lineCov">  305565017 :         ux = (a2-&gt;dx -a1-&gt;dx)*lambda +(a2-&gt;x -a1-&gt;x);</span>
+<span class="lineNum">     487 </span>                :<span class="lineCov">  305565017 :         uy = (a2-&gt;dy -a1-&gt;dy)*lambda +(a2-&gt;y -a1-&gt;y);</span>
+<span class="lineNum">     488 </span>                :<span class="lineCov">  305565017 :         uz = (a2-&gt;dz -a1-&gt;dz)*lambda +(a2-&gt;z -a1-&gt;z);</span>
+<span class="lineNum">     489 </span>                :<span class="lineCov">  305565017 :         r =one/( ux*ux + uy*uy + uz*uz); r0 = sqrt(r);</span>
+<span class="lineNum">     490 </span>                :<span class="lineCov">  305565017 :         ux = ux*r0; uy = uy*r0; uz = uz*r0;</span>
+<span class="lineNum">     491 </span>                :<span class="lineCov">  305565017 :         k = -dielectric*a1-&gt;q*a2-&gt;q*r;</span>
+<span class="lineNum">     492 </span>                :<span class="lineCov">  305565017 :         r = r*r*r;</span>
+<span class="lineNum">     493 </span>                :<span class="lineCov">  305565017 :         k += a1-&gt;a*a2-&gt;a*r*r0*six;</span>
+<span class="lineNum">     494 </span>                :<span class="lineCov">  305565017 :         k -= a1-&gt;b*a2-&gt;b*r*r*r0*twelve;</span>
+<span class="lineNum">     495 </span>                :<span class="lineCov">  305565017 :         a1-&gt;fx += ux*k;</span>
+<span class="lineNum">     496 </span>                :<span class="lineCov">  305565017 :         a1-&gt;fy += uy*k;</span>
+<span class="lineNum">     497 </span>                :<span class="lineCov">  305565017 :         a1-&gt;fz += uz*k;</span>
+<span class="lineNum">     498 </span>                :<span class="lineCov">  305565017 :         a2-&gt;fx -= ux*k;</span>
+<span class="lineNum">     499 </span>                :<span class="lineCov">  305565017 :         a2-&gt;fy -= uy*k;</span>
+<span class="lineNum">     500 </span>                :<span class="lineCov">  305565017 :         a2-&gt;fz -= uz*k;</span>
+<span class="lineNum">     501 </span>                :            :         }
+<span class="lineNum">     502 </span>                :            :         } 
+<span class="lineNum">     503 </span>                :            : 
+<span class="lineNum">     504 </span>                :<span class="lineCov">       1002 :         a_inactive_f_zero();</span>
+<span class="lineNum">     505 </span>                :<span class="lineCov">       1002 :         free( atomall); return 1;</span>
+<span class="lineNum">     506 </span>                :            : 
+<span class="lineNum">     507 </span>                :            : }
+<span class="lineNum">     508 </span>                :            : /* v_nonbon()
+<span class="lineNum">     509 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     510 </span>                :            : * for the atoms defined in the nonbon data structure.
+<span class="lineNum">     511 </span>                :            : */
+<a name="512"><span class="lineNum">     512 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     513 </span>                :            : * V is the potential */
+<span class="lineNum">     514 </span>                :<span class="lineCov">          3 : int v_nonbon( V, lambda )</span>
+<span class="lineNum">     515 </span>                :            :         float *V,lambda;
+<span class="lineNum">     516 </span>                :            : {
+<span class="lineNum">     517 </span>                :            :         float r,r0,xt,yt,zt;
+<span class="lineNum">     518 </span>                :            :         float get_f_variable();
+<span class="lineNum">     519 </span>                :            :         float k;
+<span class="lineNum">     520 </span>                :            :         int inbond,inangle,i;
+<span class="lineNum">     521 </span>                :            :         ATOM *a1,*a2,*bonded[10],*angled[10];
+<span class="lineNum">     522 </span>                :            :         ATOM *a_next( ); /* returns first ATOM when called with -1 */
+<span class="lineNum">     523 </span>                :            :         int a_number(),inbuffer;
+<span class="lineNum">     524 </span>                :            :         int invector,atomsused,ii,jj,imax;
+<span class="lineNum">     525 </span>                :            :         float (*vector)[];
+<span class="lineNum">     526 </span>                :            :         float vx;
+<span class="lineNum">     527 </span>                :            :         float k2;
+<span class="lineNum">     528 </span>                :            :         ATOM *(*atomall)[];
+<span class="lineNum">     529 </span>                :            :         float dielectric;
+<span class="lineNum">     530 </span>                :            :         float xt2,xt3,xt4,xt5;
+<span class="lineNum">     531 </span>                :            :         float yt2,yt3,yt4,yt5;
+<span class="lineNum">     532 </span>                :            :         float zt2,zt3,zt4,zt5;
+<span class="lineNum">     533 </span>                :            : 
+<span class="lineNum">     534 </span>                :<span class="lineCov">          3 :         fv_update_nonbon( lambda);</span>
+<span class="lineNum">     535 </span>                :            : 
+<span class="lineNum">     536 </span>                :<span class="lineCov">          3 :         dielectric = get_f_variable(&quot;dielec&quot;);</span>
+<span class="lineNum">     537 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :         if( dielectric &lt; 1.) dielectric = 1.;</span>
+<span class="lineNum">     538 </span>                :<span class="lineCov">          3 :         dielectric = 332.17752/dielectric;</span>
+<span class="lineNum">     539 </span>                :            : 
+<span class="lineNum">     540 </span>                :            : /*  get the number of atoms and allocate the memory for the array space */
+<span class="lineNum">     541 </span>                :<span class="lineCov">          3 :         i = a_number();</span>
+<span class="lineNum">     542 </span>                :<span class="lineCov">          3 :         atomall = malloc( i*sizeof(ATOM *) );</span>
+<span class="lineNum">     543 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :         if( atomall == NULL)</span>
+<span class="lineNum">     544 </span>                :<span class="lineNoCov">          0 :         {aaerror(&quot;cannot allocate memory in v_nonbon&quot;); return 0;}</span>
+<span class="lineNum">     545 </span>                :            : 
+<span class="lineNum">     546 </span>                :<span class="lineCov">          3 :         imax = a_number();</span>
+<span class="lineNum">     547 </span>        [<span class="branchCov" title="Branch 0 was taken 28746 times"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">      28749 :         for( i=0; i&lt; imax; i++)</span>
+<span class="lineNum">     548 </span>                :            :         {
+<span class="lineNum">     549 </span>                :<span class="lineCov">      28746 :                 (*atomall)[i] = a_next(i);</span>
+<span class="lineNum">     550 </span>                :            :         }
+<span class="lineNum">     551 </span>        [<span class="branchCov" title="Branch 0 was taken 28746 times"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">      28749 :         for( i= 0; i&lt; imax; i++)</span>
+<span class="lineNum">     552 </span>                :            :         {
+<span class="lineNum">     553 </span>                :<span class="lineCov">      28746 :                 a1 = (*atomall)[i];</span>
+<span class="lineNum">     554 </span>                :<span class="lineCov">      28746 :                 vx = a1-&gt;VP;</span>
+<span class="lineNum">     555 </span>                :<span class="lineCov">      28746 :                 xt = a1-&gt;dx*lambda +a1-&gt;x - a1-&gt;px;</span>
+<span class="lineNum">     556 </span>                :<span class="lineCov">      28746 :                 yt = a1-&gt;dy*lambda +a1-&gt;y - a1-&gt;py;</span>
+<span class="lineNum">     557 </span>                :<span class="lineCov">      28746 :                 zt = a1-&gt;dz*lambda +a1-&gt;z - a1-&gt;pz;</span>
+<span class="lineNum">     558 </span>                :<span class="lineCov">      57492 :                 vx -= (a1-&gt;dpx*xt + a1-&gt;dpy*yt</span>
+<span class="lineNum">     559 </span>                :<span class="lineCov">      28746 :                         + a1-&gt;dpz*zt) ;</span>
+<span class="lineNum">     560 </span>                :<span class="lineCov">      57492 :                 vx -= ( (xt*(.5*a1-&gt;qxx*xt + a1-&gt;qxy*yt + a1-&gt;qxz*zt)</span>
+<span class="lineNum">     561 </span>                :<span class="lineCov">      28746 :                 + yt*(.5*a1-&gt;qyy*yt + a1-&gt;qyz*zt) + .5*zt*a1-&gt;qzz*zt));</span>
+<span class="lineNum">     562 </span>                :            : #ifdef CUBIC
+<span class="lineNum">     563 </span>                :            :                 xt2 = xt*xt; yt2 = yt*yt;  zt2 = zt*zt;
+<span class="lineNum">     564 </span>                :            :                 xt3 = xt2*xt; yt3 = yt2*yt; zt3 = zt2*zt;
+<span class="lineNum">     565 </span>                :            : 
+<span class="lineNum">     566 </span>                :            :         vx -= a1-&gt;qxxx*xt3/6. + a1-&gt;qxxy*xt2*yt/2 + a1-&gt;qxxz*xt2*zt/2
+<span class="lineNum">     567 </span>                :            :                 + a1-&gt;qxyy*xt*yt2/2 + a1-&gt;qxyz*xt*yt*zt + a1-&gt;qxzz*xt*zt2/2
+<span class="lineNum">     568 </span>                :            :                 + a1-&gt;qyyy*yt3/6 + a1-&gt;qyyz*yt2*zt/2 + a1-&gt;qyzz*yt*zt2/2 
+<span class="lineNum">     569 </span>                :            :                 + a1-&gt;qzzz*zt3/6.;
+<span class="lineNum">     570 </span>                :            : #endif
+<span class="lineNum">     571 </span>                :            : #ifdef QUARTIC
+<span class="lineNum">     572 </span>                :            :                 xt4 = xt3*xt; yt4 = yt3*yt; zt4 = zt3*zt;
+<span class="lineNum">     573 </span>                :            :         vx -= a1-&gt;qxxxx*xt4/24. + a1-&gt;qxxxy*xt3*yt/6. + a1-&gt;qxxxz*xt3*yt/6. + a1-&gt;qxxyy*xt2*yt2/4.
+<span class="lineNum">     574 </span>                :            :                 + a1-&gt;qxxyz*xt2*yt*zt/2. + a1-&gt;qxxzz*xt2*zt2/4. + a1-&gt;qxyyy*xt*yt3/6.
+<span class="lineNum">     575 </span>                :            :                 + a1-&gt;qxyyz*xt*yt2*zt/2. + a1-&gt;qxyzz*xt*yt*zt2/2. + a1-&gt;qxzzz*xt*zt3/6.
+<span class="lineNum">     576 </span>                :            :                 + a1-&gt;qyyyy*yt4/24. + a1-&gt;qyyyz*yt3*zt/6. + a1-&gt;qyyzz*yt2*zt2/4. + a1-&gt;qyzzz*yt*zt3/6.
+<span class="lineNum">     577 </span>                :            :                 + a1-&gt;qzzzz*zt4/24.;
+<span class="lineNum">     578 </span>                :            : #endif
+<span class="lineNum">     579 </span>                :            : #ifdef QUINTIC
+<span class="lineNum">     580 </span>                :            :                 xt5 = xt4*xt; yt5 = yt4*yt; zt5 = zt4*zt;
+<span class="lineNum">     581 </span>                :            :         vx -= a1-&gt;qxxxxx*xt5/120. + a1-&gt;qxxxxy*xt4*yt/24. + a1-&gt;qxxxxz*xt4*zt/24.
+<span class="lineNum">     582 </span>                :            :                 + a1-&gt;qxxxyy*xt3*yt2/12. + a1-&gt;qxxxyz*xt3*yt*zt/6. + a1-&gt;qxxxzz*xt3*zt2/12.
+<span class="lineNum">     583 </span>                :            :                 + a1-&gt;qxxyyy*xt2*yt3/12. + a1-&gt;qxxyyz*xt2*yt2*zt/4. + a1-&gt;qxxyzz*xt2*yt*zt2/4.
+<span class="lineNum">     584 </span>                :            :                 + a1-&gt;qxxzzz*xt2*zt3/12. + a1-&gt;qxyyyy*xt*yt4/24.  + a1-&gt;qxyyyz*xt*yt3*zt/6.
+<span class="lineNum">     585 </span>                :            :                 + a1-&gt;qxyyzz*xt*yt2*zt2/4. + a1-&gt;qxyzzz*xt*yt*zt3/6. + a1-&gt;qxzzzz*xt*zt4/24.
+<span class="lineNum">     586 </span>                :            :                 + a1-&gt;qyyyyy*yt5/120. + a1-&gt;qyyyyz*yt4*zt/24 + a1-&gt;qyyyzz*yt3*zt2/12.
+<span class="lineNum">     587 </span>                :            :                 + a1-&gt;qyyzzz*yt2*zt3/12. + a1-&gt;qyzzzz*yt*zt4/24. + a1-&gt;qzzzzz*zt5/120.;
+<span class="lineNum">     588 </span>                :            : 
+<span class="lineNum">     589 </span>                :            : #endif
+<span class="lineNum">     590 </span>                :            : /* do the close atoms */
+<span class="lineNum">     591 </span>        [<span class="branchCov" title="Branch 0 was taken 965458 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     965458 :         for( jj=0; jj&lt; NCLOSE; jj++)</span>
+<span class="lineNum">     592 </span>        [<span class="branchCov" title="Branch 0 was taken 936712 times"> + </span><span class="branchCov" title="Branch 1 was taken 28746 times"> + </span>]:<span class="lineCov">     965458 :         { if( a1-&gt;close[jj] == NULL) break; }</span>
+<span class="lineNum">     593 </span>        [<span class="branchCov" title="Branch 0 was taken 936712 times"> + </span><span class="branchCov" title="Branch 1 was taken 28746 times"> + </span>]:<span class="lineCov">     965458 :         for( ii=0; ii&lt; jj;ii++)</span>
+<span class="lineNum">     594 </span>                :            :         {
+<span class="lineNum">     595 </span>                :<span class="lineCov">     936712 :         a2 = a1-&gt;close[ii]; </span>
+<span class="lineNum">     596 </span>                :<span class="lineCov">     936712 :         xt = (a2-&gt;dx -a1-&gt;dx)*lambda +(a2-&gt;x -a1-&gt;x);</span>
+<span class="lineNum">     597 </span>                :<span class="lineCov">     936712 :         yt = (a2-&gt;dy -a1-&gt;dy)*lambda +(a2-&gt;y -a1-&gt;y);</span>
+<span class="lineNum">     598 </span>                :<span class="lineCov">     936712 :         zt = (a2-&gt;dz -a1-&gt;dz)*lambda +(a2-&gt;z -a1-&gt;z);</span>
+<span class="lineNum">     599 </span>                :<span class="lineCov">     936712 :         r = one/(xt*xt + yt*yt + zt*zt); r0 = sqrt(r);</span>
+<span class="lineNum">     600 </span>                :            : /*      xt = xt/r0; yt = yt/r0; zt = zt/r0;
+<span class="lineNum">     601 </span>                :            : */
+<span class="lineNum">     602 </span>                :<span class="lineCov">     936712 :         k = dielectric*a1-&gt;q*a2-&gt;q*r0;</span>
+<span class="lineNum">     603 </span>                :<span class="lineCov">     936712 :         r = r*r*r;</span>
+<span class="lineNum">     604 </span>                :<span class="lineCov">     936712 :         k -= a1-&gt;a*a2-&gt;a*r;</span>
+<span class="lineNum">     605 </span>                :<span class="lineCov">     936712 :         k += a1-&gt;b*a2-&gt;b*r*r;</span>
+<span class="lineNum">     606 </span>                :<span class="lineCov">     936712 :         vx += k;</span>
+<span class="lineNum">     607 </span>                :            :         }
+<span class="lineNum">     608 </span>                :<span class="lineCov">      28746 :         *V += vx;</span>
+<span class="lineNum">     609 </span>                :            :         }
+<span class="lineNum">     610 </span>                :<span class="lineCov">          3 :         a_inactive_f_zero();</span>
+<span class="lineNum">     611 </span>                :<span class="lineCov">          3 :         free( atomall); return 1;</span>
+<span class="lineNum">     612 </span>                :            : }
+<span class="lineNum">     613 </span>                :            : 
+<span class="lineNum">     614 </span>                :            : /*zone_nonbon()
+<span class="lineNum">     615 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     616 </span>                :            : * for the atoms defined in the nonbon data structure.
+<span class="lineNum">     617 </span>                :            : */
+<a name="618"><span class="lineNum">     618 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     619 </span>                :            : * V is the potential */
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 : int zone_nonbon( V, lambda ,alist, inalist )</span>
+<span class="lineNum">     621 </span>                :            :         float *V,lambda;
+<span class="lineNum">     622 </span>                :            :         ATOM *( *alist)[] ;
+<span class="lineNum">     623 </span>                :            :         int inalist;
+<span class="lineNum">     624 </span>                :            : {
+<span class="lineNum">     625 </span>                :            :         float r,r0,xt,yt,zt;
+<span class="lineNum">     626 </span>                :            :         float lcutoff,cutoff,get_f_variable();
+<span class="lineNum">     627 </span>                :            :         int inbond,inangle,i,ii;
+<span class="lineNum">     628 </span>                :            :         ATOM *a1,*a2;
+<span class="lineNum">     629 </span>                :            :         ATOM *a_next( ); /* returns first ATOM when called with -1 */
+<span class="lineNum">     630 </span>                :            :         float dielectric,ve,va,vh;
+<span class="lineNum">     631 </span>                :            :         ATOM *a_m_serial();
+<span class="lineNum">     632 </span>                :            : 
+<span class="lineNum">     633 </span>                :            : /* nonbonded potentials 
+<span class="lineNum">     634 </span>                :            : * do a double loop starting from the first atom to the 
+<span class="lineNum">     635 </span>                :            : * last 
+<span class="lineNum">     636 </span>                :            : * then from the second to the last 
+<span class="lineNum">     637 </span>                :            : * etc
+<span class="lineNum">     638 </span>                :            : *
+<span class="lineNum">     639 </span>                :            : * also check to avoid bonded and 1-3 bonded atoms
+<span class="lineNum">     640 </span>                :            : */
+<span class="lineNum">     641 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( inalist &lt;= 0 ) return 1;</span>
+<span class="lineNum">     642 </span>                :<span class="lineNoCov">          0 :         dielectric = get_f_variable(&quot;dielec&quot;);</span>
+<span class="lineNum">     643 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( dielectric &lt; 1.) dielectric = 1.;</span>
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :         dielectric = 332.17752/dielectric;</span>
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :         cutoff = get_f_variable(&quot;cutoff&quot;);</span>
+<span class="lineNum">     646 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( cutoff &lt; 1.) cutoff = 1.e10;</span>
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 :         lcutoff = -cutoff;</span>
+<span class="lineNum">     648 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( ii=0; ii&lt; inalist; ii++)</span>
+<span class="lineNum">     649 </span>                :            :         {
+<span class="lineNum">     650 </span>                :<span class="lineNoCov">          0 :         a1 = (*alist)[ii];</span>
+<span class="lineNum">     651 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( a1 == NULL ) goto NOTANATOM;</span>
+<span class="lineNum">     652 </span>                :<span class="lineNoCov">          0 :         ve = 0.; va = 0.; vh = 0.;</span>
+<span class="lineNum">     653 </span>                :<span class="lineNoCov">          0 :         a2 = a_next(-1);</span>
+<span class="lineNum">     654 </span>                :            : /*      
+<span class="lineNum">     655 </span>                :            : *       for(i = 0; i&lt; a1-&gt;dontuse; i++)
+<span class="lineNum">     656 </span>                :            : *       printf(&quot;%d &quot;,a1-&gt;excluded[i]-&gt;serial);
+<span class="lineNum">     657 </span>                :            : *       printf(&quot;\n&quot;);
+<span class="lineNum">     658 </span>                :            : */
+<span class="lineNum">     659 </span>                :            : /*
+<span class="lineNum">     660 </span>                :            :         while(  (a2-&gt;next != a2) &amp;&amp; (a2-&gt;next != NULL))
+<span class="lineNum">     661 </span>                :            :         */
+<span class="lineNum">     662 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while(  (a2 != NULL) &amp;&amp; (a2-&gt;next != NULL) &amp;&amp; a2-&gt;next != a2)</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     663 </span>                :            :         {
+<span class="lineNum">     664 </span>                :            : /* goto SKIP is used because this is one case where it makes sense */
+<span class="lineNum">     665 </span>                :            : /*      if( a2 == a1) break;  */
+<span class="lineNum">     666 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( a2 == a1) goto SKIP;</span>
+<span class="lineNum">     667 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for(i = 0; i&lt; a1-&gt;dontuse; i++)</span>
+<span class="lineNum">     668 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( a2 == a1-&gt;excluded[i]) goto SKIP;</span>
+<span class="lineNum">     669 </span>                :            : /* non - bonded are only used when the atoms arent bonded */
+<span class="lineNum">     670 </span>                :            : 
+<span class="lineNum">     671 </span>                :<span class="lineNoCov">          0 :         xt = (a1-&gt;x -a2-&gt;x) + lambda*(a1-&gt;dx - a2-&gt;dx);</span>
+<span class="lineNum">     672 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (xt &gt; cutoff) || (xt &lt; lcutoff) ) goto SKIP;</span>
+<span class="lineNum">     673 </span>                :<span class="lineNoCov">          0 :         yt = (a1-&gt;y -a2-&gt;y) + lambda*(a1-&gt;dy - a2-&gt;dy);</span>
+<span class="lineNum">     674 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (yt &gt; cutoff) || (yt &lt; lcutoff) ) goto SKIP;</span>
+<span class="lineNum">     675 </span>                :<span class="lineNoCov">          0 :         zt = (a1-&gt;z -a2-&gt;z) + lambda*(a1-&gt;dz - a2-&gt;dz);</span>
+<span class="lineNum">     676 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (zt &gt; cutoff) || (zt &lt; lcutoff) ) goto SKIP;</span>
+<span class="lineNum">     677 </span>                :            : 
+<span class="lineNum">     678 </span>                :<span class="lineNoCov">          0 :         r = xt*xt+yt*yt+zt*zt;</span>
+<span class="lineNum">     679 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( r &lt; 1.) r = 1.;  </span>
+<span class="lineNum">     680 </span>                :            : 
+<span class="lineNum">     681 </span>                :<span class="lineNoCov">          0 :         r0 = sqrt(r); r = r*r*r ;</span>
+<span class="lineNum">     682 </span>                :            : /* debugging
+<span class="lineNum">     683 </span>                :            :         printf(&quot; %d %d %f %f %f \n&quot;, a1-&gt;serial,a2-&gt;serial,a1-&gt;q,a2-&gt;q,
+<span class="lineNum">     684 </span>                :            :         332.17752*a1-&gt;q*a2-&gt;q/r0);
+<span class="lineNum">     685 </span>                :            : */
+<span class="lineNum">     686 </span>                :<span class="lineNoCov">          0 :         ve += dielectric*a1-&gt;q*a2-&gt;q/r0; </span>
+<span class="lineNum">     687 </span>                :<span class="lineNoCov">          0 :         va -= a1-&gt;a*a2-&gt;a/r;</span>
+<span class="lineNum">     688 </span>                :<span class="lineNoCov">          0 :         vh += a1-&gt;b*a2-&gt;b/r/r; </span>
+<span class="lineNum">     689 </span>                :            : 
+<span class="lineNum">     690 </span>                :            : SKIP:
+<span class="lineNum">     691 </span>                :            : /*      if( a2-&gt;next == a1) break; */
+<span class="lineNum">     692 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( a2-&gt;next == a2) break;  </span>
+<span class="lineNum">     693 </span>                :<span class="lineNoCov">          0 :         a2 = a2-&gt;next;</span>
+<span class="lineNum">     694 </span>                :            :         }
+<span class="lineNum">     695 </span>                :<span class="lineNoCov">          0 :         *V += ve + va + vh;</span>
+<span class="lineNum">     696 </span>                :            : NOTANATOM:
+<span class="lineNum">     697 </span>                :<span class="lineNoCov">          0 :         i = i;</span>
+<span class="lineNum">     698 </span>                :            :         }
+<span class="lineNum">     699 </span>                :<span class="lineNoCov">          0 :         return 1;</span>
+<span class="lineNum">     700 </span>                :            : 
+<span class="lineNum">     701 </span>                :            : }
+<span class="lineNum">     702 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

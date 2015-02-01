@@ -1,0 +1,1406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/src/scanner_opt.c</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../../index.html">top level</a> - <a href="index.html">home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/src</a> - scanner_opt.c<span style="font-size: 80%;"> (source / <a href="scanner_opt.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">501</td>
+            <td class="headerCovTableEntry">593</td>
+            <td class="headerCovTableEntryMed">84.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-28</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntryHi">95.8 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">545</td>
+            <td class="headerCovTableEntry">684</td>
+            <td class="headerCovTableEntryMed">79.7 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /*$Header: /home/domeika/spec2000/newver3/RCS/scanner.c,v 1.3 1997/08/31 23:18:45 domeika Exp domeika $*/</a>
+<span class="lineNum">       2 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">       3 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       4 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">       5 </span>                :            : #include &lt;fcntl.h&gt;
+<span class="lineNum">       6 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">       7 </span>                :            : #include &lt;unistd.h&gt;
+<span class="lineNum">       8 </span>                :            : #include &quot;parallel_loop_in_batches.h&quot;
+<span class="lineNum">       9 </span>                :            : #include &lt;iostream&gt;
+<span class="lineNum">      10 </span>                :            : using namespace std;
+<span class="lineNum">      11 </span>                :            : #ifdef PLATFORM_NT
+<span class="lineNum">      12 </span>                :            : #include &lt;io.h&gt;
+<span class="lineNum">      13 </span>                :            : #endif
+<span class="lineNum">      14 </span>                :            : #ifdef PLATFORM_LINUX
+<span class="lineNum">      15 </span>                :            : #endif
+<span class="lineNum">      16 </span>                :            : 
+<span class="lineNum">      17 </span>                :            : #define TRUE 1
+<span class="lineNum">      18 </span>                :            : #define FALSE 0
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : #define MODE_RECOGNIZE 0
+<span class="lineNum">      21 </span>                :            : #define MODE_TRAIN1 1
+<span class="lineNum">      22 </span>                :            : #define MODE_TRAIN2 2
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : void alloc_td_bu();
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : unsigned char **cimage;
+<span class="lineNum">      28 </span>                :            : double **tds;
+<span class="lineNum">      29 </span>                :            : double **bus;
+<span class="lineNum">      30 </span>                :            : int lwidth,lheight;
+<span class="lineNum">      31 </span>                :            : int width, height,numinputs;
+<span class="lineNum">      32 </span>                :            : long i,j;
+<span class="lineNum">      33 </span>                :            :  
+<span class="lineNum">      34 </span>                :            : int highx[20][2], highy[20][2];
+<span class="lineNum">      35 </span>                :            : double highest_confidence[20][2];
+<span class="lineNum">      36 </span>                :            : int set_high[20][2];
+<span class="lineNum">      37 </span>                :            : int numIt=0;
+<span class="lineNum">      38 </span>                :            : 
+<span class="lineNum">      39 </span>                :            : #define DB1 1
+<span class="lineNum">      40 </span>                :            : #define DB2 0
+<span class="lineNum">      41 </span>                :            : #define DB3 1
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :            : FILE *fp;
+<span class="lineNum">      44 </span>                :            : 
+<span class="lineNum">      45 </span>                :            : int winner[20];
+<span class="lineNum">      46 </span>                :            : int resonant[20];
+<span class="lineNum">      47 </span>                :            : int numf1s,numf2s, cp,numpatterns;
+<a name="48"><span class="lineNum">      48 </span>                :            : </a>
+<span class="lineNum">      49 </span>                :            : /*Variables for parallel execution*/
+<span class="lineNum">      50 </span>                :<span class="lineCov">          4 : parallel_loop_in_batches loop1;</span>
+<span class="lineNum">      51 </span>                :            : bool hasRead;
+<span class="lineNum">      52 </span>                :            : pthread_mutex_t loop_mutex;
+<span class="lineNum">      53 </span>                :            : int sx, ex, st;
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :            : double a, b, c, d, theta, delta_t;
+<span class="lineNum">      56 </span>                :            : double rho;
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :            : typedef struct {
+<span class="lineNum">      59 </span>                :            :         double *I;
+<span class="lineNum">      60 </span>                :            :         double W;
+<span class="lineNum">      61 </span>                :            :         double X;
+<span class="lineNum">      62 </span>                :            :         double V;
+<span class="lineNum">      63 </span>                :            :         double U;
+<span class="lineNum">      64 </span>                :            :         double P;
+<span class="lineNum">      65 </span>                :            :         double Q;
+<span class="lineNum">      66 </span>                :            :         double R;
+<span class="lineNum">      67 </span>                :            :                 } f1_neuron;
+<span class="lineNum">      68 </span>                :            : 
+<span class="lineNum">      69 </span>                :            : f1_neuron *f1_layer[20];
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : typedef struct {
+<span class="lineNum">      72 </span>                :            :       double y;
+<span class="lineNum">      73 </span>                :            :       int   reset;
+<span class="lineNum">      74 </span>                :            :       } xyz;
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :            : xyz *Y[20];
+<a name="77"><span class="lineNum">      77 </span>                :            : </a>
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :<span class="lineCov">   44320000 : double g(int i)</span>
+<span class="lineNum">      80 </span>                :            : {  double result;
+<span class="lineNum">      81 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 22160000 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">   44320000 :     if (i != winner[0])</span>
+<span class="lineNum">      82 </span>                :<span class="lineNoCov">          0 :         result =0;</span>
+<span class="lineNum">      83 </span>                :            :     else
+<span class="lineNum">      84 </span>[<span class="branchCov" title="Branch 0 was taken 22160000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   44320000 :        if ( Y[0][i].y &gt; 0)</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">   44320000 :            result = d;</span>
+<span class="lineNum">      86 </span>                :            :        else
+<span class="lineNum">      87 </span>                :<span class="lineNoCov">          0 :            result =0;</span>
+<span class="lineNum">      88 </span>                :<span class="lineCov">   44320000 :     return(result);</span>
+<a name="89"><span class="lineNum">      89 </span>                :            : }</a>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>                :<span class="lineCov">       2010 : void find_match(int g)</span>
+<span class="lineNum">      92 </span>                :            : { int i;
+<span class="lineNum">      93 </span>                :<span class="lineCov">       2010 :    winner[g] = 0;</span>
+<span class="lineNum">      94 </span>[<span class="branchCov" title="Branch 0 was taken 11055 times"> + </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">      24120 :    for (i=0;i&lt;numf2s;i++)</span>
+<span class="lineNum">      95 </span>[<span class="branchCov" title="Branch 0 was taken 2072 times"> + </span><span class="branchCov" title="Branch 1 was taken 8983 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 19 times"> + </span><span class="branchCov" title="Branch 1 was taken 81 times"> + </span>]:<span class="lineCov">      22110 :        if (Y[g][i].y &gt; Y[g][winner[g]].y)</span>
+<span class="lineNum">      96 </span>                :<span class="lineCov">       4144 :               winner[g] =i;</span>
+<a name="97"><span class="lineNum">      97 </span>                :<span class="lineCov">       2010 : }</span></a>
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :<span class="lineCov">       2216 : double simtest()</span>
+<span class="lineNum">     100 </span>                :            : {   int j;
+<span class="lineNum">     101 </span>                :            :    double sum,norm;
+<span class="lineNum">     102 </span>                :            :    double temp_sum;
+<span class="lineNum">     103 </span>                :            : 
+<span class="lineNum">     104 </span>                :<span class="lineCov">       2216 :    sum = norm =0;</span>
+<span class="lineNum">     105 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :    for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     106 </span>                :            :    {
+<span class="lineNum">     107 </span>                :<span class="lineCov">   22160000 :       norm += f1_layer[0][j].P * f1_layer[0][j].P;</span>
+<span class="lineNum">     108 </span>                :            :    }
+<span class="lineNum">     109 </span>                :<span class="lineCov">       2216 :    norm = sqrt((double) norm);    </span>
+<span class="lineNum">     110 </span>                :<span class="lineCov">       2216 :    norm *= c;                    </span>
+<span class="lineNum">     111 </span>                :<span class="lineCov">       2216 :    sum += norm;</span>
+<span class="lineNum">     112 </span>                :<span class="lineCov">       2216 :    norm =0;</span>
+<span class="lineNum">     113 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :    for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     114 </span>                :            :    {
+<span class="lineNum">     115 </span>                :<span class="lineCov">   22160000 :       temp_sum = f1_layer[0][j].U * f1_layer[0][j].U;</span>
+<span class="lineNum">     116 </span>                :<span class="lineCov">   22160000 :       norm += temp_sum;</span>
+<span class="lineNum">     117 </span>                :            :    }
+<span class="lineNum">     118 </span>                :<span class="lineCov">       2216 :    norm = sqrt((double) norm);</span>
+<span class="lineNum">     119 </span>                :<span class="lineCov">       2216 :    sum += norm;</span>
+<span class="lineNum">     120 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :    for (j=0;j&lt;numf1s;j++){</span>
+<span class="lineNum">     121 </span>                :<span class="lineCov">   22160000 :       f1_layer[0][j].R =  (f1_layer[0][j].U+ c * f1_layer[0][j].P)/sum;</span>
+<span class="lineNum">     122 </span>                :            :    }
+<span class="lineNum">     123 </span>                :<span class="lineCov">       2216 :    norm = 0;</span>
+<span class="lineNum">     124 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :    for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     125 </span>                :<span class="lineCov">   22160000 :       norm += f1_layer[0][j].R * f1_layer[0][j].R;</span>
+<span class="lineNum">     126 </span>                :<span class="lineCov">       2216 :    norm = sqrt((double) norm);</span>
+<span class="lineNum">     127 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     128 </span>                :            :    if (DB2 &amp;&amp; (winner[0]==0)) printf(&quot;%5.3f&quot;,norm);
+<span class="lineNum">     129 </span>                :            : #endif
+<span class="lineNum">     130 </span>                :<span class="lineCov">       2216 : return(norm);</span>
+<span class="lineNum">     131 </span>                :            : }
+<a name="132"><span class="lineNum">     132 </span>                :            : </a>
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>                :<span class="lineCov">       2218 : double simtest2(int g)</span>
+<span class="lineNum">     135 </span>                :            : {   int j;
+<span class="lineNum">     136 </span>                :            :    double Su,Sp,numerator,denom;
+<span class="lineNum">     137 </span>                :            :    double su,sp;
+<span class="lineNum">     138 </span>                :            :    double su2,sp2;
+<span class="lineNum">     139 </span>                :            :    double sup;
+<span class="lineNum">     140 </span>                :            :    double r;
+<span class="lineNum">     141 </span>                :<span class="lineCov">       2218 :    double e = 0.0000000001; /* 10e-10 */</span>
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :<span class="lineCov">       2218 :    su = sp = sup = su2 = sp2=numerator= 0.0;</span>
+<span class="lineNum">     144 </span>[<span class="branchCov" title="Branch 0 was taken 10070000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1109 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   20142218 :    for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     145 </span>                :            :    {
+<span class="lineNum">     146 </span>                :<span class="lineCov">   20140000 :       su += f1_layer[g][j].U;</span>
+<span class="lineNum">     147 </span>                :<span class="lineCov">   20140000 :       sp += f1_layer[g][j].P;</span>
+<span class="lineNum">     148 </span>                :<span class="lineCov">   20140000 :       su2 += f1_layer[g][j].U * f1_layer[g][j].U;</span>
+<span class="lineNum">     149 </span>                :<span class="lineCov">   20140000 :       sp2 += f1_layer[g][j].P * f1_layer[g][j].P;</span>
+<span class="lineNum">     150 </span>                :<span class="lineCov">   20140000 :       sup += f1_layer[g][j].U * f1_layer[g][j].P;</span>
+<span class="lineNum">     151 </span>                :            :    }
+<span class="lineNum">     152 </span>                :<span class="lineCov">       2218 :    Su = ((double)numf1s*su2-su*su)/((double)numf1s*((double)numf1s-1.0));</span>
+<span class="lineNum">     153 </span>                :<span class="lineCov">       2218 :    Su = sqrt(Su);</span>
+<span class="lineNum">     154 </span>                :<span class="lineCov">       2218 :    Sp = ((double)numf1s*sp2-sp*sp)/((double)numf1s*((double)numf1s-1.0));</span>
+<span class="lineNum">     155 </span>                :<span class="lineCov">       2218 :    Sp = sqrt(Sp);</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">       2218 :    numerator = (double) numf1s * sup - su * sp;</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">       2218 :    denom = sqrt((double) numf1s*su2 - su*su) * sqrt((double) numf1s*sp2 - sp*sp);</span>
+<span class="lineNum">     158 </span>                :<span class="lineCov">       2218 :    r = (numerator+e)/(denom+e);</span>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>[<span class="branchCov" title="Branch 0 was taken 1109 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1109 times"> + </span>]:<span class="lineCov">       2218 :    if ((numerator == 0) || (denom==0))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 100 times"> + </span>]
+<span class="lineNum">     161 </span>                :            :    {
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot;potential div by zero&quot;);</span>
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :        r=1;</span>
+<span class="lineNum">     164 </span>                :            :    }
+<span class="lineNum">     165 </span>[<span class="branchCov" title="Branch 0 was taken 1109 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1109 times"> + </span>]:<span class="lineCov">       2218 :    if ((numerator != 0) &amp;&amp; (denom==0))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 100 times"> + </span>]
+<span class="lineNum">     166 </span>                :            :    {
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot;div by zero&quot;);</span>
+<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :        r=1;</span>
+<span class="lineNum">     169 </span>                :            :    }
+<span class="lineNum">     170 </span>                :<span class="lineCov">       2218 :    r *= r;     /*  trying to match inverse images */</span>
+<span class="lineNum">     171 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     172 </span>                :            :    if (DB1) printf( &quot;  simtest2(r) = %8.6f\n&quot;,r);
+<span class="lineNum">     173 </span>                :            :    if (DB2 &amp;&amp; (winner[g]==0)) printf(&quot;%8.4f&quot;,r);
+<span class="lineNum">     174 </span>                :            : #endif
+<span class="lineNum">     175 </span>                :<span class="lineCov">       2218 :    return (r);</span>
+<a name="176"><span class="lineNum">     176 </span>                :            : }</a>
+<span class="lineNum">     177 </span>                :            : 
+<span class="lineNum">     178 </span>                :<span class="lineCov">       2216 : void weightadj()</span>
+<span class="lineNum">     179 </span>                :            : { int i,j,k;
+<span class="lineNum">     180 </span>                :            :   double temp;
+<span class="lineNum">     181 </span>                :<span class="lineCov">       2216 :   double er = 0.000000001;</span>
+<span class="lineNum">     182 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     183 </span>                :            :   int bad_count;
+<span class="lineNum">     184 </span>                :            :   int good_count;
+<span class="lineNum">     185 </span>                :            : #endif
+<span class="lineNum">     186 </span>                :            : 
+<span class="lineNum">     187 </span>                :<span class="lineCov">       2216 :     i = winner[0];</span>
+<span class="lineNum">     188 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     189 </span>                :            :     fprintf(stdout,&quot;winner %d\n&quot;,i);
+<span class="lineNum">     190 </span>                :            : #endif
+<span class="lineNum">     191 </span>[<span class="branchCov" title="Branch 0 was taken 1108 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">       4432 :     for (k=0;k&lt;1;k++)</span>
+<span class="lineNum">     192 </span>                :<span class="lineCov">       2216 :     {   resonant[0]=0;</span>
+<span class="lineNum">     193 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :         for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     194 </span>                :<span class="lineCov">   22160000 :         {    temp = tds[j][i];</span>
+<span class="lineNum">     195 </span>                :<span class="lineCov">   22160000 :              tds[j][i] += g(i)*(f1_layer[0][j].P - tds[j][i])*delta_t; </span>
+<span class="lineNum">     196 </span>        [<span class="branchCov" title="Branch 0 was taken 6249810 times"> + </span><span class="branchCov" title="Branch 1 was taken 4830290 times"> + </span>]:<span class="lineCov">   22160000 :              if (fabs(temp - tds[j][i]) &lt;= er)</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">   12499508 :                 resonant[0] = 1;</span>
+<span class="lineNum">     198 </span>                :            :         }
+<span class="lineNum">     199 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     200 </span>                :            :         bad_count=0;
+<span class="lineNum">     201 </span>                :            :         good_count = 0;
+<span class="lineNum">     202 </span>                :            : #endif
+<span class="lineNum">     203 </span>[<span class="branchCov" title="Branch 0 was taken 11080000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   22162216 :         for (j=0;j&lt;numf1s;j++)</span>
+<span class="lineNum">     204 </span>                :<span class="lineCov">   22160000 :         {   temp = bus[j][i];</span>
+<span class="lineNum">     205 </span>                :<span class="lineCov">   22160000 :             bus[j][i] += g(i) * (f1_layer[0][j].P - bus[j][i]) * delta_t;</span>
+<span class="lineNum">     206 </span>[<span class="branchCov" title="Branch 0 was taken 5316472 times"> + </span><span class="branchCov" title="Branch 1 was taken 5763628 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 150204 times"> + </span><span class="branchCov" title="Branch 3 was taken 5166220 times"> + </span>]:<span class="lineCov">   22160000 :             if ((fabs(temp - bus[j][i]) &lt;= er) &amp;&amp; resonant[0])</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchCov" title="Branch 3 was taken 97 times"> + </span>]
+<span class="lineNum">     207 </span>                :            :             {
+<span class="lineNum">     208 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     209 </span>                :            :                  good_count++;
+<span class="lineNum">     210 </span>                :            : #endif
+<span class="lineNum">     211 </span>                :<span class="lineCov">     300408 :                  resonant[0] =1;</span>
+<span class="lineNum">     212 </span>                :            :             }
+<span class="lineNum">     213 </span>                :            :             else 
+<span class="lineNum">     214 </span>                :            :             {
+<span class="lineNum">     215 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     216 </span>                :            :                  bad_count++;
+<span class="lineNum">     217 </span>                :            : #endif
+<span class="lineNum">     218 </span>                :<span class="lineCov">   21859592 :                  resonant[0] =0;</span>
+<span class="lineNum">     219 </span>                :            :             }
+<span class="lineNum">     220 </span>                :            :         }
+<span class="lineNum">     221 </span>                :            :     }
+<span class="lineNum">     222 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     223 </span>                :            :     printf(&quot;bad %d good %d\n&quot;,bad_count,good_count);
+<span class="lineNum">     224 </span>                :            : #endif
+<span class="lineNum">     225 </span>                :<span class="lineCov">       2216 : }</span>
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :            : /* init_globs - initialize ART 2 parameters based
+<span class="lineNum">     228 </span>                :            :  *   on whether we are training a network or loading
+<a name="229"><span class="lineNum">     229 </span>                :            :  *   the weights of a pretrained network.</a>
+<span class="lineNum">     230 </span>                :            :  */
+<span class="lineNum">     231 </span>                :<span class="lineCov">         12 : void init_globs(int mode)</span>
+<span class="lineNum">     232 </span>                :            : {
+<span class="lineNum">     233 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 33 times"> + </span><span class="branchCov" title="Branch 1 was taken 67 times"> + </span>]:<span class="lineCov">         12 :   if (mode==MODE_RECOGNIZE)</span>
+<span class="lineNum">     234 </span>                :            :   {
+<span class="lineNum">     235 </span>                :<span class="lineCov">          4 :      a       = 255;</span>
+<span class="lineNum">     236 </span>                :<span class="lineCov">          4 :      b       = 0.0;</span>
+<span class="lineNum">     237 </span>                :<span class="lineCov">          4 :      c       = 0.11;</span>
+<span class="lineNum">     238 </span>                :<span class="lineCov">          4 :      d       = 0.9;</span>
+<span class="lineNum">     239 </span>                :<span class="lineCov">          4 :      theta   = 1/sqrt((double) numf1s);</span>
+<span class="lineNum">     240 </span>                :<span class="lineCov">          4 :      delta_t = 0.1;</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">          4 :      rho     = 0.70;</span>
+<span class="lineNum">     242 </span>                :            :   }
+<span class="lineNum">     243 </span>                :            :   else
+<span class="lineNum">     244 </span>                :            :   { 
+<span class="lineNum">     245 </span>                :<span class="lineCov">          8 :      a       = 255;</span>
+<span class="lineNum">     246 </span>                :<span class="lineCov">          8 :      b       = 10.0;</span>
+<span class="lineNum">     247 </span>                :<span class="lineCov">          8 :      c       = 0.11;</span>
+<span class="lineNum">     248 </span>                :<span class="lineCov">          8 :      d       = 0.9;</span>
+<span class="lineNum">     249 </span>                :<span class="lineCov">          8 :      theta   = 1/sqrt((double) numf1s);</span>
+<span class="lineNum">     250 </span>                :<span class="lineCov">          8 :      delta_t = 0.7;</span>
+<span class="lineNum">     251 </span>                :<span class="lineCov">          8 :      rho     = 0.95;</span>
+<span class="lineNum">     252 </span>                :            :   }
+<a name="253"><span class="lineNum">     253 </span>                :<span class="lineCov">         12 : } /* end of init_globs */</span></a>
+<span class="lineNum">     254 </span>                :            : 
+<span class="lineNum">     255 </span>                :<span class="lineCov">          4 : void init_net()</span>
+<span class="lineNum">     256 </span>                :            : {
+<span class="lineNum">     257 </span>                :            :    int i;
+<span class="lineNum">     258 </span>                :            :         
+<span class="lineNum">     259 </span>[<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         84 :    for(int g=0; g&lt;20; g++){</span>
+<span class="lineNum">     260 </span>                :<span class="lineCov">         80 :    f1_layer[g] = (f1_neuron *)malloc(numf1s * sizeof (f1_neuron)); </span>
+<span class="lineNum">     261 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">         80 :    if (f1_layer[g]==NULL)</span>
+<span class="lineNum">     262 </span>                :            :    {
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;malloc error in init_net\n&quot;);</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     265 </span>                :            :    }
+<span class="lineNum">     266 </span>                :            :    }
+<span class="lineNum">     267 </span>[<span class="branchCov" title="Branch 0 was taken 20000 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      40004 :    for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     268 </span>                :            :    {
+<span class="lineNum">     269 </span>[<span class="branchCov" title="Branch 0 was taken 400000 times"> + </span><span class="branchCov" title="Branch 1 was taken 20000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">     840000 :     for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">     270 </span>                :            : 
+<span class="lineNum">     271 </span>                :<span class="lineCov">     800000 :      f1_layer[g][i].I = (double *)malloc(2*sizeof(double));</span>
+<span class="lineNum">     272 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 400000 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">     800000 :      if (f1_layer[g][i].I==NULL)</span>
+<span class="lineNum">     273 </span>                :            :      {
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot;malloc error in init_net\n&quot;);</span>
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :        exit(1);</span>
+<span class="lineNum">     276 </span>                :            :      }
+<span class="lineNum">     277 </span>                :            :    }
+<span class="lineNum">     278 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].W = 0;</span>
+<span class="lineNum">     279 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].X = 0;</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].V = 0;</span>
+<span class="lineNum">     281 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].U = 0;</span>
+<span class="lineNum">     282 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].P = 0;</span>
+<span class="lineNum">     283 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].Q = 0;</span>
+<span class="lineNum">     284 </span>                :<span class="lineCov">      40000 :      f1_layer[0][i].R = 0;</span>
+<span class="lineNum">     285 </span>                :            : }
+<span class="lineNum">     286 </span>                :            :    
+<span class="lineNum">     287 </span>                :            : 
+<span class="lineNum">     288 </span>[<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         84 :    for(int g=0; g&lt;20; g++){</span>
+<span class="lineNum">     289 </span>                :<span class="lineCov">         80 :    Y[g] = (xyz *)malloc(numf2s*sizeof(xyz));</span>
+<span class="lineNum">     290 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">         80 :    if (Y[g]==NULL)</span>
+<span class="lineNum">     291 </span>                :            :    {
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;Malloc error for Y\n&quot;);</span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     294 </span>                :            :    }
+<span class="lineNum">     295 </span>                :            :    }  
+<a name="296"><span class="lineNum">     296 </span>                :<span class="lineCov">          4 : }</span></a>
+<span class="lineNum">     297 </span>                :            : 
+<span class="lineNum">     298 </span>                :<span class="lineCov">       2424 : void reset_nodes(int g)</span>
+<span class="lineNum">     299 </span>                :            : { int i;
+<span class="lineNum">     300 </span>                :            : 
+<span class="lineNum">     301 </span>[<span class="branchCov" title="Branch 0 was taken 12000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1212 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   24002424 :    for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     302 </span>                :            :    {
+<span class="lineNum">     303 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].W = 0.0;</span>
+<span class="lineNum">     304 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].X = 0.0;</span>
+<span class="lineNum">     305 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].V = 0.0;</span>
+<span class="lineNum">     306 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].U = 0.0;</span>
+<span class="lineNum">     307 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].P = 0.0;</span>
+<span class="lineNum">     308 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].Q = 0.0;</span>
+<span class="lineNum">     309 </span>                :<span class="lineCov">   24000000 :      f1_layer[g][i].R = 0.0;</span>
+<span class="lineNum">     310 </span>                :            :   }
+<span class="lineNum">     311 </span>[<span class="branchCov" title="Branch 0 was taken 13332 times"> + </span><span class="branchCov" title="Branch 1 was taken 1212 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">      29088 :    for (i=0;i&lt;numf2s;i++)</span>
+<span class="lineNum">     312 </span>                :            :     {   
+<span class="lineNum">     313 </span>[<span class="branchCov" title="Branch 0 was taken 266640 times"> + </span><span class="branchCov" title="Branch 1 was taken 13332 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">     559944 :         for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">     314 </span>                :<span class="lineCov">     533280 :         Y[g][i].y = 0.0;</span>
+<span class="lineNum">     315 </span>                :<span class="lineCov">     533280 :         Y[g][i].reset =0;</span>
+<span class="lineNum">     316 </span>                :            :         }
+<span class="lineNum">     317 </span>                :            :     }
+<span class="lineNum">     318 </span>                :<span class="lineCov">       2424 :     winner[g] = 0;</span>
+<span class="lineNum">     319 </span>                :<span class="lineCov">       2424 :     resonant[g] = 0;</span>
+<span class="lineNum">     320 </span>                :<span class="lineCov">       2424 : }</span>
+<a name="321"><span class="lineNum">     321 </span>                :            : </a>
+<span class="lineNum">     322 </span>                :            : 
+<span class="lineNum">     323 </span>                :<span class="lineCov">       2218 : void reset_nodes2(int g)</span>
+<span class="lineNum">     324 </span>                :            : { int i;
+<span class="lineNum">     325 </span>                :            : 
+<span class="lineNum">     326 </span>[<span class="branchCov" title="Branch 0 was taken 9440000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1109 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   18882218 :    for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     327 </span>                :            :    {
+<span class="lineNum">     328 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].W = 0.0;</span>
+<span class="lineNum">     329 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].X = 0.0;</span>
+<span class="lineNum">     330 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].V = 0.0;</span>
+<span class="lineNum">     331 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].U = 0.0;</span>
+<span class="lineNum">     332 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].P = 0.0;</span>
+<span class="lineNum">     333 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].Q = 0.0;</span>
+<span class="lineNum">     334 </span>                :<span class="lineCov">   18880000 :      f1_layer[g][i].R = 0.0;</span>
+<span class="lineNum">     335 </span>                :            :   }
+<span class="lineNum">     336 </span>[<span class="branchCov" title="Branch 0 was taken 12199 times"> + </span><span class="branchCov" title="Branch 1 was taken 1109 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">      26616 :    for (i=0;i&lt;numf2s;i++)</span>
+<span class="lineNum">     337 </span>                :<span class="lineCov">      24398 :        Y[g][i].y = 0.0;</span>
+<span class="lineNum">     338 </span>                :<span class="lineCov">       2218 :     winner[g] = 0;</span>
+<span class="lineNum">     339 </span>                :<span class="lineCov">       2218 :     resonant[g] = 0;</span>
+<span class="lineNum">     340 </span>                :<span class="lineCov">       2218 : }</span>
+<a name="341"><span class="lineNum">     341 </span>                :            : </a>
+<span class="lineNum">     342 </span>                :            : 
+<span class="lineNum">     343 </span>                :<span class="lineCov">        128 : void print_f12(int g)</span>
+<span class="lineNum">     344 </span>                :            : { int j;
+<span class="lineNum">     345 </span>                :            :      printf(&quot;\n\n&quot;);
+<span class="lineNum">     346 </span>[<span class="branchCov" title="Branch 0 was taken 704 times"> + </span><span class="branchCov" title="Branch 1 was taken 64 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">       1536 :      for(j=0;j&lt;numf2s;j++)</span>
+<span class="lineNum">     347 </span>                :<span class="lineCov">       1408 :          printf(&quot; j = %i  Y= %9.7f\n&quot;,j,Y[g][j].y);</span>
+<a name="348"><span class="lineNum">     348 </span>                :<span class="lineCov">        128 : }</span></a>
+<span class="lineNum">     349 </span>                :            : 
+<span class="lineNum">     350 </span>                :<span class="lineCov">       2216 : void train_match(int spot)</span>
+<span class="lineNum">     351 </span>                :            : { int j,matched,f1res,mt;
+<span class="lineNum">     352 </span>                :            :   int ti,tj,tresult;
+<span class="lineNum">     353 </span>                :            :   double tnorm;
+<span class="lineNum">     354 </span>                :            :   double xr,qr,tsum,ttemp;
+<span class="lineNum">     355 </span>                :            :   char matchtest;
+<span class="lineNum">     356 </span>                :            :   double match_confidence;
+<span class="lineNum">     357 </span>                :<span class="lineCov">       2216 :   f1res=0;</span>
+<span class="lineNum">     358 </span>                :<span class="lineCov">       2216 :   reset_nodes(0);</span>
+<span class="lineNum">     359 </span>                :<span class="lineCov">       2216 :   cp =spot;</span>
+<span class="lineNum">     360 </span>                :<span class="lineCov">       2216 :   matched = 0;</span>
+<span class="lineNum">     361 </span>[<span class="branchCov" title="Branch 0 was taken 1108 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">       5540 :   while (!matched)</span>
+<span class="lineNum">     362 </span>                :            :   { 
+<span class="lineNum">     363 </span>                :<span class="lineCov">       2216 :     f1res = 0;</span>
+<span class="lineNum">     364 </span>[<span class="branchCov" title="Branch 0 was taken 9700 times"> + </span><span class="branchCov" title="Branch 1 was taken 1108 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 90 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">      21616 :     for (j=0;j&lt;9 &amp;&amp; !f1res ;j++)</span>
+<span class="lineNum">     365 </span>                :            :     {
+<span class="lineNum">     366 </span>                :            : 
+<span class="lineNum">     367 </span>                :            :       /* Compute F1 layer - W values */
+<span class="lineNum">     368 </span>                :<span class="lineCov">      19400 :       tnorm = 0;</span>
+<span class="lineNum">     369 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     370 </span>                :            :       {
+<span class="lineNum">     371 </span>                :<span class="lineCov">  194000000 :           f1_layer[0][ti].W = f1_layer[0][ti].I[cp] + a*(f1_layer[0][ti].U);</span>
+<span class="lineNum">     372 </span>                :<span class="lineCov">  194000000 :           tnorm += f1_layer[0][ti].W * f1_layer[0][ti].W;</span>
+<span class="lineNum">     373 </span>                :            :       }
+<span class="lineNum">     374 </span>                :<span class="lineCov">      19400 :       tnorm =  sqrt((double)tnorm);</span>
+<span class="lineNum">     375 </span>                :            :       /* Compute F1 layer - X values */
+<span class="lineNum">     376 </span>                :            : 
+<span class="lineNum">     377 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     378 </span>                :<span class="lineCov">  194000000 :             f1_layer[0][tj].X = f1_layer[0][tj].W/tnorm;</span>
+<span class="lineNum">     379 </span>                :            : 
+<span class="lineNum">     380 </span>                :            :       /* Compute F1 layer - V values */
+<span class="lineNum">     381 </span>                :            : 
+<span class="lineNum">     382 </span>                :<span class="lineCov">      19400 :       tnorm =0;</span>
+<span class="lineNum">     383 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     384 </span>                :            :       {
+<span class="lineNum">     385 </span>[<span class="branchCov" title="Branch 0 was taken 53687220 times"> + </span><span class="branchCov" title="Branch 1 was taken 43312780 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 55 times"> + </span><span class="branchCov" title="Branch 1 was taken 45 times"> + </span>]:<span class="lineCov">  194000000 :            if (f1_layer[0][ti].X &lt; theta)</span>
+<span class="lineNum">     386 </span>                :<span class="lineCov">  107374440 :                   xr = 0;</span>
+<span class="lineNum">     387 </span>                :            :            else
+<span class="lineNum">     388 </span>                :<span class="lineCov">   86625560 :                   xr = f1_layer[0][ti].X; </span>
+<span class="lineNum">     389 </span>[<span class="branchCov" title="Branch 0 was taken 58634944 times"> + </span><span class="branchCov" title="Branch 1 was taken 38365056 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 60 times"> + </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>]:<span class="lineCov">  194000000 :            if (f1_layer[0][ti].Q &lt; theta)</span>
+<span class="lineNum">     390 </span>                :<span class="lineCov">  117269888 :                   qr = 0;</span>
+<span class="lineNum">     391 </span>                :            :            else
+<span class="lineNum">     392 </span>                :<span class="lineCov">   76730112 :                   qr = f1_layer[0][ti].Q;</span>
+<span class="lineNum">     393 </span>                :<span class="lineCov">  194000000 :            f1_layer[0][ti].V = xr + b*qr;</span>
+<span class="lineNum">     394 </span>                :<span class="lineCov">  194000000 :            tnorm += f1_layer[0][ti].V * f1_layer[0][ti].V;</span>
+<span class="lineNum">     395 </span>                :            :       }
+<span class="lineNum">     396 </span>                :            : 
+<span class="lineNum">     397 </span>                :            :       /* Compute F1 layer - U values */
+<span class="lineNum">     398 </span>                :<span class="lineCov">      19400 :       tnorm = sqrt((double) tnorm);</span>
+<span class="lineNum">     399 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     400 </span>                :<span class="lineCov">  194000000 :             f1_layer[0][tj].U = f1_layer[0][tj].V/tnorm;</span>
+<span class="lineNum">     401 </span>                :            : 
+<span class="lineNum">     402 </span>                :            : 
+<span class="lineNum">     403 </span>                :            : 
+<span class="lineNum">     404 </span>                :            :       /* Compute F1 layer - P values */
+<span class="lineNum">     405 </span>                :<span class="lineCov">      19400 :       tnorm =0;</span>
+<span class="lineNum">     406 </span>                :<span class="lineCov">      19400 :       tsum=0;</span>
+<span class="lineNum">     407 </span>                :<span class="lineCov">      19400 :       tresult = 1;</span>
+<span class="lineNum">     408 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     409 </span>                :            :       {   
+<span class="lineNum">     410 </span>                :<span class="lineCov">  194000000 :         tsum = 0;</span>
+<span class="lineNum">     411 </span>                :<span class="lineCov">  194000000 :         ttemp = f1_layer[0][ti].P;</span>
+<span class="lineNum">     412 </span>                :            : 
+<span class="lineNum">     413 </span>[<span class="branchCov" title="Branch 0 was taken 1017640000 times"> + </span><span class="branchCov" title="Branch 1 was taken 97000000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 91 times"> + </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov"> 2229280000 :         for (tj=spot;tj&lt;numf2s;tj++)</span>
+<span class="lineNum">     414 </span>                :            :         {
+<span class="lineNum">     415 </span>[<span class="branchCov" title="Branch 0 was taken 91360000 times"> + </span><span class="branchCov" title="Branch 1 was taken 926280000 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 85920000 times"> + </span><span class="branchCov" title="Branch 3 was taken 5440000 times"> + </span>]:<span class="lineCov"> 2035280000 :            if ((tj == winner[0])&amp;&amp;(Y[0][tj].y &gt; 0))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 91 times"> + </span><span class="branchCov" title="Branch 2 was taken 94 times"> + </span><span class="branchCov" title="Branch 3 was taken 6 times"> + </span>]
+<span class="lineNum">     416 </span>                :<span class="lineCov">  171840000 :                  tsum += tds[ti][tj] * d;</span>
+<span class="lineNum">     417 </span>                :            :         }
+<span class="lineNum">     418 </span>                :            : 
+<span class="lineNum">     419 </span>                :<span class="lineCov">  194000000 :         f1_layer[0][ti].P = f1_layer[0][ti].U + tsum;</span>
+<span class="lineNum">     420 </span>                :            : 
+<span class="lineNum">     421 </span>                :<span class="lineCov">  194000000 :         tnorm += f1_layer[0][ti].P * f1_layer[0][ti].P;</span>
+<span class="lineNum">     422 </span>                :            : 
+<span class="lineNum">     423 </span>[<span class="branchCov" title="Branch 0 was taken 43026980 times"> + </span><span class="branchCov" title="Branch 1 was taken 53973020 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 44 times"> + </span><span class="branchCov" title="Branch 1 was taken 56 times"> + </span>]:<span class="lineCov">  194000000 :         if (ttemp != f1_layer[0][ti].P)</span>
+<span class="lineNum">     424 </span>                :<span class="lineCov">   86053960 :            tresult=0;</span>
+<span class="lineNum">     425 </span>                :            :       }
+<span class="lineNum">     426 </span>                :<span class="lineCov">      19400 :       f1res = tresult;</span>
+<span class="lineNum">     427 </span>                :            : 
+<span class="lineNum">     428 </span>                :            :       /* Compute F1 - Q values */
+<span class="lineNum">     429 </span>                :            : 
+<span class="lineNum">     430 </span>                :<span class="lineCov">      19400 :       tnorm = sqrt((double) tnorm);</span>
+<span class="lineNum">     431 </span>[<span class="branchCov" title="Branch 0 was taken 97000000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  194019400 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     432 </span>                :<span class="lineCov">  194000000 :             f1_layer[0][tj].Q = f1_layer[0][tj].P;</span>
+<span class="lineNum">     433 </span>                :            : 
+<span class="lineNum">     434 </span>                :            :       /* Compute F2 - y values */
+<span class="lineNum">     435 </span>[<span class="branchCov" title="Branch 0 was taken 101764 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 91 times"> + </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">     222928 :       for (tj=spot;tj&lt;numf2s;tj++)</span>
+<span class="lineNum">     436 </span>                :            :       {    
+<span class="lineNum">     437 </span>                :<span class="lineCov">     203528 :         Y[0][tj].y = 0;</span>
+<span class="lineNum">     438 </span>[<span class="branchCov" title="Branch 0 was taken 101764 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     203528 :         if ( !Y[0][tj].reset )</span>
+<span class="lineNum">     439 </span>[<span class="branchCov" title="Branch 0 was taken 1017640000 times"> + </span><span class="branchCov" title="Branch 1 was taken 101764 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov"> 2035483528 :         for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     440 </span>                :<span class="lineCov"> 2035280000 :            Y[0][tj].y += f1_layer[0][ti].P * bus[ti][tj];</span>
+<span class="lineNum">     441 </span>                :            :       }
+<span class="lineNum">     442 </span>                :            : 
+<span class="lineNum">     443 </span>                :            :       /* Find match */
+<span class="lineNum">     444 </span>                :<span class="lineCov">      19400 :       winner[0] = 0;</span>
+<span class="lineNum">     445 </span>[<span class="branchCov" title="Branch 0 was taken 101764 times"> + </span><span class="branchCov" title="Branch 1 was taken 9700 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 91 times"> + </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">     222928 :       for (ti=spot;ti&lt;numf2s;ti++)</span>
+<span class="lineNum">     446 </span>                :            :       {
+<span class="lineNum">     447 </span>[<span class="branchCov" title="Branch 0 was taken 5536 times"> + </span><span class="branchCov" title="Branch 1 was taken 96228 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 5 times"> + </span><span class="branchCov" title="Branch 1 was taken 95 times"> + </span>]:<span class="lineCov">     203528 :        if (Y[0][ti].y &gt; Y[0][winner[0]].y)</span>
+<span class="lineNum">     448 </span>                :<span class="lineCov">      11072 :           winner[0] =ti;</span>
+<span class="lineNum">     449 </span>                :            :       }
+<span class="lineNum">     450 </span>                :            : 
+<span class="lineNum">     451 </span>                :            : 
+<span class="lineNum">     452 </span>                :            :     }
+<span class="lineNum">     453 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     454 </span>                :            :     if (DB1) print_f12(0);
+<span class="lineNum">     455 </span>                :            :     if (DB1) printf(&quot;\n num iterations for p to stabalize = %i \n&quot;,j);
+<span class="lineNum">     456 </span>                :            : #endif
+<span class="lineNum">     457 </span>                :<span class="lineCov">       2216 :     match_confidence=simtest();</span>
+<span class="lineNum">     458 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     459 </span>                :            : fprintf(stdout,&quot;rho %e\n&quot;,match_confidence);
+<span class="lineNum">     460 </span>                :            : #endif
+<span class="lineNum">     461 </span>        [<span class="branchCov" title="Branch 0 was taken 1208 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       2216 :     if ((match_confidence) &gt; rho)</span>
+<span class="lineNum">     462 </span>                :            :     {
+<span class="lineNum">     463 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     464 </span>                :            :        if (DB2 &amp;&amp; (winner[0]==0)) printf(&quot;#%i&quot;,winner[0]);
+<span class="lineNum">     465 </span>                :            : #endif
+<span class="lineNum">     466 </span>                :<span class="lineCov">       2216 :        weightadj();</span>
+<span class="lineNum">     467 </span>                :<span class="lineCov">       2216 :        matched = 1;</span>
+<span class="lineNum">     468 </span>                :            :     }
+<span class="lineNum">     469 </span>                :            :     else
+<span class="lineNum">     470 </span>                :<span class="lineNoCov">          0 :     {    Y[0][winner[0]].y = 0;</span>
+<span class="lineNum">     471 </span>                :<span class="lineNoCov">          0 :          Y[0][winner[0]].reset = 1;</span>
+<span class="lineNum">     472 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     473 </span>                :            :          if (DB1) printf(&quot;#%iN&quot;,winner[0]);
+<span class="lineNum">     474 </span>                :            : #endif
+<span class="lineNum">     475 </span>                :<span class="lineNoCov">          0 :          matchtest=0;</span>
+<span class="lineNum">     476 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (mt=spot;mt&lt;numf2s;mt++)</span>
+<span class="lineNum">     477 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :               if (Y[0][mt].reset==0)</span>
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :                    matchtest =1;</span>
+<span class="lineNum">     479 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (matchtest)</span>
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :             find_match(0);</span>
+<span class="lineNum">     481 </span>                :            :          else
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :             matched = 1;</span>
+<span class="lineNum">     483 </span>                :            :     }
+<span class="lineNum">     484 </span>                :            :   } /* end while */
+<a name="485"><span class="lineNum">     485 </span>                :<span class="lineCov">       2216 : } /* end of train_match() */</span></a>
+<span class="lineNum">     486 </span>                :            : 
+<span class="lineNum">     487 </span>                :<span class="lineCov">        208 : bool match(int g)</span>
+<span class="lineNum">     488 </span>                :            : { int j,matched,f1res,mt;
+<span class="lineNum">     489 </span>                :            :   int ti,tj,tresult;
+<span class="lineNum">     490 </span>                :            :   double tnorm;
+<span class="lineNum">     491 </span>                :            :   double xr,qr,tsum,ttemp;
+<span class="lineNum">     492 </span>                :            :   char matchtest;
+<span class="lineNum">     493 </span>                :            :   double match_confidence;
+<span class="lineNum">     494 </span>                :<span class="lineCov">        208 :   bool pass=false;</span>
+<span class="lineNum">     495 </span>                :<span class="lineCov">        208 :   f1res=0;</span>
+<span class="lineNum">     496 </span>                :            : 
+<span class="lineNum">     497 </span>                :<span class="lineCov">        208 :   cp =0;</span>
+<span class="lineNum">     498 </span>                :<span class="lineCov">        208 :   reset_nodes(g);</span>
+<span class="lineNum">     499 </span>                :            : 
+<span class="lineNum">     500 </span>                :<span class="lineCov">        208 :   matched = 0;</span>
+<span class="lineNum">     501 </span>[<span class="branchCov" title="Branch 0 was taken 1109 times"> + </span><span class="branchCov" title="Branch 1 was taken 104 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 91 times"> + </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">       2530 :   while (!matched)</span>
+<span class="lineNum">     502 </span>                :            :   { 
+<span class="lineNum">     503 </span>                :<span class="lineCov">       2218 :     reset_nodes2(g);</span>
+<span class="lineNum">     504 </span>                :<span class="lineCov">       2218 :     f1res = 0;</span>
+<span class="lineNum">     505 </span>[<span class="branchCov" title="Branch 0 was taken 9709 times"> + </span><span class="branchCov" title="Branch 1 was taken 1109 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 90 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">      21636 :     for (j=0;j&lt;9 &amp;&amp; !f1res ;j++)</span>
+<span class="lineNum">     506 </span>                :            :     {
+<span class="lineNum">     507 </span>                :            : 
+<span class="lineNum">     508 </span>                :            :       /* Compute F1 layer - W values */
+<span class="lineNum">     509 </span>                :<span class="lineCov">      19418 :       tnorm = 0;</span>
+<span class="lineNum">     510 </span>[<span class="branchCov" title="Branch 0 was taken 36210000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   72439418 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     511 </span>                :            :       {
+<span class="lineNum">     512 </span>                :<span class="lineCov">   72420000 :           f1_layer[g][ti].W = f1_layer[g][ti].I[0] + a*(f1_layer[g][ti].U);</span>
+<span class="lineNum">     513 </span>                :<span class="lineCov">   72420000 :           tnorm += f1_layer[g][ti].W * f1_layer[g][ti].W;</span>
+<span class="lineNum">     514 </span>                :            :       }
+<span class="lineNum">     515 </span>                :<span class="lineCov">      19418 :       tnorm =  sqrt((double)tnorm);</span>
+<span class="lineNum">     516 </span>                :            :       /* Compute F1 layer - X values */
+<span class="lineNum">     517 </span>                :            : 
+<span class="lineNum">     518 </span>[<span class="branchCov" title="Branch 0 was taken 49870000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   99759418 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     519 </span>                :<span class="lineCov">   99740000 :             f1_layer[g][tj].X = f1_layer[g][tj].W/tnorm;</span>
+<span class="lineNum">     520 </span>                :            : 
+<span class="lineNum">     521 </span>                :            :       /* Compute F1 layer - V values */
+<span class="lineNum">     522 </span>                :            : 
+<span class="lineNum">     523 </span>                :<span class="lineCov">      19418 :       tnorm =0;</span>
+<span class="lineNum">     524 </span>[<span class="branchCov" title="Branch 0 was taken 41730000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   83479418 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     525 </span>                :            :       {
+<span class="lineNum">     526 </span>[<span class="branchCov" title="Branch 0 was taken 22968722 times"> + </span><span class="branchCov" title="Branch 1 was taken 18761278 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 55 times"> + </span><span class="branchCov" title="Branch 1 was taken 45 times"> + </span>]:<span class="lineCov">   83460000 :            if (f1_layer[g][ti].X &lt; theta)</span>
+<span class="lineNum">     527 </span>                :<span class="lineCov">   45937444 :                   xr = 0;</span>
+<span class="lineNum">     528 </span>                :            :            else
+<span class="lineNum">     529 </span>                :<span class="lineCov">   37522556 :                   xr = f1_layer[g][ti].X; </span>
+<span class="lineNum">     530 </span>[<span class="branchCov" title="Branch 0 was taken 9002831 times"> + </span><span class="branchCov" title="Branch 1 was taken 32727169 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 22 times"> + </span><span class="branchCov" title="Branch 1 was taken 78 times"> + </span>]:<span class="lineCov">   83460000 :            if (f1_layer[g][ti].Q &lt; theta)</span>
+<span class="lineNum">     531 </span>                :<span class="lineCov">   18005662 :                   qr = 0;</span>
+<span class="lineNum">     532 </span>                :            :            else
+<span class="lineNum">     533 </span>                :<span class="lineCov">   65454338 :                   qr = f1_layer[g][ti].Q;</span>
+<span class="lineNum">     534 </span>                :<span class="lineCov">   83460000 :            f1_layer[g][ti].V = xr + b*qr;</span>
+<span class="lineNum">     535 </span>                :<span class="lineCov">   83460000 :            tnorm += f1_layer[g][ti].V * f1_layer[g][ti].V;</span>
+<span class="lineNum">     536 </span>                :            :       }
+<span class="lineNum">     537 </span>                :            : 
+<span class="lineNum">     538 </span>                :            :       /* Compute F1 layer - U values */
+<span class="lineNum">     539 </span>                :<span class="lineCov">      19418 :       tnorm = sqrt((double) tnorm);</span>
+<span class="lineNum">     540 </span>[<span class="branchCov" title="Branch 0 was taken 46450000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   92919418 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     541 </span>                :<span class="lineCov">   92900000 :             f1_layer[g][tj].U = f1_layer[g][tj].V/tnorm;</span>
+<span class="lineNum">     542 </span>                :            : 
+<span class="lineNum">     543 </span>                :            : 
+<span class="lineNum">     544 </span>                :            : 
+<span class="lineNum">     545 </span>                :            :       /* Compute F1 layer - P values */
+<span class="lineNum">     546 </span>                :<span class="lineCov">      19418 :       tnorm =0;</span>
+<span class="lineNum">     547 </span>                :<span class="lineCov">      19418 :       tsum=0;</span>
+<span class="lineNum">     548 </span>                :<span class="lineCov">      19418 :       tresult = 1;</span>
+<span class="lineNum">     549 </span>[<span class="branchCov" title="Branch 0 was taken 23970000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   47959418 :       for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     550 </span>                :            :       {   
+<span class="lineNum">     551 </span>                :<span class="lineCov">   47940000 :         tsum = 0;</span>
+<span class="lineNum">     552 </span>                :<span class="lineCov">   47940000 :         ttemp = f1_layer[g][ti].P;</span>
+<span class="lineNum">     553 </span>                :            : 
+<span class="lineNum">     554 </span>[<span class="branchCov" title="Branch 0 was taken 264660000 times"> + </span><span class="branchCov" title="Branch 1 was taken 23970000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">  577260000 :         for (tj=0;tj&lt;numf2s;tj++)</span>
+<span class="lineNum">     555 </span>                :            :         {
+<span class="lineNum">     556 </span>[<span class="branchCov" title="Branch 0 was taken 23980000 times"> + </span><span class="branchCov" title="Branch 1 was taken 240680000 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 20302974 times"> + </span><span class="branchCov" title="Branch 3 was taken 3677026 times"> + </span>]:<span class="lineCov">  529320000 :            if ((tj == winner[g])&amp;&amp;(Y[g][tj].y &gt; 0))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 91 times"> + </span><span class="branchCov" title="Branch 2 was taken 85 times"> + </span><span class="branchCov" title="Branch 3 was taken 15 times"> + </span>]
+<span class="lineNum">     557 </span>                :<span class="lineCov">   40605948 :                  tsum += tds[ti][tj] * d;</span>
+<span class="lineNum">     558 </span>                :            :         }
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>                :<span class="lineCov">   47940000 :         f1_layer[g][ti].P = f1_layer[g][ti].U + tsum;</span>
+<span class="lineNum">     561 </span>                :            : 
+<span class="lineNum">     562 </span>                :<span class="lineCov">   47940000 :         tnorm += f1_layer[g][ti].P * f1_layer[g][ti].P;</span>
+<span class="lineNum">     563 </span>                :            : 
+<span class="lineNum">     564 </span>[<span class="branchCov" title="Branch 0 was taken 21378469 times"> + </span><span class="branchCov" title="Branch 1 was taken 2591531 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 89 times"> + </span><span class="branchCov" title="Branch 1 was taken 11 times"> + </span>]:<span class="lineCov">   47940000 :         if (ttemp != f1_layer[g][ti].P)</span>
+<span class="lineNum">     565 </span>                :<span class="lineCov">   42756938 :            tresult=0;</span>
+<span class="lineNum">     566 </span>                :            :       }
+<span class="lineNum">     567 </span>                :<span class="lineCov">      19418 :       f1res = tresult;</span>
+<span class="lineNum">     568 </span>                :            : 
+<span class="lineNum">     569 </span>                :            :       /* Compute F1 - Q values */
+<span class="lineNum">     570 </span>                :            : 
+<span class="lineNum">     571 </span>                :<span class="lineCov">      19418 :       tnorm = sqrt((double) tnorm);</span>
+<span class="lineNum">     572 </span>[<span class="branchCov" title="Branch 0 was taken 48100000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   96219418 :       for (tj=0;tj&lt;numf1s;tj++)</span>
+<span class="lineNum">     573 </span>                :<span class="lineCov">   96200000 :             f1_layer[g][tj].Q = f1_layer[g][tj].P;</span>
+<span class="lineNum">     574 </span>                :            : 
+<span class="lineNum">     575 </span>                :            :       /* Compute F2 - y values */
+<span class="lineNum">     576 </span>[<span class="branchCov" title="Branch 0 was taken 12144 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 56 times"> + </span><span class="branchCov" title="Branch 1 was taken 44 times"> + </span>]:<span class="lineCov">      43706 :       for (tj=0;tj&lt;numf2s;tj++)</span>
+<span class="lineNum">     577 </span>                :            :       {    
+<span class="lineNum">     578 </span>                :<span class="lineCov">      24288 :         Y[g][tj].y = 0;</span>
+<span class="lineNum">     579 </span>[<span class="branchCov" title="Branch 0 was taken 7398 times"> + </span><span class="branchCov" title="Branch 1 was taken 4746 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 61 times"> + </span><span class="branchCov" title="Branch 1 was taken 39 times"> + </span>]:<span class="lineCov">      24288 :         if ( !Y[g][tj].reset )</span>
+<span class="lineNum">     580 </span>[<span class="branchCov" title="Branch 0 was taken 73980000 times"> + </span><span class="branchCov" title="Branch 1 was taken 7398 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">  147974796 :         for (ti=0;ti&lt;numf1s;ti++)</span>
+<span class="lineNum">     581 </span>                :<span class="lineCov">  147960000 :            Y[g][tj].y += f1_layer[g][ti].P * bus[ti][tj];</span>
+<span class="lineNum">     582 </span>                :            :       }
+<span class="lineNum">     583 </span>                :            : 
+<span class="lineNum">     584 </span>                :            :       /* Find match */
+<span class="lineNum">     585 </span>                :<span class="lineCov">      19418 :       winner[g] = 0;</span>
+<span class="lineNum">     586 </span>[<span class="branchCov" title="Branch 0 was taken 103983 times"> + </span><span class="branchCov" title="Branch 1 was taken 9709 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 91 times"> + </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">     227384 :       for (ti=0;ti&lt;numf2s;ti++)</span>
+<span class="lineNum">     587 </span>                :            :       {
+<span class="lineNum">     588 </span>[<span class="branchCov" title="Branch 0 was taken 20191 times"> + </span><span class="branchCov" title="Branch 1 was taken 83792 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 19 times"> + </span><span class="branchCov" title="Branch 1 was taken 81 times"> + </span>]:<span class="lineCov">     207966 :        if (Y[g][ti].y &gt; Y[g][winner[g]].y)</span>
+<span class="lineNum">     589 </span>                :<span class="lineCov">      40382 :           winner[g] =ti;</span>
+<span class="lineNum">     590 </span>                :            :       }
+<span class="lineNum">     591 </span>                :            : 
+<span class="lineNum">     592 </span>                :            : 
+<span class="lineNum">     593 </span>                :            :     }
+<span class="lineNum">     594 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     595 </span>                :            :     if (DB1) print_f12(g);
+<span class="lineNum">     596 </span>                :            :     if (DB1) printf(&quot;\n num iterations for p to stabilize = %i \n&quot;,j);
+<span class="lineNum">     597 </span>                :            : #endif
+<span class="lineNum">     598 </span>                :<span class="lineCov">       2218 :     match_confidence=simtest2(g);</span>
+<span class="lineNum">     599 </span>        [<span class="branchCov" title="Branch 0 was taken 113 times"> + </span><span class="branchCov" title="Branch 1 was taken 1096 times"> + </span>]:<span class="lineCov">       2218 :     if ((match_confidence) &gt; rho)</span>
+<span class="lineNum">     600 </span>                :            :     {
+<span class="lineNum">     601 </span>                :            :        /* If the winner is not the default F2 neuron (the highest one)
+<span class="lineNum">     602 </span>                :            :         * we have a match.
+<span class="lineNum">     603 </span>                :            :         */
+<span class="lineNum">     604 </span>[<span class="branchCov" title="Branch 0 was taken 64 times"> + </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 62 times"> + </span><span class="branchCov" title="Branch 1 was taken 38 times"> + </span>]:<span class="lineCov">        208 :        if (winner[g]!=numf2s-1)</span>
+<span class="lineNum">     605 </span>                :            :        {
+<span class="lineNum">     606 </span>                :<span class="lineCov">        128 :            pass=true;</span>
+<span class="lineNum">     607 </span>                :<span class="lineCov">        128 :            fprintf(stdout,&quot;F2 neuron %d passes vigilance with a value of %0.4f\n&quot;,winner[g],match_confidence);</span>
+<span class="lineNum">     608 </span>                :<span class="lineCov">        128 :            print_f12(g);</span>
+<span class="lineNum">     609 </span>        [<span class="branchCov" title="Branch 0 was taken 144 times"> + </span><span class="branchCov" title="Branch 1 was taken 21 times"> + </span>]:<span class="lineCov">        128 :            if (match_confidence &gt; highest_confidence[g][winner[g]])</span>
+<span class="lineNum">     610 </span>                :            :            {
+<span class="lineNum">     611 </span>                :<span class="lineCov">        112 :              highest_confidence[g][winner[g]] = match_confidence;</span>
+<span class="lineNum">     612 </span>                :<span class="lineCov">        112 :              set_high[g][winner[g]] = TRUE;</span>
+<span class="lineNum">     613 </span>                :            :            }
+<span class="lineNum">     614 </span>                :            :        }
+<span class="lineNum">     615 </span>                :<span class="lineCov">        208 :        matched = 1;</span>
+<span class="lineNum">     616 </span>                :            :     }
+<span class="lineNum">     617 </span>                :            :     else
+<span class="lineNum">     618 </span>                :<span class="lineCov">       2010 :     {    Y[g][winner[g]].y = 0;</span>
+<span class="lineNum">     619 </span>                :<span class="lineCov">       2010 :          Y[g][winner[g]].reset = 1;</span>
+<span class="lineNum">     620 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     621 </span>                :            :          if (DB1) printf(&quot;#%i No&quot;,winner[g]);
+<span class="lineNum">     622 </span>                :            : #endif
+<span class="lineNum">     623 </span>                :<span class="lineCov">       2010 :          matchtest=0;</span>
+<span class="lineNum">     624 </span>[<span class="branchCov" title="Branch 0 was taken 11055 times"> + </span><span class="branchCov" title="Branch 1 was taken 1005 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 92 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">      24120 :          for (mt=0;mt&lt;numf2s;mt++)</span>
+<span class="lineNum">     625 </span>[<span class="branchCov" title="Branch 0 was taken 6622 times"> + </span><span class="branchCov" title="Branch 1 was taken 4433 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 60 times"> + </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>]:<span class="lineCov">      22110 :               if (Y[g][mt].reset==0)</span>
+<span class="lineNum">     626 </span>                :<span class="lineCov">      13244 :                    matchtest =1;</span>
+<span class="lineNum">     627 </span>[<span class="branchCov" title="Branch 0 was taken 1005 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       2010 :          if (matchtest)</span>
+<span class="lineNum">     628 </span>                :<span class="lineCov">       2010 :             find_match(g);</span>
+<span class="lineNum">     629 </span>                :            :          else
+<span class="lineNum">     630 </span>                :<span class="lineNoCov">          0 :             matched = 1;</span>
+<span class="lineNum">     631 </span>                :            :     }
+<span class="lineNum">     632 </span>                :            :   } /* end while */
+<span class="lineNum">     633 </span>                :<span class="lineCov">        208 :   return pass;</span>
+<span class="lineNum">     634 </span>                :            : }
+<span class="lineNum">     635 </span>                :            : 
+<span class="lineNum">     636 </span>                :            : 
+<span class="lineNum">     637 </span>                :            : /*
+<span class="lineNum">     638 </span>                :            :  *  loadimage - load image to scan
+<span class="lineNum">     639 </span>                :            :  *  This was rewritten because Windows NT seems to have
+<span class="lineNum">     640 </span>                :            :  *  problems with sequential calls to getc, scanf, fread,
+<span class="lineNum">     641 </span>                :            :  *  and fread.  The bug is flaky.  It appears that I'd
+<span class="lineNum">     642 </span>                :            :  *  only get one big read and all of the rest of the reads
+<span class="lineNum">     643 </span>                :            :  *  would contain bogus data, yet no error condition is 
+<span class="lineNum">     644 </span>                :            :  *  generated by the read.  Solution: one big read of the
+<span class="lineNum">     645 </span>                :            :  *  whole image and then a copy to where I really want it,
+<a name="646"><span class="lineNum">     646 </span>                :            :  *  cimage.</a>
+<span class="lineNum">     647 </span>                :            :  */
+<span class="lineNum">     648 </span>                :<span class="lineCov">          4 : void loadimage(char *input_file)</span>
+<span class="lineNum">     649 </span>                :            : { 
+<span class="lineNum">     650 </span>                :            :    int i,j;
+<span class="lineNum">     651 </span>                :            :    int fd;
+<span class="lineNum">     652 </span>                :            :    char buffer[64];
+<span class="lineNum">     653 </span>                :            :    char *superbuffer;
+<span class="lineNum">     654 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if ((fd=open(input_file,O_RDONLY))==-1)</span>
+<span class="lineNum">     655 </span>                :            :    {
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;Error opening %s\n&quot;,input_file);</span>
+<span class="lineNum">     657 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     658 </span>                :            :    } 
+<span class="lineNum">     659 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     660 </span>                :            :    printf(&quot;made it to loadimage\n&quot;);
+<span class="lineNum">     661 </span>                :            : #endif
+<span class="lineNum">     662 </span>                :            : 
+<span class="lineNum">     663 </span>                :            :    /* Strip Format descriptor */
+<span class="lineNum">     664 </span>                :            :    read(fd,buffer,8);
+<span class="lineNum">     665 </span>                :            :    /* Read width */
+<span class="lineNum">     666 </span>                :            :    read(fd,buffer,4);
+<span class="lineNum">     667 </span>[<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 80 times"> + </span><span class="branchCov" title="Branch 1 was taken 20 times"> + </span>]:<span class="lineCov">         20 :    for (i=0;i&lt;4;i++)</span>
+<span class="lineNum">     668 </span>[<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 75 times"> + </span><span class="branchCov" title="Branch 1 was taken 25 times"> + </span>]:<span class="lineCov">         16 :      if (buffer[i] != ' ')</span>
+<span class="lineNum">     669 </span>                :<span class="lineCov">         12 :        width = width * 10 + buffer[i] - '0';</span>
+<span class="lineNum">     670 </span>                :            : 
+<span class="lineNum">     671 </span>                :            :    /* Read height */
+<span class="lineNum">     672 </span>                :            :    read(fd,buffer,4);
+<span class="lineNum">     673 </span>[<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 80 times"> + </span><span class="branchCov" title="Branch 1 was taken 20 times"> + </span>]:<span class="lineCov">         20 :    for (i=0;i&lt;4;i++)</span>
+<span class="lineNum">     674 </span>[<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 75 times"> + </span><span class="branchCov" title="Branch 1 was taken 25 times"> + </span>]:<span class="lineCov">         16 :      if (buffer[i] != ' ')</span>
+<span class="lineNum">     675 </span>                :<span class="lineCov">         12 :        height = height * 10 + buffer[i] - '0';</span>
+<span class="lineNum">     676 </span>                :            : 
+<span class="lineNum">     677 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     678 </span>                :            :    fprintf(stderr,&quot;width %d, height %d\n&quot;,width,height);
+<span class="lineNum">     679 </span>                :            : #endif
+<span class="lineNum">     680 </span>                :            : 
+<span class="lineNum">     681 </span>                :<span class="lineCov">          4 :    superbuffer = (char *)malloc(width * height * sizeof(char )); </span>
+<span class="lineNum">     682 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (superbuffer == NULL)</span>
+<span class="lineNum">     683 </span>                :            :    {
+<span class="lineNum">     684 </span>                :<span class="lineNoCov">          0 :       fprintf(stderr,&quot;Problems with malloc in loadimage()\n&quot;); </span>
+<span class="lineNum">     685 </span>                :<span class="lineNoCov">          0 :       exit(1);</span>
+<span class="lineNum">     686 </span>                :            :    }
+<span class="lineNum">     687 </span>                :<span class="lineCov">          4 :    cimage = (unsigned char **) malloc(sizeof(unsigned char *) * height); </span>
+<span class="lineNum">     688 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (cimage == NULL)</span>
+<span class="lineNum">     689 </span>                :            :    {
+<span class="lineNum">     690 </span>                :<span class="lineNoCov">          0 :       fprintf(stderr,&quot;Problems with malloc in loadimage()\n&quot;); </span>
+<span class="lineNum">     691 </span>                :<span class="lineNoCov">          0 :       exit(1);</span>
+<span class="lineNum">     692 </span>                :            :    }
+<span class="lineNum">     693 </span>                :            : 
+<span class="lineNum">     694 </span>[<span class="branchCov" title="Branch 0 was taken 960 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1924 :    for (i=0;i&lt;height;i++)</span>
+<span class="lineNum">     695 </span>                :            :    {
+<span class="lineNum">     696 </span>                :<span class="lineCov">       1920 :       cimage[i] = (unsigned char *) malloc(width* sizeof(unsigned char));</span>
+<span class="lineNum">     697 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 960 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">       1920 :       if (cimage[i]==NULL)</span>
+<span class="lineNum">     698 </span>                :            :       {
+<span class="lineNum">     699 </span>                :<span class="lineNoCov">          0 :         fprintf(stderr,&quot;Problems with malloc in loadimage()\n&quot;); </span>
+<span class="lineNum">     700 </span>                :<span class="lineNoCov">          0 :         exit(1);</span>
+<span class="lineNum">     701 </span>                :            :       }
+<span class="lineNum">     702 </span>                :            :    }
+<span class="lineNum">     703 </span>                :            : 
+<span class="lineNum">     704 </span>                :<span class="lineCov">          4 :    read(fd,superbuffer,width*height);</span>
+<span class="lineNum">     705 </span>[<span class="branchCov" title="Branch 0 was taken 960 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1924 :    for (i=0;i&lt;height;i++)</span>
+<span class="lineNum">     706 </span>                :            :    {
+<span class="lineNum">     707 </span>[<span class="branchCov" title="Branch 0 was taken 614400 times"> + </span><span class="branchCov" title="Branch 1 was taken 960 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">    1230720 :      for (j=0;j&lt;width;j++)</span>
+<span class="lineNum">     708 </span>                :            :      {
+<span class="lineNum">     709 </span>                :<span class="lineCov">    1228800 :        cimage[i][j] = superbuffer[i*width + j];</span>
+<span class="lineNum">     710 </span>                :            :      }
+<span class="lineNum">     711 </span>                :            :    }
+<span class="lineNum">     712 </span>                :            : 
+<span class="lineNum">     713 </span>                :            : 
+<span class="lineNum">     714 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     715 </span>                :            :    printf(&quot; upper left 10X10 corner of image\n&quot;);
+<span class="lineNum">     716 </span>                :            :    for (i=0;i&lt;10;i++)
+<span class="lineNum">     717 </span>                :            :    {
+<span class="lineNum">     718 </span>                :            :       for (j=0;j&lt;10;j++)
+<span class="lineNum">     719 </span>                :            :           printf(&quot;%4d&quot;,cimage[i][j]);
+<span class="lineNum">     720 </span>                :            :       printf(&quot;\n&quot;);
+<span class="lineNum">     721 </span>                :            :    } 
+<span class="lineNum">     722 </span>                :            : #endif 
+<span class="lineNum">     723 </span>                :            : 
+<span class="lineNum">     724 </span>                :<span class="lineCov">          4 : }</span>
+<span class="lineNum">     725 </span>                :            : 
+<span class="lineNum">     726 </span>                :            : /* load_weights - load neural net weights
+<span class="lineNum">     727 </span>                :            :  * This seems to function properly which is odd because
+<span class="lineNum">     728 </span>                :            :  * loadimage does not.  The only difference really is that
+<span class="lineNum">     729 </span>                :            :  * loadimage is trying to load bytes of any value, whereas
+<span class="lineNum">     730 </span>                :            :  * load_weights is looking at a file that only contains
+<a name="731"><span class="lineNum">     731 </span>                :            :  * ascii characters and reading them as ints or doubles.</a>
+<span class="lineNum">     732 </span>                :            :  */ 
+<span class="lineNum">     733 </span>                :<span class="lineNoCov">          0 : void load_weights(char *weightfile)</span>
+<span class="lineNum">     734 </span>                :            : {  double a;
+<span class="lineNum">     735 </span>                :            :    long i,j;
+<span class="lineNum">     736 </span>                :            : 
+<span class="lineNum">     737 </span>                :            :    FILE *inp;
+<span class="lineNum">     738 </span>                :            : 
+<span class="lineNum">     739 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if ((inp=fopen(weightfile,&quot;r&quot;))==NULL)</span>
+<span class="lineNum">     740 </span>                :            :    {
+<span class="lineNum">     741 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;Unable to open %s\n&quot;,weightfile);</span>
+<span class="lineNum">     742 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     743 </span>                :            :    }
+<span class="lineNum">     744 </span>                :            : 
+<span class="lineNum">     745 </span>                :            :    printf(&quot;made it to load_weights\n&quot;);
+<span class="lineNum">     746 </span>                :<span class="lineNoCov">          0 :    fscanf (inp,&quot;%d %d&quot;,&amp;lwidth,&amp;lheight);</span>
+<span class="lineNum">     747 </span>                :<span class="lineNoCov">          0 :    numf1s = numinputs = lwidth * lheight;</span>
+<span class="lineNum">     748 </span>                :<span class="lineNoCov">          0 :    numf2s = numpatterns+1;             </span>
+<span class="lineNum">     749 </span>                :            : 
+<span class="lineNum">     750 </span>                :<span class="lineNoCov">          0 :    alloc_td_bu();</span>
+<span class="lineNum">     751 </span>                :            : 
+<span class="lineNum">     752 </span>                :<span class="lineNoCov">          0 :    j = 0;</span>
+<span class="lineNum">     753 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     754 </span>                :<span class="lineNoCov">          0 :    {   fscanf(inp,&quot;%le&quot;,&amp;a);</span>
+<span class="lineNum">     755 </span>                :<span class="lineNoCov">          0 :        bus[i][j] = tds[i][j] =a;</span>
+<span class="lineNum">     756 </span>                :            :    }
+<span class="lineNum">     757 </span>                :<span class="lineNoCov">          0 : } /* end of load_weights */</span>
+<span class="lineNum">     758 </span>                :            : 
+<span class="lineNum">     759 </span>                :            : /* alloc_td_bu - memory alloc of top down and bottom up
+<a name="760"><span class="lineNum">     760 </span>                :            :  *   connections</a>
+<span class="lineNum">     761 </span>                :            :  */
+<span class="lineNum">     762 </span>                :<span class="lineCov">          4 : void alloc_td_bu()</span>
+<span class="lineNum">     763 </span>                :            : {
+<span class="lineNum">     764 </span>                :<span class="lineCov">          4 :    bus = (double **)malloc(numf1s*sizeof(double *));</span>
+<span class="lineNum">     765 </span>                :<span class="lineCov">          4 :    tds = (double **)malloc(numf1s*sizeof(double *));</span>
+<span class="lineNum">     766 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          4 :    if ((bus==NULL)||(tds==NULL))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 100 times"> + </span>]
+<span class="lineNum">     767 </span>                :            :    {
+<span class="lineNum">     768 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;Malloc problem in load_weights\n&quot;);</span>
+<span class="lineNum">     769 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     770 </span>                :            :    }
+<span class="lineNum">     771 </span>[<span class="branchCov" title="Branch 0 was taken 20000 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      40004 :    for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     772 </span>                :            :    {
+<span class="lineNum">     773 </span>                :<span class="lineCov">      40000 :      bus[i] = (double *)malloc(numf2s*sizeof(double));</span>
+<span class="lineNum">     774 </span>                :<span class="lineCov">      40000 :      tds[i] = (double *)malloc(numf2s*sizeof(double));</span>
+<span class="lineNum">     775 </span>                :            :    }
+<span class="lineNum">     776 </span>                :<span class="lineCov">          4 : } /* end of alloc_td_bu */</span>
+<span class="lineNum">     777 </span>                :            : 
+<span class="lineNum">     778 </span>                :            : /* init_td - initialize top down weights
+<span class="lineNum">     779 </span>                :            :  *   start signifies which F2 neuron to initialize for.  Enables
+<a name="780"><span class="lineNum">     780 </span>                :            :  *   training on more than one image.  </a>
+<span class="lineNum">     781 </span>                :            :  */
+<span class="lineNum">     782 </span>                :<span class="lineCov">         12 : void init_td(int start)</span>
+<span class="lineNum">     783 </span>                :            : {
+<span class="lineNum">     784 </span>                :            :   int i,j;
+<span class="lineNum">     785 </span>[<span class="branchCov" title="Branch 0 was taken 60000 times"> + </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">     120012 :   for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     786 </span>[<span class="branchCov" title="Branch 0 was taken 440000 times"> + </span><span class="branchCov" title="Branch 1 was taken 60000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 88 times"> + </span><span class="branchCov" title="Branch 1 was taken 12 times"> + </span>]:<span class="lineCov">    1000000 :     for (j=start;j&lt;numf2s;j++)</span>
+<span class="lineNum">     787 </span>                :<span class="lineCov">     880000 :       tds[i][j] = 0.0;</span>
+<span class="lineNum">     788 </span>                :<span class="lineCov">         12 : } /* end of init_td */</span>
+<span class="lineNum">     789 </span>                :            : 
+<a name="790"><span class="lineNum">     790 </span>                :            : /* init_bu - initialize bottom up weights</a>
+<span class="lineNum">     791 </span>                :            :  */
+<span class="lineNum">     792 </span>                :<span class="lineCov">         12 : void init_bu(int start )</span>
+<span class="lineNum">     793 </span>                :            : {
+<span class="lineNum">     794 </span>                :            :   int i,j;
+<span class="lineNum">     795 </span>[<span class="branchCov" title="Branch 0 was taken 60000 times"> + </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">     120012 :   for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     796 </span>[<span class="branchCov" title="Branch 0 was taken 440000 times"> + </span><span class="branchCov" title="Branch 1 was taken 60000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 88 times"> + </span><span class="branchCov" title="Branch 1 was taken 12 times"> + </span>]:<span class="lineCov">    1000000 :     for (j=start;j&lt;numf2s;j++)</span>
+<span class="lineNum">     797 </span>                :<span class="lineCov">     880000 :       bus[i][j] = 1/(1.0 - d)/sqrt((double)numf1s); </span>
+<span class="lineNum">     798 </span>                :<span class="lineCov">         12 : } /* end of init_bu */</span>
+<span class="lineNum">     799 </span>                :            : 
+<span class="lineNum">     800 </span>                :            : /* load_train - load a training file into
+<a name="801"><span class="lineNum">     801 </span>                :            :  *   location f1_layer[].I[spot]</a>
+<span class="lineNum">     802 </span>                :            :  */
+<span class="lineNum">     803 </span>                :<span class="lineCov">          8 : void load_train(char *trainfile,int mode, int objects)</span>
+<span class="lineNum">     804 </span>                :            : {
+<span class="lineNum">     805 </span>                :            :    int i;
+<span class="lineNum">     806 </span>                :            :    int fd;
+<span class="lineNum">     807 </span>                :            :    char buffer[64];
+<span class="lineNum">     808 </span>                :            :    char *superbuffer;
+<span class="lineNum">     809 </span>                :            :    unsigned char t;
+<span class="lineNum">     810 </span>                :            :    int spot;
+<span class="lineNum">     811 </span>                :            : 
+<span class="lineNum">     812 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">          8 :    if (mode==MODE_TRAIN1)</span>
+<span class="lineNum">     813 </span>                :            :    {
+<span class="lineNum">     814 </span>                :<span class="lineCov">          4 :      spot=0;</span>
+<span class="lineNum">     815 </span>                :            :    }
+<span class="lineNum">     816 </span>                :            :    else
+<span class="lineNum">     817 </span>                :            :    {
+<span class="lineNum">     818 </span>                :<span class="lineCov">          4 :      spot=1;</span>
+<span class="lineNum">     819 </span>                :            :    }
+<span class="lineNum">     820 </span>                :            : 
+<span class="lineNum">     821 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          8 :    if ((fd=open(trainfile,O_RDONLY))==-1)</span>
+<span class="lineNum">     822 </span>                :            :    {
+<span class="lineNum">     823 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;Error opening %s\n&quot;,trainfile);</span>
+<span class="lineNum">     824 </span>                :<span class="lineNoCov">          0 :      exit(1);</span>
+<span class="lineNum">     825 </span>                :            :    } 
+<span class="lineNum">     826 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     827 </span>                :            :    printf(&quot;made it to load_train. opening %s\n&quot;,trainfile);
+<span class="lineNum">     828 </span>                :            : #endif
+<span class="lineNum">     829 </span>                :            : 
+<span class="lineNum">     830 </span>                :<span class="lineCov">          8 :    lwidth = 0;</span>
+<span class="lineNum">     831 </span>                :<span class="lineCov">          8 :    lheight = 0;</span>
+<span class="lineNum">     832 </span>                :            : 
+<span class="lineNum">     833 </span>                :            :    /* Strip Format descriptor */
+<span class="lineNum">     834 </span>                :            :    read(fd,buffer,8);
+<span class="lineNum">     835 </span>                :            :    /* Read width */
+<span class="lineNum">     836 </span>                :            :    read(fd,buffer,4);
+<span class="lineNum">     837 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 80 times"> + </span><span class="branchCov" title="Branch 1 was taken 20 times"> + </span>]:<span class="lineCov">         40 :    for (i=0;i&lt;4;i++)</span>
+<span class="lineNum">     838 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         32 :      if (buffer[i] != ' ')</span>
+<span class="lineNum">     839 </span>                :<span class="lineCov">         32 :        lwidth = lwidth * 10 + buffer[i] - '0';</span>
+<span class="lineNum">     840 </span>                :            :    /* Read height */
+<span class="lineNum">     841 </span>                :            :    read(fd,buffer,4);
+<span class="lineNum">     842 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 80 times"> + </span><span class="branchCov" title="Branch 1 was taken 20 times"> + </span>]:<span class="lineCov">         40 :    for (i=0;i&lt;4;i++)</span>
+<span class="lineNum">     843 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         32 :      if (buffer[i] != ' ')</span>
+<span class="lineNum">     844 </span>                :<span class="lineCov">         32 :        lheight = lheight * 10 + buffer[i] - '0';</span>
+<span class="lineNum">     845 </span>                :            : 
+<span class="lineNum">     846 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     847 </span>                :            :    fprintf(stderr,&quot;width %d, height %d\n&quot;,lwidth,lheight);
+<span class="lineNum">     848 </span>                :            : #endif
+<span class="lineNum">     849 </span>                :            : 
+<span class="lineNum">     850 </span>                :            :    /* The first time through we set up the network
+<span class="lineNum">     851 </span>                :            :     * based on what is read from the file.
+<span class="lineNum">     852 </span>                :            :     * The second time through (if we have more than
+<span class="lineNum">     853 </span>                :            :     * one training file, we make sure the parameters
+<span class="lineNum">     854 </span>                :            :     * match what was read the first time, e.g. the
+<span class="lineNum">     855 </span>                :            :     * f1 layer is the same size.
+<span class="lineNum">     856 </span>                :            :     */ 
+<span class="lineNum">     857 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">          8 :    if (mode==MODE_TRAIN1)</span>
+<span class="lineNum">     858 </span>                :            :    {
+<span class="lineNum">     859 </span>                :<span class="lineCov">          4 :      numf1s = numinputs = lwidth * lheight;</span>
+<span class="lineNum">     860 </span>                :<span class="lineCov">          4 :      numf2s = objects+1;             </span>
+<span class="lineNum">     861 </span>                :<span class="lineCov">          4 :      init_globs(MODE_TRAIN1);</span>
+<span class="lineNum">     862 </span>                :<span class="lineCov">          4 :      init_net();</span>
+<span class="lineNum">     863 </span>                :            :    }
+<span class="lineNum">     864 </span>                :            :    else
+<span class="lineNum">     865 </span>                :            :    {
+<span class="lineNum">     866 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :      if ((lwidth * lheight)!= numf1s)</span>
+<span class="lineNum">     867 </span>                :            :      {
+<span class="lineNum">     868 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot;Dimensions of first image do not match&quot;);</span>
+<span class="lineNum">     869 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot; dimensions of second.\n&quot;);</span>
+<span class="lineNum">     870 </span>                :<span class="lineNoCov">          0 :        exit(1);</span>
+<span class="lineNum">     871 </span>                :            :      }
+<span class="lineNum">     872 </span>                :            :    }
+<span class="lineNum">     873 </span>                :            : 
+<span class="lineNum">     874 </span>                :<span class="lineCov">          8 :    superbuffer = (char *)malloc(lwidth * lheight * sizeof(char )); </span>
+<span class="lineNum">     875 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          8 :    if (superbuffer == NULL)</span>
+<span class="lineNum">     876 </span>                :            :    {
+<span class="lineNum">     877 </span>                :<span class="lineNoCov">          0 :       fprintf(stderr,&quot;Problems with malloc in loadimage()\n&quot;); </span>
+<span class="lineNum">     878 </span>                :<span class="lineNoCov">          0 :       exit(1);</span>
+<span class="lineNum">     879 </span>                :            :    }
+<span class="lineNum">     880 </span>                :            :   
+<span class="lineNum">     881 </span>                :<span class="lineCov">          8 :    read(fd,superbuffer,lwidth*lheight);</span>
+<span class="lineNum">     882 </span>[<span class="branchCov" title="Branch 0 was taken 40000 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      80008 :    for (i=0;i&lt;lheight*lwidth;i++)</span>
+<span class="lineNum">     883 </span>                :            :    {
+<span class="lineNum">     884 </span>                :<span class="lineCov">      80000 :      t = superbuffer[i];</span>
+<span class="lineNum">     885 </span>                :<span class="lineCov">      80000 :      f1_layer[0][i].I[spot] = (double) t;</span>
+<span class="lineNum">     886 </span>                :            :    }
+<span class="lineNum">     887 </span>                :            : 
+<span class="lineNum">     888 </span>                :<span class="lineCov">          8 :    free (superbuffer); </span>
+<span class="lineNum">     889 </span>                :            : 
+<span class="lineNum">     890 </span>                :<span class="lineCov">          8 : } /* end of load_train */</span>
+<span class="lineNum">     891 </span>                :            : 
+<span class="lineNum">     892 </span>                :            : /* This routine is used to simulate training of other objects.
+<span class="lineNum">     893 </span>                :            :  * Training on multiple objects would consume the entire execution
+<span class="lineNum">     894 </span>                :            :  * time of the benchmark.  Instead we train on a few then we simulate
+<span class="lineNum">     895 </span>                :            :  * others by copying the interconnections for the objects we are trained
+<span class="lineNum">     896 </span>                :            :  * on and then adding noise to the connections.  This simulates training on
+<span class="lineNum">     897 </span>                :            :  * other objects.  Need to blur the objects enough to overcome ART's
+<a name="898"><span class="lineNum">     898 </span>                :            :  * noise filtering.</a>
+<span class="lineNum">     899 </span>                :            :  */
+<span class="lineNum">     900 </span>                :<span class="lineCov">          4 : void sim_other_objects(int low, int high, int stop)</span>
+<span class="lineNum">     901 </span>                :            : {
+<span class="lineNum">     902 </span>                :            :   int i,j;
+<span class="lineNum">     903 </span>                :            :   int noise1;
+<span class="lineNum">     904 </span>                :            :   double noise2;
+<span class="lineNum">     905 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     906 </span>                :            :   printf(&quot;sim other low %d high %d stop %d\n&quot;,low,high,stop);
+<span class="lineNum">     907 </span>                :            :   printf(&quot;sim other numf2s %d numpat %d\n&quot;,numf2s,numpatterns);
+<span class="lineNum">     908 </span>                :            : #endif
+<span class="lineNum">     909 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :   if (high&lt;=low) {</span>
+<span class="lineNum">     910 </span>                :            :     return;
+<span class="lineNum">     911 </span>                :            :   }
+<span class="lineNum">     912 </span>                :<span class="lineCov">          4 :   srand(10);</span>
+<span class="lineNum">     913 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 89 times"> + </span><span class="branchCov" title="Branch 1 was taken 11 times"> + </span>]:<span class="lineCov">         36 :   for (i=low;i&lt;high;i++) {</span>
+<span class="lineNum">     914 </span>[<span class="branchCov" title="Branch 0 was taken 160000 times"> + </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">     320032 :     for (j=0;j&lt;numf1s;j++) {</span>
+<span class="lineNum">     915 </span>[<span class="branchCov" title="Branch 0 was taken 80000 times"> + </span><span class="branchCov" title="Branch 1 was taken 80000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">     320000 :       if (i%low) {</span>
+<span class="lineNum">     916 </span>                :<span class="lineCov">     160000 :         tds[j][i] = tds[j][0];</span>
+<span class="lineNum">     917 </span>                :<span class="lineCov">     160000 :         tds[j][i] = bus[j][0];</span>
+<span class="lineNum">     918 </span>                :            :       } else {
+<span class="lineNum">     919 </span>                :<span class="lineCov">     160000 :         tds[j][i] = tds[j][1];</span>
+<span class="lineNum">     920 </span>                :<span class="lineCov">     160000 :         tds[j][i] = bus[j][1];</span>
+<span class="lineNum">     921 </span>                :            :       }
+<span class="lineNum">     922 </span>                :            :     }
+<span class="lineNum">     923 </span>                :            :   }
+<span class="lineNum">     924 </span>[<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 89 times"> + </span><span class="branchCov" title="Branch 1 was taken 11 times"> + </span>]:<span class="lineCov">         36 :   for (i=low;i&lt;high;i++) {</span>
+<span class="lineNum">     925 </span>[<span class="branchCov" title="Branch 0 was taken 160000 times"> + </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">     320032 :     for (j=0;j&lt;numf1s;j++) {</span>
+<span class="lineNum">     926 </span>                :<span class="lineCov">     320000 :         noise1 = rand()&amp;0xffff; </span>
+<span class="lineNum">     927 </span>                :<span class="lineCov">     320000 :         noise2 = (double)noise1/(double)0xffff;</span>
+<span class="lineNum">     928 </span>                :<span class="lineCov">     320000 :         tds[j][i] += noise2;</span>
+<span class="lineNum">     929 </span>                :<span class="lineCov">     320000 :         bus[j][i] += noise2;</span>
+<span class="lineNum">     930 </span>                :            :     }
+<span class="lineNum">     931 </span>                :            :   }
+<span class="lineNum">     932 </span>                :            : #if 0
+<span class="lineNum">     933 </span>                :            :   for (i=low;i&lt;high;i++) {
+<span class="lineNum">     934 </span>                :            :     for (j=0;j&lt;numf1s;j++) {
+<span class="lineNum">     935 </span>                :            :         fprintf(stderr,&quot;%d %d %f\n&quot;,i,j,tds[j][i]);
+<span class="lineNum">     936 </span>                :            :     }
+<span class="lineNum">     937 </span>                :            :   }
+<span class="lineNum">     938 </span>                :            : #endif
+<a name="939"><span class="lineNum">     939 </span>                :            : } /* sim_other_objects */</a>
+<span class="lineNum">     940 </span>                :            : 
+<span class="lineNum">     941 </span>                :<span class="lineCov">          4 : void setup_base_pattern(int spot)</span>
+<span class="lineNum">     942 </span>                :            : { int i,j;
+<span class="lineNum">     943 </span>                :            : 
+<span class="lineNum">     944 </span>[<span class="branchCov" title="Branch 0 was taken 20000 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      40004 :   for (i=0;i&lt;numf1s;i++)</span>
+<span class="lineNum">     945 </span>                :            :   {
+<span class="lineNum">     946 </span>[<span class="branchCov" title="Branch 0 was taken 20000 times"> + </span><span class="branchCov" title="Branch 1 was taken 20000 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">      80000 :     for (j=spot;j&lt;numf2s;j++)</span>
+<span class="lineNum">     947 </span>                :            :     {
+<span class="lineNum">     948 </span>                :<span class="lineCov">      40000 :       tds[i][j] = bus[i][j] = 1.0 /sqrt((double)numf1s) /(1-d);</span>
+<span class="lineNum">     949 </span>                :            :     }
+<span class="lineNum">     950 </span>                :            :   }
+<a name="951"><span class="lineNum">     951 </span>                :<span class="lineCov">          4 : }</span></a>
+<span class="lineNum">     952 </span>                :            : 
+<span class="lineNum">     953 </span>                :<span class="lineCov">         80 : void* f_loop1 (void* arg){</span>
+<span class="lineNum">     954 </span>                :<span class="lineCov">         80 :        int j=(int)arg;</span>
+<span class="lineNum">     955 </span>                :<span class="lineCov">         80 :        int it=numIt;</span>
+<span class="lineNum">     956 </span>                :            :        long k;
+<span class="lineNum">     957 </span>                :            :        int m, n;
+<span class="lineNum">     958 </span>                :            :        bool pass;
+<span class="lineNum">     959 </span>                :<span class="lineCov">         80 :        hasRead=true;</span>
+<span class="lineNum">     960 </span>                :            : //       pthread_mutex_lock(&amp;loop_mutex);
+<span class="lineNum">     961 </span>[<span class="branchCov" title="Branch 0 was taken 104 times"> + </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 72 times"> + </span><span class="branchCov" title="Branch 1 was taken 28 times"> + </span>]:<span class="lineCov">        288 :        for (i=sx;i&lt;ex;i=i+st)</span>
+<span class="lineNum">     962 </span>                :            :        {  
+<span class="lineNum">     963 </span>                :<span class="lineCov">        208 :          k=0;</span>
+<span class="lineNum">     964 </span>[<span class="branchCov" title="Branch 0 was taken 9100 times"> + </span><span class="branchCov" title="Branch 1 was taken 104 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      18408 :          for (m=j;m&lt;(lheight+j);m++)</span>
+<span class="lineNum">     965 </span>[<span class="branchCov" title="Branch 0 was taken 910000 times"> + </span><span class="branchCov" title="Branch 1 was taken 9100 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">    1838200 :            for (n=i;n&lt;(lwidth+i);n++){</span>
+<span class="lineNum">     966 </span>                :<span class="lineCov">    1820000 :                f1_layer[it][k++].I[0] = cimage[m][n];</span>
+<span class="lineNum">     967 </span>                :            :                }
+<span class="lineNum">     968 </span>                :<span class="lineCov">        208 :          pass=match(it);</span>
+<span class="lineNum">     969 </span>        [<span class="branchCov" title="Branch 0 was taken 126 times"> + </span><span class="branchCov" title="Branch 1 was taken 78 times"> + </span>]:<span class="lineCov">        208 :          if (pass)</span>
+<span class="lineNum">     970 </span>                :            :          {
+<span class="lineNum">     971 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     972 </span>                :            :             printf(&quot; at X= %d Y = %d\n&quot;,i,j);
+<span class="lineNum">     973 </span>                :            : #endif
+<span class="lineNum">     974 </span>[<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchCov" title="Branch 1 was taken 49 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 23 times"> + </span><span class="branchCov" title="Branch 1 was taken 77 times"> + </span>]:<span class="lineCov">        128 :             if (set_high[it][0]==TRUE)</span>
+<span class="lineNum">     975 </span>                :            :             {
+<span class="lineNum">     976 </span>                :<span class="lineCov">         30 :               highx[it][0] = i;</span>
+<span class="lineNum">     977 </span>                :<span class="lineCov">         30 :               highy[it][0] = j;</span>
+<span class="lineNum">     978 </span>                :<span class="lineCov">         30 :               set_high[it][0] = FALSE;</span>
+<span class="lineNum">     979 </span>                :            :             }
+<span class="lineNum">     980 </span>[<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchCov" title="Branch 1 was taken 49 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 23 times"> + </span><span class="branchCov" title="Branch 1 was taken 77 times"> + </span>]:<span class="lineCov">        128 :             if (set_high[it][1]==TRUE) </span>
+<span class="lineNum">     981 </span>                :            :             {
+<span class="lineNum">     982 </span>                :<span class="lineCov">         30 :               highx[it][1] = i;</span>
+<span class="lineNum">     983 </span>                :<span class="lineCov">         30 :               highy[it][1] = j;</span>
+<span class="lineNum">     984 </span>                :<span class="lineCov">         30 :               set_high[it][1] = FALSE;</span>
+<span class="lineNum">     985 </span>                :            :             }
+<span class="lineNum">     986 </span>                :            :          }
+<span class="lineNum">     987 </span>                :            : #ifdef DEBUG
+<span class="lineNum">     988 </span>                :            :          else if (DB3)
+<span class="lineNum">     989 </span>                :            :             printf(&quot;0.00#%dx%da%2.1fb%2.1f\n&quot;,i,j,a,b);
+<span class="lineNum">     990 </span>                :            : #endif
+<span class="lineNum">     991 </span>                :            :        }  
+<span class="lineNum">     992 </span>                :            :   //     pthread_mutex_unlock(&amp;loop_mutex);
+<span class="lineNum">     993 </span>                :<span class="lineCov">         80 : loop1.commit();</span>
+<span class="lineNum">     994 </span>                :<span class="lineCov">         80 : }</span>
+<span class="lineNum">     995 </span>                :            : 
+<span class="lineNum">     996 </span>                :<span class="lineCov">          4 : void scan_recognize(int startx, int starty, int endx, int endy, int stride)</span>
+<span class="lineNum">     997 </span>                :            : { 
+<span class="lineNum">     998 </span>                :            :     int i,j,m,n;
+<span class="lineNum">     999 </span>                :            :     long k;
+<span class="lineNum">    1000 </span>                :            :     
+<span class="lineNum">    1001 </span>                :            : 
+<span class="lineNum">    1002 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          4 :     if ((starty&gt;(height-lheight+1))||(startx&gt;(width-lwidth+1)))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 100 times"> + </span>]
+<span class="lineNum">    1003 </span>                :            :     {
+<span class="lineNum">    1004 </span>                :<span class="lineNoCov">          0 :       fprintf(stderr,&quot;Startx %d or Starty %d is out of range\n&quot;, startx, starty);</span>
+<span class="lineNum">    1005 </span>                :<span class="lineNoCov">          0 :       exit(1);</span>
+<span class="lineNum">    1006 </span>                :            :     }
+<span class="lineNum">    1007 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 2 times"> + </span>]:<span class="lineCov">          4 :     if ((endy&gt;(height-lheight+1))||(endx&gt;(width-lwidth+1)))</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 100 times"> + </span>]
+<span class="lineNum">    1008 </span>                :            :     {
+<span class="lineNum">    1009 </span>                :<span class="lineNoCov">          0 :       fprintf(stderr,&quot;endx %d or endy %d is out of range\n&quot;, endx, endy);</span>
+<span class="lineNum">    1010 </span>                :<span class="lineNoCov">          0 :       exit(1);</span>
+<span class="lineNum">    1011 </span>                :            :     }
+<span class="lineNum">    1012 </span>                :            : #ifdef DEBUG
+<span class="lineNum">    1013 </span>                :            :     if (DB3) 
+<span class="lineNum">    1014 </span>                :            :     {
+<span class="lineNum">    1015 </span>                :            :       fprintf(stdout,&quot;made it to scan_recognize\n&quot;);
+<span class="lineNum">    1016 </span>                :            :       fprintf(stdout,&quot;w= %d h = %d lw = %d lh = %d\n&quot;,width,height,lwidth,lheight);
+<span class="lineNum">    1017 </span>                :            :     }
+<span class="lineNum">    1018 </span>                :            : #endif
+<span class="lineNum">    1019 </span>                :<span class="lineCov">          4 :   sx=startx;</span>
+<span class="lineNum">    1020 </span>                :<span class="lineCov">          4 :   ex=endx;</span>
+<span class="lineNum">    1021 </span>                :<span class="lineCov">          4 :   st=stride;</span>
+<span class="lineNum">    1022 </span>                :<span class="lineCov">          4 :   script_vector input_functions;</span>
+<span class="lineNum">    1023 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :   input_functions.push_back(f_loop1);</span>
+<span class="lineNum">    1024 </span>                :<span class="lineCov">          4 :   vector &lt;void*&gt; input_vars;</span>
+<span class="lineNum">    1025 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :   input_vars.push_back((void*)starty);</span>
+<span class="lineNum">    1026 </span>                :<span class="lineCov">          4 :   hasRead=false;</span>
+<span class="lineNum">    1027 </span>                :<span class="lineCov">          4 :   numIt=0;</span>
+<span class="lineNum">    1028 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 3 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span>]:<span class="lineCov">          4 :   loop1.run (input_functions, input_vars);</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 6 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span> 
+<span class="lineNum">         </span>   <span class="branchCov" title="Branch 3 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">    1029 </span>[<span class="branchCov" title="Branch 0 was taken 22820518 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   45641040 :     for (j=starty+stride;j&lt;endy;j=j+stride ){</span>
+<span class="lineNum">    1030 </span>[<span class="branchCov" title="Branch 0 was taken 22820480 times"> + </span><span class="branchCov" title="Branch 1 was taken 38 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">   45641036 :             if (!hasRead){ </span>
+<span class="lineNum">    1031 </span>                :<span class="lineCov">   45640960 :                 j=j-stride;</span>
+<span class="lineNum">    1032 </span>                :            :             }
+<span class="lineNum">    1033 </span>                :            :             else {
+<span class="lineNum">    1034 </span>                :<span class="lineCov">         76 :              hasRead=false;</span>
+<span class="lineNum">    1035 </span>                :<span class="lineCov">         76 :              numIt++;</span>
+<span class="lineNum">    1036 </span>[<span class="branchCov" title="Branch 0 was taken 38 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         76 :              loop1.append(f_loop1,(void*)j);</span>
+<span class="lineNum">    1037 </span>                :            :            }
+<span class="lineNum">    1038 </span>                :            :     }
+<span class="lineNum">    1039 </span>                :<span class="lineCov">          4 :     loop1.commit();</span>
+<span class="lineNum">    1040 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :     loop1.get_results();</span>
+<span class="lineNum">    1041 </span>                :<span class="lineCov">          4 : }</span>
+<span class="lineNum">    1042 </span>                :            : 
+<a name="1043"><span class="lineNum">    1043 </span>                :            : </a>
+<span class="lineNum">    1044 </span>                :            : 
+<span class="lineNum">    1045 </span>                :<span class="lineCov">          4 : int main(int argc, char *argv[])</span>
+<span class="lineNum">    1046 </span>                :            : {  int k;
+<span class="lineNum">    1047 </span>                :            :    int startx, starty;
+<span class="lineNum">    1048 </span>                :            :    int endx, endy;
+<span class="lineNum">    1049 </span>                :            :    int stride;
+<span class="lineNum">    1050 </span>                :            :    int objects;
+<span class="lineNum">    1051 </span>                :            :    int arg_index;
+<span class="lineNum">    1052 </span>                :<span class="lineCov">          4 :    char *scanfile=NULL;</span>
+<span class="lineNum">    1053 </span>                :<span class="lineCov">          4 :    char *weightfile=NULL;</span>
+<span class="lineNum">    1054 </span>                :<span class="lineCov">          4 :    char *trainfile1=NULL;</span>
+<span class="lineNum">    1055 </span>                :<span class="lineCov">          4 :    char *trainfile2=NULL;</span>
+<span class="lineNum">    1056 </span>                :            :  
+<span class="lineNum">    1057 </span>                :<span class="lineCov">          4 :    pthread_mutex_init(&amp;loop_mutex, NULL);</span>
+<span class="lineNum">    1058 </span>                :            : 
+<span class="lineNum">    1059 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :    if (argc&lt;2)</span>
+<span class="lineNum">    1060 </span>                :            :    {
+<span class="lineNum">    1061 </span>                :            :      goto Usage;
+<span class="lineNum">    1062 </span>                :            :    }
+<span class="lineNum">    1063 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (argc == 2)</span>
+<span class="lineNum">    1064 </span>                :            :    {
+<span class="lineNum">    1065 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :      if (strcmp(argv[1],&quot;-v&quot;)==0)</span>
+<span class="lineNum">    1066 </span>                :            :        goto Version;
+<span class="lineNum">    1067 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :      else if (strcmp(argv[1],&quot;-h&quot;)==0)</span>
+<span class="lineNum">    1068 </span>                :            :        goto Usage;
+<span class="lineNum">    1069 </span>                :            :    }
+<span class="lineNum">    1070 </span>                :            : 
+<span class="lineNum">    1071 </span>                :<span class="lineCov">          4 :    stride = 0; </span>
+<span class="lineNum">    1072 </span>                :<span class="lineCov">          4 :    startx = 0;</span>
+<span class="lineNum">    1073 </span>                :<span class="lineCov">          4 :    starty = 0;</span>
+<span class="lineNum">    1074 </span>                :<span class="lineCov">          4 :    endy = 0;</span>
+<span class="lineNum">    1075 </span>                :<span class="lineCov">          4 :    endx = 0;</span>
+<span class="lineNum">    1076 </span>                :<span class="lineCov">          4 :    objects = 0;</span>
+<span class="lineNum">    1077 </span>                :            : 
+<span class="lineNum">    1078 </span>                :            :    /* Read command line options */
+<span class="lineNum">    1079 </span>                :<span class="lineCov">          4 :    arg_index = 1;</span>
+<span class="lineNum">    1080 </span>[<span class="branchCov" title="Branch 0 was taken 18 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 90 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">         42 :    while (arg_index &lt; argc-1)</span>
+<span class="lineNum">    1081 </span>                :            :    {
+<span class="lineNum">    1082 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 11 times"> + </span><span class="branchCov" title="Branch 1 was taken 89 times"> + </span>]:<span class="lineCov">         36 :      if (strcmp(argv[arg_index],&quot;-scanfile&quot;)==0)</span>
+<span class="lineNum">    1083 </span>                :            :      {
+<span class="lineNum">    1084 </span>                :<span class="lineCov">          4 :        scanfile= argv[arg_index+1];</span>
+<span class="lineNum">    1085 </span>                :            :      }
+<span class="lineNum">    1086 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 16 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">         32 :      else if (strcmp(argv[arg_index],&quot;-weightfile&quot;)==0)</span>
+<span class="lineNum">    1087 </span>                :            :      {
+<span class="lineNum">    1088 </span>                :<span class="lineNoCov">          0 :        weightfile= argv[arg_index+1];</span>
+<span class="lineNum">    1089 </span>                :            :      }
+<span class="lineNum">    1090 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 14 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchCov" title="Branch 1 was taken 88 times"> + </span>]:<span class="lineCov">         32 :      else if (strcmp(argv[arg_index],&quot;-trainfile1&quot;)==0)</span>
+<span class="lineNum">    1091 </span>                :            :      {
+<span class="lineNum">    1092 </span>                :<span class="lineCov">          4 :        trainfile1= argv[arg_index+1];</span>
+<span class="lineNum">    1093 </span>                :            :      }
+<span class="lineNum">    1094 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 12 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 14 times"> + </span><span class="branchCov" title="Branch 1 was taken 86 times"> + </span>]:<span class="lineCov">         28 :      else if (strcmp(argv[arg_index],&quot;-trainfile2&quot;)==0)</span>
+<span class="lineNum">    1095 </span>                :            :      {
+<span class="lineNum">    1096 </span>                :<span class="lineCov">          4 :        trainfile2= argv[arg_index+1];</span>
+<span class="lineNum">    1097 </span>                :            :      }
+<span class="lineNum">    1098 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 17 times"> + </span><span class="branchCov" title="Branch 1 was taken 83 times"> + </span>]:<span class="lineCov">         24 :      else if (strcmp(argv[arg_index],&quot;-startx&quot;)==0)</span>
+<span class="lineNum">    1099 </span>                :            :      {
+<span class="lineNum">    1100 </span>                :<span class="lineCov">          4 :        startx = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1101 </span>                :            :      }
+<span class="lineNum">    1102 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 20 times"> + </span><span class="branchCov" title="Branch 1 was taken 80 times"> + </span>]:<span class="lineCov">         20 :      else if (strcmp(argv[arg_index],&quot;-starty&quot;)==0)</span>
+<span class="lineNum">    1103 </span>                :            :      {
+<span class="lineNum">    1104 </span>                :<span class="lineCov">          4 :        starty = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1105 </span>                :            :      }
+<span class="lineNum">    1106 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 25 times"> + </span><span class="branchCov" title="Branch 1 was taken 75 times"> + </span>]:<span class="lineCov">         16 :      else if (strcmp(argv[arg_index],&quot;-endx&quot;)==0)</span>
+<span class="lineNum">    1107 </span>                :            :      {
+<span class="lineNum">    1108 </span>                :<span class="lineCov">          4 :        endx = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1109 </span>                :            :      }
+<span class="lineNum">    1110 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 33 times"> + </span><span class="branchCov" title="Branch 1 was taken 67 times"> + </span>]:<span class="lineCov">         12 :      else if (strcmp(argv[arg_index],&quot;-endy&quot;)==0)</span>
+<span class="lineNum">    1111 </span>                :            :      {
+<span class="lineNum">    1112 </span>                :<span class="lineCov">          4 :        endy = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1113 </span>                :            :      }
+<span class="lineNum">    1114 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">          8 :      else if (strcmp(argv[arg_index],&quot;-stride&quot;)==0)</span>
+<span class="lineNum">    1115 </span>                :            :      {
+<span class="lineNum">    1116 </span>                :<span class="lineCov">          4 :        stride = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1117 </span>                :            :      }
+<span class="lineNum">    1118 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :      else if (strcmp(argv[arg_index],&quot;-objects&quot;)==0)</span>
+<span class="lineNum">    1119 </span>                :            :      {
+<span class="lineNum">    1120 </span>                :<span class="lineCov">          4 :        objects = atoi(argv[arg_index+1]);</span>
+<span class="lineNum">    1121 </span>                :            :      }
+<span class="lineNum">    1122 </span>                :            :      else
+<span class="lineNum">    1123 </span>                :            :      {
+<span class="lineNum">    1124 </span>                :<span class="lineNoCov">          0 :        fprintf(stderr,&quot;ERROR: Unknown option -&gt; %s\n&quot;,argv[arg_index]);</span>
+<span class="lineNum">    1125 </span>                :            :        goto Usage;
+<span class="lineNum">    1126 </span>                :            :      }
+<span class="lineNum">    1127 </span>                :<span class="lineCov">         36 :      arg_index+=2; /* this works as long as options are duals!!! */</span>
+<span class="lineNum">    1128 </span>                :            :    }
+<span class="lineNum">    1129 </span>                :            : 
+<span class="lineNum">    1130 </span>                :            :    /* Some basic error checking. */
+<span class="lineNum">    1131 </span>                :            : 
+<span class="lineNum">    1132 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (scanfile==NULL)</span>
+<span class="lineNum">    1133 </span>                :            :    {
+<span class="lineNum">    1134 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;ERROR: Must specify input files\n&quot;);</span>
+<span class="lineNum">    1135 </span>                :            :      goto Usage;
+<span class="lineNum">    1136 </span>                :            :    }
+<span class="lineNum">    1137 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if ((weightfile==NULL)&amp;&amp;(trainfile1==NULL))</span>
+<span class="lineNum">    1138 </span>                :            :    {
+<span class="lineNum">    1139 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;ERROR: Must specify weightfile or trainfile1\n&quot;);</span>
+<span class="lineNum">    1140 </span>                :            :      goto Usage;
+<span class="lineNum">    1141 </span>                :            :    }
+<span class="lineNum">    1142 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if ((weightfile!=NULL)&amp;&amp;(trainfile1!=NULL))</span>
+<span class="lineNum">    1143 </span>                :            :    {
+<span class="lineNum">    1144 </span>                :<span class="lineNoCov">          0 :      fprintf(stderr,&quot;ERROR: Cannot specify weightfile and trainfile1\n&quot;);</span>
+<span class="lineNum">    1145 </span>                :            :      goto Usage;
+<span class="lineNum">    1146 </span>                :            :    }
+<span class="lineNum">    1147 </span>                :            :    
+<span class="lineNum">    1148 </span>                :            : #ifdef DEBUG
+<span class="lineNum">    1149 </span>                :            :    fprintf(stdout,&quot;scanfile = %s\n weightfile = %s\n startx = %d\n starty = %d\n stride = %d\n&quot;,scanfile,weightfile,startx,starty,stride);
+<span class="lineNum">    1150 </span>                :            : #endif
+<span class="lineNum">    1151 </span>                :            : 
+<span class="lineNum">    1152 </span>                :<span class="lineCov">          4 :    loadimage(scanfile);</span>
+<span class="lineNum">    1153 </span>                :            : 
+<span class="lineNum">    1154 </span>                :            :    /* Differentiate between loading pretrained network (load_weights)
+<span class="lineNum">    1155 </span>                :            :     * and training.  Currently, loading a pretrained network
+<span class="lineNum">    1156 </span>                :            :     * supports only 1 object.  If we train, we can learn to
+<span class="lineNum">    1157 </span>                :            :     * recognize two objects.
+<span class="lineNum">    1158 </span>                :            :     */ 
+<span class="lineNum">    1159 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 102 times"> + </span>]:<span class="lineCov">          4 :    if (weightfile!=NULL)</span>
+<span class="lineNum">    1160 </span>                :            :    {
+<span class="lineNum">    1161 </span>                :<span class="lineNoCov">          0 :      numpatterns = 1;</span>
+<span class="lineNum">    1162 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :      if (objects==0)</span>
+<span class="lineNum">    1163 </span>                :            :          {
+<span class="lineNum">    1164 </span>                :<span class="lineNoCov">          0 :         objects = numpatterns;</span>
+<span class="lineNum">    1165 </span>                :            :          }
+<span class="lineNum">    1166 </span>                :<span class="lineNoCov">          0 :      load_weights(weightfile);</span>
+<span class="lineNum">    1167 </span>                :<span class="lineNoCov">          0 :      init_globs(MODE_RECOGNIZE);</span>
+<span class="lineNum">    1168 </span>                :<span class="lineNoCov">          0 :      init_net();</span>
+<span class="lineNum">    1169 </span>                :            :    }
+<span class="lineNum">    1170 </span>                :            :    else
+<span class="lineNum">    1171 </span>                :            :    {
+<span class="lineNum">    1172 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :      if (trainfile2!=NULL)</span>
+<span class="lineNum">    1173 </span>                :            :      {
+<span class="lineNum">    1174 </span>                :<span class="lineCov">          4 :        numpatterns = 2;</span>
+<span class="lineNum">    1175 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :        if (objects&lt;numpatterns)</span>
+<span class="lineNum">    1176 </span>                :            :            {
+<span class="lineNum">    1177 </span>                :<span class="lineNoCov">          0 :           objects = numpatterns;</span>
+<span class="lineNum">    1178 </span>                :            :            }
+<span class="lineNum">    1179 </span>                :<span class="lineCov">          4 :        load_train(trainfile1,MODE_TRAIN1,objects);</span>
+<span class="lineNum">    1180 </span>                :<span class="lineCov">          4 :        alloc_td_bu();</span>
+<span class="lineNum">    1181 </span>                :<span class="lineCov">          4 :        init_td(0);</span>
+<span class="lineNum">    1182 </span>                :<span class="lineCov">          4 :        init_bu(0);</span>
+<span class="lineNum">    1183 </span>[<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         84 :        for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">    1184 </span>                :<span class="lineCov">         80 :        resonant[g]=k=0;</span>
+<span class="lineNum">    1185 </span>                :            :        }
+<span class="lineNum">    1186 </span>[<span class="branchCov" title="Branch 0 was taken 544 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1092 :        while (!resonant[0])</span>
+<span class="lineNum">    1187 </span>                :            :        {
+<span class="lineNum">    1188 </span>                :            : #ifdef DEBUG
+<span class="lineNum">    1189 </span>                :            :          fprintf(stdout,&quot;k=%d\n&quot;,k);
+<span class="lineNum">    1190 </span>                :            : #endif
+<span class="lineNum">    1191 </span>                :<span class="lineCov">       1088 :         train_match(0);</span>
+<span class="lineNum">    1192 </span>                :            : 
+<span class="lineNum">    1193 </span>                :<span class="lineCov">       1088 :          k++;</span>
+<span class="lineNum">    1194 </span>                :            :        }
+<span class="lineNum">    1195 </span>                :<span class="lineCov">          4 :        load_train(trainfile2,MODE_TRAIN2,objects);</span>
+<span class="lineNum">    1196 </span>                :<span class="lineCov">          4 :        init_globs(MODE_TRAIN2);</span>
+<span class="lineNum">    1197 </span>                :<span class="lineCov">          4 :        init_td(1);</span>
+<span class="lineNum">    1198 </span>                :<span class="lineCov">          4 :        init_bu(1);</span>
+<span class="lineNum">    1199 </span>[<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         84 :        for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">    1200 </span>                :<span class="lineCov">         80 :        resonant[g]=k=0;</span>
+<span class="lineNum">    1201 </span>                :            :        }
+<span class="lineNum">    1202 </span>[<span class="branchCov" title="Branch 0 was taken 564 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 99 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1132 :        while (!resonant[0])</span>
+<span class="lineNum">    1203 </span>                :            :        {
+<span class="lineNum">    1204 </span>                :            : #ifdef DEBUG
+<span class="lineNum">    1205 </span>                :            :          fprintf(stdout,&quot;k=%d\n&quot;,k);
+<span class="lineNum">    1206 </span>                :            : #endif
+<span class="lineNum">    1207 </span>                :<span class="lineCov">       1128 :                 train_match(1);</span>
+<span class="lineNum">    1208 </span>                :<span class="lineCov">       1128 :          k++;</span>
+<span class="lineNum">    1209 </span>                :            :        }
+<span class="lineNum">    1210 </span>                :<span class="lineCov">          4 :        init_globs(MODE_RECOGNIZE);</span>
+<span class="lineNum">    1211 </span>                :<span class="lineCov">          4 :        init_td(objects);</span>
+<span class="lineNum">    1212 </span>                :<span class="lineCov">          4 :        init_bu(objects);</span>
+<span class="lineNum">    1213 </span>                :<span class="lineCov">          4 :        sim_other_objects(numpatterns,objects,numf2s);</span>
+<span class="lineNum">    1214 </span>                :<span class="lineCov">          4 :        setup_base_pattern(objects);</span>
+<span class="lineNum">    1215 </span>                :            :      }
+<span class="lineNum">    1216 </span>                :            :      else
+<span class="lineNum">    1217 </span>                :            :      {
+<span class="lineNum">    1218 </span>                :<span class="lineNoCov">          0 :        numpatterns = 1;</span>
+<span class="lineNum">    1219 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        if (objects&lt;numpatterns)</span>
+<span class="lineNum">    1220 </span>                :            :            {
+<span class="lineNum">    1221 </span>                :<span class="lineNoCov">          0 :           objects = numpatterns;</span>
+<span class="lineNum">    1222 </span>                :            :            }
+<span class="lineNum">    1223 </span>                :<span class="lineNoCov">          0 :        load_train(trainfile1,MODE_TRAIN1,objects);</span>
+<span class="lineNum">    1224 </span>                :<span class="lineNoCov">          0 :        alloc_td_bu();</span>
+<span class="lineNum">    1225 </span>                :<span class="lineNoCov">          0 :        init_td(0);</span>
+<span class="lineNum">    1226 </span>                :<span class="lineNoCov">          0 :        init_bu(0);</span>
+<span class="lineNum">    1227 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">    1228 </span>                :<span class="lineNoCov">          0 :        resonant[g]=k=0;</span>
+<span class="lineNum">    1229 </span>                :            :        }
+<span class="lineNum">    1230 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        while (!resonant[0])</span>
+<span class="lineNum">    1231 </span>                :            :        {
+<span class="lineNum">    1232 </span>                :            : #ifdef DEBUG
+<span class="lineNum">    1233 </span>                :            :          fprintf(stdout,&quot;k=%d\n&quot;,k);
+<span class="lineNum">    1234 </span>                :            : #endif
+<span class="lineNum">    1235 </span>                :<span class="lineNoCov">          0 :                 train_match(0);</span>
+<span class="lineNum">    1236 </span>                :            :         
+<span class="lineNum">    1237 </span>                :<span class="lineNoCov">          0 :          k++;</span>
+<span class="lineNum">    1238 </span>                :            :        }
+<span class="lineNum">    1239 </span>                :<span class="lineNoCov">          0 :        init_globs(MODE_RECOGNIZE);</span>
+<span class="lineNum">    1240 </span>                :<span class="lineNoCov">          0 :        init_td(1);</span>
+<span class="lineNum">    1241 </span>                :<span class="lineNoCov">          0 :        init_bu(1);</span>
+<span class="lineNum">    1242 </span>                :<span class="lineNoCov">          0 :        setup_base_pattern(1);</span>
+<span class="lineNum">    1243 </span>                :            :      }
+<span class="lineNum">    1244 </span>                :            :    }
+<span class="lineNum">    1245 </span>                :            :    /* Set endx and endy if user never specified */   
+<span class="lineNum">    1246 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (endy==0)</span>
+<span class="lineNum">    1247 </span>                :            :    {
+<span class="lineNum">    1248 </span>                :<span class="lineNoCov">          0 :      endy=height-lheight;</span>
+<span class="lineNum">    1249 </span>                :            :    }
+<span class="lineNum">    1250 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :    if (endx==0)</span>
+<span class="lineNum">    1251 </span>                :            :    {
+<span class="lineNum">    1252 </span>                :<span class="lineNoCov">          0 :      endx=width-lwidth;</span>
+<span class="lineNum">    1253 </span>                :            :    }
+<span class="lineNum">    1254 </span>[<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         84 :    for (int g=0; g&lt;20; g++){</span>
+<span class="lineNum">    1255 </span>                :<span class="lineCov">         80 :    highest_confidence[g][0] = 0.0;</span>
+<span class="lineNum">    1256 </span>                :<span class="lineCov">         80 :    highest_confidence[g][1] = 0.0;</span>
+<span class="lineNum">    1257 </span>                :<span class="lineCov">         80 :    highx[g][0] = 0;</span>
+<span class="lineNum">    1258 </span>                :<span class="lineCov">         80 :    highx[g][1] = 0;</span>
+<span class="lineNum">    1259 </span>                :<span class="lineCov">         80 :    highy[g][0] = 0;</span>
+<span class="lineNum">    1260 </span>                :<span class="lineCov">         80 :    highy[g][1] = 0;</span>
+<span class="lineNum">    1261 </span>                :<span class="lineCov">         80 :    set_high[g][0] = FALSE;</span>
+<span class="lineNum">    1262 </span>                :<span class="lineCov">         80 :    set_high[g][1] = FALSE;</span>
+<span class="lineNum">    1263 </span>                :            :    }
+<span class="lineNum">    1264 </span>                :            :    
+<span class="lineNum">    1265 </span>                :            :    /*Extra: Copy results from train_match on [0] to others
+<span class="lineNum">    1266 </span>                :            :    for (int h=0; h&lt;numf1s; h++){
+<span class="lineNum">    1267 </span>                :            :         for (int f=1; f&lt;20; f++){
+<span class="lineNum">    1268 </span>                :            :       f1_layer[f][h].W=f1_layer[0][h].W;
+<span class="lineNum">    1269 </span>                :            :       f1_layer[f][h].X=f1_layer[0][h].X;
+<span class="lineNum">    1270 </span>                :            :       f1_layer[f][h].V=f1_layer[0][h].V;      
+<span class="lineNum">    1271 </span>                :            :       f1_layer[f][h].U=f1_layer[0][h].U;
+<span class="lineNum">    1272 </span>                :            :       f1_layer[f][h].P=f1_layer[0][h].P;
+<span class="lineNum">    1273 </span>                :            :       f1_layer[f][h].Q=f1_layer[0][h].Q;
+<span class="lineNum">    1274 </span>                :            :       f1_layer[f][h].R=f1_layer[0][h].R;}
+<span class="lineNum">    1275 </span>                :            :    }*/
+<span class="lineNum">    1276 </span>                :            : 
+<span class="lineNum">    1277 </span>                :<span class="lineCov">          4 :    scan_recognize(startx, starty, endx, endy, stride);</span>
+<span class="lineNum">    1278 </span>                :            : 
+<span class="lineNum">    1279 </span>                :            :    int hc0, hc1, hx0, hx1, hy0, hy1;
+<span class="lineNum">    1280 </span>                :<span class="lineCov">          4 :    hc0=highest_confidence[0][0];</span>
+<span class="lineNum">    1281 </span>                :<span class="lineCov">          4 :    hc1=highest_confidence[0][1];</span>
+<span class="lineNum">    1282 </span>                :<span class="lineCov">          4 :    hx0=highx[0][0];</span>
+<span class="lineNum">    1283 </span>                :<span class="lineCov">          4 :    hx1=highx[0][1];</span>
+<span class="lineNum">    1284 </span>                :<span class="lineCov">          4 :    hy0=highy[0][0];</span>
+<span class="lineNum">    1285 </span>                :<span class="lineCov">          4 :    hy1=highy[0][1];</span>
+<span class="lineNum">    1286 </span>[<span class="branchCov" title="Branch 0 was taken 38 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 95 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">         80 :    for (int g=1; g&lt;20; g++){</span>
+<span class="lineNum">    1287 </span>[<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 29 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 24 times"> + </span><span class="branchCov" title="Branch 1 was taken 76 times"> + </span>]:<span class="lineCov">         76 :      if (highest_confidence[g][0]&gt;hc0){</span>
+<span class="lineNum">    1288 </span>                :<span class="lineCov">         18 :           hc0=highest_confidence[g][0];</span>
+<span class="lineNum">    1289 </span>                :<span class="lineCov">         18 :           hx0=highx[g][0];</span>
+<span class="lineNum">    1290 </span>                :<span class="lineCov">         18 :           hy0=highy[g][0];</span>
+<span class="lineNum">    1291 </span>                :            :      }
+<span class="lineNum">    1292 </span>[<span class="branchCov" title="Branch 0 was taken 10 times"> + </span><span class="branchCov" title="Branch 1 was taken 28 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 26 times"> + </span><span class="branchCov" title="Branch 1 was taken 74 times"> + </span>]:<span class="lineCov">         76 :      if (highest_confidence[g][1]&gt;hc1){</span>
+<span class="lineNum">    1293 </span>                :<span class="lineCov">         20 :           hc1=highest_confidence[g][1];</span>
+<span class="lineNum">    1294 </span>                :<span class="lineCov">         20 :           hx1=highx[g][1];</span>
+<span class="lineNum">    1295 </span>                :<span class="lineCov">         20 :           hy1=highy[g][1];</span>
+<span class="lineNum">    1296 </span>                :            :      }
+<span class="lineNum">    1297 </span>                :            :    }
+<span class="lineNum">    1298 </span>                :<span class="lineCov">          4 :    fprintf(stdout,&quot;Highest vigilance for 1 = %0.4f for object at X = %d, Y = %d\n&quot;, hc0, hx0, hy0);</span>
+<span class="lineNum">    1299 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :    if (numpatterns==2) {</span>
+<span class="lineNum">    1300 </span>                :<span class="lineCov">          4 :    fprintf(stdout,&quot;Highest vigilance for 2 = %0.4f for object at X = %d, Y = %d\n&quot;, hc1, hx1, hy1);</span>
+<span class="lineNum">    1301 </span>                :            :    }
+<span class="lineNum">    1302 </span>                :<span class="lineCov">          4 :    return 0;</span>
+<span class="lineNum">    1303 </span>                :            : Usage:
+<span class="lineNum">    1304 </span>                :<span class="lineNoCov">          0 :    fprintf(stderr,&quot;Usage: scanner [-startx &lt;num&gt;] [-starty &lt;num&gt;] [-endx &lt;num&gt;] [-endy &lt;num&gt;] [-stride &lt;num&gt;] -scanfile &lt;filename&gt; -trainfile1 &lt;filename&gt; [-trainfile2 &lt;filename&gt;]\n&quot;);</span>
+<span class="lineNum">    1305 </span>                :<span class="lineNoCov">          0 :    exit(1);</span>
+<span class="lineNum">    1306 </span>                :            : Version:
+<span class="lineNum">    1307 </span>                :<span class="lineNoCov">          0 :    fprintf(stderr,&quot;Version 1.00 \n&quot;);</span>
+<span class="lineNum">    1308 </span>                :<span class="lineNoCov">          0 :    exit(1);</span>
+<span class="lineNum">    1309 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">         42 : }</span>
+<span class="lineNum">         </span>  [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]
+<span class="lineNum">    1310 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

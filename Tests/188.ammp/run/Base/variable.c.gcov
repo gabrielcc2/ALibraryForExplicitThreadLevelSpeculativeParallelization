@@ -1,0 +1,263 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/variable.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* variable.c
+        -:    2:*
+        -:    3:* variable storage and retreival routines for AMMP
+        -:    4:*
+        -:    5:* using scope rules for structuring
+        -:    6:*
+        -:    7:*
+        -:    8:*  variables are stored in linked list form
+        -:    9:*
+        -:   10:*   get_f_variable( char *name, float *fvalue )
+        -:   11:*   get_i_variable( char *name,  int *ivalue )
+        -:   12:*	returns variable who matches name (all lower case )
+        -:   13:*   set_f_variable( char *name, float fvalue )
+        -:   14:*   set_i_variable( char *name, int ivalue )
+        -:   15:*	sets variable who matches name (all lower case )
+        -:   16:*   match_variable( char *name ) returns pointer to name if there NULL if not
+        -:   17:*   dump_variable(FILE *output  )
+        -:   18:*	 dumps variables to  file 
+        -:   19:*/
+        -:   20:/*
+        -:   21:*  copyright 1992 Robert W. Harrison
+        -:   22:*  
+        -:   23:*  This notice may not be removed
+        -:   24:*  This program may be copied for scientific use
+        -:   25:*  It may not be sold for profit without explicit
+        -:   26:*  permission of the author(s) who retain any
+        -:   27:*  commercial rights including the right to modify 
+        -:   28:*  this notice
+        -:   29:*/
+        -:   30:
+        -:   31:#define ANSI 1
+        -:   32:#include <stdio.h>
+        -:   33:#include <ctype.h>
+        -:   34:#include <string.h>
+        -:   35:#ifdef ANSI
+        -:   36:#include <stdlib.h>
+        -:   37:#endif
+        -:   38://#include "ammp.h"
+        -:   39:#define NUM_SIG 6
+        -:   40:#define NUM_TOT 7
+        -:   41:#define INTEGER 0
+        -:   42:#define FLOAT 1
+        -:   43:typedef struct{
+        -:   44:	int type;
+        -:   45:	char name[NUM_TOT];
+        -:   46:	union{  float f; int i;} value;
+        -:   47:	void *next;
+        -:   48:	}  VARIABLE;
+        -:   49:VARIABLE *variableFIRST = NULL;
+        -:   50:VARIABLE *variableLAST = NULL;
+        -:   51:#define variableLONG sizeof(VARIABLE)
+        -:   52:
+        -:   53:/****************************************************************/
+        -:   54:
+        -:   55:/* function match_variable( char *name)
+        -:   56:* tries to find the variable in the list returns NULL if not there *
+        -:   57:*/
+function _Z14match_variablePc called 519406 returned 100% blocks executed 100%
+   519406:   58:VARIABLE *match_variable(char *name)
+        -:   59:{
+        -:   60:	VARIABLE *vp;
+   519406:   61:	vp = variableFIRST; 
+  4256847:   62:	while(1 )
+        -:   63:	{
+  4776253:   64:		if( vp == NULL ) return vp;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  4776252:   65:		if( strcmp( &(vp->name[0]), name) == 0) return vp;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  4772858:   66:		if( vp == vp->next) return NULL;
+branch  0 taken 11% (fallthrough)
+branch  1 taken 89%
+  4256847:   67:		vp = (VARIABLE*) vp->next;
+        -:   68:	}
+        -:   69:}
+        -:   70:/* function set_f_variable( char *name, float f)
+        -:   71:*
+        -:   72:*   allocates storage if needed
+        -:   73:*   atempts to match name and update, otherwise adds to the list
+        -:   74:*/
+        -:   75:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z14set_f_variablePcf called 80 returned 100% blocks executed 94%
+       80:   76:int set_f_variable( char *name, float f)
+        -:   77:{
+        -:   78:	VARIABLE *new_p;
+        -:   79:	VARIABLE *match_variable(char*);
+        -:   80:	int i;
+        -:   81:	
+       80:   82:	new_p = match_variable(name);
+call    0 returned 100%
+       80:   83:        if( new_p == NULL)
+branch  0 taken 11% (fallthrough)
+branch  1 taken 89%
+        -:   84:        {
+        9:   85:        if( ( new_p = (VARIABLE*) malloc(  variableLONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   86:        {
+    #####:   87:        return 0;
+        -:   88:        }
+        9:   89:        new_p->next = NULL;
+        -:   90:        /* initialize the pointers */
+        9:   91:        if( variableFIRST == NULL) variableFIRST = new_p;
+branch  0 taken 11% (fallthrough)
+branch  1 taken 89%
+        9:   92:        if( variableLAST == NULL) variableLAST = new_p;
+branch  0 taken 11% (fallthrough)
+branch  1 taken 89%
+        -:   93:	}
+       80:   94:	new_p->value.f = f;
+       80:   95:	new_p->type = FLOAT;
+      414:   96:	for( i=0; i< NUM_TOT; i++)
+branch  0 taken 100%
+branch  1 taken 0% (fallthrough)
+        -:   97:	{
+      414:   98:		new_p->name[i] = *name;
+      414:   99:		if( *name == '\0') break;
+branch  0 taken 81% (fallthrough)
+branch  1 taken 19%
+      334:  100:		name++;
+        -:  101:	}
+       80:  102:	if( new_p->next == NULL)
+branch  0 taken 11% (fallthrough)
+branch  1 taken 89%
+        -:  103:        {
+        9:  104:        new_p -> next = new_p;
+        9:  105:        variableLAST -> next = new_p;
+        9:  106:        variableLAST = new_p;
+        -:  107:        }
+       80:  108:        return 1;
+        -:  109:}
+        -:  110:/* function set_i_variable( char *name, int f)
+        -:  111:*
+        -:  112:*   allocates storage if needed
+        -:  113:*   atempts to match name and update, otherwise adds to the list
+        -:  114:*/
+function _Z14set_i_variablePci called 15 returned 100% blocks executed 81%
+       15:  115:int set_i_variable(char *name, int f)
+        -:  116:{
+        -:  117:	VARIABLE *new_p;
+        -:  118:	VARIABLE *match_variable(char*);
+        -:  119:	int i;
+        -:  120:	
+       15:  121:	new_p = match_variable( name);
+call    0 returned 100%
+       15:  122:        if( new_p == NULL)
+branch  0 taken 20% (fallthrough)
+branch  1 taken 80%
+        -:  123:        {
+        3:  124:        if( ( new_p = (VARIABLE*) malloc( variableLONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  125:        {
+    #####:  126:        return 0;
+        -:  127:        }
+        3:  128:        new_p->next = NULL;
+        -:  129:        /* initialize the pointers */
+        3:  130:        if( variableFIRST == NULL) variableFIRST = new_p;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        3:  131:        if( variableLAST == NULL) variableLAST = new_p;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  132:	}
+       15:  133:	new_p->value.i = f;
+       15:  134:	new_p->type = INTEGER ;
+      105:  135:	for( i=0; i< NUM_TOT; i++)
+branch  0 taken 100%
+branch  1 taken 0% (fallthrough)
+        -:  136:	{
+      105:  137:		new_p->name[i] = *name;
+      105:  138:		if( *name == '\0') break;
+branch  0 taken 86% (fallthrough)
+branch  1 taken 14%
+       90:  139:		name++;
+        -:  140:	}
+       15:  141:	if( new_p->next == NULL)
+branch  0 taken 20% (fallthrough)
+branch  1 taken 80%
+        -:  142:        {
+        3:  143:        new_p -> next = new_p;
+        3:  144:        variableLAST -> next = new_p;
+        3:  145:        variableLAST = new_p;
+        -:  146:        }
+       15:  147:        return 1;
+        -:  148:}
+        -:  149:/* function get_f_variable(char * name )
+        -:  150:*
+        -:  151:* returns 0. or the float referenced or converted by name
+        -:  152:*/
+function _Z14get_f_variablePc called 262841 returned 100% blocks executed 100%
+   262841:  153:float get_f_variable(char *name)
+        -:  154:{
+        -:  155:	VARIABLE *vp;
+        -:  156:	VARIABLE *match_variable(char*);
+        -:  157:
+   262841:  158:	vp = match_variable(name);
+call    0 returned 100%
+   262841:  159:	if( vp == NULL ) return 0.;
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+     3301:  160:	if( vp->type == FLOAT) return vp->value.f ;
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+        3:  161:	return (float) vp->value.i;
+        -:  162:}
+        -:  163:/* function get_i_variable(char * name )
+        -:  164:*
+        -:  165:* returns 0 or the integer referenced or converted by name
+        -:  166:*/
+function _Z14get_i_variablePc called 256444 returned 100% blocks executed 100%
+   256444:  167:int get_i_variable(char *name)
+        -:  168:{
+        -:  169:	VARIABLE *vp;
+        -:  170:	VARIABLE *match_variable(char*);
+        -:  171:
+   256444:  172:	vp = match_variable(name);
+call    0 returned 100%
+        -:  173:/* earlier errorneous version had return 0. */
+   256444:  174:	if( vp == NULL ) return 0;
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+        7:  175:	if( vp->type == INTEGER) return vp->value.i ;
+branch  0 taken 43% (fallthrough)
+branch  1 taken 57%
+        4:  176:	return (int) vp->value.f;
+        -:  177:}
+        -:  178:/*  dump_variable( FILE *where )
+        -:  179:* 
+        -:  180:* writes all of the variables out to the file in AMMP syntax 
+        -:  181:*/
+        -:  182:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z13dump_variableP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  183:void dump_variable( FILE *where )
+        -:  184:{
+        -:  185:	VARIABLE *vp;
+    #####:  186:	vp = variableFIRST;
+    #####:  187:	while(1)
+        -:  188:	{
+    #####:  189:	if( vp->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  190:	if( vp->type == INTEGER)
+branch  0 never executed
+branch  1 never executed
+        -:  191:	{
+    #####:  192:	fprintf(where,"seti %s %d ;\n",&vp->name[0],vp->value.i);
+        -:  193:	} else
+        -:  194:	{
+    #####:  195:	fprintf(where,"setf %s %f ;\n",&vp->name[0],vp->value.f);
+        -:  196:	}
+    #####:  197:	if( vp->next == vp) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  198:	vp = (VARIABLE*) vp->next;
+        -:  199:	}
+        -:  200:}

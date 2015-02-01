@@ -1,0 +1,9 @@
+running commands in compare.cmd 1 times
+runs started at 1316692595, 199685000, Thu Sep 22 07:26:35 2011
+run 1 started at 1316692595, 199767000, Thu Sep 22 07:26:35 2011
+child started: 0, 1316692595, 199782000, 4739, '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specdiff -m -l 10  -r 1e-05 /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/data/ref/output/inp.out inp.out'
+child finished: 0, 1316692595, 278175000, 0, 78393000, 4739, 0
+run 1 finished at: 1316692595, 278185000, Thu Sep 22 07:26:35 2011
+run 1 elapsed time: 0, 78418000, 0.078418000
+runs finished at 1316692595, 278230000, Thu Sep 22 07:26:35 2011
+runs elapsed time: 0, 78545000, 0.078545000

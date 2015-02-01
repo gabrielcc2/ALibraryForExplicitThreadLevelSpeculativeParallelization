@@ -1,0 +1,2 @@
+time scanner -scanfile ../images/c756hel.in -trainfile1 ../training/a10.img -trainfile2 ../training/hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 
+time scanner -scanfile ../images/c756hel.in -trainfile1 ../training/a10.img -trainfile2 ../training/hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 

@@ -1,0 +1,137 @@
+        -:    0:Source:/usr/include/c++/4.5/ext/new_allocator.h
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:// Allocator that wraps operator new -*- C++ -*-
+        -:    2:
+        -:    3:// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2009
+        -:    4:// Free Software Foundation, Inc.
+        -:    5://
+        -:    6:// This file is part of the GNU ISO C++ Library.  This library is free
+        -:    7:// software; you can redistribute it and/or modify it under the
+        -:    8:// terms of the GNU General Public License as published by the
+        -:    9:// Free Software Foundation; either version 3, or (at your option)
+        -:   10:// any later version.
+        -:   11:
+        -:   12:// This library is distributed in the hope that it will be useful,
+        -:   13:// but WITHOUT ANY WARRANTY; without even the implied warranty of
+        -:   14:// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        -:   15:// GNU General Public License for more details.
+        -:   16:
+        -:   17:// Under Section 7 of GPL version 3, you are granted additional
+        -:   18:// permissions described in the GCC Runtime Library Exception, version
+        -:   19:// 3.1, as published by the Free Software Foundation.
+        -:   20:
+        -:   21:// You should have received a copy of the GNU General Public License and
+        -:   22:// a copy of the GCC Runtime Library Exception along with this program;
+        -:   23:// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+        -:   24:// <http://www.gnu.org/licenses/>.
+        -:   25:
+        -:   26:/** @file ext/new_allocator.h
+        -:   27: *  This file is a GNU extension to the Standard C++ Library.
+        -:   28: */
+        -:   29:
+        -:   30:#ifndef _NEW_ALLOCATOR_H
+        -:   31:#define _NEW_ALLOCATOR_H 1
+        -:   32:
+        -:   33:#include <new>
+        -:   34:#include <bits/functexcept.h>
+        -:   35:#include <bits/move.h>
+        -:   36:
+        -:   37:_GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+        -:   38:
+        -:   39:  using std::size_t;
+        -:   40:  using std::ptrdiff_t;
+        -:   41:
+        -:   42:  /**
+        -:   43:   *  @brief  An allocator that uses global new, as per [20.4].
+        -:   44:   *  @ingroup allocators
+        -:   45:   *
+        -:   46:   *  This is precisely the allocator defined in the C++ Standard. 
+        -:   47:   *    - all allocation calls operator new
+        -:   48:   *    - all deallocation calls operator delete
+        -:   49:   */
+        -:   50:  template<typename _Tp>
+        -:   51:    class new_allocator
+        -:   52:    {
+        -:   53:    public:
+        -:   54:      typedef size_t     size_type;
+        -:   55:      typedef ptrdiff_t  difference_type;
+        -:   56:      typedef _Tp*       pointer;
+        -:   57:      typedef const _Tp* const_pointer;
+        -:   58:      typedef _Tp&       reference;
+        -:   59:      typedef const _Tp& const_reference;
+        -:   60:      typedef _Tp        value_type;
+        -:   61:
+        -:   62:      template<typename _Tp1>
+        -:   63:        struct rebind
+        -:   64:        { typedef new_allocator<_Tp1> other; };
+        -:   65:
+        -:   66:      new_allocator() throw() { }
+        -:   67:
+        -:   68:      new_allocator(const new_allocator&) throw() { }
+        -:   69:
+        -:   70:      template<typename _Tp1>
+        -:   71:        new_allocator(const new_allocator<_Tp1>&) throw() { }
+        -:   72:
+        -:   73:      ~new_allocator() throw() { }
+        -:   74:
+        -:   75:      pointer
+        -:   76:      address(reference __x) const { return &__x; }
+        -:   77:
+        -:   78:      const_pointer
+        -:   79:      address(const_reference __x) const { return &__x; }
+        -:   80:
+        -:   81:      // NB: __n is permitted to be 0.  The C++ standard says nothing
+        -:   82:      // about what the return value is when __n == 0.
+        -:   83:      pointer
+        -:   84:      allocate(size_type __n, const void* = 0)
+        -:   85:      { 
+        -:   86:	if (__n > this->max_size())
+        -:   87:	  std::__throw_bad_alloc();
+        -:   88:
+        -:   89:	return static_cast<_Tp*>(::operator new(__n * sizeof(_Tp)));
+        -:   90:      }
+        -:   91:
+        -:   92:      // __p is not permitted to be a null pointer.
+        -:   93:      void
+        -:   94:      deallocate(pointer __p, size_type)
+    #####:   95:      { ::operator delete(__p); }
+call    0 never executed
+call    1 never executed
+        -:   96:
+        -:   97:      size_type
+        -:   98:      max_size() const throw() 
+        -:   99:      { return size_t(-1) / sizeof(_Tp); }
+        -:  100:
+        -:  101:      // _GLIBCXX_RESOLVE_LIB_DEFECTS
+        -:  102:      // 402. wrong new expression in [some_] allocator::construct
+        -:  103:      void 
+        -:  104:      construct(pointer __p, const _Tp& __val) 
+        -:  105:      { ::new((void *)__p) _Tp(__val); }
+        -:  106:
+        -:  107:#ifdef __GXX_EXPERIMENTAL_CXX0X__
+        -:  108:      template<typename... _Args>
+        -:  109:        void
+        -:  110:        construct(pointer __p, _Args&&... __args)
+        -:  111:	{ ::new((void *)__p) _Tp(std::forward<_Args>(__args)...); }
+        -:  112:#endif
+        -:  113:
+        -:  114:      void 
+        -:  115:      destroy(pointer __p) { __p->~_Tp(); }
+        -:  116:    };
+        -:  117:
+        -:  118:  template<typename _Tp>
+        -:  119:    inline bool
+        -:  120:    operator==(const new_allocator<_Tp>&, const new_allocator<_Tp>&)
+        -:  121:    { return true; }
+        -:  122:  
+        -:  123:  template<typename _Tp>
+        -:  124:    inline bool
+        -:  125:    operator!=(const new_allocator<_Tp>&, const new_allocator<_Tp>&)
+        -:  126:    { return false; }
+        -:  127:
+        -:  128:_GLIBCXX_END_NAMESPACE
+        -:  129:
+        -:  130:#endif

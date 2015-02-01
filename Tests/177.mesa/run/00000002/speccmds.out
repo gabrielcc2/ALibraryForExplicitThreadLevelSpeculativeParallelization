@@ -1,0 +1,9 @@
+running commands in speccmds.cmd 1 times
+runs started at 1312934523, 211474000, Tue Aug  9 19:32:03 2011
+run 1 started at 1312934523, 211565000, Tue Aug  9 19:32:03 2011
+child started: 0, 1312934523, 211579000, 10390, '../00000002/mesa_base.x86_linux -frames 10 -meshfile mesa.in -ppmfile mesa.ppm'
+child finished: 0, 1312934524, 688017000, 1, 476438000, 10390, 0
+run 1 finished at: 1312934524, 688027000, Tue Aug  9 19:32:04 2011
+run 1 elapsed time: 1, 476462000, 1.476462000
+runs finished at 1312934524, 688076000, Tue Aug  9 19:32:04 2011
+runs elapsed time: 1, 476602000, 1.476602000

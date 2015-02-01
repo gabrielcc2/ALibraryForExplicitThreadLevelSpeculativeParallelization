@@ -1,0 +1,48 @@
+echo off;
+ setf mxdq 0.75;
+  setf mmbox 10.;
+ setf temp 300;
+ seti numstp 333;
+ setf bbox 35.;
+ use none box bond angle hybrid torsion nonbon;
+  echo off;
+ tpac numstp .00001 temp;
+ monitor;
+ 0.000000 unknown potential type
+ 1183.095771 bond energy
+ 2140.779933 angle energy
+ 67.674876 hybrid energy
+ 528.207695 torsion energy
+ -15738.937252 non-bonded energy
+ -11819.178977 total potential energy
+ 8533.288451 total kinetic energy
+ -3285.890527 total energy
+ 20352.467428 total action
+  echo off;
+ tpac numstp .00001 temp;
+ monitor;
+ 0.000000 unknown potential type
+ 1232.045367 bond energy
+ 2228.827988 angle energy
+ 69.507047 hybrid energy
+ 544.474641 torsion energy
+ -15935.833879 non-bonded energy
+ -11860.978835 total potential energy
+ 8560.677485 total kinetic energy
+ -3300.301350 total energy
+ 20421.656321 total action
+  echo off;
+ tpac numstp .00001 temp;
+ monitor;
+ 0.000000 unknown potential type
+ 1254.131539 bond energy
+ 2252.098875 angle energy
+ 71.348784 hybrid energy
+ 574.585831 torsion energy
+ -15747.011399 non-bonded energy
+ -11594.846370 total potential energy
+ 8578.735752 total kinetic energy
+ -3016.110617 total energy
+ 20173.582122 total action
+  echo;
+ exit;

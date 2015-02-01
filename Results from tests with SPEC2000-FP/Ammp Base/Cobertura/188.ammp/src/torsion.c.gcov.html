@@ -1,0 +1,613 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 188.ammp/src/torsion.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">188.ammp/src</a> - torsion.c<span style="font-size: 80%;"> (source / <a href="torsion.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">149</td>
+            <td class="headerCovTableEntry">251</td>
+            <td class="headerCovTableEntryLo">59.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryLo">42.9 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">39</td>
+            <td class="headerCovTableEntry">136</td>
+            <td class="headerCovTableEntryLo">28.7 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* torsion.c</a>
+<span class="lineNum">       2 </span>                :            : *
+<span class="lineNum">       3 </span>                :            : * collection of routines to service bond torsion  potentials
+<span class="lineNum">       4 </span>                :            : *
+<span class="lineNum">       5 </span>                :            : * POOP (Poor-mans Object Oriented Programming) using scope rules
+<span class="lineNum">       6 </span>                :            : *
+<span class="lineNum">       7 </span>                :            : * these routines hold a data base (in terms of array indeces)
+<span class="lineNum">       8 </span>                :            : * of torsion, with the associated length and force constant
+<span class="lineNum">       9 </span>                :            : *
+<span class="lineNum">      10 </span>                :            : * (this could be table driven but what the hell memories cheap)
+<span class="lineNum">      11 </span>                :            : *
+<span class="lineNum">      12 </span>                :            : * the routines for potential value, force and (eventually) second
+<span class="lineNum">      13 </span>                :            : * derivatives are here also
+<span class="lineNum">      14 </span>                :            : *
+<span class="lineNum">      15 </span>                :            : * force and 2nd derivative routines assume zero'd arrays for output
+<span class="lineNum">      16 </span>                :            : * this allows for parralellization if needed (on a PC?)
+<span class="lineNum">      17 </span>                :            : *
+<span class="lineNum">      18 </span>                :            : * forces are bond wise symmetric - so we don't have to mess around with
+<span class="lineNum">      19 </span>                :            : * s matrices and the like.
+<span class="lineNum">      20 </span>                :            : */
+<span class="lineNum">      21 </span>                :            : /*
+<span class="lineNum">      22 </span>                :            : *  copyright 1992 Robert W. Harrison
+<span class="lineNum">      23 </span>                :            : *  
+<span class="lineNum">      24 </span>                :            : *  This notice may not be removed
+<span class="lineNum">      25 </span>                :            : *  This program may be copied for scientific use
+<span class="lineNum">      26 </span>                :            : *  It may not be sold for profit without explicit
+<span class="lineNum">      27 </span>                :            : *  permission of the author(s) who retain any
+<span class="lineNum">      28 </span>                :            : *  commercial rights including the right to modify 
+<span class="lineNum">      29 </span>                :            : *  this notice
+<span class="lineNum">      30 </span>                :            : */
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : #define ANSI 1
+<span class="lineNum">      33 </span>                :            : /* misc includes - ANSI and some are just to be safe */
+<span class="lineNum">      34 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">      35 </span>                :            : #include &lt;ctype.h&gt;
+<span class="lineNum">      36 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      37 </span>                :            : #ifdef ANSI
+<span class="lineNum">      38 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      39 </span>                :            : #endif
+<span class="lineNum">      40 </span>                :            : /* global defs */
+<span class="lineNum">      41 </span>                :            : #define TOO_SMALL 1.e-8
+<span class="lineNum">      42 </span>                :            : #define doublefloat double
+<span class="lineNum">      43 </span>                :            : 
+<span class="lineNum">      44 </span>                :            : #include &quot;ammp.h&quot;
+<span class="lineNum">      45 </span>                :            : /* ATOM structure contains a serial number for indexing into
+<span class="lineNum">      46 </span>                :            : * arrays and the like (a Hessian)
+<span class="lineNum">      47 </span>                :            : * but otherwise is self-contained. Note the hooks for Non-torsioned potentials
+<span class="lineNum">      48 </span>                :            : */
+<span class="lineNum">      49 </span>                :            : typedef struct{
+<span class="lineNum">      50 </span>                :            :         ATOM *atom1,*atom2,*atom3,*atom4;
+<span class="lineNum">      51 </span>                :            :         float k,offset;
+<span class="lineNum">      52 </span>                :            :         int   n;
+<span class="lineNum">      53 </span>                :            :         void *next;
+<span class="lineNum">      54 </span>                :            :         }  TORSION;
+<span class="lineNum">      55 </span>                :            : #define TLONG sizeof(TORSION)
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            : TORSION *torsion_first = NULL;
+<span class="lineNum">      58 </span>                :            : TORSION *torsion_last = NULL;
+<span class="lineNum">      59 </span>                :            : /* function torsion adds a torsion to the torsion list
+<span class="lineNum">      60 </span>                :            : * returns 1 if ok
+<span class="lineNum">      61 </span>                :            : * returns 0 if not
+<span class="lineNum">      62 </span>                :            : *  is passed the array pointers, length and constant
+<span class="lineNum">      63 </span>                :            : * allocates the new memory, initializes it and
+<a name="64"><span class="lineNum">      64 </span>                :            : * returns</a>
+<span class="lineNum">      65 </span>                :            : */
+<span class="lineNum">      66 </span>                :<span class="lineCov">       8650 : int torsion( p1,p2,p3,p4,fk,n,off)</span>
+<span class="lineNum">      67 </span>                :            :         int p1,p2,p3,p4,n;
+<span class="lineNum">      68 </span>                :            :         float fk,off;
+<span class="lineNum">      69 </span>                :            :         {
+<span class="lineNum">      70 </span>                :            :         TORSION *new;
+<span class="lineNum">      71 </span>                :            :         ATOM *ap1,*ap2,*ap3,*ap4,*a_m_serial();
+<span class="lineNum">      72 </span>                :            :         char line[80];
+<span class="lineNum">      73 </span>                :            : /* consistancy checks */
+<span class="lineNum">      74 </span>        [<span class="branchCov" title="Branch 0 was taken 8650 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       8650 :         if(  p1 == p2 || p1 == p3 || p1 == p4</span>
+<span class="lineNum">      75 </span>[<span class="branchCov" title="Branch 0 was taken 8650 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 8650 times"> + </span>]:<span class="lineCov">       8650 :         || p2 == p3 || p2 == p4 || p3 == p4)</span>
+<span class="lineNum">      76 </span>                :            :         {
+<span class="lineNum">      77 </span>                :<span class="lineNoCov">          0 :         sprintf( line,&quot; same atom in torsion %d %d %d %d \0&quot;,p1,p2,p3,p4);</span>
+<span class="lineNum">      78 </span>                :<span class="lineNoCov">          0 :         aaerror( line );</span>
+<span class="lineNum">      79 </span>                :<span class="lineNoCov">          0 :         return 1;</span>
+<span class="lineNum">      80 </span>                :            :         }
+<span class="lineNum">      81 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8650 times"> + </span>]:<span class="lineCov">       8650 :         if( fk == 0.) return 1;</span>
+<span class="lineNum">      82 </span>                :            : /* get the atom pointers for the two serial numbers */
+<span class="lineNum">      83 </span>                :<span class="lineCov">       8650 :         ap1 = a_m_serial( p1 );</span>
+<span class="lineNum">      84 </span>                :<span class="lineCov">       8650 :         ap2 = a_m_serial( p2 );</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">       8650 :         ap3 = a_m_serial( p3 );</span>
+<span class="lineNum">      86 </span>                :<span class="lineCov">       8650 :         ap4 = a_m_serial( p4 );</span>
+<span class="lineNum">      87 </span>[<span class="branchCov" title="Branch 0 was taken 8650 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 8650 times"> + </span>]:<span class="lineCov">       8650 :         if( (ap1 == NULL) || (ap2 == NULL) || (ap3==NULL) || (ap4==NULL) ) </span>
+<span class="lineNum">      88 </span>                :            :         {
+<span class="lineNum">      89 </span>                :<span class="lineNoCov">          0 :         sprintf( line,&quot;undefined atom in torsion %d %d %d %d \0&quot;,p1,p2,p3,p4);</span>
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :         aaerror( line );</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">      92 </span>                :            :         }
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8650 times"> + </span>]:<span class="lineCov">       8650 :         if( ( new = malloc( TLONG ) ) == NULL)</span>
+<span class="lineNum">      95 </span>                :            :         {
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">      97 </span>                :            :         }
+<span class="lineNum">      98 </span>                :            :         /* initialize the pointers */
+<span class="lineNum">      99 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 8649 times"> + </span>]:<span class="lineCov">       8650 :         if( torsion_first == NULL) torsion_first = new;</span>
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 8649 times"> + </span>]:<span class="lineCov">       8650 :         if( torsion_last == NULL) torsion_last = new;</span>
+<span class="lineNum">     101 </span>                :<span class="lineCov">       8650 :         new -&gt; atom1 = ap1;</span>
+<span class="lineNum">     102 </span>                :<span class="lineCov">       8650 :         new -&gt; atom2 = ap2;</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">       8650 :         new -&gt; atom3 = ap3;</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">       8650 :         new -&gt; atom4 = ap4;</span>
+<span class="lineNum">     105 </span>                :<span class="lineCov">       8650 :         new -&gt; offset = off;</span>
+<span class="lineNum">     106 </span>                :<span class="lineCov">       8650 :         new -&gt; k = fk;</span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">       8650 :         new -&gt; n = n;</span>
+<span class="lineNum">     108 </span>                :<span class="lineCov">       8650 :         new -&gt; next = new;</span>
+<span class="lineNum">     109 </span>                :<span class="lineCov">       8650 :         torsion_last -&gt; next = new;</span>
+<span class="lineNum">     110 </span>                :<span class="lineCov">       8650 :         torsion_last = new;</span>
+<span class="lineNum">     111 </span>                :<span class="lineCov">       8650 :         return 1;</span>
+<span class="lineNum">     112 </span>                :            :         }
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>                :            : /* v_torsion()
+<span class="lineNum">     116 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     117 </span>                :            : * for the atoms defined in the torsion data structure.
+<span class="lineNum">     118 </span>                :            : */
+<a name="119"><span class="lineNum">     119 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     120 </span>                :            : * V is the potential */
+<span class="lineNum">     121 </span>                :<span class="lineCov">          3 : int v_torsion( V, lambda )</span>
+<span class="lineNum">     122 </span>                :            :         float *V,lambda;
+<span class="lineNum">     123 </span>                :            : {
+<span class="lineNum">     124 </span>                :            :         TORSION *bp;
+<span class="lineNum">     125 </span>                :            : /* difference vectors */
+<span class="lineNum">     126 </span>                :            :         doublefloat x1,y1,z1,x2,y2,z2,x3,y3,z3;
+<span class="lineNum">     127 </span>                :            : /* cross products and storage for normalizing */
+<span class="lineNum">     128 </span>                :            :         doublefloat r,cx1,cy1,cz1,cx2,cy2,cz2;
+<span class="lineNum">     129 </span>                :            :         doublefloat dp;
+<span class="lineNum">     130 </span>                :            :         ATOM *a1,*a2,*a3,*a4;
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>                :            : 
+<span class="lineNum">     133 </span>                :<span class="lineCov">          3 :         bp = torsion_first;</span>
+<span class="lineNum">     134 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     135 </span>                :            :        while(1)
+<span class="lineNum">     136 </span>                :            :        {
+<span class="lineNum">     137 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 25950 times"> + </span>]:<span class="lineCov">      25950 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">      25950 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2; a3 = bp-&gt;atom3;</span>
+<span class="lineNum">     139 </span>                :<span class="lineCov">      25950 :         a4 = bp-&gt;atom4;</span>
+<span class="lineNum">     140 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 25950 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      25950 :         if( a1-&gt;active|| a2-&gt;active || a3-&gt;active || a4-&gt;active) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     141 </span>                :<span class="lineCov">      25950 :         x1 = (a1-&gt;x -a2-&gt;x +lambda*(a1-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     142 </span>                :<span class="lineCov">      25950 :         y1 = (a1-&gt;y -a2-&gt;y +lambda*(a1-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">      25950 :         z1 = (a1-&gt;z -a2-&gt;z +lambda*(a1-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">      25950 :         x2 = (a3-&gt;x -a2-&gt;x +lambda*(a3-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     145 </span>                :<span class="lineCov">      25950 :         y2 = (a3-&gt;y -a2-&gt;y +lambda*(a3-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     146 </span>                :<span class="lineCov">      25950 :         z2 = (a3-&gt;z -a2-&gt;z +lambda*(a3-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     147 </span>                :<span class="lineCov">      25950 :         x3 = (a4-&gt;x -a3-&gt;x +lambda*(a4-&gt;dx-a3-&gt;dx));</span>
+<span class="lineNum">     148 </span>                :<span class="lineCov">      25950 :         y3 = (a4-&gt;y -a3-&gt;y +lambda*(a4-&gt;dy-a3-&gt;dy));</span>
+<span class="lineNum">     149 </span>                :<span class="lineCov">      25950 :         z3 = (a4-&gt;z -a3-&gt;z +lambda*(a4-&gt;dz-a3-&gt;dz));</span>
+<span class="lineNum">     150 </span>                :            : /* 1 cross 2 */
+<span class="lineNum">     151 </span>                :<span class="lineCov">      25950 :         cx1 = y1*z2 - y2*z1;</span>
+<span class="lineNum">     152 </span>                :<span class="lineCov">      25950 :         cy1 = -x1*z2 + x2*z1;</span>
+<span class="lineNum">     153 </span>                :<span class="lineCov">      25950 :         cz1 = x1*y2 - x2*y1;</span>
+<span class="lineNum">     154 </span>                :<span class="lineCov">      25950 :         r = cx1*cx1 + cy1*cy1 + cz1*cz1;</span>
+<span class="lineNum">     155 </span>        [<span class="branchCov" title="Branch 0 was taken 25950 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">      25950 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">      25950 :         r = one/sqrt(r);</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">      25950 :         cx1 = cx1*r;</span>
+<span class="lineNum">     158 </span>                :<span class="lineCov">      25950 :         cy1 = cy1*r;</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov">      25950 :         cz1 = cz1*r;</span>
+<span class="lineNum">     160 </span>                :            : /* 3 cross 2 */
+<span class="lineNum">     161 </span>                :<span class="lineCov">      25950 :         cx2 = y3*z2 - y2*z3;</span>
+<span class="lineNum">     162 </span>                :<span class="lineCov">      25950 :         cy2 = -x3*z2 + x2*z3;</span>
+<span class="lineNum">     163 </span>                :<span class="lineCov">      25950 :         cz2 = x3*y2 - x2*y3;</span>
+<span class="lineNum">     164 </span>                :<span class="lineCov">      25950 :         r = cx2*cx2 + cy2*cy2 + cz2*cz2;</span>
+<span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 0 was taken 25950 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">      25950 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">      25950 :         r = one/sqrt(r);</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">      25950 :         cx2 = cx2*r;</span>
+<span class="lineNum">     168 </span>                :<span class="lineCov">      25950 :         cy2 = cy2*r;</span>
+<span class="lineNum">     169 </span>                :<span class="lineCov">      25950 :         cz2 = cz2*r;</span>
+<span class="lineNum">     170 </span>                :            : /* if here everything is well determined */
+<span class="lineNum">     171 </span>                :<span class="lineCov">      25950 :         dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */</span>
+<span class="lineNum">     172 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 25950 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 25950 times"> + </span>]:<span class="lineCov">      25950 :         if( dp &gt; 1.) dp = 1.; if( dp &lt; -1.) dp = -1.;</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">      25950 :         dp = acos(dp);</span>
+<span class="lineNum">     174 </span>                :            : /* determine the sign by triple product */
+<span class="lineNum">     175 </span>                :<span class="lineCov">      25950 :         r = cx1*x3 + cy1*y3 + cz1*z3;</span>
+<span class="lineNum">     176 </span>        [<span class="branchCov" title="Branch 0 was taken 12868 times"> + </span><span class="branchCov" title="Branch 1 was taken 13082 times"> + </span>]:<span class="lineCov">      25950 :         if( r &gt; 0 ) dp =  -dp ;</span>
+<span class="lineNum">     177 </span>                :<span class="lineCov">      25950 :         *V += .5*(bp-&gt;k)*( 1. + cos( bp-&gt;n * dp - bp-&gt;offset   )) ; </span>
+<span class="lineNum">     178 </span>                :            :         }
+<span class="lineNum">     179 </span>                :            : SKIP:
+<span class="lineNum">     180 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 25947 times"> + </span>]:<span class="lineCov">      25950 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">      25947 :         bp = bp-&gt;next;</span>
+<span class="lineNum">     182 </span>                :<span class="lineCov">      25950 :        }</span>
+<span class="lineNum">     183 </span>                :            : }
+<span class="lineNum">     184 </span>                :            : /* f_torsion()
+<span class="lineNum">     185 </span>                :            : *
+<span class="lineNum">     186 </span>                :            : * f_torsion increments the forces in the atom structures by the force
+<span class="lineNum">     187 </span>                :            : * due to the torsion components.  NOTE THE WORD increment.
+<span class="lineNum">     188 </span>                :            : * the forces should first be zero'd.
+<span class="lineNum">     189 </span>                :            : * if not then this code will be invalid.  THIS IS DELIBERATE.
+<span class="lineNum">     190 </span>                :            : * on bigger (and better?) machines the different potential terms
+<span class="lineNum">     191 </span>                :            : * may be updated at random or in parrellel, if we assume that this routine
+<a name="192"><span class="lineNum">     192 </span>                :            : * will initialize the forces then we can't do this.</a>
+<span class="lineNum">     193 </span>                :            : */
+<span class="lineNum">     194 </span>                :<span class="lineCov">       1002 : int f_torsion(lambda)</span>
+<span class="lineNum">     195 </span>                :            : float lambda;
+<span class="lineNum">     196 </span>                :            : /*  returns 0 if error, 1 if OK */
+<span class="lineNum">     197 </span>                :            : {
+<span class="lineNum">     198 </span>                :            :         TORSION *bp;
+<span class="lineNum">     199 </span>                :            : /* difference vectors */
+<span class="lineNum">     200 </span>                :            :         doublefloat x1,y1,z1,x2,y2,z2,x3,y3,z3;
+<span class="lineNum">     201 </span>                :            : /* cross products and storage for normalizing */
+<span class="lineNum">     202 </span>                :            :         doublefloat r,cx1,cy1,cz1,cx2,cy2,cz2;
+<span class="lineNum">     203 </span>                :            :         doublefloat dp,sdp;
+<span class="lineNum">     204 </span>                :            :         doublefloat r1,r2,r3,c1,c2,s1,s2;
+<span class="lineNum">     205 </span>                :            :         doublefloat ux,uy,uz;
+<span class="lineNum">     206 </span>                :            :         int i;  
+<span class="lineNum">     207 </span>                :            :         ATOM *a1,*a2,*a3,*a4;
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>                :<span class="lineCov">       1002 :         bp = torsion_first;</span>
+<span class="lineNum">     211 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1002 times"> + </span>]:<span class="lineCov">       1002 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">       1002 :        i = 0;</span>
+<span class="lineNum">     213 </span>                :            :        while(1)
+<span class="lineNum">     214 </span>                :            :        {
+<span class="lineNum">     215 </span>                :            : /* debugging a mysterious error 
+<span class="lineNum">     216 </span>                :            : * there was a crash at the a1= line
+<span class="lineNum">     217 </span>                :            : * seems to have been when atom1 and atom2 where the
+<span class="lineNum">     218 </span>                :            : * same
+<span class="lineNum">     219 </span>                :            :         printf(&quot; torsion %d\n&quot;,i++);
+<span class="lineNum">     220 </span>                :            :         printf(&quot; %s\n&quot;,bp-&gt;atom1-&gt;name);
+<span class="lineNum">     221 </span>                :            :         printf(&quot; %s\n&quot;,bp-&gt;atom2-&gt;name);
+<span class="lineNum">     222 </span>                :            :         printf(&quot; %s\n&quot;,bp-&gt;atom3-&gt;name);
+<span class="lineNum">     223 </span>                :            :         printf(&quot; %s\n&quot;,bp-&gt;atom4-&gt;name);
+<span class="lineNum">     224 </span>                :            : */
+<span class="lineNum">     225 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8667300 times"> + </span>]:<span class="lineCov">    8667300 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     226 </span>                :<span class="lineCov">    8667300 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2; a3 = bp-&gt;atom3;</span>
+<span class="lineNum">     227 </span>                :<span class="lineCov">    8667300 :         a4 = bp-&gt;atom4;</span>
+<span class="lineNum">     228 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8667300 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">    8667300 :         if( a1-&gt;active|| a2-&gt;active || a3-&gt;active || a4-&gt;active) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     229 </span>                :<span class="lineCov">    8667300 :         x1 = (a1-&gt;x -a2-&gt;x +lambda*(a1-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     230 </span>                :<span class="lineCov">    8667300 :         y1 = (a1-&gt;y -a2-&gt;y +lambda*(a1-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     231 </span>                :<span class="lineCov">    8667300 :         z1 = (a1-&gt;z -a2-&gt;z +lambda*(a1-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     232 </span>                :<span class="lineCov">    8667300 :         x2 = (a3-&gt;x -a2-&gt;x +lambda*(a3-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     233 </span>                :<span class="lineCov">    8667300 :         y2 = (a3-&gt;y -a2-&gt;y +lambda*(a3-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     234 </span>                :<span class="lineCov">    8667300 :         z2 = (a3-&gt;z -a2-&gt;z +lambda*(a3-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     235 </span>                :<span class="lineCov">    8667300 :         x3 = (a4-&gt;x -a3-&gt;x +lambda*(a4-&gt;dx-a3-&gt;dx));</span>
+<span class="lineNum">     236 </span>                :<span class="lineCov">    8667300 :         y3 = (a4-&gt;y -a3-&gt;y +lambda*(a4-&gt;dy-a3-&gt;dy));</span>
+<span class="lineNum">     237 </span>                :<span class="lineCov">    8667300 :         z3 = (a4-&gt;z -a3-&gt;z +lambda*(a4-&gt;dz-a3-&gt;dz));</span>
+<span class="lineNum">     238 </span>                :            : /* lengths for normalization */
+<span class="lineNum">     239 </span>                :<span class="lineCov">    8667300 :         r1 = sqrt( x1*x1 + y1*y1 + z1*z1);</span>
+<span class="lineNum">     240 </span>                :<span class="lineCov">    8667300 :         r2 = sqrt( x2*x2 + y2*y2 + z2*z2);</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">    8667300 :         r3 = sqrt( x3*x3 + y3*y3 + z3*z3);</span>
+<span class="lineNum">     242 </span>                :<span class="lineCov">    8667300 :         c1 = (x1*x2 + y1*y2 + z1*z2)/r1/r2;</span>
+<span class="lineNum">     243 </span>                :<span class="lineCov">    8667300 :         c2 = -(x2*x3 + y2*y3 + z2*z3)/r2/r3;</span>
+<span class="lineNum">     244 </span>                :            :         /*
+<span class="lineNum">     245 </span>                :            :         s1 = sqrt( 1. - c1*c1); s2 = sqrt( 1. -c2*c2);
+<span class="lineNum">     246 </span>                :            :         */
+<span class="lineNum">     247 </span>                :<span class="lineCov">    8667300 :         s1 = ( 1. - c1*c1); s2 = ( 1. -c2*c2);</span>
+<span class="lineNum">     248 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( s1 &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     249 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( s2 &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     250 </span>                :            : /* 1 cross 2 */
+<span class="lineNum">     251 </span>                :<span class="lineCov">    8667300 :         cx1 = y1*z2 - y2*z1;</span>
+<span class="lineNum">     252 </span>                :<span class="lineCov">    8667300 :         cy1 = -x1*z2 + x2*z1;</span>
+<span class="lineNum">     253 </span>                :<span class="lineCov">    8667300 :         cz1 = x1*y2 - x2*y1;</span>
+<span class="lineNum">     254 </span>                :<span class="lineCov">    8667300 :         r = cx1*cx1 + cy1*cy1 + cz1*cz1;</span>
+<span class="lineNum">     255 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     256 </span>                :<span class="lineCov">    8667300 :         r = one/sqrt(r);</span>
+<span class="lineNum">     257 </span>                :<span class="lineCov">    8667300 :         cx1 = cx1*r;</span>
+<span class="lineNum">     258 </span>                :<span class="lineCov">    8667300 :         cy1 = cy1*r;</span>
+<span class="lineNum">     259 </span>                :<span class="lineCov">    8667300 :         cz1 = cz1*r;</span>
+<span class="lineNum">     260 </span>                :            : /* 3 cross 2 */
+<span class="lineNum">     261 </span>                :<span class="lineCov">    8667300 :         cx2 = y3*z2 - y2*z3;</span>
+<span class="lineNum">     262 </span>                :<span class="lineCov">    8667300 :         cy2 = -x3*z2 + x2*z3;</span>
+<span class="lineNum">     263 </span>                :<span class="lineCov">    8667300 :         cz2 = x3*y2 - x2*y3;</span>
+<span class="lineNum">     264 </span>                :<span class="lineCov">    8667300 :         r = cx2*cx2 + cy2*cy2 + cz2*cz2;</span>
+<span class="lineNum">     265 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     266 </span>                :<span class="lineCov">    8667300 :         r = one/sqrt(r);</span>
+<span class="lineNum">     267 </span>                :<span class="lineCov">    8667300 :         cx2 = cx2*r;</span>
+<span class="lineNum">     268 </span>                :<span class="lineCov">    8667300 :         cy2 = cy2*r;</span>
+<span class="lineNum">     269 </span>                :<span class="lineCov">    8667300 :         cz2 = cz2*r;</span>
+<span class="lineNum">     270 </span>                :            : /* if here everything is well determined */
+<span class="lineNum">     271 </span>                :<span class="lineCov">    8667300 :         dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */</span>
+<span class="lineNum">     272 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 8667300 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 8667300 times"> + </span>]:<span class="lineCov">    8667300 :         if( dp &gt; 1.) dp = 1.; if( dp &lt; -1.) dp = -1.;</span>
+<span class="lineNum">     273 </span>                :<span class="lineCov">    8667300 :         dp = acos(dp);</span>
+<span class="lineNum">     274 </span>                :            : /* determine the sign by triple product */
+<span class="lineNum">     275 </span>                :            : /*      r = cx1*x3 + cy1*y3 + cz1*z3;  */
+<span class="lineNum">     276 </span>                :<span class="lineCov">   17334600 :         r = sqrt(x3*x3 +y3*y3 +z3*z3)*</span>
+<span class="lineNum">     277 </span>                :<span class="lineCov">    8667300 :             sqrt(x2*x2+y2*y2+z2*z2);</span>
+<span class="lineNum">     278 </span>                :<span class="lineCov">    8667300 :         sdp = x3*x2 + y3*y2 + z3*z2;</span>
+<span class="lineNum">     279 </span>                :<span class="lineCov">    8667300 :         sdp = sdp/r;</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">    8667300 :         ux = x3 - sdp*x2;</span>
+<span class="lineNum">     281 </span>                :<span class="lineCov">    8667300 :         uy = y3 - sdp*y2;</span>
+<span class="lineNum">     282 </span>                :<span class="lineCov">    8667300 :         uz = z3 - sdp*z2;</span>
+<span class="lineNum">     283 </span>                :<span class="lineCov">    8667300 :         r = cx1*ux + cy1*uy + cz1*uz;</span>
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>        [<span class="branchCov" title="Branch 0 was taken 4292451 times"> + </span><span class="branchCov" title="Branch 1 was taken 4374849 times"> + </span>]:<span class="lineCov">    8667300 :         if( r &gt;= 0 ) dp = -dp  ; </span>
+<span class="lineNum">     286 </span>                :            : 
+<span class="lineNum">     287 </span>                :            : /*
+<span class="lineNum">     288 </span>                :            : *       printf(&quot; dp target %f %f %f %f\n&quot;,dp,bp-&gt;n*dp-bp-&gt;offset,
+<span class="lineNum">     289 </span>                :            : *       -sin(bp-&gt;n*dp-bp-&gt;offset),1.+cos(bp-&gt;n*dp-bp-&gt;offset));
+<span class="lineNum">     290 </span>                :            : */
+<span class="lineNum">     291 </span>                :            : 
+<span class="lineNum">     292 </span>                :            : /* the potential */
+<span class="lineNum">     293 </span>                :            : /*      *V += .5*(bp-&gt;k)*( 1. + cos( bp-&gt;n * dp -bp-&gt;offset  )) ;  */
+<span class="lineNum">     294 </span>                :            : /* its derivative */
+<span class="lineNum">     295 </span>                :<span class="lineCov">    8667300 :         r = -.5*bp-&gt;k*bp-&gt;n*sin( bp-&gt;n*dp - bp-&gt;offset);</span>
+<span class="lineNum">     296 </span>                :            : /*
+<span class="lineNum">     297 </span>                :            :         if( bp-&gt;n == 1)
+<span class="lineNum">     298 </span>                :            :         {
+<span class="lineNum">     299 </span>                :            :         r = -.5*bp-&gt;k*sin(dp);
+<span class="lineNum">     300 </span>                :            :         } else if( bp-&gt;n == 2)
+<span class="lineNum">     301 </span>                :            :         {
+<span class="lineNum">     302 </span>                :            :         r = -bp-&gt;k*(sin(dp+dp));
+<span class="lineNum">     303 </span>                :            :         } else if( bp-&gt;n == 3)
+<span class="lineNum">     304 </span>                :            :         {
+<span class="lineNum">     305 </span>                :            :         r = cos(dp);
+<span class="lineNum">     306 </span>                :            :         r = -.5*(12*r*r-3)*sin(dp);
+<span class="lineNum">     307 </span>                :            :         } else
+<span class="lineNum">     308 </span>                :            :         {
+<span class="lineNum">     309 </span>                :            :         r =   -.5*(bp-&gt;k)*( (bp-&gt;n)*sin(bp-&gt;n*dp  ));
+<span class="lineNum">     310 </span>                :            :         }
+<span class="lineNum">     311 </span>                :            :         if( bp-&gt;offset &gt; 1.e-5 || bp-&gt;offset &lt; -1.e-5)
+<span class="lineNum">     312 </span>                :            :                 r = -r;
+<span class="lineNum">     313 </span>                :            : */      
+<span class="lineNum">     314 </span>                :<span class="lineCov">    8667300 :         s1 = one/s1;</span>
+<span class="lineNum">     315 </span>                :<span class="lineCov">    8667300 :         s2 = one/s2;</span>
+<span class="lineNum">     316 </span>                :            : 
+<span class="lineNum">     317 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( a1-&gt;active){</span>
+<span class="lineNum">     318 </span>                :<span class="lineCov">    8667300 :         a1-&gt;fx -= r*cx1/r1*s1;</span>
+<span class="lineNum">     319 </span>                :<span class="lineCov">    8667300 :         a1-&gt;fy -= r*cy1/r1*s1;</span>
+<span class="lineNum">     320 </span>                :<span class="lineCov">    8667300 :         a1-&gt;fz -= r*cz1/r1*s1;</span>
+<span class="lineNum">     321 </span>                :            :         }
+<span class="lineNum">     322 </span>                :            : 
+<span class="lineNum">     323 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( a2-&gt;active){</span>
+<span class="lineNum">     324 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fx += r*cx1*(r2-c1*r1)/r2/r1*s1;</span>
+<span class="lineNum">     325 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fy += r*cy1*(r2-c1*r1)/r2/r1*s1;</span>
+<span class="lineNum">     326 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fz += r*cz1*(r2-c1*r1)/r2/r1*s1;</span>
+<span class="lineNum">     327 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fx -= r*cx2*c2/r2*s2;</span>
+<span class="lineNum">     328 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fy -= r*cy2*c2/r2*s2;</span>
+<span class="lineNum">     329 </span>                :<span class="lineCov">    8667300 :         a2-&gt;fz -= r*cz2*c2/r2*s2;</span>
+<span class="lineNum">     330 </span>                :            :         }
+<span class="lineNum">     331 </span>                :            : 
+<span class="lineNum">     332 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( a3-&gt;active){</span>
+<span class="lineNum">     333 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fx -= r*cx2*(r2-c2*r3)/r2/r3*s2;</span>
+<span class="lineNum">     334 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fy -= r*cy2*(r2-c2*r3)/r2/r3*s2;</span>
+<span class="lineNum">     335 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fz -= r*cz2*(r2-c2*r3)/r2/r3*s2;</span>
+<span class="lineNum">     336 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fx += r*cx1*c1/r2*s1;</span>
+<span class="lineNum">     337 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fy += r*cy1*c1/r2*s1;</span>
+<span class="lineNum">     338 </span>                :<span class="lineCov">    8667300 :         a3-&gt;fz += r*cz1*c1/r2*s1;</span>
+<span class="lineNum">     339 </span>                :            :         }
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>        [<span class="branchCov" title="Branch 0 was taken 8667300 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8667300 :         if( a4-&gt;active){</span>
+<span class="lineNum">     342 </span>                :<span class="lineCov">    8667300 :         a4-&gt;fx += r*cx2/r3*s2;</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">    8667300 :         a4-&gt;fy += r*cy2/r3*s2;</span>
+<span class="lineNum">     344 </span>                :<span class="lineCov">    8667300 :         a4-&gt;fz += r*cz2/r3*s2;</span>
+<span class="lineNum">     345 </span>                :            :         }
+<span class="lineNum">     346 </span>                :            : 
+<span class="lineNum">     347 </span>                :            : 
+<span class="lineNum">     348 </span>                :            :         }
+<span class="lineNum">     349 </span>                :            : SKIP:
+<span class="lineNum">     350 </span>        [<span class="branchCov" title="Branch 0 was taken 1002 times"> + </span><span class="branchCov" title="Branch 1 was taken 8666298 times"> + </span>]:<span class="lineCov">    8667300 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     351 </span>                :<span class="lineCov">    8666298 :         bp = bp-&gt;next;</span>
+<span class="lineNum">     352 </span>                :<span class="lineCov">    8667300 :        }</span>
+<span class="lineNum">     353 </span>                :            : }
+<span class="lineNum">     354 </span>                :            : /* function get_torsion( a1,bonded,10,inbond);
+<a name="355"><span class="lineNum">     355 </span>                :            : * check the torsion list for atoms 1-4 ed to a1</a>
+<span class="lineNum">     356 </span>                :            : */
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 : void get_torsion( a1,bonded,mbond,inbond)</span>
+<span class="lineNum">     358 </span>                :            : ATOM *a1, *bonded[];
+<span class="lineNum">     359 </span>                :            : int mbond,*inbond ;
+<span class="lineNum">     360 </span>                :            : {
+<span class="lineNum">     361 </span>                :            :         TORSION *mine;
+<span class="lineNum">     362 </span>                :<span class="lineNoCov">          0 :         mine = torsion_first;</span>
+<span class="lineNum">     363 </span>                :<span class="lineNoCov">          0 :         *inbond = 0;</span>
+<span class="lineNum">     364 </span>                :            :         while(1)
+<span class="lineNum">     365 </span>                :            :         {
+<span class="lineNum">     366 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (mine == NULL) )</span>
+<span class="lineNum">     367 </span>                :            :         {
+<span class="lineNum">     368 </span>                :            :                 return;
+<span class="lineNum">     369 </span>                :            :         }
+<span class="lineNum">     370 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine-&gt;atom1 == a1)</span>
+<span class="lineNum">     371 </span>                :            :         {
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :                 bonded[(*inbond)++] = mine-&gt;atom4;</span>
+<span class="lineNum">     373 </span>                :            :         }
+<span class="lineNum">     374 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine-&gt;atom4 == a1)</span>
+<span class="lineNum">     375 </span>                :            :         {
+<span class="lineNum">     376 </span>                :<span class="lineNoCov">          0 :                 bonded[(*inbond)++] = mine-&gt;atom1;</span>
+<span class="lineNum">     377 </span>                :            :         }
+<span class="lineNum">     378 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine == mine-&gt;next) return;</span>
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :         mine = mine-&gt;next;</span>
+<span class="lineNum">     380 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *inbond == mbond ) return;</span>
+<span class="lineNum">     381 </span>                :            :         }               
+<span class="lineNum">     382 </span>                :            : }
+<span class="lineNum">     383 </span>                :            : /* routine dump_torsions
+<span class="lineNum">     384 </span>                :            : * this function outputs the torsion parameters
+<span class="lineNum">     385 </span>                :            : * and does it in a simple form
+<span class="lineNum">     386 </span>                :            : * torsion ser1,ser2,ser3,k,theta (in degrees )
+<span class="lineNum">     387 </span>                :            : * the rest is just free format
+<a name="388"><span class="lineNum">     388 </span>                :            : */</a>
+<span class="lineNum">     389 </span>                :            : /* SPEC use modern style declaration, to match proto jh/9/22/99 */
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 : void dump_torsions( FILE *where )</span>
+<span class="lineNum">     391 </span>                :            : {
+<span class="lineNum">     392 </span>                :            :         TORSION *b;
+<span class="lineNum">     393 </span>                :            :         ATOM *a1,*a2,*a3,*a4;
+<span class="lineNum">     394 </span>                :            :         float rtodeg;
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :         b = torsion_first;</span>
+<span class="lineNum">     396 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b == NULL ) return;</span>
+<span class="lineNum">     397 </span>                :<span class="lineNoCov">          0 :         rtodeg = 180./acos(-1.);</span>
+<span class="lineNum">     398 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( (b-&gt;next != b)  )</span>
+<span class="lineNum">     399 </span>                :            :         {
+<span class="lineNum">     400 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b-&gt;next == NULL) return;</span>
+<span class="lineNum">     401 </span>                :<span class="lineNoCov">          0 :         a1 = b-&gt;atom1; a2 = b-&gt;atom2;a3 = b-&gt;atom3; a4 = b-&gt;atom4;</span>
+<span class="lineNum">     402 </span>                :<span class="lineNoCov">          0 :         fprintf( where,&quot;torsion %d %d %d %d %f %d %f ;\n&quot;,</span>
+<span class="lineNum">     403 </span>                :            :                 a1-&gt;serial,a2-&gt;serial,
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :                 a3-&gt; serial,a4-&gt;serial,b-&gt;k,b-&gt;n,b-&gt;offset*rtodeg);</span>
+<span class="lineNum">     405 </span>                :<span class="lineNoCov">          0 :         b = b-&gt;next;</span>
+<span class="lineNum">     406 </span>                :            :         }
+<span class="lineNum">     407 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b-&gt;next == NULL) return;</span>
+<span class="lineNum">     408 </span>                :<span class="lineNoCov">          0 :         a1 = b-&gt;atom1; a2 = b-&gt;atom2;a3 = b-&gt;atom3; a4 = b-&gt;atom4;</span>
+<span class="lineNum">     409 </span>                :<span class="lineNoCov">          0 :         fprintf( where,&quot;torsion %d %d %d %d %f %d %f ;\n&quot;,</span>
+<span class="lineNum">     410 </span>                :            :                 a1-&gt;serial,a2-&gt;serial,
+<span class="lineNum">     411 </span>                :<span class="lineNoCov">          0 :                 a3-&gt; serial,a4-&gt;serial,b-&gt;k,b-&gt;n,b-&gt;offset*rtodeg);</span>
+<span class="lineNum">     412 </span>                :            : }       
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>                :            : /* a_torsion()
+<span class="lineNum">     415 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     416 </span>                :            : * for the atoms defined in the torsion data structure.
+<span class="lineNum">     417 </span>                :            : */
+<a name="418"><span class="lineNum">     418 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     419 </span>                :            : * V is the potential */
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 : int a_torsion( V, lambda ,ilow,ihigh,op)</span>
+<span class="lineNum">     421 </span>                :            :         float *V,lambda;
+<span class="lineNum">     422 </span>                :            :         int ilow,ihigh;
+<span class="lineNum">     423 </span>                :            :         FILE *op;
+<span class="lineNum">     424 </span>                :            : {
+<span class="lineNum">     425 </span>                :            :         TORSION *bp;
+<span class="lineNum">     426 </span>                :            : /* difference vectors */
+<span class="lineNum">     427 </span>                :            :         float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+<span class="lineNum">     428 </span>                :            : /* cross products and storage for normalizing */
+<span class="lineNum">     429 </span>                :            :         float r,cx1,cy1,cz1,cx2,cy2,cz2;
+<span class="lineNum">     430 </span>                :            :         float dp;
+<span class="lineNum">     431 </span>                :            :         ATOM *a1,*a2,*a3,*a4;
+<span class="lineNum">     432 </span>                :            : 
+<span class="lineNum">     433 </span>                :            : 
+<span class="lineNum">     434 </span>                :<span class="lineNoCov">          0 :         bp = torsion_first;</span>
+<span class="lineNum">     435 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     436 </span>                :            :        while(1)
+<span class="lineNum">     437 </span>                :            :        {
+<span class="lineNum">     438 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     439 </span>                :<span class="lineNoCov">          0 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2; a3 = bp-&gt;atom3;</span>
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :         a4 = bp-&gt;atom4;</span>
+<span class="lineNum">     441 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (a1-&gt;serial &gt;= ilow &amp;&amp; a1-&gt;serial &lt;= ihigh)</span>
+<span class="lineNum">     442 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         ||  (a2-&gt;serial &gt;= ilow &amp;&amp; a2-&gt;serial &lt;= ihigh)</span>
+<span class="lineNum">     443 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         ||  (a3-&gt;serial &gt;= ilow &amp;&amp; a3-&gt;serial &lt;= ihigh) </span>
+<span class="lineNum">     444 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         ||  (a4-&gt;serial &gt;= ilow &amp;&amp; a4-&gt;serial &lt;= ihigh) )</span>
+<span class="lineNum">     445 </span>                :            :         {
+<span class="lineNum">     446 </span>                :<span class="lineNoCov">          0 :         x1 = (a1-&gt;x -a2-&gt;x +lambda*(a1-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     447 </span>                :<span class="lineNoCov">          0 :         y1 = (a1-&gt;y -a2-&gt;y +lambda*(a1-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     448 </span>                :<span class="lineNoCov">          0 :         z1 = (a1-&gt;z -a2-&gt;z +lambda*(a1-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     449 </span>                :<span class="lineNoCov">          0 :         x2 = (a3-&gt;x -a2-&gt;x +lambda*(a3-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     450 </span>                :<span class="lineNoCov">          0 :         y2 = (a3-&gt;y -a2-&gt;y +lambda*(a3-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     451 </span>                :<span class="lineNoCov">          0 :         z2 = (a3-&gt;z -a2-&gt;z +lambda*(a3-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     452 </span>                :<span class="lineNoCov">          0 :         x3 = (a4-&gt;x -a3-&gt;x +lambda*(a4-&gt;dx-a3-&gt;dx));</span>
+<span class="lineNum">     453 </span>                :<span class="lineNoCov">          0 :         y3 = (a4-&gt;y -a3-&gt;y +lambda*(a4-&gt;dy-a3-&gt;dy));</span>
+<span class="lineNum">     454 </span>                :<span class="lineNoCov">          0 :         z3 = (a4-&gt;z -a3-&gt;z +lambda*(a4-&gt;dz-a3-&gt;dz));</span>
+<span class="lineNum">     455 </span>                :            : /* 1 cross 2 */
+<span class="lineNum">     456 </span>                :<span class="lineNoCov">          0 :         cx1 = y1*z2 - y2*z1;</span>
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :         cy1 = -x1*z2 + x2*z1;</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :         cz1 = x1*y2 - x2*y1;</span>
+<span class="lineNum">     459 </span>                :<span class="lineNoCov">          0 :         r = cx1*cx1 + cy1*cy1 + cz1*cz1;</span>
+<span class="lineNum">     460 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     461 </span>                :<span class="lineNoCov">          0 :         r = sqrt(r);</span>
+<span class="lineNum">     462 </span>                :<span class="lineNoCov">          0 :         cx1 = cx1/r;</span>
+<span class="lineNum">     463 </span>                :<span class="lineNoCov">          0 :         cy1 = cy1/r;</span>
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 :         cz1 = cz1/r;</span>
+<span class="lineNum">     465 </span>                :            : /* 3 cross 2 */
+<span class="lineNum">     466 </span>                :<span class="lineNoCov">          0 :         cx2 = y3*z2 - y2*z3;</span>
+<span class="lineNum">     467 </span>                :<span class="lineNoCov">          0 :         cy2 = -x3*z2 + x2*z3;</span>
+<span class="lineNum">     468 </span>                :<span class="lineNoCov">          0 :         cz2 = x3*y2 - x2*y3;</span>
+<span class="lineNum">     469 </span>                :<span class="lineNoCov">          0 :         r = cx2*cx2 + cy2*cy2 + cz2*cz2;</span>
+<span class="lineNum">     470 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( r &lt; TOO_SMALL) goto SKIP;</span>
+<span class="lineNum">     471 </span>                :<span class="lineNoCov">          0 :         r = sqrt(r);</span>
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 :         cx2 = cx2/r;</span>
+<span class="lineNum">     473 </span>                :<span class="lineNoCov">          0 :         cy2 = cy2/r;</span>
+<span class="lineNum">     474 </span>                :<span class="lineNoCov">          0 :         cz2 = cz2/r;</span>
+<span class="lineNum">     475 </span>                :            : /* if here everything is well determined */
+<span class="lineNum">     476 </span>                :<span class="lineNoCov">          0 :         dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */</span>
+<span class="lineNum">     477 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( dp &gt; 1.) dp = 1.; if( dp &lt; -1.) dp = -1.;</span>
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :         dp = acos(dp);</span>
+<span class="lineNum">     479 </span>                :            : /* determine the sign by triple product */
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :         r = cx1*x3 + cy1*y3 + cz1*z3;</span>
+<span class="lineNum">     481 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( r &gt; 0 ) dp =  -dp ;</span>
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :         z2 = .5*(bp-&gt;k)*( 1. + cos( bp-&gt;n * dp - bp-&gt;offset   )) ; </span>
+<span class="lineNum">     483 </span>                :<span class="lineNoCov">          0 :         *V += z2;</span>
+<span class="lineNum">     484 </span>                :<span class="lineNoCov">          0 :         fprintf(op,&quot;Torsion %s %d %s %d %s %d %s %d E %f Angle %f error %f\n&quot;</span>
+<span class="lineNum">     485 </span>                :            :                 ,a1-&gt;name,a1-&gt;serial,a2-&gt;name,a2-&gt;serial,a3-&gt;name,a3-&gt;serial,
+<span class="lineNum">     486 </span>                :<span class="lineNoCov">          0 :                 a4-&gt;name,a4-&gt;serial, z2,dp*180./3.14159265</span>
+<span class="lineNum">     487 </span>                :<span class="lineNoCov">          0 :         ,acos(-(cos(bp-&gt;n*dp-bp-&gt;offset)))*180./3.14159265 );</span>
+<span class="lineNum">     488 </span>                :            :         }
+<span class="lineNum">     489 </span>                :            : SKIP:
+<span class="lineNum">     490 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :         bp = bp-&gt;next;</span>
+<a name="492"><span class="lineNum">     492 </span>                :<span class="lineNoCov">          0 :        }</span></a>
+<span class="lineNum">     493 </span>                :            : }
+<span class="lineNum">     494 </span>                :<span class="lineNoCov">          0 : gsdg_torsion( ap )</span>
+<span class="lineNum">     495 </span>                :            : ATOM *ap;
+<span class="lineNum">     496 </span>                :            : {
+<span class="lineNum">     497 </span>                :            : TORSION *tp;
+<span class="lineNum">     498 </span>                :            : float bond_length();
+<span class="lineNum">     499 </span>                :            : float b1,b2,b3;
+<span class="lineNum">     500 </span>                :            : 
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :         tp =torsion_first;</span>
+<span class="lineNum">     502 </span>                :            :         while( 1)
+<span class="lineNum">     503 </span>                :            :         { 
+<span class="lineNum">     504 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( tp == NULL ) return 0;</span>
+<span class="lineNum">     505 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( tp-&gt;atom1 == ap)</span>
+<span class="lineNum">     506 </span>                :            :                 {
+<span class="lineNum">     507 </span>                :<span class="lineNoCov">          0 :                         b1 = bond_length(ap,tp-&gt;atom2);</span>
+<span class="lineNum">     508 </span>                :<span class="lineNoCov">          0 :                         b2 = bond_length(tp-&gt;atom2,tp-&gt;atom3);</span>
+<span class="lineNum">     509 </span>                :<span class="lineNoCov">          0 :                         b3 = bond_length(tp-&gt;atom3,tp-&gt;atom4);</span>
+<span class="lineNum">     510 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vx = b2 + .75*(b1+b3);</span>
+<span class="lineNum">     511 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vx *= ap-&gt;vx;</span>
+<span class="lineNum">     512 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vy = 10.;</span>
+<span class="lineNum">     513 </span>                :            :                 }
+<span class="lineNum">     514 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( tp-&gt;atom4 == ap)</span>
+<span class="lineNum">     515 </span>                :            :                 {
+<span class="lineNum">     516 </span>                :<span class="lineNoCov">          0 :                         b1 = bond_length(ap,tp-&gt;atom3);</span>
+<span class="lineNum">     517 </span>                :<span class="lineNoCov">          0 :                         b2 = bond_length(tp-&gt;atom2,tp-&gt;atom3);</span>
+<span class="lineNum">     518 </span>                :<span class="lineNoCov">          0 :                         b3 = bond_length(tp-&gt;atom2,tp-&gt;atom1);</span>
+<span class="lineNum">     519 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vx = b2 + .75*(b1+b3);</span>
+<span class="lineNum">     520 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vx *= ap-&gt;vx;</span>
+<span class="lineNum">     521 </span>                :<span class="lineNoCov">          0 :                         ap-&gt;vy = 10.;</span>
+<span class="lineNum">     522 </span>                :            :                 }
+<span class="lineNum">     523 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( tp == tp-&gt;next) return 0;</span>
+<span class="lineNum">     524 </span>                :<span class="lineNoCov">          0 :                 tp = tp-&gt;next;</span>
+<span class="lineNum">     525 </span>                :<span class="lineNoCov">          0 :         }</span>
+<span class="lineNum">     526 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

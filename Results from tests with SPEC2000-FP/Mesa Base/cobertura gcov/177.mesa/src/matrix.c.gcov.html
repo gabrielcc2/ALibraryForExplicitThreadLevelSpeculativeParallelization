@@ -1,0 +1,1125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/matrix.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - matrix.c<span style="font-size: 80%;"> (source / <a href="matrix.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">195</td>
+            <td class="headerCovTableEntry">398</td>
+            <td class="headerCovTableEntryLo">49.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntry">20</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">61</td>
+            <td class="headerCovTableEntry">248</td>
+            <td class="headerCovTableEntryLo">24.6 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: matrix.c,v 1.22 1997/10/16 23:37:23 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: matrix.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.22  1997/10/16 23:37:23  brianp
+<span class="lineNum">      27 </span>                :            :  * fixed scotter's email address
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.21  1997/08/13 01:54:34  brianp
+<span class="lineNum">      30 </span>                :            :  * new matrix invert code from Scott McCaskill
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.20  1997/07/24 01:23:16  brianp
+<span class="lineNum">      33 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.19  1997/05/30 02:21:43  brianp
+<span class="lineNum">      36 </span>                :            :  * gl_PopMatrix() set ctx-&gt;New*Matrix flag incorrectly
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.18  1997/05/28 04:06:03  brianp
+<span class="lineNum">      39 </span>                :            :  * implemented projection near/far value stack for Driver.NearFar() function
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.17  1997/05/28 03:25:43  brianp
+<span class="lineNum">      42 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.16  1997/05/01 01:39:40  brianp
+<span class="lineNum">      45 </span>                :            :  * replace sqrt() with GL_SQRT()
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.15  1997/04/21 01:20:41  brianp
+<span class="lineNum">      48 </span>                :            :  * added MATRIX_2D_NO_ROT
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.14  1997/04/20 20:28:49  brianp
+<span class="lineNum">      51 </span>                :            :  * replaced abort() with gl_problem()
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.13  1997/04/20 16:31:08  brianp
+<span class="lineNum">      54 </span>                :            :  * added NearFar device driver function
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.12  1997/04/20 16:18:15  brianp
+<span class="lineNum">      57 </span>                :            :  * added glOrtho and glFrustum API pointers
+<span class="lineNum">      58 </span>                :            :  *
+<span class="lineNum">      59 </span>                :            :  * Revision 1.11  1997/04/01 04:23:53  brianp
+<span class="lineNum">      60 </span>                :            :  * added gl_analyze_*_matrix() functions
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  * Revision 1.10  1997/02/10 19:47:53  brianp
+<span class="lineNum">      63 </span>                :            :  * moved buffer resize code out of gl_Viewport() into gl_ResizeBuffersMESA()
+<span class="lineNum">      64 </span>                :            :  *
+<span class="lineNum">      65 </span>                :            :  * Revision 1.9  1997/01/31 23:32:40  brianp
+<span class="lineNum">      66 </span>                :            :  * now clear depth buffer after reallocation due to window resize
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  * Revision 1.8  1997/01/29 19:06:04  brianp
+<span class="lineNum">      69 </span>                :            :  * removed extra, local definition of Identity[] matrix
+<span class="lineNum">      70 </span>                :            :  *
+<span class="lineNum">      71 </span>                :            :  * Revision 1.7  1997/01/28 22:19:17  brianp
+<span class="lineNum">      72 </span>                :            :  * new matrix inversion code from Stephane Rehel
+<span class="lineNum">      73 </span>                :            :  *
+<span class="lineNum">      74 </span>                :            :  * Revision 1.6  1996/12/22 17:53:11  brianp
+<span class="lineNum">      75 </span>                :            :  * faster invert_matrix() function from scotter@iname.com
+<span class="lineNum">      76 </span>                :            :  *
+<span class="lineNum">      77 </span>                :            :  * Revision 1.5  1996/12/02 18:58:34  brianp
+<span class="lineNum">      78 </span>                :            :  * gl_rotation_matrix() now returns identity matrix if given a 0 rotation axis
+<span class="lineNum">      79 </span>                :            :  *
+<span class="lineNum">      80 </span>                :            :  * Revision 1.4  1996/09/27 01:29:05  brianp
+<span class="lineNum">      81 </span>                :            :  * added missing default cases to switches
+<span class="lineNum">      82 </span>                :            :  *
+<span class="lineNum">      83 </span>                :            :  * Revision 1.3  1996/09/15 14:18:37  brianp
+<span class="lineNum">      84 </span>                :            :  * now use GLframebuffer and GLvisual
+<span class="lineNum">      85 </span>                :            :  *
+<span class="lineNum">      86 </span>                :            :  * Revision 1.2  1996/09/14 06:46:04  brianp
+<span class="lineNum">      87 </span>                :            :  * better matmul() from Jacques Leroy
+<span class="lineNum">      88 </span>                :            :  *
+<span class="lineNum">      89 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      90 </span>                :            :  * Initial revision
+<span class="lineNum">      91 </span>                :            :  *
+<span class="lineNum">      92 </span>                :            :  */
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :            : /*
+<span class="lineNum">      96 </span>                :            :  * Matrix operations
+<span class="lineNum">      97 </span>                :            :  *
+<span class="lineNum">      98 </span>                :            :  *
+<span class="lineNum">      99 </span>                :            :  * NOTES:
+<span class="lineNum">     100 </span>                :            :  * 1. 4x4 transformation matrices are stored in memory in column major order.
+<span class="lineNum">     101 </span>                :            :  * 2. Points/vertices are to be thought of as column vectors.
+<span class="lineNum">     102 </span>                :            :  * 3. Transformation of a point p by a matrix M is: p' = M * p
+<span class="lineNum">     103 </span>                :            :  *
+<span class="lineNum">     104 </span>                :            :  */
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">     108 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">     109 </span>                :            : #else
+<span class="lineNum">     110 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">     111 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">     112 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">     113 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">     114 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">     115 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">     116 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">     117 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">     118 </span>                :            : #include &quot;mmath.h&quot;
+<span class="lineNum">     119 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">     120 </span>                :            : #endif
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>                :            : static GLfloat Identity[16] = {
+<span class="lineNum">     125 </span>                :            :    1.0, 0.0, 0.0, 0.0,
+<span class="lineNum">     126 </span>                :            :    0.0, 1.0, 0.0, 0.0,
+<span class="lineNum">     127 </span>                :            :    0.0, 0.0, 1.0, 0.0,
+<span class="lineNum">     128 </span>                :            :    0.0, 0.0, 0.0, 1.0
+<span class="lineNum">     129 </span>                :            : };
+<span class="lineNum">     130 </span>                :            : 
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>                :            : 
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>                :            : static void print_matrix( const GLfloat m[16] )
+<span class="lineNum">     135 </span>                :            : {
+<span class="lineNum">     136 </span>                :            :    int i;
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>                :            :    for (i=0;i&lt;4;i++) {
+<span class="lineNum">     139 </span>                :            :       printf(&quot;%f %f %f %f\n&quot;, m[i], m[4+i], m[8+i], m[12+i] );
+<span class="lineNum">     140 </span>                :            :    }
+<span class="lineNum">     141 </span>                :            : }
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>                :            : 
+<span class="lineNum">     145 </span>                :            : /*
+<span class="lineNum">     146 </span>                :            :  * Perform a 4x4 matrix multiplication  (product = a x b).
+<span class="lineNum">     147 </span>                :            :  * Input:  a, b - matrices to multiply
+<span class="lineNum">     148 </span>                :            :  * Output:  product - product of a and b
+<span class="lineNum">     149 </span>                :            :  * WARNING: (product != b) assumed
+<a name="150"><span class="lineNum">     150 </span>                :            :  * NOTE:    (product == a) allowed    </a>
+<span class="lineNum">     151 </span>                :            :  */
+<span class="lineNum">     152 </span>                :<span class="lineCov">       3001 : static void matmul( GLfloat *product, const GLfloat *a, const GLfloat *b )</span>
+<span class="lineNum">     153 </span>                :            : {
+<span class="lineNum">     154 </span>                :            :    /* This matmul was contributed by Thomas Malik */
+<span class="lineNum">     155 </span>                :            :    GLint i;
+<span class="lineNum">     156 </span>                :            : 
+<span class="lineNum">     157 </span>                :            : #define A(row,col)  a[(col&lt;&lt;2)+row]
+<span class="lineNum">     158 </span>                :            : #define B(row,col)  b[(col&lt;&lt;2)+row]
+<span class="lineNum">     159 </span>                :            : #define P(row,col)  product[(col&lt;&lt;2)+row]
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            :    /* i-te Zeile */
+<span class="lineNum">     162 </span>        [<span class="branchCov" title="Branch 0 was taken 12004 times"> + </span><span class="branchCov" title="Branch 1 was taken 3001 times"> + </span>]:<span class="lineCov">      15005 :    for (i = 0; i &lt; 4; i++) {</span>
+<span class="lineNum">     163 </span>                :<span class="lineCov">      12004 :       GLfloat ai0=A(i,0),  ai1=A(i,1),  ai2=A(i,2),  ai3=A(i,3);</span>
+<span class="lineNum">     164 </span>                :<span class="lineCov">      12004 :       P(i,0) = ai0 * B(0,0) + ai1 * B(1,0) + ai2 * B(2,0) + ai3 * B(3,0);</span>
+<span class="lineNum">     165 </span>                :<span class="lineCov">      12004 :       P(i,1) = ai0 * B(0,1) + ai1 * B(1,1) + ai2 * B(2,1) + ai3 * B(3,1);</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">      12004 :       P(i,2) = ai0 * B(0,2) + ai1 * B(1,2) + ai2 * B(2,2) + ai3 * B(3,2);</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">      12004 :       P(i,3) = ai0 * B(0,3) + ai1 * B(1,3) + ai2 * B(2,3) + ai3 * B(3,3);</span>
+<span class="lineNum">     168 </span>                :            :    }
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>                :            : #undef A
+<span class="lineNum">     171 </span>                :            : #undef B
+<span class="lineNum">     172 </span>                :            : #undef P
+<span class="lineNum">     173 </span>                :<span class="lineCov">       3001 : }</span>
+<span class="lineNum">     174 </span>                :            : 
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :            : /*
+<span class="lineNum">     178 </span>                :            :  * Compute the inverse of a 4x4 matrix.
+<span class="lineNum">     179 </span>                :            :  *
+<span class="lineNum">     180 </span>                :            :  * From an algorithm by V. Strassen, 1969, _Numerishe Mathematik_, vol. 13,
+<span class="lineNum">     181 </span>                :            :  * pp. 354-356.
+<span class="lineNum">     182 </span>                :            :  * 60 multiplies, 24 additions, 10 subtractions, 8 negations, 2 divisions,
+<span class="lineNum">     183 </span>                :            :  * 48 assignments, _0_ branches
+<span class="lineNum">     184 </span>                :            :  *
+<span class="lineNum">     185 </span>                :            :  * This implementation by Scott McCaskill
+<span class="lineNum">     186 </span>                :            :  */
+<span class="lineNum">     187 </span>                :            :  
+<span class="lineNum">     188 </span>                :            : typedef GLfloat Mat2[2][2];
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :            : enum {
+<span class="lineNum">     191 </span>                :            :     M00 = 0, M01 = 4, M02 = 8, M03 = 12,
+<span class="lineNum">     192 </span>                :            :     M10 = 1, M11 = 5, M12 = 9, M13 = 13,
+<span class="lineNum">     193 </span>                :            :     M20 = 2, M21 = 6, M22 = 10,M23 = 14,
+<span class="lineNum">     194 </span>                :            :     M30 = 3, M31 = 7, M32 = 11,M33 = 15
+<a name="195"><span class="lineNum">     195 </span>                :            : };</a>
+<span class="lineNum">     196 </span>                :            : 
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 : static void invert_matrix_general( const GLfloat *m, GLfloat *out )</span>
+<span class="lineNum">     198 </span>                :            : {
+<span class="lineNum">     199 </span>                :            :    Mat2 r1, r2, r3, r4, r5, r6, r7;
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :    const GLfloat * A = m;</span>
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :    GLfloat *       C = out;</span>
+<span class="lineNum">     202 </span>                :            :    GLfloat one_over_det;
+<span class="lineNum">     203 </span>                :            : 
+<span class="lineNum">     204 </span>                :            :    /*
+<span class="lineNum">     205 </span>                :            :     * A is the 4x4 source matrix (to be inverted).
+<span class="lineNum">     206 </span>                :            :     * C is the 4x4 destination matrix
+<span class="lineNum">     207 </span>                :            :     * a11 is the 2x2 matrix in the upper left quadrant of A
+<span class="lineNum">     208 </span>                :            :     * a12 is the 2x2 matrix in the upper right quadrant of A
+<span class="lineNum">     209 </span>                :            :     * a21 is the 2x2 matrix in the lower left quadrant of A
+<span class="lineNum">     210 </span>                :            :     * a22 is the 2x2 matrix in the lower right quadrant of A
+<span class="lineNum">     211 </span>                :            :     * similarly, cXX are the 2x2 quadrants of the destination matrix
+<span class="lineNum">     212 </span>                :            :     */
+<span class="lineNum">     213 </span>                :            : 
+<span class="lineNum">     214 </span>                :            :    /* R1 = inverse( a11 ) */
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :    one_over_det = 1.0f / ( ( A[M00] * A[M11] ) - ( A[M10] * A[M01] ) );</span>
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :    r1[0][0] = one_over_det * A[M11];</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :    r1[0][1] = one_over_det * -A[M01];</span>
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :    r1[1][0] = one_over_det * -A[M10];</span>
+<span class="lineNum">     219 </span>                :<span class="lineNoCov">          0 :    r1[1][1] = one_over_det * A[M00];</span>
+<span class="lineNum">     220 </span>                :            : 
+<span class="lineNum">     221 </span>                :            :    /* R2 = a21 x R1 */
+<span class="lineNum">     222 </span>                :<span class="lineNoCov">          0 :    r2[0][0] = A[M20] * r1[0][0] + A[M21] * r1[1][0];</span>
+<span class="lineNum">     223 </span>                :<span class="lineNoCov">          0 :    r2[0][1] = A[M20] * r1[0][1] + A[M21] * r1[1][1];</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :    r2[1][0] = A[M30] * r1[0][0] + A[M31] * r1[1][0];</span>
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :    r2[1][1] = A[M30] * r1[0][1] + A[M31] * r1[1][1];</span>
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :            :    /* R3 = R1 x a12 */
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :    r3[0][0] = r1[0][0] * A[M02] + r1[0][1] * A[M12];</span>
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :    r3[0][1] = r1[0][0] * A[M03] + r1[0][1] * A[M13];</span>
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :    r3[1][0] = r1[1][0] * A[M02] + r1[1][1] * A[M12];</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :    r3[1][1] = r1[1][0] * A[M03] + r1[1][1] * A[M13];</span>
+<span class="lineNum">     232 </span>                :            : 
+<span class="lineNum">     233 </span>                :            :    /* R4 = a21 x R3 */
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :    r4[0][0] = A[M20] * r3[0][0] + A[M21] * r3[1][0];</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :    r4[0][1] = A[M20] * r3[0][1] + A[M21] * r3[1][1];</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :    r4[1][0] = A[M30] * r3[0][0] + A[M31] * r3[1][0];</span>
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :    r4[1][1] = A[M30] * r3[0][1] + A[M31] * r3[1][1];</span>
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>                :            :    /* R5 = R4 - a22 */
+<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :    r5[0][0] = r4[0][0] - A[M22];</span>
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :    r5[0][1] = r4[0][1] - A[M23];</span>
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :    r5[1][0] = r4[1][0] - A[M32];</span>
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :    r5[1][1] = r4[1][1] - A[M33];</span>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :            :    /* R6 = inverse( R5 ) */
+<span class="lineNum">     246 </span>                :<span class="lineNoCov">          0 :    one_over_det = 1.0f / ( ( r5[0][0] * r5[1][1] ) - ( r5[1][0] * r5[0][1] ) );</span>
+<span class="lineNum">     247 </span>                :<span class="lineNoCov">          0 :    r6[0][0] = one_over_det * r5[1][1];</span>
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :    r6[0][1] = one_over_det * -r5[0][1];</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :    r6[1][0] = one_over_det * -r5[1][0];</span>
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :    r6[1][1] = one_over_det * r5[0][0];</span>
+<span class="lineNum">     251 </span>                :            : 
+<span class="lineNum">     252 </span>                :            :    /* c12 = R3 x R6 */
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :    C[M02] = r3[0][0] * r6[0][0] + r3[0][1] * r6[1][0];</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :    C[M03] = r3[0][0] * r6[0][1] + r3[0][1] * r6[1][1];</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :    C[M12] = r3[1][0] * r6[0][0] + r3[1][1] * r6[1][0];</span>
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 :    C[M13] = r3[1][0] * r6[0][1] + r3[1][1] * r6[1][1];</span>
+<span class="lineNum">     257 </span>                :            : 
+<span class="lineNum">     258 </span>                :            :    /* c21 = R6 x R2 */
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :    C[M20] = r6[0][0] * r2[0][0] + r6[0][1] * r2[1][0];</span>
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :    C[M21] = r6[0][0] * r2[0][1] + r6[0][1] * r2[1][1];</span>
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :    C[M30] = r6[1][0] * r2[0][0] + r6[1][1] * r2[1][0];</span>
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :    C[M31] = r6[1][0] * r2[0][1] + r6[1][1] * r2[1][1];</span>
+<span class="lineNum">     263 </span>                :            : 
+<span class="lineNum">     264 </span>                :            :    /* R7 = R3 x c21 */
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :    r7[0][0] = r3[0][0] * C[M20] + r3[0][1] * C[M30];</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :    r7[0][1] = r3[0][0] * C[M21] + r3[0][1] * C[M31];</span>
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :    r7[1][0] = r3[1][0] * C[M20] + r3[1][1] * C[M30];</span>
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :    r7[1][1] = r3[1][0] * C[M21] + r3[1][1] * C[M31];</span>
+<span class="lineNum">     269 </span>                :            : 
+<span class="lineNum">     270 </span>                :            :    /* c11 = R1 - R7 */
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :    C[M00] = r1[0][0] - r7[0][0];</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :    C[M01] = r1[0][1] - r7[0][1];</span>
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :    C[M10] = r1[1][0] - r7[1][0];</span>
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :    C[M11] = r1[1][1] - r7[1][1];</span>
+<span class="lineNum">     275 </span>                :            : 
+<span class="lineNum">     276 </span>                :            :    /* c22 = -R6 */
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :    C[M22] = -r6[0][0];</span>
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :    C[M23] = -r6[0][1];</span>
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :    C[M32] = -r6[1][0];</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :    C[M33] = -r6[1][1];</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     282 </span>                :            : 
+<span class="lineNum">     283 </span>                :            : 
+<span class="lineNum">     284 </span>                :            : /*
+<span class="lineNum">     285 </span>                :            :  * Invert matrix m.  This algorithm contributed by Stephane Rehel
+<a name="286"><span class="lineNum">     286 </span>                :            :  * &lt;rehel@worldnet.fr&gt;</a>
+<span class="lineNum">     287 </span>                :            :  */
+<span class="lineNum">     288 </span>                :<span class="lineCov">       1000 : static void invert_matrix( const GLfloat *m, GLfloat *out )</span>
+<span class="lineNum">     289 </span>                :            : {
+<span class="lineNum">     290 </span>                :            : /* NB. OpenGL Matrices are COLUMN major. */
+<span class="lineNum">     291 </span>                :            : #define MAT(m,r,c) (m)[(c)*4+(r)]
+<span class="lineNum">     292 </span>                :            : 
+<span class="lineNum">     293 </span>                :            : /* Here's some shorthand converting standard (row,column) to index. */
+<span class="lineNum">     294 </span>                :            : #define m11 MAT(m,0,0)
+<span class="lineNum">     295 </span>                :            : #define m12 MAT(m,0,1)
+<span class="lineNum">     296 </span>                :            : #define m13 MAT(m,0,2)
+<span class="lineNum">     297 </span>                :            : #define m14 MAT(m,0,3)
+<span class="lineNum">     298 </span>                :            : #define m21 MAT(m,1,0)
+<span class="lineNum">     299 </span>                :            : #define m22 MAT(m,1,1)
+<span class="lineNum">     300 </span>                :            : #define m23 MAT(m,1,2)
+<span class="lineNum">     301 </span>                :            : #define m24 MAT(m,1,3)
+<span class="lineNum">     302 </span>                :            : #define m31 MAT(m,2,0)
+<span class="lineNum">     303 </span>                :            : #define m32 MAT(m,2,1)
+<span class="lineNum">     304 </span>                :            : #define m33 MAT(m,2,2)
+<span class="lineNum">     305 </span>                :            : #define m34 MAT(m,2,3)
+<span class="lineNum">     306 </span>                :            : #define m41 MAT(m,3,0)
+<span class="lineNum">     307 </span>                :            : #define m42 MAT(m,3,1)
+<span class="lineNum">     308 </span>                :            : #define m43 MAT(m,3,2)
+<span class="lineNum">     309 </span>                :            : #define m44 MAT(m,3,3)
+<span class="lineNum">     310 </span>                :            : 
+<span class="lineNum">     311 </span>                :            :    register GLfloat det;
+<span class="lineNum">     312 </span>                :            :    GLfloat tmp[16]; /* Allow out == in. */
+<span class="lineNum">     313 </span>                :            : 
+<span class="lineNum">     314 </span>[<span class="branchCov" title="Branch 0 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       1000 :    if( m41 != 0. || m42 != 0. || m43 != 0. || m44 != 1. ) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchNoCov" title="Branch 6 was not taken"> - </span><span class="branchCov" title="Branch 7 was taken 1000 times"> + </span>]
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :       invert_matrix_general(m, out);</span>
+<span class="lineNum">     316 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     317 </span>                :            :    }
+<span class="lineNum">     318 </span>                :            : 
+<span class="lineNum">     319 </span>                :            :    /* Inverse = adjoint / det. (See linear algebra texts.)*/
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :<span class="lineCov">       1000 :    tmp[0]= m22 * m33 - m23 * m32;</span>
+<span class="lineNum">     322 </span>                :<span class="lineCov">       1000 :    tmp[1]= m23 * m31 - m21 * m33;</span>
+<span class="lineNum">     323 </span>                :<span class="lineCov">       1000 :    tmp[2]= m21 * m32 - m22 * m31;</span>
+<span class="lineNum">     324 </span>                :            : 
+<span class="lineNum">     325 </span>                :            :    /* Compute determinant as early as possible using these cofactors. */
+<span class="lineNum">     326 </span>                :<span class="lineCov">       1000 :    det= m11 * tmp[0] + m12 * tmp[1] + m13 * tmp[2];</span>
+<span class="lineNum">     327 </span>                :            : 
+<span class="lineNum">     328 </span>                :            :    /* Run singularity test. */
+<span class="lineNum">     329 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :    if (det == 0.0F) {</span>
+<span class="lineNum">     330 </span>                :            :       /* printf(&quot;invert_matrix: Warning: Singular matrix.\n&quot;); */
+<span class="lineNum">     331 </span>                :            :       MEMCPY( out, Identity, 16*sizeof(GLfloat) );
+<span class="lineNum">     332 </span>                :            :    }
+<span class="lineNum">     333 </span>                :            :    else {
+<span class="lineNum">     334 </span>                :            :       GLfloat d12, d13, d23, d24, d34, d41;
+<span class="lineNum">     335 </span>                :            :       register GLfloat im11, im12, im13, im14;
+<span class="lineNum">     336 </span>                :            : 
+<span class="lineNum">     337 </span>                :<span class="lineCov">       1000 :       det= 1. / det;</span>
+<span class="lineNum">     338 </span>                :            : 
+<span class="lineNum">     339 </span>                :            :       /* Compute rest of inverse. */
+<span class="lineNum">     340 </span>                :<span class="lineCov">       1000 :       tmp[0] *= det;</span>
+<span class="lineNum">     341 </span>                :<span class="lineCov">       1000 :       tmp[1] *= det;</span>
+<span class="lineNum">     342 </span>                :<span class="lineCov">       1000 :       tmp[2] *= det;</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">       1000 :       tmp[3]  = 0.;</span>
+<span class="lineNum">     344 </span>                :            : 
+<span class="lineNum">     345 </span>                :<span class="lineCov">       1000 :       im11= m11 * det;</span>
+<span class="lineNum">     346 </span>                :<span class="lineCov">       1000 :       im12= m12 * det;</span>
+<span class="lineNum">     347 </span>                :<span class="lineCov">       1000 :       im13= m13 * det;</span>
+<span class="lineNum">     348 </span>                :<span class="lineCov">       1000 :       im14= m14 * det;</span>
+<span class="lineNum">     349 </span>                :<span class="lineCov">       1000 :       tmp[4] = im13 * m32 - im12 * m33;</span>
+<span class="lineNum">     350 </span>                :<span class="lineCov">       1000 :       tmp[5] = im11 * m33 - im13 * m31;</span>
+<span class="lineNum">     351 </span>                :<span class="lineCov">       1000 :       tmp[6] = im12 * m31 - im11 * m32;</span>
+<span class="lineNum">     352 </span>                :<span class="lineCov">       1000 :       tmp[7] = 0.;</span>
+<span class="lineNum">     353 </span>                :            : 
+<span class="lineNum">     354 </span>                :            :       /* Pre-compute 2x2 dets for first two rows when computing */
+<span class="lineNum">     355 </span>                :            :       /* cofactors of last two rows. */
+<span class="lineNum">     356 </span>                :<span class="lineCov">       1000 :       d12 = im11*m22 - m21*im12;</span>
+<span class="lineNum">     357 </span>                :<span class="lineCov">       1000 :       d13 = im11*m23 - m21*im13;</span>
+<span class="lineNum">     358 </span>                :<span class="lineCov">       1000 :       d23 = im12*m23 - m22*im13;</span>
+<span class="lineNum">     359 </span>                :<span class="lineCov">       1000 :       d24 = im12*m24 - m22*im14;</span>
+<span class="lineNum">     360 </span>                :<span class="lineCov">       1000 :       d34 = im13*m24 - m23*im14;</span>
+<span class="lineNum">     361 </span>                :<span class="lineCov">       1000 :       d41 = im14*m21 - m24*im11;</span>
+<span class="lineNum">     362 </span>                :            : 
+<span class="lineNum">     363 </span>                :<span class="lineCov">       1000 :       tmp[8] =  d23;</span>
+<span class="lineNum">     364 </span>                :<span class="lineCov">       1000 :       tmp[9] = -d13;</span>
+<span class="lineNum">     365 </span>                :<span class="lineCov">       1000 :       tmp[10] = d12;</span>
+<span class="lineNum">     366 </span>                :<span class="lineCov">       1000 :       tmp[11] = 0.;</span>
+<span class="lineNum">     367 </span>                :            : 
+<span class="lineNum">     368 </span>                :<span class="lineCov">       1000 :       tmp[12] = -(m32 * d34 - m33 * d24 + m34 * d23);</span>
+<span class="lineNum">     369 </span>                :<span class="lineCov">       1000 :       tmp[13] =  (m31 * d34 + m33 * d41 + m34 * d13);</span>
+<span class="lineNum">     370 </span>                :<span class="lineCov">       1000 :       tmp[14] = -(m31 * d24 + m32 * d41 + m34 * d12);</span>
+<span class="lineNum">     371 </span>                :<span class="lineCov">       1000 :       tmp[15] =  1.;</span>
+<span class="lineNum">     372 </span>                :            : 
+<span class="lineNum">     373 </span>                :            :       MEMCPY(out, tmp, 16*sizeof(GLfloat));
+<span class="lineNum">     374 </span>                :            :   }
+<span class="lineNum">     375 </span>                :            : 
+<span class="lineNum">     376 </span>                :            : #undef m11
+<span class="lineNum">     377 </span>                :            : #undef m12
+<span class="lineNum">     378 </span>                :            : #undef m13
+<span class="lineNum">     379 </span>                :            : #undef m14
+<span class="lineNum">     380 </span>                :            : #undef m21
+<span class="lineNum">     381 </span>                :            : #undef m22
+<span class="lineNum">     382 </span>                :            : #undef m23
+<span class="lineNum">     383 </span>                :            : #undef m24
+<span class="lineNum">     384 </span>                :            : #undef m31
+<span class="lineNum">     385 </span>                :            : #undef m32
+<span class="lineNum">     386 </span>                :            : #undef m33
+<span class="lineNum">     387 </span>                :            : #undef m34
+<span class="lineNum">     388 </span>                :            : #undef m41
+<span class="lineNum">     389 </span>                :            : #undef m42
+<span class="lineNum">     390 </span>                :            : #undef m43
+<span class="lineNum">     391 </span>                :            : #undef m44
+<span class="lineNum">     392 </span>                :            : #undef MAT
+<span class="lineNum">     393 </span>                :            : }
+<span class="lineNum">     394 </span>                :            : 
+<span class="lineNum">     395 </span>                :            : 
+<span class="lineNum">     396 </span>                :            : 
+<span class="lineNum">     397 </span>                :            : /*
+<a name="398"><span class="lineNum">     398 </span>                :            :  * Determine if the given matrix is the identity matrix.</a>
+<span class="lineNum">     399 </span>                :            :  */
+<span class="lineNum">     400 </span>                :<span class="lineCov">       1001 : static GLboolean is_identity( const GLfloat m[16] )</span>
+<span class="lineNum">     401 </span>                :            : {
+<span class="lineNum">     402 </span>[<span class="branchCov" title="Branch 0 was taken 14 times"> + </span><span class="branchCov" title="Branch 1 was taken 987 times"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 14 times"> + </span>]:<span class="lineCov">       1001 :    if (   m[0]==1.0F &amp;&amp; m[4]==0.0F &amp;&amp; m[ 8]==0.0F &amp;&amp; m[12]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     403 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; m[1]==0.0F &amp;&amp; m[5]==1.0F &amp;&amp; m[ 9]==0.0F &amp;&amp; m[13]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     404 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F &amp;&amp; m[10]==1.0F &amp;&amp; m[14]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     405 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     406 </span>                :<span class="lineNoCov">          0 :       return GL_TRUE;</span>
+<span class="lineNum">     407 </span>                :            :    }
+<span class="lineNum">     408 </span>                :            :    else {
+<span class="lineNum">     409 </span>                :<span class="lineCov">       1001 :       return GL_FALSE;</span>
+<span class="lineNum">     410 </span>                :            :    }
+<span class="lineNum">     411 </span>                :            : }
+<span class="lineNum">     412 </span>                :            : 
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>                :            : /*
+<span class="lineNum">     415 </span>                :            :  * Examine the current modelview matrix to determine its type.
+<a name="416"><span class="lineNum">     416 </span>                :            :  * Later we use the matrix type to optimize vertex transformations.</a>
+<span class="lineNum">     417 </span>                :            :  */
+<span class="lineNum">     418 </span>                :<span class="lineCov">       1000 : void gl_analyze_modelview_matrix( GLcontext *ctx )</span>
+<span class="lineNum">     419 </span>                :            : {
+<span class="lineNum">     420 </span>                :<span class="lineCov">       1000 :    const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     421 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :    if (is_identity(m)) {</span>
+<span class="lineNum">     422 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ModelViewMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     423 </span>                :            :    }
+<span class="lineNum">     424 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">       1000 :    else if (                 m[4]==0.0F &amp;&amp; m[ 8]==0.0F               </span>
+<span class="lineNum">     425 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[1]==0.0F               &amp;&amp; m[ 9]==0.0F</span>
+<span class="lineNum">     426 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F &amp;&amp; m[10]==1.0F &amp;&amp; m[14]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     427 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     428 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ModelViewMatrixType = MATRIX_2D_NO_ROT;</span>
+<span class="lineNum">     429 </span>                :            :    }
+<span class="lineNum">     430 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :    else if (                               m[ 8]==0.0F               </span>
+<span class="lineNum">     431 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp;                             m[ 9]==0.0F</span>
+<span class="lineNum">     432 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F &amp;&amp; m[10]==1.0F &amp;&amp; m[14]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     433 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     434 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ModelViewMatrixType = MATRIX_2D;</span>
+<span class="lineNum">     435 </span>                :            :    }
+<span class="lineNum">     436 </span>[<span class="branchCov" title="Branch 0 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       1000 :    else if (m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     437 </span>                :<span class="lineCov">       1000 :       ctx-&gt;ModelViewMatrixType = MATRIX_3D;</span>
+<span class="lineNum">     438 </span>                :            :    }
+<span class="lineNum">     439 </span>                :            :    else {
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ModelViewMatrixType = MATRIX_GENERAL;</span>
+<span class="lineNum">     441 </span>                :            :    }
+<span class="lineNum">     442 </span>                :            : 
+<span class="lineNum">     443 </span>                :<span class="lineCov">       1000 :    invert_matrix( ctx-&gt;ModelViewMatrix, ctx-&gt;ModelViewInv );</span>
+<span class="lineNum">     444 </span>                :<span class="lineCov">       1000 :    ctx-&gt;NewModelViewMatrix = GL_FALSE;</span>
+<span class="lineNum">     445 </span>                :<span class="lineCov">       1000 : }</span>
+<span class="lineNum">     446 </span>                :            : 
+<span class="lineNum">     447 </span>                :            : 
+<span class="lineNum">     448 </span>                :            : 
+<span class="lineNum">     449 </span>                :            : /*
+<span class="lineNum">     450 </span>                :            :  * Examine the current projection matrix to determine its type.
+<a name="451"><span class="lineNum">     451 </span>                :            :  * Later we use the matrix type to optimize vertex transformations.</a>
+<span class="lineNum">     452 </span>                :            :  */
+<span class="lineNum">     453 </span>                :<span class="lineCov">          1 : void gl_analyze_projection_matrix( GLcontext *ctx )</span>
+<span class="lineNum">     454 </span>                :            : {
+<span class="lineNum">     455 </span>                :            :    /* look for common-case ortho and perspective matrices */
+<span class="lineNum">     456 </span>                :<span class="lineCov">          1 :    const GLfloat *m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     457 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span>]:<span class="lineCov">          1 :    if (is_identity(m)) {</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ProjectionMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     459 </span>                :            :    }
+<span class="lineNum">     460 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :    else if (                 m[4]==0.0F &amp;&amp; m[8] ==0.0F</span>
+<span class="lineNum">     461 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[1]==0.0F               &amp;&amp; m[9] ==0.0F</span>
+<span class="lineNum">     462 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F</span>
+<span class="lineNum">     463 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchCov" title="Branch 5 was taken 1 time"> + </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ProjectionMatrixType = MATRIX_ORTHO;</span>
+<span class="lineNum">     465 </span>                :            :    }
+<span class="lineNum">     466 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :    else if (                 m[4]==0.0F                 &amp;&amp; m[12]==0.0F</span>
+<span class="lineNum">     467 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[1]==0.0F                               &amp;&amp; m[13]==0.0F</span>
+<span class="lineNum">     468 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F</span>
+<span class="lineNum">     469 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :             &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==-1.0F &amp;&amp; m[15]==0.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     470 </span>                :<span class="lineCov">          1 :       ctx-&gt;ProjectionMatrixType = MATRIX_PERSPECTIVE;</span>
+<span class="lineNum">     471 </span>                :            :    }
+<span class="lineNum">     472 </span>                :            :    else {
+<span class="lineNum">     473 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;ProjectionMatrixType = MATRIX_GENERAL;</span>
+<span class="lineNum">     474 </span>                :            :    }
+<span class="lineNum">     475 </span>                :            : 
+<span class="lineNum">     476 </span>                :<span class="lineCov">          1 :    ctx-&gt;NewProjectionMatrix = GL_FALSE;</span>
+<span class="lineNum">     477 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     478 </span>                :            : 
+<span class="lineNum">     479 </span>                :            : 
+<span class="lineNum">     480 </span>                :            : 
+<span class="lineNum">     481 </span>                :            : /*
+<span class="lineNum">     482 </span>                :            :  * Examine the current texture matrix to determine its type.
+<a name="483"><span class="lineNum">     483 </span>                :            :  * Later we use the matrix type to optimize texture coordinate transformations.</a>
+<span class="lineNum">     484 </span>                :            :  */
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 : void gl_analyze_texture_matrix( GLcontext *ctx )</span>
+<span class="lineNum">     486 </span>                :            : {
+<span class="lineNum">     487 </span>                :<span class="lineNoCov">          0 :    const GLfloat *m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     488 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (is_identity(m)) {</span>
+<span class="lineNum">     489 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;TextureMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     490 </span>                :            :    }
+<span class="lineNum">     491 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (                               m[ 8]==0.0F               </span>
+<span class="lineNum">     492 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp;                             m[ 9]==0.0F</span>
+<span class="lineNum">     493 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[2]==0.0F &amp;&amp; m[6]==0.0F &amp;&amp; m[10]==1.0F &amp;&amp; m[14]==0.0F</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     494 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             &amp;&amp; m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     495 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;TextureMatrixType = MATRIX_2D;</span>
+<span class="lineNum">     496 </span>                :            :    }
+<span class="lineNum">     497 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (m[3]==0.0F &amp;&amp; m[7]==0.0F &amp;&amp; m[11]==0.0F &amp;&amp; m[15]==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;TextureMatrixType = MATRIX_3D;</span>
+<span class="lineNum">     499 </span>                :            :    }
+<span class="lineNum">     500 </span>                :            :    else {
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;TextureMatrixType = MATRIX_GENERAL;</span>
+<span class="lineNum">     502 </span>                :            :    }
+<span class="lineNum">     503 </span>                :            : 
+<span class="lineNum">     504 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;NewTextureMatrix = GL_FALSE;</span>
+<span class="lineNum">     505 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     506 </span>                :            : 
+<a name="507"><span class="lineNum">     507 </span>                :            : </a>
+<span class="lineNum">     508 </span>                :            : 
+<span class="lineNum">     509 </span>                :<span class="lineCov">          1 : void gl_Frustum( GLcontext *ctx,</span>
+<span class="lineNum">     510 </span>                :            :                  GLdouble left, GLdouble right,
+<span class="lineNum">     511 </span>                :            :                  GLdouble bottom, GLdouble top,
+<span class="lineNum">     512 </span>                :            :                  GLdouble nearval, GLdouble farval )
+<span class="lineNum">     513 </span>                :            : {
+<span class="lineNum">     514 </span>                :            :    GLfloat x, y, a, b, c, d;
+<span class="lineNum">     515 </span>                :            :    GLfloat m[16];
+<span class="lineNum">     516 </span>                :            : 
+<span class="lineNum">     517 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          1 :    if (nearval&lt;=0.0 || farval&lt;=0.0) {</span>
+<span class="lineNum">     518 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_VALUE, &quot;glFrustum(near or far)&quot; );</span>
+<span class="lineNum">     519 </span>                :            :    }
+<span class="lineNum">     520 </span>                :            : 
+<span class="lineNum">     521 </span>                :<span class="lineCov">          1 :    x = (2.0*nearval) / (right-left);</span>
+<span class="lineNum">     522 </span>                :<span class="lineCov">          1 :    y = (2.0*nearval) / (top-bottom);</span>
+<span class="lineNum">     523 </span>                :<span class="lineCov">          1 :    a = (right+left) / (right-left);</span>
+<span class="lineNum">     524 </span>                :<span class="lineCov">          1 :    b = (top+bottom) / (top-bottom);</span>
+<span class="lineNum">     525 </span>                :<span class="lineCov">          1 :    c = -(farval+nearval) / ( farval-nearval);</span>
+<span class="lineNum">     526 </span>                :<span class="lineCov">          1 :    d = -(2.0*farval*nearval) / (farval-nearval);  /* error? */</span>
+<span class="lineNum">     527 </span>                :            : 
+<span class="lineNum">     528 </span>                :            : #define M(row,col)  m[col*4+row]
+<span class="lineNum">     529 </span>                :<span class="lineCov">          1 :    M(0,0) = x;     M(0,1) = 0.0F;  M(0,2) = a;      M(0,3) = 0.0F;</span>
+<span class="lineNum">     530 </span>                :<span class="lineCov">          1 :    M(1,0) = 0.0F;  M(1,1) = y;     M(1,2) = b;      M(1,3) = 0.0F;</span>
+<span class="lineNum">     531 </span>                :<span class="lineCov">          1 :    M(2,0) = 0.0F;  M(2,1) = 0.0F;  M(2,2) = c;      M(2,3) = d;</span>
+<span class="lineNum">     532 </span>                :<span class="lineCov">          1 :    M(3,0) = 0.0F;  M(3,1) = 0.0F;  M(3,2) = -1.0F;  M(3,3) = 0.0F;</span>
+<span class="lineNum">     533 </span>                :            : #undef M
+<span class="lineNum">     534 </span>                :            : 
+<span class="lineNum">     535 </span>                :<span class="lineCov">          1 :    gl_MultMatrixf( ctx, m );</span>
+<span class="lineNum">     536 </span>                :            : 
+<span class="lineNum">     537 </span>                :            : 
+<span class="lineNum">     538 </span>                :            :    /* Need to keep a stack of near/far values in case the user push/pops
+<span class="lineNum">     539 </span>                :            :     * the projection matrix stack so that we can call Driver.NearFar()
+<span class="lineNum">     540 </span>                :            :     * after a pop.
+<span class="lineNum">     541 </span>                :            :     */
+<span class="lineNum">     542 </span>                :<span class="lineCov">          1 :    ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][0] = nearval;</span>
+<span class="lineNum">     543 </span>                :<span class="lineCov">          1 :    ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][1] = farval;</span>
+<span class="lineNum">     544 </span>                :            : 
+<span class="lineNum">     545 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :    if (ctx-&gt;Driver.NearFar) {</span>
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.NearFar)( ctx, nearval, farval );</span>
+<span class="lineNum">     547 </span>                :            :    }
+<span class="lineNum">     548 </span>                :<span class="lineCov">          1 : }</span>
+<a name="549"><span class="lineNum">     549 </span>                :            : </a>
+<span class="lineNum">     550 </span>                :            : 
+<span class="lineNum">     551 </span>                :<span class="lineNoCov">          0 : void gl_Ortho( GLcontext *ctx,</span>
+<span class="lineNum">     552 </span>                :            :                GLdouble left, GLdouble right,
+<span class="lineNum">     553 </span>                :            :                GLdouble bottom, GLdouble top,
+<span class="lineNum">     554 </span>                :            :                GLdouble nearval, GLdouble farval )
+<span class="lineNum">     555 </span>                :            : {
+<span class="lineNum">     556 </span>                :            :    GLfloat x, y, z;
+<span class="lineNum">     557 </span>                :            :    GLfloat tx, ty, tz;
+<span class="lineNum">     558 </span>                :            :    GLfloat m[16];
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :    x = 2.0 / (right-left);</span>
+<span class="lineNum">     561 </span>                :<span class="lineNoCov">          0 :    y = 2.0 / (top-bottom);</span>
+<span class="lineNum">     562 </span>                :<span class="lineNoCov">          0 :    z = -2.0 / (farval-nearval);</span>
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 :    tx = -(right+left) / (right-left);</span>
+<span class="lineNum">     564 </span>                :<span class="lineNoCov">          0 :    ty = -(top+bottom) / (top-bottom);</span>
+<span class="lineNum">     565 </span>                :<span class="lineNoCov">          0 :    tz = -(farval+nearval) / (farval-nearval);</span>
+<span class="lineNum">     566 </span>                :            : 
+<span class="lineNum">     567 </span>                :            : #define M(row,col)  m[col*4+row]
+<span class="lineNum">     568 </span>                :<span class="lineNoCov">          0 :    M(0,0) = x;     M(0,1) = 0.0F;  M(0,2) = 0.0F;  M(0,3) = tx;</span>
+<span class="lineNum">     569 </span>                :<span class="lineNoCov">          0 :    M(1,0) = 0.0F;  M(1,1) = y;     M(1,2) = 0.0F;  M(1,3) = ty;</span>
+<span class="lineNum">     570 </span>                :<span class="lineNoCov">          0 :    M(2,0) = 0.0F;  M(2,1) = 0.0F;  M(2,2) = z;     M(2,3) = tz;</span>
+<span class="lineNum">     571 </span>                :<span class="lineNoCov">          0 :    M(3,0) = 0.0F;  M(3,1) = 0.0F;  M(3,2) = 0.0F;  M(3,3) = 1.0F;</span>
+<span class="lineNum">     572 </span>                :            : #undef M
+<span class="lineNum">     573 </span>                :            : 
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :    gl_MultMatrixf( ctx, m );</span>
+<span class="lineNum">     575 </span>                :            : 
+<span class="lineNum">     576 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Driver.NearFar) {</span>
+<span class="lineNum">     577 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.NearFar)( ctx, nearval, farval );</span>
+<span class="lineNum">     578 </span>                :            :    }
+<span class="lineNum">     579 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="580"><span class="lineNum">     580 </span>                :            : </a>
+<span class="lineNum">     581 </span>                :            : 
+<span class="lineNum">     582 </span>                :<span class="lineCov">          2 : void gl_MatrixMode( GLcontext *ctx, GLenum mode )</span>
+<span class="lineNum">     583 </span>                :            : {
+<span class="lineNum">     584 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     585 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glMatrixMode&quot; );</span>
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     587 </span>                :            :    }
+<span class="lineNum">     588 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :    switch (mode) {</span>
+<span class="lineNum">     589 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     590 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     591 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     592 </span>                :<span class="lineCov">          2 :          ctx-&gt;Transform.MatrixMode = mode;</span>
+<span class="lineNum">     593 </span>                :<span class="lineCov">          2 :          break;</span>
+<span class="lineNum">     594 </span>                :            :       default:
+<span class="lineNum">     595 </span>                :<span class="lineCov">          2 :          gl_error( ctx,  GL_INVALID_ENUM, &quot;glMatrixMode&quot; );</span>
+<span class="lineNum">     596 </span>                :            :    }
+<span class="lineNum">     597 </span>                :            : }
+<span class="lineNum">     598 </span>                :            : 
+<a name="599"><span class="lineNum">     599 </span>                :            : </a>
+<span class="lineNum">     600 </span>                :            : 
+<span class="lineNum">     601 </span>                :<span class="lineCov">       1000 : void gl_PushMatrix( GLcontext *ctx )</span>
+<span class="lineNum">     602 </span>                :            : {
+<span class="lineNum">     603 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glPushMatrix&quot; );</span>
+<span class="lineNum">     605 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     606 </span>                :            :    }
+<span class="lineNum">     607 </span>  [<span class="branchCov" title="Branch 0 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       1000 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     608 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     609 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :          if (ctx-&gt;ModelViewStackDepth&gt;=MAX_MODELVIEW_STACK_DEPTH-1) {</span>
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_OVERFLOW, &quot;glPushMatrix&quot;);</span>
+<span class="lineNum">     611 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     612 </span>                :            :          }
+<span class="lineNum">     613 </span>                :<span class="lineCov">       1000 :          MEMCPY( ctx-&gt;ModelViewStack[ctx-&gt;ModelViewStackDepth],</span>
+<span class="lineNum">     614 </span>                :            :                  ctx-&gt;ModelViewMatrix,
+<span class="lineNum">     615 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     616 </span>                :<span class="lineCov">       1000 :          ctx-&gt;ModelViewStackDepth++;</span>
+<span class="lineNum">     617 </span>                :<span class="lineCov">       1000 :          break;</span>
+<span class="lineNum">     618 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     619 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;ProjectionStackDepth&gt;=MAX_PROJECTION_STACK_DEPTH) {</span>
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_OVERFLOW, &quot;glPushMatrix&quot;);</span>
+<span class="lineNum">     621 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     622 </span>                :            :          }
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;ProjectionStack[ctx-&gt;ProjectionStackDepth],</span>
+<span class="lineNum">     624 </span>                :            :                  ctx-&gt;ProjectionMatrix,
+<span class="lineNum">     625 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     626 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;ProjectionStackDepth++;</span>
+<span class="lineNum">     627 </span>                :            : 
+<span class="lineNum">     628 </span>                :            :          /* Save near and far projection values */
+<span class="lineNum">     629 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][0]</span>
+<span class="lineNum">     630 </span>                :<span class="lineNoCov">          0 :             = ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth-1][0];</span>
+<span class="lineNum">     631 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][1]</span>
+<span class="lineNum">     632 </span>                :<span class="lineNoCov">          0 :             = ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth-1][1];</span>
+<span class="lineNum">     633 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     634 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     635 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;TextureStackDepth&gt;=MAX_TEXTURE_STACK_DEPTH) {</span>
+<span class="lineNum">     636 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_OVERFLOW, &quot;glPushMatrix&quot;);</span>
+<span class="lineNum">     637 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     638 </span>                :            :          }
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;TextureStack[ctx-&gt;TextureStackDepth],</span>
+<span class="lineNum">     640 </span>                :            :                  ctx-&gt;TextureMatrix,
+<span class="lineNum">     641 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     642 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;TextureStackDepth++;</span>
+<span class="lineNum">     643 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     644 </span>                :            :       default:
+<span class="lineNum">     645 </span>                :<span class="lineCov">       1000 :          gl_problem(ctx, &quot;Bad matrix mode in gl_PushMatrix&quot;);</span>
+<span class="lineNum">     646 </span>                :            :    }
+<span class="lineNum">     647 </span>                :            : }
+<span class="lineNum">     648 </span>                :            : 
+<a name="649"><span class="lineNum">     649 </span>                :            : </a>
+<span class="lineNum">     650 </span>                :            : 
+<span class="lineNum">     651 </span>                :<span class="lineCov">       1000 : void gl_PopMatrix( GLcontext *ctx )</span>
+<span class="lineNum">     652 </span>                :            : {
+<span class="lineNum">     653 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     654 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glPopMatrix&quot; );</span>
+<span class="lineNum">     655 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     656 </span>                :            :    }
+<span class="lineNum">     657 </span>  [<span class="branchCov" title="Branch 0 was taken 1000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       1000 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     658 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     659 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1000 times"> + </span>]:<span class="lineCov">       1000 :          if (ctx-&gt;ModelViewStackDepth==0) {</span>
+<span class="lineNum">     660 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_UNDERFLOW, &quot;glPopMatrix&quot;);</span>
+<span class="lineNum">     661 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     662 </span>                :            :          }
+<span class="lineNum">     663 </span>                :<span class="lineCov">       1000 :          ctx-&gt;ModelViewStackDepth--;</span>
+<span class="lineNum">     664 </span>                :<span class="lineCov">       1000 :          MEMCPY( ctx-&gt;ModelViewMatrix,</span>
+<span class="lineNum">     665 </span>                :            :                  ctx-&gt;ModelViewStack[ctx-&gt;ModelViewStackDepth],
+<span class="lineNum">     666 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     667 </span>                :<span class="lineCov">       1000 :          ctx-&gt;NewModelViewMatrix = GL_TRUE;</span>
+<span class="lineNum">     668 </span>                :<span class="lineCov">       1000 :          break;</span>
+<span class="lineNum">     669 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     670 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;ProjectionStackDepth==0) {</span>
+<span class="lineNum">     671 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_UNDERFLOW, &quot;glPopMatrix&quot;);</span>
+<span class="lineNum">     672 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     673 </span>                :            :          }
+<span class="lineNum">     674 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;ProjectionStackDepth--;</span>
+<span class="lineNum">     675 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;ProjectionMatrix,</span>
+<span class="lineNum">     676 </span>                :            :                  ctx-&gt;ProjectionStack[ctx-&gt;ProjectionStackDepth],
+<span class="lineNum">     677 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     678 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewProjectionMatrix = GL_TRUE;</span>
+<span class="lineNum">     679 </span>                :            : 
+<span class="lineNum">     680 </span>                :            :          /* Device driver near/far values */
+<span class="lineNum">     681 </span>                :            :          {
+<span class="lineNum">     682 </span>                :<span class="lineNoCov">          0 :             GLfloat nearVal = ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][0];</span>
+<span class="lineNum">     683 </span>                :<span class="lineNoCov">          0 :             GLfloat farVal  = ctx-&gt;NearFarStack[ctx-&gt;ProjectionStackDepth][1];</span>
+<span class="lineNum">     684 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Driver.NearFar) {</span>
+<span class="lineNum">     685 </span>                :<span class="lineNoCov">          0 :                (*ctx-&gt;Driver.NearFar)( ctx, nearVal, farVal );</span>
+<span class="lineNum">     686 </span>                :            :             }
+<span class="lineNum">     687 </span>                :            :          }
+<span class="lineNum">     688 </span>                :            :          break;
+<span class="lineNum">     689 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     690 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;TextureStackDepth==0) {</span>
+<span class="lineNum">     691 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx,  GL_STACK_UNDERFLOW, &quot;glPopMatrix&quot;);</span>
+<span class="lineNum">     692 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     693 </span>                :            :          }
+<span class="lineNum">     694 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;TextureStackDepth--;</span>
+<span class="lineNum">     695 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;TextureMatrix,</span>
+<span class="lineNum">     696 </span>                :            :                  ctx-&gt;TextureStack[ctx-&gt;TextureStackDepth],
+<span class="lineNum">     697 </span>                :            :                  16*sizeof(GLfloat) );
+<span class="lineNum">     698 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_TRUE;</span>
+<span class="lineNum">     699 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     700 </span>                :            :       default:
+<span class="lineNum">     701 </span>                :<span class="lineCov">       1000 :          gl_problem(ctx, &quot;Bad matrix mode in gl_PopMatrix&quot;);</span>
+<span class="lineNum">     702 </span>                :            :    }
+<span class="lineNum">     703 </span>                :            : }
+<span class="lineNum">     704 </span>                :            : 
+<a name="705"><span class="lineNum">     705 </span>                :            : </a>
+<span class="lineNum">     706 </span>                :            : 
+<span class="lineNum">     707 </span>                :<span class="lineCov">          2 : void gl_LoadIdentity( GLcontext *ctx )</span>
+<span class="lineNum">     708 </span>                :            : {
+<span class="lineNum">     709 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     710 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glLoadIdentity&quot; );</span>
+<span class="lineNum">     711 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     712 </span>                :            :    }
+<span class="lineNum">     713 </span>  [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     714 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     715 </span>                :<span class="lineCov">          1 :          MEMCPY( ctx-&gt;ModelViewMatrix, Identity, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     716 </span>                :<span class="lineCov">          1 :          MEMCPY( ctx-&gt;ModelViewInv, Identity, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     717 </span>                :<span class="lineCov">          1 :          ctx-&gt;ModelViewMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     718 </span>                :<span class="lineCov">          1 :          ctx-&gt;NewModelViewMatrix = GL_FALSE;</span>
+<span class="lineNum">     719 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     720 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     721 </span>                :<span class="lineCov">          1 :          MEMCPY( ctx-&gt;ProjectionMatrix, Identity, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     722 </span>                :<span class="lineCov">          1 :          ctx-&gt;ProjectionMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     723 </span>                :<span class="lineCov">          1 :          ctx-&gt;NewProjectionMatrix = GL_FALSE;</span>
+<span class="lineNum">     724 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     725 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     726 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;TextureMatrix, Identity, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     727 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;TextureMatrixType = MATRIX_IDENTITY;</span>
+<span class="lineNum">     728 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_FALSE;</span>
+<span class="lineNum">     729 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     730 </span>                :            :       default:
+<span class="lineNum">     731 </span>                :<span class="lineCov">          2 :          gl_problem(ctx, &quot;Bad matrix mode in gl_LoadIdentity&quot;);</span>
+<span class="lineNum">     732 </span>                :            :    }
+<span class="lineNum">     733 </span>                :            : }
+<a name="734"><span class="lineNum">     734 </span>                :            : </a>
+<span class="lineNum">     735 </span>                :            : 
+<span class="lineNum">     736 </span>                :<span class="lineNoCov">          0 : void gl_LoadMatrixf( GLcontext *ctx, const GLfloat *m )</span>
+<span class="lineNum">     737 </span>                :            : {
+<span class="lineNum">     738 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     739 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glLoadMatrix&quot; );</span>
+<span class="lineNum">     740 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     741 </span>                :            :    }
+<span class="lineNum">     742 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     743 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     744 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;ModelViewMatrix, m, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     745 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewModelViewMatrix = GL_TRUE;</span>
+<span class="lineNum">     746 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     747 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     748 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;ProjectionMatrix, m, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     749 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewProjectionMatrix = GL_TRUE;</span>
+<span class="lineNum">     750 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     751 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     752 </span>                :<span class="lineNoCov">          0 :          MEMCPY( ctx-&gt;TextureMatrix, m, 16*sizeof(GLfloat) );</span>
+<span class="lineNum">     753 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_TRUE;</span>
+<span class="lineNum">     754 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     755 </span>                :            :       default:
+<span class="lineNum">     756 </span>                :<span class="lineNoCov">          0 :          gl_problem(ctx, &quot;Bad matrix mode in gl_LoadMatrixf&quot;);</span>
+<span class="lineNum">     757 </span>                :            :    }
+<span class="lineNum">     758 </span>                :            : }
+<span class="lineNum">     759 </span>                :            : 
+<a name="760"><span class="lineNum">     760 </span>                :            : </a>
+<span class="lineNum">     761 </span>                :            : 
+<span class="lineNum">     762 </span>                :<span class="lineCov">       3001 : void gl_MultMatrixf( GLcontext *ctx, const GLfloat *m )</span>
+<span class="lineNum">     763 </span>                :            : {
+<span class="lineNum">     764 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3001 times"> + </span>]:<span class="lineCov">       3001 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     765 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glMultMatrix&quot; );</span>
+<span class="lineNum">     766 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     767 </span>                :            :    }
+<span class="lineNum">     768 </span>  [<span class="branchCov" title="Branch 0 was taken 3000 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       3001 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     769 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     770 </span>                :<span class="lineCov">       3000 :          matmul( ctx-&gt;ModelViewMatrix, ctx-&gt;ModelViewMatrix, m );</span>
+<span class="lineNum">     771 </span>                :<span class="lineCov">       3000 :          ctx-&gt;NewModelViewMatrix = GL_TRUE;</span>
+<span class="lineNum">     772 </span>                :<span class="lineCov">       3000 :          break;</span>
+<span class="lineNum">     773 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     774 </span>                :<span class="lineCov">          1 :          matmul( ctx-&gt;ProjectionMatrix, ctx-&gt;ProjectionMatrix, m );</span>
+<span class="lineNum">     775 </span>                :<span class="lineCov">          1 :          ctx-&gt;NewProjectionMatrix = GL_TRUE;</span>
+<span class="lineNum">     776 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     777 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     778 </span>                :<span class="lineNoCov">          0 :          matmul( ctx-&gt;TextureMatrix, ctx-&gt;TextureMatrix, m );</span>
+<span class="lineNum">     779 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_TRUE;</span>
+<span class="lineNum">     780 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     781 </span>                :            :       default:
+<span class="lineNum">     782 </span>                :<span class="lineCov">       3001 :          gl_problem(ctx, &quot;Bad matrix mode in gl_MultMatrixf&quot;);</span>
+<span class="lineNum">     783 </span>                :            :    }
+<span class="lineNum">     784 </span>                :            : }
+<span class="lineNum">     785 </span>                :            : 
+<span class="lineNum">     786 </span>                :            : 
+<span class="lineNum">     787 </span>                :            : 
+<span class="lineNum">     788 </span>                :            : /*
+<a name="789"><span class="lineNum">     789 </span>                :            :  * Generate a 4x4 transformation matrix from glRotate parameters.</a>
+<span class="lineNum">     790 </span>                :            :  */
+<span class="lineNum">     791 </span>                :<span class="lineCov">       3000 : void gl_rotation_matrix( GLfloat angle, GLfloat x, GLfloat y, GLfloat z,</span>
+<span class="lineNum">     792 </span>                :            :                          GLfloat m[] )
+<span class="lineNum">     793 </span>                :            : {
+<span class="lineNum">     794 </span>                :            :    /* This function contributed by Erich Boleyn (erich@uruk.org) */
+<span class="lineNum">     795 </span>                :            :    GLfloat mag, s, c;
+<span class="lineNum">     796 </span>                :            :    GLfloat xx, yy, zz, xy, yz, zx, xs, ys, zs, one_c;
+<span class="lineNum">     797 </span>                :            : 
+<span class="lineNum">     798 </span>                :<span class="lineCov">       3000 :    s = sin( angle * DEG2RAD );</span>
+<span class="lineNum">     799 </span>                :<span class="lineCov">       3000 :    c = cos( angle * DEG2RAD );</span>
+<span class="lineNum">     800 </span>                :            : 
+<span class="lineNum">     801 </span>                :<span class="lineCov">       3000 :    mag = GL_SQRT( x*x + y*y + z*z );</span>
+<span class="lineNum">     802 </span>                :            : 
+<span class="lineNum">     803 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3000 times"> + </span>]:<span class="lineCov">       3000 :    if (mag == 0.0) {</span>
+<span class="lineNum">     804 </span>                :            :       /* generate an identity matrix and return */
+<span class="lineNum">     805 </span>                :            :       MEMCPY(m, Identity, sizeof(GLfloat)*16);
+<span class="lineNum">     806 </span>                :            :       return;
+<span class="lineNum">     807 </span>                :            :    }
+<span class="lineNum">     808 </span>                :            : 
+<span class="lineNum">     809 </span>                :<span class="lineCov">       3000 :    x /= mag;</span>
+<span class="lineNum">     810 </span>                :<span class="lineCov">       3000 :    y /= mag;</span>
+<span class="lineNum">     811 </span>                :<span class="lineCov">       3000 :    z /= mag;</span>
+<span class="lineNum">     812 </span>                :            : 
+<span class="lineNum">     813 </span>                :            : #define M(row,col)  m[col*4+row]
+<span class="lineNum">     814 </span>                :            : 
+<span class="lineNum">     815 </span>                :            :    /*
+<span class="lineNum">     816 </span>                :            :     *     Arbitrary axis rotation matrix.
+<span class="lineNum">     817 </span>                :            :     *
+<span class="lineNum">     818 </span>                :            :     *  This is composed of 5 matrices, Rz, Ry, T, Ry', Rz', multiplied
+<span class="lineNum">     819 </span>                :            :     *  like so:  Rz * Ry * T * Ry' * Rz'.  T is the final rotation
+<span class="lineNum">     820 </span>                :            :     *  (which is about the X-axis), and the two composite transforms
+<span class="lineNum">     821 </span>                :            :     *  Ry' * Rz' and Rz * Ry are (respectively) the rotations necessary
+<span class="lineNum">     822 </span>                :            :     *  from the arbitrary axis to the X-axis then back.  They are
+<span class="lineNum">     823 </span>                :            :     *  all elementary rotations.
+<span class="lineNum">     824 </span>                :            :     *
+<span class="lineNum">     825 </span>                :            :     *  Rz' is a rotation about the Z-axis, to bring the axis vector
+<span class="lineNum">     826 </span>                :            :     *  into the x-z plane.  Then Ry' is applied, rotating about the
+<span class="lineNum">     827 </span>                :            :     *  Y-axis to bring the axis vector parallel with the X-axis.  The
+<span class="lineNum">     828 </span>                :            :     *  rotation about the X-axis is then performed.  Ry and Rz are
+<span class="lineNum">     829 </span>                :            :     *  simply the respective inverse transforms to bring the arbitrary
+<span class="lineNum">     830 </span>                :            :     *  axis back to it's original orientation.  The first transforms
+<span class="lineNum">     831 </span>                :            :     *  Rz' and Ry' are considered inverses, since the data from the
+<span class="lineNum">     832 </span>                :            :     *  arbitrary axis gives you info on how to get to it, not how
+<span class="lineNum">     833 </span>                :            :     *  to get away from it, and an inverse must be applied.
+<span class="lineNum">     834 </span>                :            :     *
+<span class="lineNum">     835 </span>                :            :     *  The basic calculation used is to recognize that the arbitrary
+<span class="lineNum">     836 </span>                :            :     *  axis vector (x, y, z), since it is of unit length, actually
+<span class="lineNum">     837 </span>                :            :     *  represents the sines and cosines of the angles to rotate the
+<span class="lineNum">     838 </span>                :            :     *  X-axis to the same orientation, with theta being the angle about
+<span class="lineNum">     839 </span>                :            :     *  Z and phi the angle about Y (in the order described above)
+<span class="lineNum">     840 </span>                :            :     *  as follows:
+<span class="lineNum">     841 </span>                :            :     *
+<span class="lineNum">     842 </span>                :            :     *  cos ( theta ) = x / sqrt ( 1 - z^2 )
+<span class="lineNum">     843 </span>                :            :     *  sin ( theta ) = y / sqrt ( 1 - z^2 )
+<span class="lineNum">     844 </span>                :            :     *
+<span class="lineNum">     845 </span>                :            :     *  cos ( phi ) = sqrt ( 1 - z^2 )
+<span class="lineNum">     846 </span>                :            :     *  sin ( phi ) = z
+<span class="lineNum">     847 </span>                :            :     *
+<span class="lineNum">     848 </span>                :            :     *  Note that cos ( phi ) can further be inserted to the above
+<span class="lineNum">     849 </span>                :            :     *  formulas:
+<span class="lineNum">     850 </span>                :            :     *
+<span class="lineNum">     851 </span>                :            :     *  cos ( theta ) = x / cos ( phi )
+<span class="lineNum">     852 </span>                :            :     *  sin ( theta ) = y / sin ( phi )
+<span class="lineNum">     853 </span>                :            :     *
+<span class="lineNum">     854 </span>                :            :     *  ...etc.  Because of those relations and the standard trigonometric
+<span class="lineNum">     855 </span>                :            :     *  relations, it is pssible to reduce the transforms down to what
+<span class="lineNum">     856 </span>                :            :     *  is used below.  It may be that any primary axis chosen will give the
+<span class="lineNum">     857 </span>                :            :     *  same results (modulo a sign convention) using thie method.
+<span class="lineNum">     858 </span>                :            :     *
+<span class="lineNum">     859 </span>                :            :     *  Particularly nice is to notice that all divisions that might
+<span class="lineNum">     860 </span>                :            :     *  have caused trouble when parallel to certain planes or
+<span class="lineNum">     861 </span>                :            :     *  axis go away with care paid to reducing the expressions.
+<span class="lineNum">     862 </span>                :            :     *  After checking, it does perform correctly under all cases, since
+<span class="lineNum">     863 </span>                :            :     *  in all the cases of division where the denominator would have
+<span class="lineNum">     864 </span>                :            :     *  been zero, the numerator would have been zero as well, giving
+<span class="lineNum">     865 </span>                :            :     *  the expected result.
+<span class="lineNum">     866 </span>                :            :     */
+<span class="lineNum">     867 </span>                :            : 
+<span class="lineNum">     868 </span>                :<span class="lineCov">       3000 :    xx = x * x;</span>
+<span class="lineNum">     869 </span>                :<span class="lineCov">       3000 :    yy = y * y;</span>
+<span class="lineNum">     870 </span>                :<span class="lineCov">       3000 :    zz = z * z;</span>
+<span class="lineNum">     871 </span>                :<span class="lineCov">       3000 :    xy = x * y;</span>
+<span class="lineNum">     872 </span>                :<span class="lineCov">       3000 :    yz = y * z;</span>
+<span class="lineNum">     873 </span>                :<span class="lineCov">       3000 :    zx = z * x;</span>
+<span class="lineNum">     874 </span>                :<span class="lineCov">       3000 :    xs = x * s;</span>
+<span class="lineNum">     875 </span>                :<span class="lineCov">       3000 :    ys = y * s;</span>
+<span class="lineNum">     876 </span>                :<span class="lineCov">       3000 :    zs = z * s;</span>
+<span class="lineNum">     877 </span>                :<span class="lineCov">       3000 :    one_c = 1.0F - c;</span>
+<span class="lineNum">     878 </span>                :            : 
+<span class="lineNum">     879 </span>                :<span class="lineCov">       3000 :    M(0,0) = (one_c * xx) + c;</span>
+<span class="lineNum">     880 </span>                :<span class="lineCov">       3000 :    M(0,1) = (one_c * xy) - zs;</span>
+<span class="lineNum">     881 </span>                :<span class="lineCov">       3000 :    M(0,2) = (one_c * zx) + ys;</span>
+<span class="lineNum">     882 </span>                :<span class="lineCov">       3000 :    M(0,3) = 0.0F;</span>
+<span class="lineNum">     883 </span>                :            : 
+<span class="lineNum">     884 </span>                :<span class="lineCov">       3000 :    M(1,0) = (one_c * xy) + zs;</span>
+<span class="lineNum">     885 </span>                :<span class="lineCov">       3000 :    M(1,1) = (one_c * yy) + c;</span>
+<span class="lineNum">     886 </span>                :<span class="lineCov">       3000 :    M(1,2) = (one_c * yz) - xs;</span>
+<span class="lineNum">     887 </span>                :<span class="lineCov">       3000 :    M(1,3) = 0.0F;</span>
+<span class="lineNum">     888 </span>                :            : 
+<span class="lineNum">     889 </span>                :<span class="lineCov">       3000 :    M(2,0) = (one_c * zx) - ys;</span>
+<span class="lineNum">     890 </span>                :<span class="lineCov">       3000 :    M(2,1) = (one_c * yz) + xs;</span>
+<span class="lineNum">     891 </span>                :<span class="lineCov">       3000 :    M(2,2) = (one_c * zz) + c;</span>
+<span class="lineNum">     892 </span>                :<span class="lineCov">       3000 :    M(2,3) = 0.0F;</span>
+<span class="lineNum">     893 </span>                :            : 
+<span class="lineNum">     894 </span>                :<span class="lineCov">       3000 :    M(3,0) = 0.0F;</span>
+<span class="lineNum">     895 </span>                :<span class="lineCov">       3000 :    M(3,1) = 0.0F;</span>
+<span class="lineNum">     896 </span>                :<span class="lineCov">       3000 :    M(3,2) = 0.0F;</span>
+<span class="lineNum">     897 </span>                :<span class="lineCov">       3000 :    M(3,3) = 1.0F;</span>
+<span class="lineNum">     898 </span>                :            : 
+<span class="lineNum">     899 </span>                :            : #undef M
+<span class="lineNum">     900 </span>                :            : }
+<span class="lineNum">     901 </span>                :            : 
+<a name="902"><span class="lineNum">     902 </span>                :            : </a>
+<span class="lineNum">     903 </span>                :            : 
+<span class="lineNum">     904 </span>                :<span class="lineCov">       3000 : void gl_Rotatef( GLcontext *ctx,</span>
+<span class="lineNum">     905 </span>                :            :                  GLfloat angle, GLfloat x, GLfloat y, GLfloat z )
+<span class="lineNum">     906 </span>                :            : {
+<span class="lineNum">     907 </span>                :            :    GLfloat m[16];
+<span class="lineNum">     908 </span>                :<span class="lineCov">       3000 :    gl_rotation_matrix( angle, x, y, z, m );</span>
+<span class="lineNum">     909 </span>                :<span class="lineCov">       3000 :    gl_MultMatrixf( ctx, m );</span>
+<span class="lineNum">     910 </span>                :<span class="lineCov">       3000 : }</span>
+<span class="lineNum">     911 </span>                :            : 
+<span class="lineNum">     912 </span>                :            : 
+<span class="lineNum">     913 </span>                :            : 
+<span class="lineNum">     914 </span>                :            : /*
+<a name="915"><span class="lineNum">     915 </span>                :            :  * Execute a glScale call</a>
+<span class="lineNum">     916 </span>                :            :  */
+<span class="lineNum">     917 </span>                :<span class="lineNoCov">          0 : void gl_Scalef( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     918 </span>                :            : {
+<span class="lineNum">     919 </span>                :            :    GLfloat *m;
+<span class="lineNum">     920 </span>                :            : 
+<span class="lineNum">     921 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     922 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glScale&quot; );</span>
+<span class="lineNum">     923 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     924 </span>                :            :    }
+<span class="lineNum">     925 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     926 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     927 </span>                :<span class="lineNoCov">          0 :          m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     928 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewModelViewMatrix = GL_TRUE;</span>
+<span class="lineNum">     929 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     930 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     931 </span>                :<span class="lineNoCov">          0 :          m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     932 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewProjectionMatrix = GL_TRUE;</span>
+<span class="lineNum">     933 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     934 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     935 </span>                :<span class="lineNoCov">          0 :          m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     936 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_TRUE;</span>
+<span class="lineNum">     937 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     938 </span>                :            :       default:
+<span class="lineNum">     939 </span>                :<span class="lineNoCov">          0 :          gl_problem(ctx, &quot;Bad matrix mode in gl_Scalef&quot;);</span>
+<span class="lineNum">     940 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     941 </span>                :            :    }
+<span class="lineNum">     942 </span>                :<span class="lineNoCov">          0 :    m[0] *= x;   m[4] *= y;   m[8]  *= z;</span>
+<span class="lineNum">     943 </span>                :<span class="lineNoCov">          0 :    m[1] *= x;   m[5] *= y;   m[9]  *= z;</span>
+<span class="lineNum">     944 </span>                :<span class="lineNoCov">          0 :    m[2] *= x;   m[6] *= y;   m[10] *= z;</span>
+<span class="lineNum">     945 </span>                :<span class="lineNoCov">          0 :    m[3] *= x;   m[7] *= y;   m[11] *= z;</span>
+<span class="lineNum">     946 </span>                :            : }
+<span class="lineNum">     947 </span>                :            : 
+<span class="lineNum">     948 </span>                :            : 
+<span class="lineNum">     949 </span>                :            : 
+<span class="lineNum">     950 </span>                :            : /*
+<a name="951"><span class="lineNum">     951 </span>                :            :  * Execute a glTranslate call</a>
+<span class="lineNum">     952 </span>                :            :  */
+<span class="lineNum">     953 </span>                :<span class="lineCov">          1 : void gl_Translatef( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     954 </span>                :            : {
+<span class="lineNum">     955 </span>                :            :    GLfloat *m;
+<span class="lineNum">     956 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     957 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glTranslate&quot; );</span>
+<span class="lineNum">     958 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     959 </span>                :            :    }
+<span class="lineNum">     960 </span>  [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          1 :    switch (ctx-&gt;Transform.MatrixMode) {</span>
+<span class="lineNum">     961 </span>                :            :       case GL_MODELVIEW:
+<span class="lineNum">     962 </span>                :<span class="lineCov">          1 :          m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     963 </span>                :<span class="lineCov">          1 :          ctx-&gt;NewModelViewMatrix = GL_TRUE;</span>
+<span class="lineNum">     964 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     965 </span>                :            :       case GL_PROJECTION:
+<span class="lineNum">     966 </span>                :<span class="lineNoCov">          0 :          m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     967 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewProjectionMatrix = GL_TRUE;</span>
+<span class="lineNum">     968 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     969 </span>                :            :       case GL_TEXTURE:
+<span class="lineNum">     970 </span>                :<span class="lineNoCov">          0 :          m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     971 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewTextureMatrix = GL_TRUE;</span>
+<span class="lineNum">     972 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     973 </span>                :            :       default:
+<span class="lineNum">     974 </span>                :<span class="lineNoCov">          0 :          gl_problem(ctx, &quot;Bad matrix mode in gl_Translatef&quot;);</span>
+<span class="lineNum">     975 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     976 </span>                :            :    }
+<span class="lineNum">     977 </span>                :            : 
+<span class="lineNum">     978 </span>                :<span class="lineCov">          1 :    m[12] = m[0] * x + m[4] * y + m[8]  * z + m[12];</span>
+<span class="lineNum">     979 </span>                :<span class="lineCov">          1 :    m[13] = m[1] * x + m[5] * y + m[9]  * z + m[13];</span>
+<span class="lineNum">     980 </span>                :<span class="lineCov">          1 :    m[14] = m[2] * x + m[6] * y + m[10] * z + m[14];</span>
+<span class="lineNum">     981 </span>                :<span class="lineCov">          1 :    m[15] = m[3] * x + m[7] * y + m[11] * z + m[15];</span>
+<span class="lineNum">     982 </span>                :            : }
+<span class="lineNum">     983 </span>                :            : 
+<span class="lineNum">     984 </span>                :            : 
+<span class="lineNum">     985 </span>                :            : 
+<span class="lineNum">     986 </span>                :            : 
+<span class="lineNum">     987 </span>                :            : /*
+<span class="lineNum">     988 </span>                :            :  * Define a new viewport and reallocate auxillary buffers if the size of
+<a name="989"><span class="lineNum">     989 </span>                :            :  * the window (color buffer) has changed.</a>
+<span class="lineNum">     990 </span>                :            :  */
+<span class="lineNum">     991 </span>                :<span class="lineCov">          2 : void gl_Viewport( GLcontext *ctx,</span>
+<span class="lineNum">     992 </span>                :            :                   GLint x, GLint y, GLsizei width, GLsizei height )
+<span class="lineNum">     993 </span>                :            : {
+<span class="lineNum">     994 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (width&lt;0 || height&lt;0) {</span>
+<span class="lineNum">     995 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_VALUE, &quot;glViewport&quot; );</span>
+<span class="lineNum">     996 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     997 </span>                :            :    }
+<span class="lineNum">     998 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     999 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx,  GL_INVALID_OPERATION, &quot;glViewport&quot; );</span>
+<span class="lineNum">    1000 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">    1001 </span>                :            :    }
+<span class="lineNum">    1002 </span>                :            : 
+<span class="lineNum">    1003 </span>                :            :    /* clamp width, and height to implementation dependent range */
+<span class="lineNum">    1004 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :    width  = CLAMP( width,  1, MAX_WIDTH );</span>
+<span class="lineNum">    1005 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :    height = CLAMP( height, 1, MAX_HEIGHT );</span>
+<span class="lineNum">    1006 </span>                :            : 
+<span class="lineNum">    1007 </span>                :            :    /* Save viewport */
+<span class="lineNum">    1008 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.X = x;</span>
+<span class="lineNum">    1009 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Width = width;</span>
+<span class="lineNum">    1010 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Y = y;</span>
+<span class="lineNum">    1011 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Height = height;</span>
+<span class="lineNum">    1012 </span>                :            : 
+<span class="lineNum">    1013 </span>                :            :    /* compute scale and bias values */
+<span class="lineNum">    1014 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Sx = (GLfloat) width / 2.0F;</span>
+<span class="lineNum">    1015 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Tx = ctx-&gt;Viewport.Sx + x;</span>
+<span class="lineNum">    1016 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Sy = (GLfloat) height / 2.0F;</span>
+<span class="lineNum">    1017 </span>                :<span class="lineCov">          2 :    ctx-&gt;Viewport.Ty = ctx-&gt;Viewport.Sy + y;</span>
+<span class="lineNum">    1018 </span>                :            : 
+<span class="lineNum">    1019 </span>                :<span class="lineCov">          2 :    ctx-&gt;NewState |= NEW_ALL;   /* just to be safe */</span>
+<span class="lineNum">    1020 </span>                :            : 
+<span class="lineNum">    1021 </span>                :            :    /* Check if window/buffer has been resized and if so, reallocate the
+<span class="lineNum">    1022 </span>                :            :     * ancillary buffers.
+<span class="lineNum">    1023 </span>                :            :     */
+<span class="lineNum">    1024 </span>                :<span class="lineCov">          2 :    gl_ResizeBuffersMESA(ctx);</span>
+<span class="lineNum">    1025 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

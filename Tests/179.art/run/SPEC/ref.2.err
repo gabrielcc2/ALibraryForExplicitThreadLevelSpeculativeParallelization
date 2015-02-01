@@ -1,0 +1,21 @@
+==2702== Cachegrind, a cache and branch-prediction profiler
+==2702== Copyright (C) 2002-2010, and GNU GPL'd, by Nicholas Nethercote et al.
+==2702== Using Valgrind-3.6.1 and LibVEX; rerun with -h for copyright info
+==2702== Command: ../SPEC/art_base -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10
+==2702== 
+==2702== 
+==2702== I   refs:      57,937,125,400
+==2702== I1  misses:             1,288
+==2702== LLi misses:             1,281
+==2702== I1  miss rate:           0.00%
+==2702== LLi miss rate:           0.00%
+==2702== 
+==2702== D   refs:      16,575,573,762  (12,677,444,143 rd   + 3,898,129,619 wr)
+==2702== D1  misses:     5,492,116,413  ( 5,337,048,743 rd   +   155,067,670 wr)
+==2702== LLd misses:     3,049,157,684  ( 3,041,304,187 rd   +     7,853,497 wr)
+==2702== D1  miss rate:           33.1% (          42.0%     +           3.9%  )
+==2702== LLd miss rate:           18.3% (          23.9%     +           0.2%  )
+==2702== 
+==2702== LL refs:        5,492,117,701  ( 5,337,050,031 rd   +   155,067,670 wr)
+==2702== LL misses:      3,049,158,965  ( 3,041,305,468 rd   +     7,853,497 wr)
+==2702== LL miss rate:             4.0% (           4.3%     +           0.2%  )

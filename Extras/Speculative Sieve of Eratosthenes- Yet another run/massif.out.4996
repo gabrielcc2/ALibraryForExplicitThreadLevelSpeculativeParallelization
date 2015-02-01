@@ -1,0 +1,1432 @@
+desc: (none)
+cmd: ./criba_pruebanueva
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1693771
+mem_heap_B=4
+mem_heap_extra_B=12
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=1741197
+mem_heap_B=864
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=1778118
+mem_heap_B=3924
+mem_heap_extra_B=484
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=1835726
+mem_heap_B=6136
+mem_heap_extra_B=1200
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=1909840
+mem_heap_B=9208
+mem_heap_extra_B=2256
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=1987718
+mem_heap_B=12472
+mem_heap_extra_B=3312
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=2036548
+mem_heap_B=14628
+mem_heap_extra_B=4068
+mem_stacks_B=0
+heap_tree=detailed
+n8: 14628 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8352 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 8352 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n1: 8352 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 8352 0x8049D5E: initialize(void*) (criba_eratostenes.cpp:70)
+     n1: 8352 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 8352 0x425B73C: clone (clone.S:130)
+ n1: 1740 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n1: 1740 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n1: 1740 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1740 0x8049D5E: initialize(void*) (criba_eratostenes.cpp:70)
+     n1: 1740 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1740 0x425B73C: clone (clone.S:130)
+ n1: 1440 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1440 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1440 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n1: 1296 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 1296 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 144 in 1 place, below massif's threshold (01.00%)
+ n2: 1408 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n1: 1408 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 1408 0x804A286: main (criba_eratostenes.cpp:136)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 696 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 696 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n1: 696 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 696 0x8049D5E: initialize(void*) (criba_eratostenes.cpp:70)
+     n1: 696 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 696 0x425B73C: clone (clone.S:130)
+ n1: 696 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 696 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n1: 696 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 696 0x8049D5E: initialize(void*) (criba_eratostenes.cpp:70)
+     n1: 696 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 696 0x425B73C: clone (clone.S:130)
+ n1: 240 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 240 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n1: 216 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 216 0x804A286: main (criba_eratostenes.cpp:136)
+   n0: 24 in 1 place, below massif's threshold (01.00%)
+ n0: 56 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=8
+#-----------
+time=2107171
+mem_heap_B=8376
+mem_heap_extra_B=1456
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=2156409
+mem_heap_B=5680
+mem_heap_extra_B=304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=2197181
+mem_heap_B=11664
+mem_heap_extra_B=600
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=2250965
+mem_heap_B=14764
+mem_heap_extra_B=1148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=2302433
+mem_heap_B=17052
+mem_heap_extra_B=1956
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=2359590
+mem_heap_B=19308
+mem_heap_extra_B=2684
+mem_stacks_B=0
+heap_tree=detailed
+n8: 19308 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 6912 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 6912 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 6912 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 6336 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 5632 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 5632 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 3936 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 3936 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 3936 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 3936 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3936 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3936 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 1152 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 1152 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 1128 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 900 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 900 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 820 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 820 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 820 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 820 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 80 in 1 place, below massif's threshold (01.00%)
+ n1: 296 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 296 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 296 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 296 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 296 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 296 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 296 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 296 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 296 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 296 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 296 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 296 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 184 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=14
+#-----------
+time=2405428
+mem_heap_B=21132
+mem_heap_extra_B=3284
+mem_stacks_B=0
+heap_tree=detailed
+n8: 21132 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 6912 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 6912 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 6912 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 6336 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 5632 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 5632 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5184 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 5184 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 5184 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 5184 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 5184 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 5184 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 1220 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 1220 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 1080 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1080 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 1080 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1080 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 140 in 1 place, below massif's threshold (01.00%)
+ n1: 1152 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 1152 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 1128 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 376 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 376 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 376 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 376 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 376 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 376 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 376 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 376 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 376 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 376 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 376 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 376 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 280 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=15
+#-----------
+time=2454269
+mem_heap_B=22596
+mem_heap_extra_B=3876
+mem_stacks_B=0
+heap_tree=detailed
+n10: 22596 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 6912 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 6912 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 6912 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 6336 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 5856 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 5856 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 5856 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 5856 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 5856 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 5856 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 5632 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 5632 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 1660 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 1660 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 1220 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1220 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 1220 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1220 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n1: 440 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 440 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 440 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 440 0x425B73C: clone (clone.S:130)
+ n1: 1152 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 1152 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 1128 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 364 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 352 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 352 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 352 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 352 0x425B73C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n1: 360 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n0: 360 in 4 places, all below massif's threshold (01.00%)
+ n1: 312 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 312 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 312 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 312 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 312 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 312 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 312 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 312 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 312 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 312 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 312 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 312 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 36 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=16
+#-----------
+time=2489688
+mem_heap_B=23372
+mem_heap_extra_B=4204
+mem_stacks_B=0
+heap_tree=detailed
+n10: 23372 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 6912 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 6912 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 6912 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 6336 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 6144 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 6144 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 6144 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 6144 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 6144 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 6144 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 5632 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 5632 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 2020 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 2020 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 1280 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1280 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 1280 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1280 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n1: 740 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 740 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 740 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 740 0x425B73C: clone (clone.S:130)
+ n1: 1152 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 1152 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 1128 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n1: 480 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n0: 480 in 4 places, all below massif's threshold (01.00%)
+ n2: 468 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 464 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 464 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 464 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 464 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n1: 280 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 280 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 280 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 280 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 280 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 280 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 280 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 280 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 280 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 280 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 280 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 280 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 4 in 9 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=17
+#-----------
+time=2548327
+mem_heap_B=39712
+mem_heap_extra_B=5880
+mem_stacks_B=0
+heap_tree=detailed
+n10: 39712 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 16896 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 16896 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 9216 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 9216 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 9216 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 8640 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 6144 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 6144 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 6144 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 6144 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 6144 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 6144 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2180 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 2180 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 1280 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1280 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 1280 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1280 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n1: 900 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 900 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 900 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 900 0x425B73C: clone (clone.S:130)
+ n1: 1536 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 1536 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 1512 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n2: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 480 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 480 in 3 places, all below massif's threshold (01.00%)
+  n0: 400 in 2 places, all below massif's threshold (01.00%)
+ n0: 532 in 11 places, all below massif's threshold (01.00%)
+ n2: 516 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 512 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 512 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 512 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 512 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n1: 512 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n0: 512 in 4 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=18
+#-----------
+time=2590624
+mem_heap_B=34588
+mem_heap_extra_B=4276
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=2657433
+mem_heap_B=38276
+mem_heap_extra_B=4932
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=2700369
+mem_heap_B=39248
+mem_heap_extra_B=5352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=2746273
+mem_heap_B=40212
+mem_heap_extra_B=5812
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=2814107
+mem_heap_B=41324
+mem_heap_extra_B=6228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=2870006
+mem_heap_B=42668
+mem_heap_extra_B=6676
+mem_stacks_B=0
+heap_tree=detailed
+n10: 42668 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 14112 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 13536 0x804BE75: main (loop_speculator.h:1209)
+    n1: 576 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 576 0x804A286: main (criba_eratostenes.cpp:136)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7008 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 7008 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 7008 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 2480 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 2480 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n1: 2300 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 2300 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 2300 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 2300 0x425B73C: clone (clone.S:130)
+   n0: 180 in 1 place, below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 1552 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n1: 1296 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1296 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1296 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1296 0x425B73C: clone (clone.S:130)
+  n0: 256 in 3 places, all below massif's threshold (01.00%)
+ n2: 1492 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 1488 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1488 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1488 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1488 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n1: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n0: 880 in 3 places, all below massif's threshold (01.00%)
+ n0: 228 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=24
+#-----------
+time=2904517
+mem_heap_B=43268
+mem_heap_extra_B=6940
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=2956460
+mem_heap_B=42716
+mem_heap_extra_B=7148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=2992669
+mem_heap_B=38920
+mem_heap_extra_B=6968
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=3049369
+mem_heap_B=31720
+mem_heap_extra_B=6568
+mem_stacks_B=0
+heap_tree=detailed
+n10: 31720 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 11264 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 7008 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 7008 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 7008 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 3340 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 3340 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n1: 3160 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+   n0: 180 in 1 place, below massif's threshold (01.00%)
+ n1: 2352 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 2352 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 24 in 2 places, all below massif's threshold (01.00%)
+ n2: 1892 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1888 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n1: 1696 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+  n0: 192 in 3 places, all below massif's threshold (01.00%)
+ n1: 1728 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1728 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 1728 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 1728 0x804BE75: main (loop_speculator.h:1209)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n2: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n1: 420 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+    n0: 420 in 3 places, all below massif's threshold (01.00%)
+   n0: 300 in 2 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n2: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 480 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 480 in 3 places, all below massif's threshold (01.00%)
+  n0: 400 in 2 places, all below massif's threshold (01.00%)
+ n0: 68 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=28
+#-----------
+time=3122419
+mem_heap_B=30576
+mem_heap_extra_B=6512
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=3162553
+mem_heap_B=33088
+mem_heap_extra_B=6664
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=3208519
+mem_heap_B=35128
+mem_heap_extra_B=7336
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=3287283
+mem_heap_B=38364
+mem_heap_extra_B=8268
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=3330982
+mem_heap_B=40236
+mem_heap_extra_B=8812
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=3389095
+mem_heap_B=42764
+mem_heap_extra_B=9508
+mem_stacks_B=0
+heap_tree=detailed
+n12: 42764 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 14016 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 14016 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 14016 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 7008 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 12672 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 1408 0x804C2AD: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 4800 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 4800 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n1: 3160 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+   n2: 1640 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1460 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 1460 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1460 0x425B73C: clone (clone.S:130)
+    n0: 180 in 2 places, all below massif's threshold (01.00%)
+ n1: 2592 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 2592 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 264 in 3 places, all below massif's threshold (01.00%)
+ n2: 1900 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n2: 1896 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n1: 1696 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+  n0: 200 in 3 places, all below massif's threshold (01.00%)
+ n1: 1440 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1440 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 1440 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 864 0x804C33E: main (loop_speculator.h:1209)
+    n0: 576 0x804BE75: main (loop_speculator.h:1209)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n1: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n0: 880 in 3 places, all below massif's threshold (01.00%)
+ n1: 616 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 616 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 616 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 584 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 584 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 584 0x425B73C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n1: 616 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 616 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 616 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 584 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 584 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 584 0x425B73C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n0: 36 in 12 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=34
+#-----------
+time=3439114
+mem_heap_B=44876
+mem_heap_extra_B=10084
+mem_stacks_B=0
+heap_tree=detailed
+n12: 44876 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 15552 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 15552 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 15552 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 8544 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 8544 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 8544 0x425B73C: clone (clone.S:130)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 12672 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 1408 0x804C2AD: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5120 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 5120 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n1: 3160 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+   n2: 1960 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1780 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 1780 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1780 0x425B73C: clone (clone.S:130)
+    n0: 180 in 2 places, all below massif's threshold (01.00%)
+ n1: 2592 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 2592 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 264 in 3 places, all below massif's threshold (01.00%)
+ n2: 1900 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n1: 1888 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+  n0: 12 in 3 places, all below massif's threshold (01.00%)
+ n2: 1896 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n1: 1696 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+  n0: 200 in 3 places, all below massif's threshold (01.00%)
+ n1: 1440 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 1440 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 1440 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n0: 864 0x804C33E: main (loop_speculator.h:1209)
+    n0: 576 0x804BE75: main (loop_speculator.h:1209)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n1: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n0: 880 in 3 places, all below massif's threshold (01.00%)
+ n1: 744 0x804E925: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 744 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 744 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 712 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 712 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 712 0x425B73C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n1: 744 0x804E9A3: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 744 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n2: 744 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 712 0x8049A85: initialize_c(void*) (criba_eratostenes.cpp:83)
+     n1: 712 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 712 0x425B73C: clone (clone.S:130)
+    n0: 32 in 2 places, all below massif's threshold (01.00%)
+ n0: 36 in 12 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=35
+#-----------
+time=3508409
+mem_heap_B=32008
+mem_heap_extra_B=6544
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=3553316
+mem_heap_B=36268
+mem_heap_extra_B=6884
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=3597036
+mem_heap_B=38120
+mem_heap_extra_B=7464
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=3640670
+mem_heap_B=39932
+mem_heap_extra_B=8060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=3685951
+mem_heap_B=41264
+mem_heap_extra_B=8472
+mem_stacks_B=0
+heap_tree=detailed
+n10: 41264 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 14080 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n2: 2816 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 2816 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 10464 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 10464 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 10464 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 3456 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 3456 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3456 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 4360 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 4360 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 3460 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n0: 300 in 1 place, below massif's threshold (01.00%)
+   n2: 900 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 720 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 720 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 720 0x425B73C: clone (clone.S:130)
+    n0: 180 in 3 places, all below massif's threshold (01.00%)
+ n1: 2808 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n2: 2808 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 480 in 3 places, all below massif's threshold (01.00%)
+ n1: 2736 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 2736 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n3: 2736 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 2160 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 2160 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 0x804C33E: main (loop_speculator.h:1209)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 2084 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 2080 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n0: 192 in 1 place, below massif's threshold (01.00%)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2084 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 1808 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n0: 112 in 1 place, below massif's threshold (01.00%)
+  n0: 276 in 3 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n1: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n0: 880 in 3 places, all below massif's threshold (01.00%)
+ n0: 468 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=40
+#-----------
+time=3752801
+mem_heap_B=43428
+mem_heap_extra_B=9164
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=3797843
+mem_heap_B=44840
+mem_heap_extra_B=9600
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=3857052
+mem_heap_B=47972
+mem_heap_extra_B=10132
+mem_stacks_B=0
+heap_tree=detailed
+n10: 47972 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 14080 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n2: 2816 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 2816 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 12864 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 12864 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 12864 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 5856 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 5856 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 5856 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5680 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 5680 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 4280 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n1: 1120 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 1120 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1120 0x425B73C: clone (clone.S:130)
+   n2: 1400 0x8051E94: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 1220 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 1220 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1220 0x425B73C: clone (clone.S:130)
+    n0: 180 in 3 places, all below massif's threshold (01.00%)
+ n1: 4464 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 4464 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 4464 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 3888 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 3888 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 3096 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n3: 3096 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n2: 720 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 720 0x804B5A6: main (criba_eratostenes.cpp:253)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n3: 2528 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 1760 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n0: 64 in 1 place, below massif's threshold (01.00%)
+  n1: 768 0x805346E: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n0: 768 in 2 places, all below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 2516 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 2512 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n1: 624 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 624 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 624 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 1300 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 720 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 720 in 3 places, all below massif's threshold (01.00%)
+  n0: 580 in 2 places, all below massif's threshold (01.00%)
+ n1: 880 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n0: 880 in 3 places, all below massif's threshold (01.00%)
+ n0: 564 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=43
+#-----------
+time=3903769
+mem_heap_B=52356
+mem_heap_extra_B=10196
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=3948208
+mem_heap_B=55884
+mem_heap_extra_B=10532
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=4016084
+mem_heap_B=65044
+mem_heap_extra_B=11020
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=4060262
+mem_heap_B=68100
+mem_heap_extra_B=11356
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=4126916
+mem_heap_B=69384
+mem_heap_extra_B=11840
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=4171306
+mem_heap_B=70412
+mem_heap_extra_B=12244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=4232686
+mem_heap_B=71688
+mem_heap_extra_B=12664
+mem_stacks_B=0
+heap_tree=detailed
+n10: 71688 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 11264 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 13536 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 13920 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 13920 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 13920 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 6912 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 6912 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 6912 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5040 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 5040 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 4660 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n1: 1500 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 1500 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1500 0x425B73C: clone (clone.S:130)
+   n0: 380 in 1 place, below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 2328 0x804B5A6: main (criba_eratostenes.cpp:253)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n3: 3280 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 2416 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n0: 720 in 1 place, below massif's threshold (01.00%)
+  n1: 864 0x805346E: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n0: 864 in 2 places, all below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n2: 3220 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 3216 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n1: 1328 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1328 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1328 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2680 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n2: 1540 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n1: 940 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+    n0: 940 in 3 places, all below massif's threshold (01.00%)
+   n0: 600 in 2 places, all below massif's threshold (01.00%)
+  n0: 1140 in 2 places, all below massif's threshold (01.00%)
+ n2: 1960 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 1100 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 1100 in 3 places, all below massif's threshold (01.00%)
+  n0: 860 in 2 places, all below massif's threshold (01.00%)
+ n0: 244 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=50
+#-----------
+time=4266254
+mem_heap_B=72360
+mem_heap_extra_B=12880
+mem_stacks_B=0
+heap_tree=detailed
+n10: 72360 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 11264 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 13536 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 14016 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 14016 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 14016 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 7008 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5360 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 5360 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 4960 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n1: 1800 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 1800 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 1800 0x425B73C: clone (clone.S:130)
+   n0: 400 in 1 place, below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 2328 0x804B5A6: main (criba_eratostenes.cpp:253)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3392 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 2640 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n1: 944 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 944 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 944 0x425B73C: clone (clone.S:130)
+  n0: 752 in 3 places, all below massif's threshold (01.00%)
+ n2: 3364 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 3360 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n1: 1472 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1472 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1472 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2680 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n2: 1540 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n1: 940 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+    n0: 940 in 3 places, all below massif's threshold (01.00%)
+   n0: 600 in 2 places, all below massif's threshold (01.00%)
+  n0: 1140 in 2 places, all below massif's threshold (01.00%)
+ n2: 1960 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 1100 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 1100 in 3 places, all below massif's threshold (01.00%)
+  n0: 860 in 2 places, all below massif's threshold (01.00%)
+ n0: 244 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=51
+#-----------
+time=4301841
+mem_heap_B=72868
+mem_heap_extra_B=13068
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=4312147
+mem_heap_B=73052
+mem_heap_extra_B=13148
+mem_stacks_B=0
+heap_tree=detailed
+n10: 73052 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 11264 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 13536 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 14016 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 14016 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 14016 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 7008 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 5780 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 5780 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 5380 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n1: 2220 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 2220 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 2220 0x425B73C: clone (clone.S:130)
+   n0: 400 in 1 place, below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 2328 0x804B5A6: main (criba_eratostenes.cpp:253)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3568 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 2896 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n1: 1200 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1200 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1200 0x425B73C: clone (clone.S:130)
+  n0: 672 in 3 places, all below massif's threshold (01.00%)
+ n2: 3540 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 3536 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n1: 1648 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1648 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1648 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2680 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n2: 1540 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n1: 940 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+    n0: 940 in 3 places, all below massif's threshold (01.00%)
+   n0: 600 in 2 places, all below massif's threshold (01.00%)
+  n0: 1140 in 2 places, all below massif's threshold (01.00%)
+ n2: 1960 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 1100 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 1100 in 3 places, all below massif's threshold (01.00%)
+  n0: 860 in 2 places, all below massif's threshold (01.00%)
+ n0: 164 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=53
+#-----------
+time=4344793
+mem_heap_B=73772
+mem_heap_extra_B=13396
+mem_stacks_B=0
+heap_tree=peak
+n10: 73772 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 22528 0x804ECE9: std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_fill_insert(__gnu_cxx::__normal_iterator<_loop_spec_thread*, std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> > >, unsigned int, _loop_spec_thread const&) (new_allocator.h:89)
+  n2: 11264 0x805075E: loop_speculator::append(void* (*)(void*), void*) (stl_vector.h:859)
+   n0: 11264 0x804B5A6: main (criba_eratostenes.cpp:253)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 11264 0x804BDE7: main (stl_vector.h:859)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 14112 0x4010CB6: allocate_dtv (dl-tls.c:300)
+  n1: 14112 0x401144A: _dl_allocate_tls (dl-tls.c:464)
+   n2: 14112 0x404A5C5: pthread_create@@GLIBC_2.1 (allocatestack.c:570)
+    n2: 13536 0x80507E3: loop_speculator::append(void* (*)(void*), void*) (loop_speculator.h:1209)
+     n0: 13536 0x804B5A6: main (criba_eratostenes.cpp:253)
+     n0: 0 in 1 place, below massif's threshold (01.00%)
+    n0: 576 in 3 places, all below massif's threshold (01.00%)
+ n1: 14016 0x804E865: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<void* const, _data_access_log> const&) (new_allocator.h:89)
+  n1: 14016 0x804EB77: std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_insert_unique(std::pair<void* const, _data_access_log> const&) (stl_tree.h:1196)
+   n3: 14016 0x805234D: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_map.h:501)
+    n1: 7008 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n1: 7008 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 7008 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 7008 0x425B73C: clone (clone.S:130)
+    n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 6180 0x804D6DB: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, void* const&) (new_allocator.h:89)
+  n2: 6180 0x804D7E7: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_insert_unique(void* const&) (stl_tree.h:1196)
+   n2: 5780 0x8052F0B: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_set.h:408)
+    n1: 3160 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+     n1: 3160 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 3160 0x425B73C: clone (clone.S:130)
+    n1: 2620 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+     n1: 2620 0x4049E97: start_thread (pthread_create.c:304)
+      n0: 2620 0x425B73C: clone (clone.S:130)
+   n0: 400 in 1 place, below massif's threshold (01.00%)
+ n1: 4704 0x804E44B: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned long const, int> const&) (new_allocator.h:89)
+  n3: 4704 0x804E557: std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_insert_unique(std::pair<unsigned long const, int> const&) (stl_tree.h:1196)
+   n2: 2328 0x8050994: loop_speculator::append(void* (*)(void*), void*) (stl_map.h:501)
+    n0: 2328 0x804B5A6: main (criba_eratostenes.cpp:253)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 2328 0x804C052: main (stl_map.h:501)
+   n0: 48 in 2 places, all below massif's threshold (01.00%)
+ n2: 3744 0x804CEBE: std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&) (new_allocator.h:89)
+  n2: 3120 0x8053528: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1696 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1696 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1696 0x425B73C: clone (clone.S:130)
+   n1: 1424 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1424 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1424 0x425B73C: clone (clone.S:130)
+  n0: 624 in 3 places, all below massif's threshold (01.00%)
+ n2: 3684 0x804D5CE: std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) (new_allocator.h:89)
+  n2: 3680 0x8053444: int loop_speculator::write_data<bool>(bool*&, bool*) (stl_vector.h:749)
+   n1: 1888 0x80497B5: get_primes(void*) (criba_eratostenes.cpp:92)
+    n1: 1888 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1888 0x425B73C: clone (clone.S:130)
+   n1: 1792 0x80494E5: get_primes_and_sleep(void*) (criba_eratostenes.cpp:101)
+    n1: 1792 0x4049E97: start_thread (pthread_create.c:304)
+     n0: 1792 0x425B73C: clone (clone.S:130)
+  n0: 4 in 3 places, all below massif's threshold (01.00%)
+ n2: 2680 0x804D826: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n2: 1540 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n1: 940 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+    n0: 940 in 3 places, all below massif's threshold (01.00%)
+   n0: 600 in 2 places, all below massif's threshold (01.00%)
+  n0: 1140 in 2 places, all below massif's threshold (01.00%)
+ n2: 1960 0x804D894: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (new_allocator.h:89)
+  n1: 1100 0x804D86F: std::_Rb_tree<void*, void*, std::_Identity<void*>, std::less<void*>, std::allocator<void*> >::_M_copy(std::_Rb_tree_node<void*> const*, std::_Rb_tree_node<void*>*) (stl_tree.h:956)
+   n0: 1100 in 3 places, all below massif's threshold (01.00%)
+  n0: 860 in 2 places, all below massif's threshold (01.00%)
+ n0: 164 in 16 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=54
+#-----------
+time=4398933
+mem_heap_B=73944
+mem_heap_extra_B=13520
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=4434087
+mem_heap_B=69480
+mem_heap_extra_B=13272
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=4469241
+mem_heap_B=65016
+mem_heap_extra_B=13024
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=4504395
+mem_heap_B=60552
+mem_heap_extra_B=12776
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=4599520
+mem_heap_B=60560
+mem_heap_extra_B=12784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=4634055
+mem_heap_B=43324
+mem_heap_extra_B=7412
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=4668703
+mem_heap_B=14620
+mem_heap_extra_B=1868
+mem_stacks_B=0
+heap_tree=empty

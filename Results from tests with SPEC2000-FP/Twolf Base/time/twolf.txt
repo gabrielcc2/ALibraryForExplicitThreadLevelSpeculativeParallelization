@@ -1,0 +1,14 @@
+gabriel@gabriel-Vostro-A840:~/Escritorio/SPEC_CPU2000_CD_2/benchspec/CINT2000/300.twolf/run/Base$ sudo time -p /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke speccmds.cmd
+running commands in speccmds.cmd 1 times
+runs started at 1313170704, 633899000, Fri Aug 12 13:08:24 2011
+run 1 started at 1313170704, 633990000, Fri Aug 12 13:08:24 2011
+child started: 0, 1313170704, 634007000, 4102, '>ref.stdout 2>ref.err ../Base/twolf ref'
+child finished: 0, 1313170956, 156756000, 251, 522749000, 4102, 0
+run 1 finished at: 1313170956, 156779000, Fri Aug 12 13:12:36 2011
+run 1 elapsed time: 251, 522789000, 251.522789000
+runs finished at 1313170956, 156826000, Fri Aug 12 13:12:36 2011
+runs elapsed time: 251, 522927000, 251.522927000
+real 251.52
+user 250.76
+sys 0.02
+

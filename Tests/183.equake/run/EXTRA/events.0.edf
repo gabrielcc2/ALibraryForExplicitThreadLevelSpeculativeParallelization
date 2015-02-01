@@ -1,0 +1,42 @@
+40 dynamic_trace_events
+# FunctionId Group Tag "Name Type" Parameters
+1 TAU_DEFAULT 0 "addr=<0x8058380> " EntryExit
+4 TAU_DEFAULT 0 "addr=<0x80579b0> " EntryExit
+7 TAU_DEFAULT 0 "addr=<0x80561a0> " EntryExit
+10 TAU_DEFAULT 0 "addr=<0x80563c0> " EntryExit
+13 TAU_DEFAULT 0 "addr=<0x8055f20> " EntryExit
+16 TAU_DEFAULT 0 "addr=<0x8055dd0> " EntryExit
+19 TAU_DISABLE 0 "addr=<0x8055530> [THROTTLED]" EntryExit
+22 TAU_DISABLE 0 "addr=<0x80553e0> [THROTTLED]" EntryExit
+25 TAU_DEFAULT 0 "addr=<0x8057580> " EntryExit
+2 TAUEVENT 0 "addr=<0x8058380>  - Heap Memory Used (KB)" TriggerValue
+3 TAUEVENT 0 "addr=<0x8058380>  - Memory Headroom Available (MB)" TriggerValue
+5 TAUEVENT 0 "addr=<0x80579b0>  - Heap Memory Used (KB)" TriggerValue
+6 TAUEVENT 0 "addr=<0x80579b0>  - Memory Headroom Available (MB)" TriggerValue
+8 TAUEVENT 0 "addr=<0x80561a0>  - Heap Memory Used (KB)" TriggerValue
+9 TAUEVENT 0 "addr=<0x80561a0>  - Memory Headroom Available (MB)" TriggerValue
+11 TAUEVENT 0 "addr=<0x80563c0>  - Heap Memory Used (KB)" TriggerValue
+12 TAUEVENT 0 "addr=<0x80563c0>  - Memory Headroom Available (MB)" TriggerValue
+14 TAUEVENT 0 "addr=<0x8055f20>  - Heap Memory Used (KB)" TriggerValue
+15 TAUEVENT 0 "addr=<0x8055f20>  - Memory Headroom Available (MB)" TriggerValue
+17 TAUEVENT 0 "addr=<0x8055dd0>  - Heap Memory Used (KB)" TriggerValue
+18 TAUEVENT 0 "addr=<0x8055dd0>  - Memory Headroom Available (MB)" TriggerValue
+20 TAUEVENT 0 "addr=<0x8055530>  - Heap Memory Used (KB)" TriggerValue
+21 TAUEVENT 0 "addr=<0x8055530>  - Memory Headroom Available (MB)" TriggerValue
+23 TAUEVENT 0 "addr=<0x80553e0>  - Heap Memory Used (KB)" TriggerValue
+24 TAUEVENT 0 "addr=<0x80553e0>  - Memory Headroom Available (MB)" TriggerValue
+26 TAUEVENT 0 "addr=<0x8057580>  - Heap Memory Used (KB)" TriggerValue
+27 TAUEVENT 0 "addr=<0x8057580>  - Memory Headroom Available (MB)" TriggerValue
+60000 TRACER 0 "EV_INIT" none
+60001 TRACER 0 "FLUSH_ENTER" none
+60002 TRACER 0 "FLUSH_EXIT" none
+60003 TRACER 0 "FLUSH_CLOSE" none
+60004 TRACER 0 "FLUSH_INITM" none
+60005 TRACER 0 "WALL_CLOCK" none
+60006 TRACER 0 "CONT_EVENT" none
+60007 TAU_MESSAGE -7 "MESSAGE_SEND" par
+60008 TAU_MESSAGE -8 "MESSAGE_RECV" par
+70000 TAUEVENT 0 "ONESIDED_MESSAGE_SEND" TriggerValue
+70001 TAUEVENT 0 "ONESIDED_MESSAGE_RECV" TriggerValue
+70002 TAUEVENT 0 "ONESIDED_MESSAGE_ID_TriggerValueT1" TriggerValue
+70003 TAUEVENT 0 "ONESIDED_MESSAGE_ID_TriggerValueT2" TriggerValue

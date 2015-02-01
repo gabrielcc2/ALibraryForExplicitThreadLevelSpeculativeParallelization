@@ -1,0 +1,834 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/tether.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* tether.c
+        -:    2:*
+        -:    3:* collection of routines to service tether  potentials
+        -:    4:*  these fix an atom to a location 
+        -:    5:*
+        -:    6:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    7:*
+        -:    8:* these routines hold a data base (in terms of array indeces)
+        -:    9:* of tethers, with the associated position and force constant
+        -:   10:*
+        -:   11:* (this could be table driven but what the hell memories cheap)
+        -:   12:*
+        -:   13:* the routines for potential value, force and (eventually) second
+        -:   14:* derivatives are here also
+        -:   15:*
+        -:   16:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   17:* this allows for parralellization if needed (on a PC?)
+        -:   18:*
+        -:   19:*/
+        -:   20:/*
+        -:   21:*  copyright 1992 Robert W. Harrison
+        -:   22:*  
+        -:   23:*  This notice may not be removed
+        -:   24:*  This program may be copied for scientific use
+        -:   25:*  It may not be sold for profit without explicit
+        -:   26:*  permission of the author(s) who retain any
+        -:   27:*  commercial rights including the right to modify 
+        -:   28:*  this notice
+        -:   29:*/
+        -:   30:
+        -:   31:#define ANSI 1
+        -:   32:/* misc includes - ANSI and some are just to be safe */
+        -:   33:#include <stdio.h>
+        -:   34:#include <ctype.h>
+        -:   35:#include <math.h>
+        -:   36:#ifdef ANSI
+        -:   37:#include <stdlib.h>
+        -:   38:#endif
+        -:   39://#include "ammp.h"
+        -:   40:/* ATOM structure contains a serial number for indexing into
+        -:   41:* arrays and the like (a Hessian)
+        -:   42:* but otherwise is self-contained. Note the hooks for Non-tethered potentials
+        -:   43:*/
+        -:   44:typedef struct{
+        -:   45:	ATOM *atom1;
+        -:   46:	float k,x,y,z;
+        -:   47:	void *next;
+        -:   48:	}  TETHER;
+        -:   49:#define tetherLONG sizeof(TETHER)
+        -:   50:
+        -:   51:TETHER *tether_first = NULL;
+        -:   52:TETHER *tether_last = NULL;
+        -:   53:/* function tether adds a tether to the tether list
+        -:   54:* returns 1 if ok
+        -:   55:* returns 0 if not
+        -:   56:*  is passed the atom serial number, position and constant
+        -:   57:* allocates the new memory, initializes it and
+        -:   58:* returns
+        -:   59:*/
+function _Z6tetheriffff called 0 returned 0% blocks executed 0%
+    #####:   60:int tether(int p1, float fk , float x, float y, float z)
+        -:   61:	{
+        -:   62:	ATOM *ap1,*a_m_serial(int);
+        -:   63:	TETHER *new_p;
+        -:   64:	char line[80];
+        -:   65:/* get the atom pointers for the two serial numbers */
+    #####:   66:	ap1 = a_m_serial( p1 );
+call    0 never executed
+    #####:   67:	if( (ap1 == NULL)  ) 
+branch  0 never executed
+branch  1 never executed
+        -:   68:	{
+        -:   69:	sprintf( line,"undefined atom in tether %d \0",p1);
+    #####:   70:	aaerror( line );
+call    0 never executed
+    #####:   71:	return 0;
+        -:   72:	}
+        -:   73:/* check to see if it exists and update if so */
+    #####:   74:	if( tether_first != NULL)
+branch  0 never executed
+branch  1 never executed
+        -:   75:	{
+    #####:   76:	new_p = tether_first;
+    #####:   77:	while(1)
+        -:   78:	{
+    #####:   79:		if( new_p ->next == NULL) break;
+branch  0 never executed
+branch  1 never executed
+    #####:   80:		if( (ATOM*) new_p->atom1 == ap1)
+branch  0 never executed
+branch  1 never executed
+        -:   81:		{
+    #####:   82:			new_p -> k = fk;
+    #####:   83:			new_p -> x = x;
+    #####:   84:			new_p -> y = y;
+    #####:   85:			new_p -> z = z;
+    #####:   86:			return 1;
+        -:   87:		}
+    #####:   88:		if( (TETHER*) new_p->next == new_p ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:   89:		new_p = (TETHER*) new_p->next;
+        -:   90:	}
+        -:   91:	}	
+    #####:   92:	if( ( new_p = (TETHER*) malloc( tetherLONG ) ) == NULL)
+branch  0 never executed
+branch  1 never executed
+        -:   93:	{
+    #####:   94:	return 0;
+        -:   95:	}
+        -:   96:	/* initialize the pointers */
+    #####:   97:	if( tether_first == NULL) tether_first = new_p;
+branch  0 never executed
+branch  1 never executed
+    #####:   98:	if( tether_last == NULL) tether_last = new_p;
+branch  0 never executed
+branch  1 never executed
+    #####:   99:	new_p -> atom1 = ap1;
+    #####:  100:	new_p -> k = fk;
+    #####:  101:	new_p -> x = x;
+    #####:  102:	new_p -> y = y;
+    #####:  103:	new_p -> z = z;
+    #####:  104:	new_p -> next = new_p;
+    #####:  105:	tether_last -> next = new_p;
+    #####:  106:	tether_last = new_p;
+    #####:  107:	return 1;
+        -:  108:	}
+        -:  109:
+        -:  110:
+function _Z9alltetherf called 0 returned 0% blocks executed 0%
+    #####:  111:int alltether(float fk)
+        -:  112:{
+        -:  113:	ATOM *ap1 ;
+        -:  114:	ATOM *a_next(int);	
+        -:  115:	int i,numatm,a_number();
+    #####:  116:	numatm = a_number();
+call    0 never executed
+    #####:  117:	if( numatm < 1 ) return 0;
+branch  0 never executed
+branch  1 never executed
+        -:  118:
+        -:  119:/* */
+        -:  120:/* get the first atom and then loop over them all */
+        -:  121:/* write a tether for each with the given force constant */
+    #####:  122:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  123:	{
+    #####:  124:		ap1 = a_next(i);
+call    0 never executed
+    #####:  125:		if( fabs(ap1->x ) > 1.e-8)
+branch  0 never executed
+branch  1 never executed
+    #####:  126:		if( fabs(ap1->y ) > 1.e-8)
+branch  0 never executed
+branch  1 never executed
+    #####:  127:		if( fabs(ap1->z ) > 1.e-8)
+branch  0 never executed
+branch  1 never executed
+        -:  128:		{
+    #####:  129:			if( tether( ap1->serial, fk, ap1->x,ap1->y,ap1->z) )
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  130:			{ } else {return 0 ;}
+        -:  131:		}
+        -:  132:	}
+    #####:  133:	return numatm;
+        -:  134:}
+        -:  135:
+        -:  136:
+        -:  137:/* v_tether()
+        -:  138:* this function sums up the potentials
+        -:  139:* for the atoms defined in the TETHER data structure.
+        -:  140:*/
+        -:  141:/* standard returns 0 if error (any) 1 if ok
+        -:  142:* V is the potential */
+function _Z8v_tetherPff called 0 returned 0% blocks executed 0%
+    #####:  143:int v_tether(float *V, float lambda)
+        -:  144:{
+        -:  145:	TETHER *bp;
+        -:  146:	float r,xt,yt,zt;
+        -:  147:	ATOM *a1;
+        -:  148:
+        -:  149:
+    #####:  150:	bp = tether_first;
+    #####:  151:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  152:       while(1)
+        -:  153:       {
+    #####:  154:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  155:	a1 = bp->atom1; 
+    #####:  156:	if( a1->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  157:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  158:	{
+    #####:  159:	r =     (a1->x - bp->x)*(a1->x - bp->x);
+    #####:  160:	r = r + (a1->y - bp->y)*(a1->y - bp->y);
+    #####:  161:	r = r + (a1->z - bp->z)*(a1->z - bp->z);
+        -:  162:	} else
+        -:  163:	{
+    #####:  164:	xt = (a1->x -bp->x +lambda*(a1->dx));
+    #####:  165:	yt = (a1->y -bp->y +lambda*(a1->dy));
+    #####:  166:	zt = (a1->z -bp->z +lambda*(a1->dz));
+    #####:  167:	r = xt*xt+yt*yt+zt*zt;
+        -:  168:	}
+    #####:  169:	 *V += bp->k*r ;
+        -:  170:	 }
+    #####:  171:	if( bp == (TETHER*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  172:	bp = (TETHER*) bp->next;
+        -:  173:       }
+        -:  174:}
+        -:  175:/* f_tether()
+        -:  176:*
+        -:  177:* f_tether increments the forces in the atom structures by the force
+        -:  178:* due to the tether components.  NOTE THE WORD increment.
+        -:  179:* the forces should first be zero'd.
+        -:  180:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  181:* on bigger (and better?) machines the different potential terms
+        -:  182:* may be updated at random or in parrellel, if we assume that this routine
+        -:  183:* will initialize the forces then we can't do this.
+        -:  184:*/
+function _Z8f_tetherf called 0 returned 0% blocks executed 0%
+    #####:  185:int f_tether(float lambda)
+        -:  186:/*  returns 0 if error, 1 if OK */
+        -:  187:{
+        -:  188:	TETHER *bp;
+        -:  189:	float r,k,ux,uy,uz;
+        -:  190:	ATOM *a1;
+        -:  191:
+        -:  192:
+    #####:  193:	bp = tether_first;
+    #####:  194:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  195:       while(1)
+        -:  196:       {
+    #####:  197:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  198:	k = bp->k;
+    #####:  199:	a1 = bp->atom1; 
+    #####:  200:	if( a1->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  201:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  202:	{
+    #####:  203:	ux = (a1->x - bp->x );
+    #####:  204:	uy = (a1->y - bp->y );
+    #####:  205:	uz = (a1->z - bp->z );
+        -:  206:	}else{
+    #####:  207:	ux = (a1->x -bp->x +lambda*(a1->dx));
+    #####:  208:	uy = (a1->y -bp->y +lambda*(a1->dy));
+    #####:  209:	uz = (a1->z -bp->z +lambda*(a1->dz));
+        -:  210:	}
+    #####:  211:	r = ux*ux + uy*uy + uz*uz;
+        -:  212:	 /* watch for FP errors*/
+    #####:  213:	 if( r <= 1.e-5)
+branch  0 never executed
+branch  1 never executed
+        -:  214:	 { goto SKIP; }else{
+    #####:  215:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  216:	}
+    #####:  217:	ux = 2*k*(r)*ux; 
+    #####:  218:	uy = 2*k*(r)*uy; 
+    #####:  219:	uz = 2*k*(r)*uz;
+    #####:  220:	a1->fx -= ux; 
+    #####:  221:	a1->fy -= uy; 
+    #####:  222:	a1->fz -= uz; 
+        -:  223:	}
+        -:  224:SKIP:
+    #####:  225:	if( bp == (TETHER*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  226:	bp = (TETHER*) bp->next;
+        -:  227:       }
+        -:  228:}
+        -:  229:/* routine dump_tethers
+        -:  230:* this function outputs the tether parameters
+        -:  231:* and does it in a simple form
+        -:  232:* tether ser1,k,x,y,z
+        -:  233:* the rest is just free format
+        -:  234:*/
+        -:  235:/* SPEC use modern declaration style, to match proto jh/9/22/99 */
+function _Z12dump_tethersP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  236:void dump_tethers( FILE *where )
+        -:  237:{
+        -:  238:	TETHER *b;
+        -:  239:	ATOM *a1;
+    #####:  240:	b = tether_first;
+    #####:  241:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  242:	while( ((TETHER*)b->next != b) )
+branch  0 never executed
+branch  1 never executed
+        -:  243:	{
+    #####:  244:	if( (TETHER*)b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  245:	a1 = b->atom1; 
+        -:  246:	fprintf( where,"tether %d %f %f %f %f ;\n",a1->serial,
+    #####:  247:		b->k,b->x,b->y,b->z);
+    #####:  248:	b = (TETHER*)b->next;
+        -:  249:	}
+    #####:  250:	if( (TETHER*) b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  251:	a1 = b->atom1; 
+        -:  252:	fprintf( where,"tether %d %f %f %f %f ;\n",a1->serial,
+    #####:  253:		b->k,b->x,b->y,b->z);
+        -:  254:}	
+        -:  255:/* a_tether()
+        -:  256:* this function sums up the potentials
+        -:  257:* for the atoms defined in the TETHER data structure.
+        -:  258:*/
+        -:  259:/* standard returns 0 if error (any) 1 if ok
+        -:  260:* V is the potential */
+function _Z8a_tetherPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  261:int a_tether(float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  262:{
+        -:  263:	TETHER *bp;
+        -:  264:	float r,xt,yt,zt;
+        -:  265:	float rms, rmax;
+        -:  266:	int tried,imax;
+        -:  267:	ATOM *a1;
+        -:  268:	float bstrot(float [], float [], float [], float [], float [], float [], int, float[3][3], float[3]);
+        -:  269:	float (*x)[],(*y)[],(*z)[],(*xx)[],(*yy)[],(*zz)[];
+        -:  270:	float matrix[3][3],delta[3];
+        -:  271:	int numatm,a_number();
+        -:  272:
+        -:  273:/* SPEC pick this one up from ammp.h now jh/9/21/99 */
+        -:  274:/*	int set_f_variable(); */
+        -:  275:
+        -:  276:	
+    #####:  277:	rms = 0.; rmax = -1.;
+    #####:  278:	tried = 0;
+    #####:  279:	bp = tether_first;
+    #####:  280:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  281:	numatm = a_number();
+call    0 never executed
+    #####:  282:	x = (float (*)[]) malloc( numatm*sizeof(float));
+    #####:  283:	y = (float (*)[]) malloc( numatm*sizeof(float));
+    #####:  284:	z = (float (*)[] )malloc( numatm*sizeof(float));
+    #####:  285: 	xx = (float (*)[]) malloc( numatm*sizeof(float));
+    #####:  286:	yy = (float (*)[]) malloc( numatm*sizeof(float));
+    #####:  287:	zz = (float (*)[]) malloc( numatm*sizeof(float));
+        -:  288:   
+    #####:  289:	if( x == NULL || y == NULL || z== NULL || xx == NULL ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  290:		yy == NULL || zz== NULL)
+    #####:  291:		{aaerror("cannot allocate memory"); return 1;}
+call    0 never executed
+        -:  292:
+    #####:  293:	while(1)
+        -:  294:       {
+    #####:  295:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  296:	a1 = bp->atom1; 
+    #####:  297:	if( a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  298:	{
+    #####:  299:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  300:	{
+    #####:  301:	r =     (a1->x - bp->x)*(a1->x - bp->x);
+    #####:  302:	r = r + (a1->y - bp->y)*(a1->y - bp->y);
+    #####:  303:	r = r + (a1->z - bp->z)*(a1->z - bp->z);
+        -:  304:	} else
+        -:  305:	{
+    #####:  306:	xt = (a1->x -bp->x +lambda*(a1->dx));
+    #####:  307:	yt = (a1->y -bp->y +lambda*(a1->dy));
+    #####:  308:	zt = (a1->z -bp->z +lambda*(a1->dz));
+    #####:  309:	r = xt*xt+yt*yt+zt*zt;
+        -:  310:	}
+        -:  311:
+    #####:  312:	(*x)[tried] = a1->x+lambda*a1->dx;
+    #####:  313:	(*y)[tried] = a1->y+lambda*a1->dy;
+    #####:  314:	(*z)[tried] = a1->z+lambda*a1->dz;
+    #####:  315:	(*xx)[tried] = bp->x;
+    #####:  316:	(*yy)[tried] = bp->y;
+    #####:  317:	(*zz)[tried] = bp->z;
+        -:  318:
+    #####:  319:	tried += 1;
+    #####:  320:	rms = rms + r;
+    #####:  321:	if( r > rmax ) {rmax = r; imax = a1->serial;}
+branch  0 never executed
+branch  1 never executed
+        -:  322:
+    #####:  323:	zt = bp->k*r ;
+    #####:  324:	*V += zt;
+        -:  325:#ifndef SPEC_CPU2000
+        -:  326:	fprintf(op,"Tether %d E %f error %f\n",a1->serial,zt,sqrt(r));
+        -:  327:#endif
+        -:  328:	}
+    #####:  329:	if( bp == (TETHER*) bp->next ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:  330:	bp = (TETHER*) bp->next;
+        -:  331:       }
+    #####:  332:	   if( tried > 0){
+branch  0 never executed
+branch  1 never executed
+    #####:  333:		rms = sqrt(rms/tried); rmax = sqrt(rmax);
+        -:  334:/* SPEC version 
+        -:  335:	fprintf(op," RMSD %f Maximum Deviation %f on atom %d\n",rms,rmax,imax);
+        -:  336:*/
+    #####:  337:	fprintf(op," RMSD %f Maximum Deviation %f \n",rms,rmax);
+        -:  338:	 fprintf(op," RMSD after superposition %f\n",
+        -:  339:			bstrot( &(*x)[0], &(*y)[0], &(*z)[0], &(*xx)[0], &(*yy)[0], 
+    #####:  340:			&(*zz)[0],tried,matrix,delta) );
+call    0 never executed
+    #####:  341:	set_f_variable("rmsdev",rms);
+call    0 never executed
+        -:  342:	   }
+    #####:  343:	free(zz); free(yy); free(xx); free(z); free(y); free(x);
+        -:  344:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  345:        /*        any callers actually look at this return value       */
+        -:  346:        /*        - j.henning 21-sep-99                                */
+    #####:  347:        return 1;
+        -:  348:}
+        -:  349:/* routine to superimpose two sets of coordinates
+        -:  350:*  
+        -:  351:* cadged from Larry Andrews' Newvector.f library
+        -:  352:*
+        -:  353:C  The algorithm is from Ferro and Hermans, Acta Cryst., A33,345-347
+        -:  354:C  (1977).  Other algorithms give the same result, such as:
+        -:  355:C
+        -:  356:C  Kearsley, Acta Cryst., A45, 208-210 (1989)
+        -:  357:C  Diamond,  Acta Cryst., A44, 211-216 (1988)
+        -:  358:C  Kabsch,   Acta Cryst., A34, 827-828 (1978)
+        -:  359:C  Kabsch,   Acta Cryst., A32, 922-923 (1976)
+        -:  360:C
+        -:  361:C  The algorithm of Ferro and Hermans has the advantage that the
+        -:  362:C  rotational components are removed iteratively, so that residual
+        -:  363:C  numerical errors are correctly removed.  This leaves no
+        -:  364:C  possibility of poorly orthogonalized matrices.  The explicit
+        -:  365:C  iteration is not a problem.  The other methods simply hide the
+        -:  366:C  iteration in the eigenvector solver.  Ferro and Hermans
+        -:  367:C  simply build what is a simple, special purpose version of the QR
+        -:  368:C  method.
+        -:  369:*/
+        -:  370:
+        -:  371:#include <math.h>
+        -:  372:/*void matmul(float[],float[],float[],int,int);
+        -:  373:*/
+        -:  374:
+        -:  375:/* return the RMS error, -1 on internal error */
+function _Z6bstrotPfS_S_S_S_S_iPA3_fS_ called 0 returned 0% blocks executed 0%
+    #####:  376:float bstrot(float x[], float y[], float z[], float xx[], float yy[], float zz[], int na, float matrix[3][3], float delta [])
+        -:  377:{
+        -:  378:
+        -:  379:	float tensor[3][3],cx,cy,cz,cxx,cyy,czz;
+        -:  380:	float tx,ty,tz,txx,tyy,tzz;
+        -:  381:	float rms;
+        -:  382:	float sx[3][3],sy[3][3],sz[3][3];
+        -:  383:	float sq[3][3];
+        -:  384:	void cpyvec(float[], float[], int);
+        -:  385:	void matmul(float[],float[],float[],int,int);
+        -:  386:	int i,j,ipass;
+        -:  387:
+        -:  388:
+    #####:  389:	if( na < 1) return -1.;
+branch  0 never executed
+branch  1 never executed
+        -:  390:/* find the centers of mass */
+    #####:  391:	cx = 0.;
+    #####:  392:	cy = 0.;
+    #####:  393:	cz = 0.;
+    #####:  394:	cxx = 0.;
+    #####:  395:	cyy = 0.;
+    #####:  396:	czz = 0.;
+    #####:  397:	for( i=0; i< na; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  398:	{
+    #####:  399:		cx += x[i];
+    #####:  400:		cy += y[i];
+    #####:  401:		cz += z[i];
+    #####:  402:		cxx += xx[i];
+    #####:  403:		cyy += yy[i];
+    #####:  404:		czz += zz[i];
+        -:  405:	}
+    #####:  406:	cx /= na;
+    #####:  407:	cy /= na;
+    #####:  408:	cz /= na;
+    #####:  409:	cxx /= na;
+    #####:  410:	cyy /= na;
+    #####:  411:	czz /= na;
+        -:  412:/* make the metric tensor */
+    #####:  413:	for( i=0; i< 3; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  414:	for( j=0; j< 3; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  415:	{ 
+    #####:  416:		tensor[i][j] = 0.; 
+    #####:  417:		matrix[i][j] = 0.;
+    #####:  418:		sx[i][j] = 0.;
+    #####:  419:		sy[i][j] = 0.;
+    #####:  420:		sz[i][j] = 0.;
+        -:  421:	}
+    #####:  422:	matrix[0][0] = 1.;	
+    #####:  423:	matrix[1][1] = 1.;	
+    #####:  424:	matrix[2][2] = 1.;	
+    #####:  425:	sx[0][0] = 1.;
+    #####:  426:	sy[1][1] = 1.;
+    #####:  427:	sz[2][2] = 1.;
+    #####:  428:	for( i=0; i<na; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  429:	{
+    #####:  430:		tx = x[i] - cx;	
+    #####:  431:		ty = y[i] - cy;	
+    #####:  432:		tz = z[i] - cz;	
+    #####:  433:		txx = xx[i] - cxx;	
+    #####:  434:		tyy = yy[i] - cyy;	
+    #####:  435:		tzz = zz[i] - czz;	
+    #####:  436:		tensor[0][0] += tx*txx;
+    #####:  437:		tensor[0][1] += tx*tyy;
+    #####:  438:		tensor[0][2] += tx*tzz;
+    #####:  439:		tensor[1][0] += ty*txx;
+    #####:  440:		tensor[1][1] += ty*tyy;
+    #####:  441:		tensor[1][2] += ty*tzz;
+    #####:  442:		tensor[2][0] += tz*txx;
+    #####:  443:		tensor[2][1] += tz*tyy;
+    #####:  444:		tensor[2][2] += tz*tzz;
+        -:  445:	}
+        -:  446:/* now find the linear orthogonal transformation which symetrizes
+        -:  447:* the metric tensor */
+        -:  448:
+    #####:  449:	for( ipass = 0; ipass < 20; ipass ++)
+branch  0 never executed
+branch  1 never executed
+        -:  450:	{
+    #####:  451:	rms = 0.;
+        -:  452:/* x */	
+    #####:  453:		tx = atan2( tensor[2][1]-tensor[1][2], 
+    #####:  454:			tensor[1][1]+tensor[2][2]);
+    #####:  455:		rms += fabs(tx);
+    #####:  456:		ty = cos(tx); tz = sin(tx);
+    #####:  457:		sx[1][1] = ty;
+    #####:  458:		sx[2][1] = -tz;
+    #####:  459:		sx[1][2] = tz;
+    #####:  460:		sx[2][2] = ty;
+    #####:  461:		matmul( &sx[0][0],&tensor[0][0],&sq[0][0],3,3);
+call    0 never executed
+    #####:  462:		cpyvec(&sq[0][0],&tensor[0][0],9);
+call    0 never executed
+    #####:  463:		matmul( &sx[0][0],&matrix[0][0],&sq[0][0],3,3);
+call    0 never executed
+    #####:  464:		cpyvec( &sq[0][0],&matrix[0][0],9);
+call    0 never executed
+        -:  465:/* y */	
+    #####:  466:		tx = atan2( tensor[2][0]-tensor[0][2], 
+    #####:  467:			tensor[0][0]+tensor[2][2]);
+    #####:  468:		rms += fabs(tx);
+    #####:  469:		ty = cos(tx); tz = sin(tx);
+    #####:  470:		sy[0][0] = ty;
+    #####:  471:		sy[2][0] = -tz;
+    #####:  472:		sy[0][2] = tz;
+    #####:  473:		sy[2][2] = ty;
+    #####:  474:		matmul( &sy[0][0],&tensor[0][0],&sq[0][0],3,3);
+call    0 never executed
+    #####:  475:		cpyvec(&sq[0][0],&tensor[0][0],9);
+call    0 never executed
+    #####:  476:		matmul( &sy[0][0],&matrix[0][0],&sq[0][0],3,3);
+call    0 never executed
+    #####:  477:		cpyvec( &sq[0][0],&matrix[0][0],9);
+call    0 never executed
+        -:  478:/* z */	
+    #####:  479:		tx = atan2( tensor[0][1]-tensor[1][0], 
+    #####:  480:			tensor[1][1]+tensor[0][0]);
+    #####:  481:		rms += fabs(tx);
+    #####:  482:		ty = cos(tx); tz = sin(tx);
+    #####:  483:		sz[1][1] = ty;
+    #####:  484:		sz[0][1] = -tz;
+    #####:  485:		sz[1][0] = tz;
+    #####:  486:		sz[0][0] = ty;
+    #####:  487:		matmul( &sz[0][0],&tensor[0][0],&sq[0][0],3,3);
+call    0 never executed
+    #####:  488:		cpyvec(&sq[0][0],&tensor[0][0],9);
+call    0 never executed
+    #####:  489:		matmul(&sz[0][0],&matrix[0][0], &sq[0][0],3,3);
+call    0 never executed
+    #####:  490:		cpyvec(&sq[0][0],&matrix[0][0],9);
+call    0 never executed
+        -:  491:/*  termination critereon here */
+    #####:  492:		if( rms < 1.e-7) break;
+branch  0 never executed
+branch  1 never executed
+        -:  493:	}
+    #####:  494:	rms = 0.;
+    #####:  495:	for(i=0; i< na; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  496:	{
+    #####:  497:	txx = xx[i] - cxx;
+    #####:  498:	tyy = yy[i] - cyy;
+    #####:  499:	tzz = zz[i] - czz;
+    #####:  500:	tx = matrix[0][0]*txx + matrix[1][0]*tyy + matrix[2][0]*tzz;
+    #####:  501:	ty = matrix[0][1]*txx + matrix[1][1]*tyy + matrix[2][1]*tzz;
+    #####:  502:	tz = matrix[0][2]*txx + matrix[1][2]*tyy + matrix[2][2]*tzz;
+    #####:  503:	tx += cx - x[i];
+    #####:  504:	ty += cy - y[i];
+    #####:  505:	tz += cz - z[i];
+    #####:  506:	rms += tx*tx + ty*ty + tz*tz;
+        -:  507:	}
+    #####:  508:	tx = matrix[0][0]*cxx + matrix[1][0]*cyy + matrix[2][0]*czz;
+    #####:  509:	ty = matrix[0][1]*cxx + matrix[1][1]*cyy + matrix[2][1]*czz;
+    #####:  510:	tz = matrix[0][2]*cxx + matrix[1][2]*cyy + matrix[2][2]*czz;
+    #####:  511:	delta[0] = cx - tx;
+    #####:  512:	delta[1] = cy - ty;
+    #####:  513:	delta[2] = cz - tz;
+    #####:  514:	return sqrt(rms/na);
+        -:  515:
+        -:  516:
+        -:  517:}/* end of routine */
+        -:  518:/* copy a vector into another */
+function _Z6cpyvecPfS_i called 0 returned 0% blocks executed 0%
+    #####:  519:void cpyvec(float orig[], float copy[], int n)
+        -:  520:{
+        -:  521:	int i;
+    #####:  522:	for( i=0; i< n; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  523:		copy[i] = orig[i];
+    #####:  524:}
+        -:  525:/* 
+        -:  526:multiply c[n][n] =  a[n][m] b[m][n];
+        -:  527:*/
+function _Z6matmulPfS_S_ii called 0 returned 0% blocks executed 0%
+    #####:  528:void matmul(float a[], float b[], float c[], int n, int m)
+        -:  529:{
+        -:  530:	int i,j,k,ioff,koff;
+        -:  531:
+    #####:  532:	for( i=0; i< n*n; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  533:		c[i] = 0.;
+    #####:  534:	for( i=0; i< n; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  535:	{
+    #####:  536:		ioff = i*n;
+    #####:  537:		for( j=0; j< n; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  538:		{
+    #####:  539:		koff = 0.;
+    #####:  540:		for( k=0; k<m; k++)
+branch  0 never executed
+branch  1 never executed
+        -:  541:		{
+    #####:  542:		c[ ioff +j] += a[ioff + k] *b[ j +koff];
+    #####:  543:		koff += m;
+        -:  544:		}
+        -:  545:		}
+        -:  546:	}
+        -:  547:
+    #####:  548:}
+        -:  549:/* v_ho_tether()
+        -:  550:* this function sums up the potentials
+        -:  551:* for the atoms defined in the TETHER data structure.
+        -:  552:* homotropy version !!!
+        -:  553:*/
+        -:  554:/* standard returns 0 if error (any) 1 if ok
+        -:  555:* V is the potential */
+function _Z11v_ho_tetherPff called 0 returned 0% blocks executed 0%
+    #####:  556:int v_ho_tether(float *V, float lambda)
+        -:  557:{
+        -:  558:	TETHER *bp;
+        -:  559:	float r,xt,yt,zt;
+        -:  560:	ATOM *a1;
+        -:  561:        float hol, get_f_variable(char*);
+        -:  562:
+    #####:  563:	hol = get_f_variable( "lambda");
+call    0 never executed
+    #####:  564:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  565:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  566:	if( hol == 1.) return 0;
+branch  0 never executed
+branch  1 never executed
+        -:  567:
+    #####:  568:	bp = tether_first;
+    #####:  569:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  570:       while(1)
+        -:  571:       {
+    #####:  572:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  573:	a1 = bp->atom1; 
+    #####:  574:	if( a1->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  575:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  576:	{
+    #####:  577:	xt = (a1->x -bp->x );
+    #####:  578:	yt = (a1->y -bp->y );
+    #####:  579:	zt = (a1->z -bp->z );
+        -:  580:	} else
+        -:  581:	{
+    #####:  582:	xt = (a1->x + lambda*(a1->dx) -bp->x);
+    #####:  583:	yt = (a1->y + lambda*(a1->dy) -bp->y);
+    #####:  584:	zt = (a1->z + lambda*(a1->dz) -bp->z);
+        -:  585:	}
+    #####:  586:	r =(xt*xt+yt*yt+zt*zt)*(1.-hol)*(1.-hol);
+    #####:  587:	 *V += bp->k*r ;
+        -:  588:	 }
+    #####:  589:	if( bp == (TETHER*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  590:	bp = (TETHER*) bp->next;
+        -:  591:       }
+        -:  592:}
+        -:  593:/* f_ho_tether()
+        -:  594:*
+        -:  595:* f_tether increments the forces in the atom structures by the force
+        -:  596:* due to the tether components.  NOTE THE WORD increment.
+        -:  597:* the forces should first be zero'd.
+        -:  598:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  599:* on bigger (and better?) machines the different potential terms
+        -:  600:* may be updated at random or in parrellel, if we assume that this routine
+        -:  601:* will initialize the forces then we can't do this.
+        -:  602:*
+        -:  603:*homotropy version
+        -:  604:*/
+function _Z11f_ho_tetherf called 0 returned 0% blocks executed 0%
+    #####:  605:int f_ho_tether(float lambda)
+        -:  606:/*  returns 0 if error, 1 if OK */
+        -:  607:{
+        -:  608:	TETHER *bp;
+        -:  609:	float r,k,ux,uy,uz;
+        -:  610:	ATOM *a1;
+        -:  611:        float hol, get_f_variable(char*);
+        -:  612:
+    #####:  613:	hol = get_f_variable( "lambda");
+call    0 never executed
+    #####:  614:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  615:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  616:	if( hol == 1.) return 0;
+branch  0 never executed
+branch  1 never executed
+        -:  617:
+        -:  618:
+        -:  619:
+    #####:  620:	bp = tether_first;
+    #####:  621:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  622:       while(1)
+        -:  623:       {
+    #####:  624:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  625:	k = bp->k;
+    #####:  626:	a1 = bp->atom1; 
+    #####:  627:	if( a1->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  628:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  629:	{
+    #####:  630:	ux = (a1->x - bp->x );
+    #####:  631:	uy = (a1->y - bp->y );
+    #####:  632:	uz = (a1->z - bp->z );
+        -:  633:	}else{
+    #####:  634:	ux = (a1->x -bp->x +lambda*(a1->dx));
+    #####:  635:	uy = (a1->y -bp->y +lambda*(a1->dy));
+    #####:  636:	uz = (a1->z -bp->z +lambda*(a1->dz));
+        -:  637:	}
+    #####:  638:	r = ux*ux + uy*uy + uz*uz;
+        -:  639:	 /* watch for FP errors*/
+    #####:  640:	 if( r <= 1.e-5)
+branch  0 never executed
+branch  1 never executed
+        -:  641:	 { goto SKIP; }else{
+    #####:  642:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  643:	}
+    #####:  644:	ux = 2*k*(r)*ux*(1.-hol); 
+    #####:  645:	uy = 2*k*(r)*uy*(1.-hol); 
+    #####:  646:	uz = 2*k*(r)*uz*(1.-hol);
+    #####:  647:	a1->fx -= ux; 
+    #####:  648:	a1->fy -= uy; 
+    #####:  649:	a1->fz -= uz; 
+        -:  650:	}
+        -:  651:SKIP:
+    #####:  652:	if( bp == (TETHER*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  653:	bp = (TETHER*) bp->next;
+        -:  654:       }
+        -:  655:}

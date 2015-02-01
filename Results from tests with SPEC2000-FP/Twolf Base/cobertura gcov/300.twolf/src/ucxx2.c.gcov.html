@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/ucxx2.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - ucxx2.c<span style="font-size: 80%;"> (source / <a href="ucxx2.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">139</td>
+            <td class="headerCovTableEntry">145</td>
+            <td class="headerCovTableEntryHi">95.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntry">68</td>
+            <td class="headerCovTableEntryMed">77.9 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;ucxxglb.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : int axcenter , aycenter , bxcenter , bycenter ;
+<span class="lineNum">       4 </span>                :            : int anxcenter , bnxcenter ;
+<span class="lineNum">       5 </span>                :            : int aleft , aright , bleft , bright ;
+<span class="lineNum">       6 </span>                :            : int potential_errors , error_count , P_limit ;
+<span class="lineNum">       7 </span>                :            : double total_wire_chg ;
+<span class="lineNum">       8 </span>                :            : double sigma_wire_chg ;
+<span class="lineNum">       9 </span>                :            : double mean_wire_chg ;
+<span class="lineNum">      10 </span>                :            : int wire_chgs ;
+<a name="11"><span class="lineNum">      11 </span>                :            : extern int attempts ;</a>
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :<span class="lineCov">   97434069 : ucxx2( )</span>
+<span class="lineNum">      14 </span>                :            : {
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :            : CBOXPTR acellptr , bcellptr ;
+<span class="lineNum">      17 </span>                :            : TIBOXPTR atileptr , btileptr ;
+<span class="lineNum">      18 </span>                :            : TEBOXPTR atermptr , btermptr ;
+<span class="lineNum">      19 </span>                :            : int error_light_is_on ;
+<span class="lineNum">      20 </span>                :            : int cost ;
+<span class="lineNum">      21 </span>                :            : int aorient , borient ;
+<span class="lineNum">      22 </span>                :            : int a1LoBin, a1HiBin, b1LoBin, b1HiBin ;
+<span class="lineNum">      23 </span>                :            : int a2LoBin, a2HiBin, b2LoBin, b2HiBin ;
+<span class="lineNum">      24 </span>                :            : int startxa1 , endxa1 , startxa2 , endxa2 ;
+<span class="lineNum">      25 </span>                :            : int startxb1 , endxb1 , startxb2 , endxb2 ;
+<span class="lineNum">      26 </span>                :            : int anbin , bnbin , i ;
+<span class="lineNum">      27 </span>                :            : int truth ;
+<span class="lineNum">      28 </span>                :            : double temp ;
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :<span class="lineCov">   97434069 : acellptr = carray[ a ]    ; </span>
+<span class="lineNum">      32 </span>                :<span class="lineCov">   97434069 : axcenter = acellptr-&gt;cxcenter ; </span>
+<span class="lineNum">      33 </span>                :<span class="lineCov">   97434069 : aycenter = acellptr-&gt;cycenter ; </span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">   97434069 : aorient  = acellptr-&gt;corient  ; </span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">   97434069 : atileptr = acellptr-&gt;tileptr ; </span>
+<span class="lineNum">      36 </span>                :<span class="lineCov">   97434069 : aleft    = atileptr-&gt;left    ; </span>
+<span class="lineNum">      37 </span>                :<span class="lineCov">   97434069 : aright   = atileptr-&gt;right   ; </span>
+<span class="lineNum">      38 </span>                :<span class="lineCov">   97434069 : atermptr = atileptr-&gt;termsptr ; </span>
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :<span class="lineCov">   97434069 : bcellptr = carray[ b ]    ; </span>
+<span class="lineNum">      41 </span>                :<span class="lineCov">   97434069 : bxcenter = bcellptr-&gt;cxcenter ; </span>
+<span class="lineNum">      42 </span>                :<span class="lineCov">   97434069 : bycenter = bcellptr-&gt;cycenter ; </span>
+<span class="lineNum">      43 </span>                :<span class="lineCov">   97434069 : borient  = bcellptr-&gt;corient  ; </span>
+<span class="lineNum">      44 </span>                :<span class="lineCov">   97434069 : btileptr = bcellptr-&gt;tileptr ; </span>
+<span class="lineNum">      45 </span>                :<span class="lineCov">   97434069 : bleft    = btileptr-&gt;left    ; </span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">   97434069 : bright   = btileptr-&gt;right   ; </span>
+<span class="lineNum">      47 </span>                :<span class="lineCov">   97434069 : btermptr = btileptr-&gt;termsptr ; </span>
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :<span class="lineCov">   97434069 : newbinpenal = binpenal ;</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">   97434069 : newrowpenal = rowpenal ;</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">   97434069 : newpenal    = penalty  ;</span>
+<span class="lineNum">      52 </span>                :            : 
+<span class="lineNum">      53 </span>                :<span class="lineCov">   97434069 : new_old( bright-bleft-aright+aleft ) ;</span>
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :<span class="lineCov">   97434069 : find_new_pos() ;</span>
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : a1LoBin = SetBin( startxa1 = axcenter + aleft  ) ; </span>
+<span class="lineNum">      58 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : a1HiBin = SetBin( endxa1   = axcenter + aright ) ; </span>
+<span class="lineNum">      59 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : b1LoBin = SetBin( startxb1 = bxcenter + bleft  ) ; </span>
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : b1HiBin = SetBin( endxb1   = bxcenter + bright ) ; </span>
+<span class="lineNum">      61 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : a2LoBin = SetBin( startxa2 = anxcenter + aleft  ) ; </span>
+<span class="lineNum">      62 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : a2HiBin = SetBin( endxa2   = anxcenter + aright ) ; </span>
+<span class="lineNum">      63 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : b2LoBin = SetBin( startxb2 = bnxcenter + bleft  ) ; </span>
+<span class="lineNum">      64 </span>        [<span class="branchCov" title="Branch 0 was taken 97434069 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   97434069 : b2HiBin = SetBin( endxb2   = bnxcenter + bright ) ; </span>
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>                :<span class="lineCov">   97434069 : old_assgnto_new2( a1LoBin , a1HiBin , b1LoBin , b1HiBin , </span>
+<span class="lineNum">      67 </span>                :            :                   a2LoBin , a2HiBin , b2LoBin , b2HiBin ) ;
+<span class="lineNum">      68 </span>                :            : 
+<span class="lineNum">      69 </span>                :<span class="lineCov">   97434069 : sub_penal( startxa1 , endxa1 , ablock , a1LoBin , a1HiBin ) ; </span>
+<span class="lineNum">      70 </span>                :<span class="lineCov">   97434069 : sub_penal( startxb1 , endxb1 , bblock , b1LoBin , b1HiBin ) ; </span>
+<span class="lineNum">      71 </span>                :<span class="lineCov">   97434069 : add_penal( startxa2 , endxa2 , bblock , a2LoBin , a2HiBin ) ; </span>
+<span class="lineNum">      72 </span>                :<span class="lineCov">   97434069 : add_penal( startxb2 , endxb2 , ablock , b2LoBin , b2HiBin ) ; </span>
+<span class="lineNum">      73 </span>                :            : 
+<span class="lineNum">      74 </span>                :<span class="lineCov">   97434069 : binpen_chg = newbinpenal - binpenal ;</span>
+<span class="lineNum">      75 </span>                :<span class="lineCov">   97434069 : rowpen_chg = newrowpenal - rowpenal ;</span>
+<span class="lineNum">      76 </span>                :<span class="lineCov">  194868138 : newpenal = (int)( roLenCon * (double) newrowpenal + </span>
+<span class="lineNum">      77 </span>                :<span class="lineCov">   97434069 :                                 binpenCon * (double) newbinpenal ) ;</span>
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :<span class="lineCov">   97434069 : error_light_is_on = 0 ;</span>
+<span class="lineNum">      80 </span>        [<span class="branchCov" title="Branch 0 was taken 16352471 times"> + </span><span class="branchCov" title="Branch 1 was taken 81081598 times"> + </span>]:<span class="lineCov">   97434069 : if( newpenal - penalty &gt; P_limit ) {</span>
+<span class="lineNum">      81 </span>        [<span class="branchCov" title="Branch 0 was taken 5982 times"> + </span><span class="branchCov" title="Branch 1 was taken 16346489 times"> + </span>]:<span class="lineCov">   16352471 :     if( potential_errors &lt; 100 ) {</span>
+<span class="lineNum">      82 </span>                :<span class="lineCov">       5982 :         ++potential_errors ;</span>
+<span class="lineNum">      83 </span>                :<span class="lineCov">       5982 :         error_light_is_on = 1 ;</span>
+<span class="lineNum">      84 </span>                :            :     } else {
+<span class="lineNum">      85 </span>                :<span class="lineCov">   16346489 :         earlyRej++ ;</span>
+<span class="lineNum">      86 </span>                :<span class="lineCov">   16346489 :         return( -1 ) ;</span>
+<span class="lineNum">      87 </span>                :            :     }
+<span class="lineNum">      88 </span>                :            : }
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>        [<span class="branchCov" title="Branch 0 was taken 56647736 times"> + </span><span class="branchCov" title="Branch 1 was taken 24439844 times"> + </span>]:<span class="lineCov">   81087580 : if( ablock != bblock ) {</span>
+<span class="lineNum">      91 </span>                :<span class="lineCov">   56647736 :     term_newpos_a( atermptr , anxcenter , bycenter , aorient ) ; </span>
+<span class="lineNum">      92 </span>                :<span class="lineCov">   56647736 :     term_newpos_b( btermptr , bnxcenter , aycenter , borient ) ; </span>
+<span class="lineNum">      93 </span>                :            : } else {
+<span class="lineNum">      94 </span>                :<span class="lineCov">   24439844 :     term_newpos( atermptr , anxcenter , bycenter , aorient ) ; </span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">   24439844 :     term_newpos( btermptr , bnxcenter , aycenter , borient ) ; </span>
+<span class="lineNum">      96 </span>                :            : }
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :<span class="lineCov">   81087580 : cost = funccost ; </span>
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :<span class="lineCov">   81087580 : delta_vert_cost = 0 ;</span>
+<span class="lineNum">     101 </span>        [<span class="branchCov" title="Branch 0 was taken 56647736 times"> + </span><span class="branchCov" title="Branch 1 was taken 24439844 times"> + </span>]:<span class="lineCov">   81087580 : if( ablock != bblock ) {</span>
+<span class="lineNum">     102 </span>                :<span class="lineCov">   56647736 :     new_dbox_a( atermptr , &amp;cost ) ;</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">   56647736 :     new_dbox_a( btermptr , &amp;cost ) ;</span>
+<span class="lineNum">     104 </span>                :            : } else {
+<span class="lineNum">     105 </span>                :<span class="lineCov">   24439844 :     new_dbox( atermptr , &amp;cost ) ;</span>
+<span class="lineNum">     106 </span>                :<span class="lineCov">   24439844 :     new_dbox( btermptr , &amp;cost ) ;</span>
+<span class="lineNum">     107 </span>                :            : }
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>                :<span class="lineCov">   81087580 : wire_chg = cost - funccost ;</span>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineCov">   81087580 : truth = acceptt(funccost + penalty - cost - newpenal - delta_vert_cost);</span>
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>        [<span class="branchCov" title="Branch 0 was taken 19364958 times"> + </span><span class="branchCov" title="Branch 1 was taken 61722622 times"> + </span>]:<span class="lineCov">   81087580 : if( truth == 1 ) {</span>
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>        [<span class="branchCov" title="Branch 0 was taken 47 times"> + </span><span class="branchCov" title="Branch 1 was taken 19364911 times"> + </span>]:<span class="lineCov">   19364958 :     if( error_light_is_on ) {</span>
+<span class="lineNum">     116 </span>                :<span class="lineCov">         47 :         error_count++ ;</span>
+<span class="lineNum">     117 </span>                :            :     }
+<span class="lineNum">     118 </span>                :<span class="lineCov">   19364958 :     new_assgnto_old2( a1LoBin , a1HiBin , b1LoBin , b1HiBin , </span>
+<span class="lineNum">     119 </span>                :            :                       a2LoBin , a2HiBin , b2LoBin , b2HiBin ) ;
+<span class="lineNum">     120 </span>        [<span class="branchCov" title="Branch 0 was taken 4773498 times"> + </span><span class="branchCov" title="Branch 1 was taken 14591460 times"> + </span>]:<span class="lineCov">   19364958 :     if( ablock != bblock ) {</span>
+<span class="lineNum">     121 </span>                :<span class="lineCov">    4773498 :         dbox_pos_2( atermptr ) ;</span>
+<span class="lineNum">     122 </span>                :<span class="lineCov">    4773498 :         dbox_pos_2( btermptr ) ;</span>
+<span class="lineNum">     123 </span>                :            :     } else {
+<span class="lineNum">     124 </span>                :<span class="lineCov">   14591460 :         dbox_pos( atermptr ) ;</span>
+<span class="lineNum">     125 </span>                :<span class="lineCov">   14591460 :         dbox_pos( btermptr ) ;</span>
+<span class="lineNum">     126 </span>                :            :     }
+<span class="lineNum">     127 </span>        [<span class="branchCov" title="Branch 0 was taken 19364958 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   19364958 :     anbin = SetBin( anxcenter ) ;</span>
+<span class="lineNum">     128 </span>        [<span class="branchCov" title="Branch 0 was taken 19364958 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   19364958 :     bnbin = SetBin( bnxcenter ) ;</span>
+<span class="lineNum">     129 </span>        [<span class="branchCov" title="Branch 0 was taken 18563795 times"> + </span><span class="branchCov" title="Branch 1 was taken 801163 times"> + </span>]:<span class="lineCov">   19364958 :     if( cellaptr != cellbptr ) {</span>
+<span class="lineNum">     130 </span>        [<span class="branchCov" title="Branch 0 was taken 2106341 times"> + </span><span class="branchCov" title="Branch 1 was taken 16457454 times"> + </span>]:<span class="lineCov">   18563795 :         remv_cell( cellaptr , Apost ) ;</span>
+<span class="lineNum">     131 </span>        [<span class="branchCov" title="Branch 0 was taken 1180557 times"> + </span><span class="branchCov" title="Branch 1 was taken 17383238 times"> + </span>]:<span class="lineCov">   18563795 :         remv_cell( cellbptr , Bpost ) ;</span>
+<span class="lineNum">     132 </span>                :<span class="lineCov">   18563795 :         add_cell( &amp;binptr[bblock][anbin]-&gt;cell , a ) ;</span>
+<span class="lineNum">     133 </span>                :<span class="lineCov">   18563795 :         add_cell( &amp;binptr[ablock][bnbin]-&gt;cell , b ) ;</span>
+<span class="lineNum">     134 </span>                :            :     } else {
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 0 was taken 417915 times"> + </span><span class="branchCov" title="Branch 1 was taken 383248 times"> + </span>]:<span class="lineCov">     801163 :         remv_cell( cellaptr , Apost ) ;</span>
+<span class="lineNum">     136 </span>        [<span class="branchCov" title="Branch 0 was taken 857015 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     857015 :         for( i = 1 ; i &lt;= *cellaptr ; i++ ) {</span>
+<span class="lineNum">     137 </span>        [<span class="branchCov" title="Branch 0 was taken 55852 times"> + </span><span class="branchCov" title="Branch 1 was taken 801163 times"> + </span>]:<span class="lineCov">     857015 :             if( cellaptr[i] == b ) {</span>
+<span class="lineNum">     138 </span>                :            :                 break ;
+<span class="lineNum">     139 </span>                :            :             }
+<span class="lineNum">     140 </span>                :            :         }
+<span class="lineNum">     141 </span>        [<span class="branchCov" title="Branch 0 was taken 52954 times"> + </span><span class="branchCov" title="Branch 1 was taken 748209 times"> + </span>]:<span class="lineCov">     801163 :         remv_cell( cellaptr , i ) ;</span>
+<span class="lineNum">     142 </span>                :<span class="lineCov">     801163 :         add_cell( &amp;binptr[ablock][anbin]-&gt;cell , a ) ;</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">     801163 :         add_cell( &amp;binptr[ablock][bnbin]-&gt;cell , b ) ;</span>
+<span class="lineNum">     144 </span>                :            :     }
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 0 was taken 9447483 times"> + </span><span class="branchCov" title="Branch 1 was taken 9917475 times"> + </span>]:<span class="lineCov">   19364958 :     if( wire_chg &lt; 0 ) {</span>
+<span class="lineNum">     146 </span>                :<span class="lineCov">    9447483 :         temp = (double) - wire_chg ;</span>
+<span class="lineNum">     147 </span>                :<span class="lineCov">    9447483 :         total_wire_chg += temp ;</span>
+<span class="lineNum">     148 </span>                :<span class="lineCov">   18894966 :         sigma_wire_chg += (temp - mean_wire_chg) * </span>
+<span class="lineNum">     149 </span>                :<span class="lineCov">    9447483 :                                         (temp - mean_wire_chg) ;</span>
+<span class="lineNum">     150 </span>                :<span class="lineCov">    9447483 :         wire_chgs++ ;</span>
+<span class="lineNum">     151 </span>                :            :     }
+<span class="lineNum">     152 </span>                :            :  
+<span class="lineNum">     153 </span>                :<span class="lineCov">   19364958 :     acellptr-&gt;cblock   = bblock    ;</span>
+<span class="lineNum">     154 </span>                :<span class="lineCov">   19364958 :     acellptr-&gt;cxcenter = anxcenter ; </span>
+<span class="lineNum">     155 </span>                :<span class="lineCov">   19364958 :     acellptr-&gt;cycenter = bycenter  ; </span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">   19364958 :     bcellptr-&gt;cblock   = ablock    ;</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">   19364958 :     bcellptr-&gt;cxcenter = bnxcenter ; </span>
+<span class="lineNum">     158 </span>                :<span class="lineCov">   19364958 :     bcellptr-&gt;cycenter = aycenter  ; </span>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :<span class="lineCov">   19364958 :     funccost = cost ; </span>
+<span class="lineNum">     161 </span>                :<span class="lineCov">   19364958 :     binpenal = newbinpenal ;</span>
+<span class="lineNum">     162 </span>                :<span class="lineCov">   19364958 :     rowpenal = newrowpenal ;</span>
+<span class="lineNum">     163 </span>                :<span class="lineCov">   19364958 :     penalty  = newpenal ;</span>
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>        [<span class="branchCov" title="Branch 0 was taken 4773498 times"> + </span><span class="branchCov" title="Branch 1 was taken 14591460 times"> + </span>]:<span class="lineCov">   19364958 :     if( ablock != bblock ) {</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">    4773498 :         barray[ablock]-&gt;oldsize = barray[ablock]-&gt;newsize ;</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">    4773498 :         barray[bblock]-&gt;oldsize = barray[bblock]-&gt;newsize ;</span>
+<span class="lineNum">     168 </span>                :            :     }
+<span class="lineNum">     169 </span>                :<span class="lineCov">   19364958 :     return( 1 ) ;</span>
+<span class="lineNum">     170 </span>                :            : } else {
+<span class="lineNum">     171 </span>                :<span class="lineCov">   97434069 :     return( 0 ) ;</span>
+<span class="lineNum">     172 </span>                :            : }
+<span class="lineNum">     173 </span>                :            : }
+<a name="174"><span class="lineNum">     174 </span>                :            : </a>
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :<span class="lineCov">   97434069 : find_new_pos()</span>
+<span class="lineNum">     177 </span>                :            : {
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            : int newA_l , newA_r , newB_l , newB_r ;
+<span class="lineNum">     180 </span>                :            : int oldA_l , oldA_r , oldB_l , oldB_r ;
+<span class="lineNum">     181 </span>                :            : int span , target , target_l , target_r , blkLeft , blkRite ;
+<span class="lineNum">     182 </span>                :            : int dist1 , dist2 ;
+<span class="lineNum">     183 </span>                :            : 
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :<span class="lineCov">   97434069 : newA_l = bxcenter + aleft  ;</span>
+<span class="lineNum">     186 </span>                :<span class="lineCov">   97434069 : newA_r = bxcenter + aright ;</span>
+<span class="lineNum">     187 </span>                :<span class="lineCov">   97434069 : newB_l = axcenter + bleft  ;</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">   97434069 : newB_r = axcenter + bright ;</span>
+<span class="lineNum">     189 </span>[<span class="branchCov" title="Branch 0 was taken 28410031 times"> + </span><span class="branchCov" title="Branch 1 was taken 69024038 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 8427979 times"> + </span><span class="branchCov" title="Branch 3 was taken 19982052 times"> + </span>]:<span class="lineCov">   97434069 : if( (ablock == bblock) &amp;&amp; (!( (newA_l &gt;= newB_r) || (newB_l &gt;= newA_r)))){</span>
+<span class="lineNum">     190 </span>                :            :     /*  
+<span class="lineNum">     191 </span>                :            :      *   Then some overlapping will exist in the new positions
+<span class="lineNum">     192 </span>                :            :      */
+<span class="lineNum">     193 </span>                :<span class="lineCov">    8427979 :     oldA_l = axcenter + aleft  ;</span>
+<span class="lineNum">     194 </span>                :<span class="lineCov">    8427979 :     oldA_r = axcenter + aright ;</span>
+<span class="lineNum">     195 </span>                :<span class="lineCov">    8427979 :     oldB_l = bxcenter + bleft  ;</span>
+<span class="lineNum">     196 </span>                :<span class="lineCov">    8427979 :     oldB_r = bxcenter + bright ;</span>
+<span class="lineNum">     197 </span>        [<span class="branchCov" title="Branch 0 was taken 8427979 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">    8427979 :     if( !( (oldA_l &gt;= oldB_r) || (oldB_l &gt;= oldA_r) ) ) {</span>
+<span class="lineNum">     198 </span>                :            :         /*  
+<span class="lineNum">     199 </span>                :            :          *    There was also initial overlap; therefore
+<span class="lineNum">     200 </span>                :            :          *    move cells apart.  Find the minimum distance
+<span class="lineNum">     201 </span>                :            :          *    necessary to pull them apart.
+<span class="lineNum">     202 </span>                :            :          */
+<span class="lineNum">     203 </span>                :<span class="lineCov">    8427979 :         span = aright - aleft + bright - bleft ;</span>
+<span class="lineNum">     204 </span>                :<span class="lineCov">   16855958 :         target = ( ((oldA_l &lt;= oldB_l) ? oldA_l : oldB_l) +</span>
+<span class="lineNum">     205 </span>                :<span class="lineCov">    8427979 :                    ((oldA_r &gt;= oldB_r) ? oldA_r : oldB_r) ) / 2 ;</span>
+<span class="lineNum">     206 </span>                :<span class="lineCov">    8427979 :         target_l = target - span / 2 ;</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">    8427979 :         target_r = target_l + span ;</span>
+<span class="lineNum">     208 </span>                :<span class="lineCov">    8427979 :         blkLeft = barray[ablock]-&gt;bxcenter + barray[ablock]-&gt;bleft ;</span>
+<span class="lineNum">     209 </span>                :<span class="lineCov">    8427979 :         blkRite = blkLeft + barray[ablock]-&gt;desire  ;</span>
+<span class="lineNum">     210 </span>        [<span class="branchCov" title="Branch 0 was taken 76765 times"> + </span><span class="branchCov" title="Branch 1 was taken 8351214 times"> + </span>]:<span class="lineCov">    8427979 :         if( target_l &lt; blkLeft ) {</span>
+<span class="lineNum">     211 </span>                :<span class="lineCov">      76765 :             target_l += blkLeft - target_l ;</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">      76765 :             target_r += blkLeft - target_l ;</span>
+<span class="lineNum">     213 </span>        [<span class="branchCov" title="Branch 0 was taken 3680 times"> + </span><span class="branchCov" title="Branch 1 was taken 8347534 times"> + </span>]:<span class="lineCov">    8351214 :         } else if( target_r &gt; blkRite ) {</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">       3680 :             target_l -= target_r - blkRite ;</span>
+<span class="lineNum">     215 </span>                :<span class="lineCov">       3680 :             target_r -= target_r - blkRite ;</span>
+<span class="lineNum">     216 </span>                :            :         }
+<span class="lineNum">     217 </span>                :<span class="lineCov">    8427979 :         dist1 = newA_r - newB_l ;</span>
+<span class="lineNum">     218 </span>                :<span class="lineCov">    8427979 :         dist2 = newB_r - newA_l ;</span>
+<span class="lineNum">     219 </span>        [<span class="branchCov" title="Branch 0 was taken 4197349 times"> + </span><span class="branchCov" title="Branch 1 was taken 4230630 times"> + </span>]:<span class="lineCov">    8427979 :         if( dist1 &lt;= dist2 ) {</span>
+<span class="lineNum">     220 </span>                :<span class="lineCov">    4197349 :             anxcenter = target_l - aleft  ;</span>
+<span class="lineNum">     221 </span>                :<span class="lineCov">    4197349 :             bnxcenter = target_r - bright ;</span>
+<span class="lineNum">     222 </span>                :            :         } else {
+<span class="lineNum">     223 </span>                :<span class="lineCov">    4230630 :             anxcenter = target_r - aright ;</span>
+<span class="lineNum">     224 </span>                :<span class="lineCov">    4230630 :             bnxcenter = target_l - bleft  ;</span>
+<span class="lineNum">     225 </span>                :            :         }
+<span class="lineNum">     226 </span>                :            :     } else {
+<span class="lineNum">     227 </span>                :            :         /*  
+<span class="lineNum">     228 </span>                :            :          *    No initial overlap, but some would be created
+<span class="lineNum">     229 </span>                :            :          *    as it stands now.  Eliminate the possibility of
+<span class="lineNum">     230 </span>                :            :          *    overlap by maintaining the original left
+<span class="lineNum">     231 </span>                :            :          *    bound and the original right bound.
+<span class="lineNum">     232 </span>                :            :          */
+<span class="lineNum">     233 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( oldA_l &lt;= oldB_l ) {</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :             bnxcenter = oldA_l - bleft  ;</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :             anxcenter = oldB_r - aright ;</span>
+<span class="lineNum">     236 </span>                :            :         } else {
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :             anxcenter = oldB_l - aleft  ;</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :             bnxcenter = oldA_r - bright ;</span>
+<span class="lineNum">     239 </span>                :            :         }
+<span class="lineNum">     240 </span>                :            :     }
+<span class="lineNum">     241 </span>                :            : } else {
+<span class="lineNum">     242 </span>                :<span class="lineCov">   89006090 :     anxcenter = bxcenter ;</span>
+<span class="lineNum">     243 </span>                :<span class="lineCov">   97434069 :     bnxcenter = axcenter ;</span>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :            : }
+<span class="lineNum">     246 </span>                :            : return ;
+<span class="lineNum">     247 </span>                :            : }
+<a name="248"><span class="lineNum">     248 </span>                :            :  </a>
+<span class="lineNum">     249 </span>                :            : 
+<span class="lineNum">     250 </span>                :<span class="lineCov">   41026101 : add_cell( cellptr , c ) </span>
+<span class="lineNum">     251 </span>                :            : int **cellptr , c ;
+<span class="lineNum">     252 </span>                :            : {
+<span class="lineNum">     253 </span>                :            : 
+<span class="lineNum">     254 </span>                :            : int k ;
+<span class="lineNum">     255 </span>                :            : 
+<span class="lineNum">     256 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 41026101 times"> + </span>]:<span class="lineCov">   41026101 : if( (k = ++(**cellptr)) % 10 == 0 ) {</span>
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :     *cellptr = (int *) safe_realloc( *cellptr, (k + 10) * sizeof(int));</span>
+<span class="lineNum">     258 </span>                :            : 
+<span class="lineNum">     259 </span>                :            : }
+<span class="lineNum">     260 </span>                :<span class="lineCov">   41026101 : (*cellptr)[k] = c ;</span>
+<span class="lineNum">     261 </span>                :            : 
+<span class="lineNum">     262 </span>                :            : return ;
+<span class="lineNum">     263 </span>                :            : }
+<span class="lineNum">     264 </span>                :            : 
+<span class="lineNum">     265 </span>                :            : 
+<span class="lineNum">     266 </span>                :            : 
+<span class="lineNum">     267 </span>                :            : 
+<span class="lineNum">     268 </span>                :            : /*
+<span class="lineNum">     269 </span>                :            : remv_cell( cellptr , post )
+<span class="lineNum">     270 </span>                :            : int *cellptr , post ;
+<span class="lineNum">     271 </span>                :            : {
+<span class="lineNum">     272 </span>                :            : 
+<span class="lineNum">     273 </span>                :            : if( *cellptr != post ) {
+<span class="lineNum">     274 </span>                :            :     cellptr[ post ] = cellptr[ *cellptr ] ;
+<span class="lineNum">     275 </span>                :            : }
+<span class="lineNum">     276 </span>                :            : (*cellptr)-- ;
+<span class="lineNum">     277 </span>                :            : }
+<span class="lineNum">     278 </span>                :            : */
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

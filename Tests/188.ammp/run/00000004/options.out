@@ -1,0 +1,2 @@
+COMP: gcc -c -o options.o       -DSPEC_CPU2000     -O3   
+LINK: gcc     -O3       -lm  -o options

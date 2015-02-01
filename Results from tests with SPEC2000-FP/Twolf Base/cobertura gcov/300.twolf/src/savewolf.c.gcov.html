@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/savewolf.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - savewolf.c<span style="font-size: 80%;"> (source / <a href="savewolf.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntry">81</td>
+            <td class="headerCovTableEntryLo">39.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">33.3 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">26</td>
+            <td class="headerCovTableEntryLo">30.8 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : #include &quot;groute.h&quot;
+<span class="lineNum">       3 </span>                :            : int stage ;
+<span class="lineNum">       4 </span>                :            : extern int estimate_feeds ;
+<span class="lineNum">       5 </span>                :            : extern double T ;
+<span class="lineNum">       6 </span>                :            : extern int iteration ;
+<span class="lineNum">       7 </span>                :            : extern int impcount ;
+<span class="lineNum">       8 </span>                :            : extern int *fixarray ;
+<span class="lineNum">       9 </span>                :            : extern double binpenCon , roLenCon , cost_scale_factor ;
+<a name="10"><span class="lineNum">      10 </span>                :            : int last_level ;</a>
+<span class="lineNum">      11 </span>                :            : 
+<span class="lineNum">      12 </span>                :<span class="lineCov">        124 : savewolf( level )</span>
+<span class="lineNum">      13 </span>                :            : int level ;
+<span class="lineNum">      14 </span>                :            : {
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :            : FILE *fp ;
+<span class="lineNum">      17 </span>                :            : int xcenter , ycenter ;
+<span class="lineNum">      18 </span>                :            : int cell , block , orient , seg ;
+<span class="lineNum">      19 </span>                :            : char filename[64] ;
+<span class="lineNum">      20 </span>                :            : char file1[1024], file2[1024];
+<span class="lineNum">      21 </span>                :            : CBOXPTR cellptr ;
+<span class="lineNum">      22 </span>                :            : double cpu_time();
+<span class="lineNum">      23 </span>                :            : double current_time;
+<span class="lineNum">      24 </span>                :            : static double last_time = 0.0;
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            : #ifndef VMS
+<span class="lineNum">      27 </span>                :            : /* make sure another checkpoint is worthwhile !! */
+<span class="lineNum">      28 </span>                :<span class="lineCov">        124 : current_time = cpu_time();</span>
+<span class="lineNum">      29 </span>        [<span class="branchCov" title="Branch 0 was taken 124 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">        124 : if ((current_time - last_time) &lt; 600.0 &amp;&amp; </span>
+<span class="lineNum">      30 </span>        [<span class="branchCov" title="Branch 0 was taken 5 times"> + </span><span class="branchCov" title="Branch 1 was taken 119 times"> + </span>]:<span class="lineCov">        124 :                 level == last_level &amp;&amp; level &lt;= 1 ) {</span>
+<span class="lineNum">      31 </span>                :            :     return;
+<span class="lineNum">      32 </span>                :            : }
+<span class="lineNum">      33 </span>                :<span class="lineCov">          5 : last_time = current_time;</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">          5 : last_level = level;</span>
+<span class="lineNum">      35 </span>                :            : #endif
+<span class="lineNum">      36 </span>                :            : 
+<span class="lineNum">      37 </span>                :            : #ifdef VMS
+<span class="lineNum">      38 </span>                :            : if( level == 1 ) {
+<span class="lineNum">      39 </span>                :            :     sprintf( filename , &quot;%s.sav&quot; , cktName ) ;
+<span class="lineNum">      40 </span>                :            :     fp = twopen( filename , &quot;w&quot;, ABORT ) ;
+<span class="lineNum">      41 </span>                :            :     sprintf( filename , &quot;%s.sav;-2&quot; , cktName ) ;
+<span class="lineNum">      42 </span>                :            :     delete( filename ) ;
+<span class="lineNum">      43 </span>                :            : } else {
+<span class="lineNum">      44 </span>                :            :     sprintf( filename , &quot;%s.sv2&quot; , cktName ) ;
+<span class="lineNum">      45 </span>                :            :     fp = twopen( filename , &quot;w&quot;, ABORT ) ;
+<span class="lineNum">      46 </span>                :            :     sprintf( filename , &quot;%s.sv2;-2&quot; , cktName ) ;
+<span class="lineNum">      47 </span>                :            :     delete( filename ) ;
+<span class="lineNum">      48 </span>                :            : }
+<span class="lineNum">      49 </span>                :            : #else
+<span class="lineNum">      50 </span>                :<span class="lineCov">          5 : sprintf( filename , &quot;%s.tmp&quot; , cktName ) ;</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">          5 : fp = twopen( filename , &quot;w&quot;, ABORT ) ;</span>
+<span class="lineNum">      52 </span>                :            : #endif
+<span class="lineNum">      53 </span>                :            : 
+<span class="lineNum">      54 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%f\n&quot;, T ) ;</span>
+<span class="lineNum">      55 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%d\n&quot;, iteration ) ;</span>
+<span class="lineNum">      56 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%d\n&quot;, ffeeds ) ;</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%d\n&quot;, level ) ;</span>
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%f\n&quot;, binpenCon ) ;</span>
+<span class="lineNum">      60 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%f\n&quot;, roLenCon ) ;</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%f\n&quot;, cost_scale_factor ) ;</span>
+<span class="lineNum">      62 </span>                :<span class="lineCov">          5 : fprintf( fp, &quot;%d\n&quot;, estimate_feeds ) ;</span>
+<span class="lineNum">      63 </span>                :            : 
+<span class="lineNum">      64 </span>                :            : 
+<span class="lineNum">      65 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">          5 : if( level == 3 ) {</span>
+<span class="lineNum">      66 </span>                :<span class="lineNoCov">          0 :     fprintf(fp,&quot;%d\n&quot;, numSegs ) ;</span>
+<span class="lineNum">      67 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( seg = 1 ; seg &lt;= numSegs ; seg++ ) {</span>
+<span class="lineNum">      68 </span>                :<span class="lineNoCov">          0 :         fprintf(fp,&quot;%d\n&quot;, aNetSeg[seg].current ) ;</span>
+<span class="lineNum">      69 </span>                :            :     }
+<span class="lineNum">      70 </span>                :            : }
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>        [<span class="branchCov" title="Branch 0 was taken 11948 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">      11953 : for( cell = 1 ; cell &lt;= numcells + numterms ; cell++ ) {</span>
+<span class="lineNum">      73 </span>                :<span class="lineCov">      11948 :     cellptr = carray[ cell ] ;</span>
+<span class="lineNum">      74 </span>                :<span class="lineCov">      11948 :     orient  = cellptr-&gt;corient   ;</span>
+<span class="lineNum">      75 </span>                :<span class="lineCov">      11948 :     block   = cellptr-&gt;cblock    ;</span>
+<span class="lineNum">      76 </span>                :<span class="lineCov">      11948 :     xcenter = cellptr-&gt;cxcenter  ;</span>
+<span class="lineNum">      77 </span>                :<span class="lineCov">      11948 :     ycenter = cellptr-&gt;cycenter  ;</span>
+<span class="lineNum">      78 </span>                :<span class="lineCov">      11948 :     fprintf( fp , &quot;%d %d %d %d %d\n&quot;, cell , block , </span>
+<span class="lineNum">      79 </span>                :            :                                orient , xcenter , ycenter ) ;
+<span class="lineNum">      80 </span>                :            : }
+<span class="lineNum">      81 </span>                :<span class="lineCov">          5 : twclose( fp ) ;</span>
+<span class="lineNum">      82 </span>                :            : #ifndef VMS
+<span class="lineNum">      83 </span>                :<span class="lineCov">          5 : sprintf(file1, &quot;%s.tmp&quot;, cktName);</span>
+<span class="lineNum">      84 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          5 : if( level == 1 ) {</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">          2 :     sprintf(file2, &quot;%s.sav&quot;, cktName);</span>
+<span class="lineNum">      86 </span>                :            : } else {
+<span class="lineNum">      87 </span>                :<span class="lineCov">          3 :     sprintf(file2, &quot;%s.sv2&quot;, cktName);</span>
+<span class="lineNum">      88 </span>                :            : }
+<span class="lineNum">      89 </span>                :<span class="lineCov">          5 : unlink(file2);</span>
+<span class="lineNum">      90 </span>                :<span class="lineCov">          5 : rename(file1, file2);</span>
+<span class="lineNum">      91 </span>                :            : #endif
+<span class="lineNum">      92 </span>                :<span class="lineCov">        124 : return ;</span>
+<a name="93"><span class="lineNum">      93 </span>                :            : }</a>
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>                :<span class="lineNoCov">          0 : TW_oldin( fp )</span>
+<span class="lineNum">      96 </span>                :            : FILE *fp ;
+<span class="lineNum">      97 </span>                :            : {
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : int cell , orient , numfds ;
+<span class="lineNum">     100 </span>                :            : int block , xcenter , ycenter , dummy ;
+<span class="lineNum">     101 </span>                :            : CBOXPTR ptr ;
+<span class="lineNum">     102 </span>                :            : TEBOXPTR term ;
+<span class="lineNum">     103 </span>                :            : NBOXPTR termptr ;
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;T ) ;</span>
+<span class="lineNum">     107 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;iteration ) ;</span>
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;numfds ) ;</span>
+<span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;dummy ) ;</span>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;binpenCon ) ;</span>
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;roLenCon ) ;</span>
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;cost_scale_factor ) ;</span>
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;estimate_feeds ) ;</span>
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 : while( fscanf( fp , &quot; %d %d %d %d %d &quot;, &amp;cell , &amp;block , &amp;orient , </span>
+<span class="lineNum">     117 </span>                :            :                                     &amp;xcenter , &amp;ycenter ) == 5 ) {
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :     ptr = carray[ cell ] ;</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;cblock   = block   ;</span>
+<span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;corient  = orient  ;</span>
+<span class="lineNum">     121 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;cxcenter = xcenter ;</span>
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;cycenter = ycenter ;</span>
+<span class="lineNum">     123 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( cell &lt;= numcells ) {</span>
+<span class="lineNum">     124 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( term = ptr-&gt;tileptr-&gt;termsptr ; </span>
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :                         term != TERMNULL ; term = term-&gt;nextterm ) {</span>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :             termptr = tearray[term-&gt;cellterm] ;</span>
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :             termptr-&gt;xpos = term-&gt;txpos[ orient/2 ] + xcenter ;</span>
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :             termptr-&gt;ypos = term-&gt;typos[ orient%2 ] + ycenter ;</span>
+<span class="lineNum">     129 </span>                :            :         }
+<span class="lineNum">     130 </span>                :            :     } else {
+<span class="lineNum">     131 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( term = ptr-&gt;tileptr-&gt;termsptr ; </span>
+<span class="lineNum">     132 </span>                :<span class="lineNoCov">          0 :                         term != TERMNULL ; term = term-&gt;nextterm ) {</span>
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :             termptr = tearray[term-&gt;cellterm] ;</span>
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :             termptr-&gt;xpos = term-&gt;txpos[ 1 ] + xcenter ;</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :             termptr-&gt;ypos = term-&gt;typos[ 1 ] + ycenter ;</span>
+<span class="lineNum">     136 </span>                :            :         }
+<span class="lineNum">     137 </span>                :            :     }
+<span class="lineNum">     138 </span>                :            : }
+<span class="lineNum">     139 </span>                :            : return ;
+<span class="lineNum">     140 </span>                :            : }
+<a name="141"><span class="lineNum">     141 </span>                :            : </a>
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 : fixfdpos( fp )</span>
+<span class="lineNum">     144 </span>                :            : FILE *fp ;
+<span class="lineNum">     145 </span>                :            : {
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>                :            : int cell , orient , numfds , dummy , number , seg , current ;
+<span class="lineNum">     148 </span>                :            : int block , xcenter , ycenter , junk ;
+<span class="lineNum">     149 </span>                :            : double d_dummy ;
+<span class="lineNum">     150 </span>                :            : CBOXPTR ptr ;
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :            : 
+<span class="lineNum">     153 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;T ) ;</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;iteration ) ;</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;numfds ) ;</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;dummy ) ;</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;d_dummy ) ;</span>
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;d_dummy ) ;</span>
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%lf&quot; , &amp;d_dummy ) ;</span>
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 : fscanf( fp , &quot;%d&quot; , &amp;junk ) ;</span>
+<span class="lineNum">     161 </span>                :            : 
+<span class="lineNum">     162 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : if( dummy == 3 ) {</span>
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :     fscanf(fp,&quot;%d&quot;, &amp;number ) ;</span>
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :     fixarray = (int *) safe_malloc( (number + 1) * sizeof(int) ) ;</span>
+<span class="lineNum">     165 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( seg = 1 ; seg &lt;= number ; seg++ ) {</span>
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :         fscanf(fp,&quot;%d&quot;, &amp;current ) ;</span>
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :         fixarray[seg] = current ;</span>
+<span class="lineNum">     168 </span>                :            :     }
+<span class="lineNum">     169 </span>                :            : }
+<span class="lineNum">     170 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 : while( fscanf( fp , &quot; %d %d %d %d %d &quot;, &amp;cell , &amp;block , &amp;orient , </span>
+<span class="lineNum">     171 </span>                :            :                                     &amp;xcenter , &amp;ycenter ) == 5 ) {
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :     ptr = carray[ cell ] ;</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;cxcenter = xcenter ;</span>
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;cycenter = ycenter ;</span>
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :     ptr-&gt;corient  = orient ;</span>
+<span class="lineNum">     176 </span>                :            : }
+<span class="lineNum">     177 </span>                :            : return ;
+<span class="lineNum">     178 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

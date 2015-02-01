@@ -1,0 +1,14 @@
+gabriel@gabriel-Vostro-A840:~/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base$ $sudo time -p /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke speccmds.cmd
+running commands in speccmds.cmd 1 times
+runs started at 1313110176, 103550000, Thu Aug 11 20:19:36 2011
+run 1 started at 1313110176, 103729000, Thu Aug 11 20:19:36 2011
+child started: 0, 1313110176, 103764000, 9303, '../Base/mesa -frames 1000 -meshfile mesa.in -ppmfile mesa.ppm'
+child finished: 0, 1313110301, 939630000, 125, 835866000, 9303, 0
+run 1 finished at: 1313110301, 939658000, Thu Aug 11 20:21:41 2011
+run 1 elapsed time: 125, 835929000, 125.835929000
+runs finished at 1313110301, 939712000, Thu Aug 11 20:21:41 2011
+runs elapsed time: 125, 836162000, 125.836162000
+real 125.83
+user 171.51
+sys 34.99
+

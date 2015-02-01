@@ -1,0 +1,1419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/vbfill.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - vbfill.c<span style="font-size: 80%;"> (source / <a href="vbfill.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">80</td>
+            <td class="headerCovTableEntry">589</td>
+            <td class="headerCovTableEntryLo">13.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">57</td>
+            <td class="headerCovTableEntryLo">8.8 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">228</td>
+            <td class="headerCovTableEntryLo">12.7 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: vbfill.c,v 1.17 1997/11/14 03:02:53 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: vbfill.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.17  1997/11/14 03:02:53  brianp
+<span class="lineNum">      27 </span>                :            :  * clamp floating point color components to [0,1] before int conversion
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.16  1997/08/13 01:31:11  brianp
+<span class="lineNum">      30 </span>                :            :  * LightTwoSide is now a GLboolean
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.15  1997/07/24 01:25:27  brianp
+<span class="lineNum">      33 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.14  1997/06/20 02:47:41  brianp
+<span class="lineNum">      36 </span>                :            :  * added Color4ubv API pointer
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.13  1997/06/20 02:46:49  brianp
+<span class="lineNum">      39 </span>                :            :  * changed color components from GLfixed to GLubyte
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.12  1997/05/28 03:26:49  brianp
+<span class="lineNum">      42 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.11  1997/05/27 03:13:41  brianp
+<span class="lineNum">      45 </span>                :            :  * removed some debugging code
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.10  1997/04/28 02:05:44  brianp
+<span class="lineNum">      48 </span>                :            :  * renamed some vertex functions, also save color with texcoords
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.9  1997/04/24 01:50:53  brianp
+<span class="lineNum">      51 </span>                :            :  * optimized glColor3f, glColor3fv, glColor4fv
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.8  1997/04/24 00:30:17  brianp
+<span class="lineNum">      54 </span>                :            :  * optimized glTexCoord2() code
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.7  1997/04/20 15:59:30  brianp
+<span class="lineNum">      57 </span>                :            :  * removed VERTEX2_BIT stuff
+<span class="lineNum">      58 </span>                :            :  *
+<span class="lineNum">      59 </span>                :            :  * Revision 1.6  1997/04/16 23:55:33  brianp
+<span class="lineNum">      60 </span>                :            :  * added optimized glTexCoord2f code
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  * Revision 1.5  1997/04/14 22:18:23  brianp
+<span class="lineNum">      63 </span>                :            :  * added optimized glVertex3fv code
+<span class="lineNum">      64 </span>                :            :  *
+<span class="lineNum">      65 </span>                :            :  * Revision 1.4  1997/04/12 16:21:54  brianp
+<span class="lineNum">      66 </span>                :            :  * added ctx-&gt;Exec.Vertex2f = vertex2_feedback; statement
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  * Revision 1.3  1997/04/12 12:23:26  brianp
+<span class="lineNum">      69 </span>                :            :  * fixed 3 bugs in gl_eval_vertex
+<span class="lineNum">      70 </span>                :            :  *
+<span class="lineNum">      71 </span>                :            :  * Revision 1.2  1997/04/07 03:01:11  brianp
+<span class="lineNum">      72 </span>                :            :  * optimized vertex[234] code
+<span class="lineNum">      73 </span>                :            :  *
+<span class="lineNum">      74 </span>                :            :  * Revision 1.1  1997/04/02 03:13:56  brianp
+<span class="lineNum">      75 </span>                :            :  * Initial revision
+<span class="lineNum">      76 </span>                :            :  *
+<span class="lineNum">      77 </span>                :            :  */
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            : /*
+<span class="lineNum">      81 </span>                :            :  * This file implements the functions for filling the vertex buffer:
+<span class="lineNum">      82 </span>                :            :  *   glVertex, glNormal, glColor, glIndex, glEdgeFlag, glTexCoord,
+<span class="lineNum">      83 </span>                :            :  */
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :            : 
+<span class="lineNum">      86 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      87 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      88 </span>                :            : #else
+<span class="lineNum">      89 </span>                :            : #include &lt;assert.h&gt;
+<span class="lineNum">      90 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">      91 </span>                :            : #include &quot;light.h&quot;
+<span class="lineNum">      92 </span>                :            : #include &quot;clip.h&quot;
+<span class="lineNum">      93 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">      94 </span>                :            : #include &quot;feedback.h&quot;
+<span class="lineNum">      95 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      96 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">      97 </span>                :            : #include &quot;pb.h&quot;
+<span class="lineNum">      98 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      99 </span>                :            : #include &quot;vb.h&quot;
+<span class="lineNum">     100 </span>                :            : #include &quot;vbfill.h&quot;
+<span class="lineNum">     101 </span>                :            : #include &quot;vbxform.h&quot;
+<span class="lineNum">     102 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">     103 </span>                :            : #endif
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :            : /**********************************************************************/
+<span class="lineNum">     108 </span>                :            : /******                    glNormal functions                     *****/
+<span class="lineNum">     109 </span>                :            : /**********************************************************************/
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :            : /*
+<a name="112"><span class="lineNum">     112 </span>                :            :  * Caller:  context-&gt;API.Normal3f pointer.</a>
+<span class="lineNum">     113 </span>                :            :  */
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 : void gl_Normal3f( GLcontext *ctx, GLfloat nx, GLfloat ny, GLfloat nz )</span>
+<span class="lineNum">     115 </span>                :            : {
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[0] = nx;</span>
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[1] = ny;</span>
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[2] = nz;</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoNormal = GL_FALSE;</span>
+<span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>                :            : /*
+<a name="124"><span class="lineNum">     124 </span>                :            :  * Caller:  context-&gt;API.Normal3fv pointer.</a>
+<span class="lineNum">     125 </span>                :            :  */
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 : void gl_Normal3fv( GLcontext *ctx, const GLfloat *n )</span>
+<span class="lineNum">     127 </span>                :            : {
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[0] = n[0];</span>
+<span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[1] = n[1];</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Normal[2] = n[2];</span>
+<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoNormal = GL_FALSE;</span>
+<span class="lineNum">     132 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     133 </span>                :            : 
+<span class="lineNum">     134 </span>                :            : 
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :            : /**********************************************************************/
+<span class="lineNum">     137 </span>                :            : /******                    glIndex functions                      *****/
+<span class="lineNum">     138 </span>                :            : /**********************************************************************/
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :            : /*
+<a name="141"><span class="lineNum">     141 </span>                :            :  * Caller:  context-&gt;API.Indexf pointer.</a>
+<span class="lineNum">     142 </span>                :            :  */
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 : void gl_Indexf( GLcontext *ctx, GLfloat c )</span>
+<span class="lineNum">     144 </span>                :            : {
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Index = (GLuint) (GLint) c;</span>
+<span class="lineNum">     146 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :            : 
+<span class="lineNum">     150 </span>                :            : /*
+<a name="151"><span class="lineNum">     151 </span>                :            :  * Caller:  context-&gt;API.Indexi pointer.</a>
+<span class="lineNum">     152 </span>                :            :  */
+<span class="lineNum">     153 </span>                :<span class="lineNoCov">          0 : void gl_Indexi( GLcontext *ctx, GLint c )</span>
+<span class="lineNum">     154 </span>                :            : {
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.Index = (GLuint) c;</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>                :            : /**********************************************************************/
+<span class="lineNum">     162 </span>                :            : /******                     glColor functions                     *****/
+<span class="lineNum">     163 </span>                :            : /**********************************************************************/
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            : /*
+<a name="166"><span class="lineNum">     166 </span>                :            :  * Caller:  context-&gt;API.Color3f pointer.</a>
+<span class="lineNum">     167 </span>                :            :  */
+<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 : void gl_Color3f( GLcontext *ctx, GLfloat red, GLfloat green, GLfloat blue )</span>
+<span class="lineNum">     169 </span>                :            : {
+<span class="lineNum">     170 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(red  , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     171 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(green, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     172 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(blue , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     174 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     177 </span>                :            : 
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            : /*
+<a name="180"><span class="lineNum">     180 </span>                :            :  * Caller:  context-&gt;API.Color3fv pointer.</a>
+<span class="lineNum">     181 </span>                :            :  */
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 : void gl_Color3fv( GLcontext *ctx, const GLfloat *c )</span>
+<span class="lineNum">     183 </span>                :            : {
+<span class="lineNum">     184 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(c[0], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     185 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(c[1], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     186 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(c[2], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     188 </span>                :            : 
+<span class="lineNum">     189 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :            : 
+<span class="lineNum">     194 </span>                :            : /*
+<a name="195"><span class="lineNum">     195 </span>                :            :  * Caller:  context-&gt;API.Color4f pointer.</a>
+<span class="lineNum">     196 </span>                :            :  */
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 : void gl_Color4f( GLcontext *ctx,</span>
+<span class="lineNum">     198 </span>                :            :                  GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
+<span class="lineNum">     199 </span>                :            : {
+<span class="lineNum">     200 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(red  , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     201 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(green, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     202 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(blue , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     203 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = CLAMP(alpha, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     204 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     207 </span>                :            : 
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            : /*
+<a name="210"><span class="lineNum">     210 </span>                :            :  * Caller:  context-&gt;API.Color4fv pointer.</a>
+<span class="lineNum">     211 </span>                :            :  */
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 : void gl_Color4fv( GLcontext *ctx, const GLfloat *c )</span>
+<span class="lineNum">     213 </span>                :            : {
+<span class="lineNum">     214 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(c[0], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     215 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(c[1], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     216 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(c[2], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     217 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = CLAMP(c[3], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     218 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     219 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     221 </span>                :            : 
+<span class="lineNum">     222 </span>                :            : 
+<span class="lineNum">     223 </span>                :            : /*
+<span class="lineNum">     224 </span>                :            :  * Used when colors are not scaled to [0,255]
+<a name="225"><span class="lineNum">     225 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     226 </span>                :            :  */
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 : void gl_Color4ub( GLcontext *ctx,</span>
+<span class="lineNum">     228 </span>                :            :                   GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha )
+<span class="lineNum">     229 </span>                :            : {
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = red   * ctx-&gt;Visual-&gt;RedScale   * (1.0F/255.0F);</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = green * ctx-&gt;Visual-&gt;GreenScale * (1.0F/255.0F);</span>
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = blue  * ctx-&gt;Visual-&gt;BlueScale  * (1.0F/255.0F);</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = alpha * ctx-&gt;Visual-&gt;AlphaScale * (1.0F/255.0F);</span>
+<span class="lineNum">     234 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     237 </span>                :            : 
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>                :            : /*
+<span class="lineNum">     240 </span>                :            :  * Used when colors are scaled to [0,255].
+<a name="241"><span class="lineNum">     241 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     242 </span>                :            :  */
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 : void gl_Color4ub8bit( GLcontext *ctx,</span>
+<span class="lineNum">     244 </span>                :            :                       GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha )
+<span class="lineNum">     245 </span>                :            : {
+<span class="lineNum">     246 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( ctx-&gt;Current.ByteColor, red, green, blue, alpha );</span>
+<span class="lineNum">     247 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     250 </span>                :            : 
+<span class="lineNum">     251 </span>                :            : 
+<span class="lineNum">     252 </span>                :            : /*
+<span class="lineNum">     253 </span>                :            :  * Used when colors are not scaled to [0,255]
+<a name="254"><span class="lineNum">     254 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     255 </span>                :            :  */
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 : void gl_Color4ubv( GLcontext *ctx, const GLubyte *c )</span>
+<span class="lineNum">     257 </span>                :            : {
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = c[0] * ctx-&gt;Visual-&gt;RedScale   * (1.0F/255.0F);</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = c[1] * ctx-&gt;Visual-&gt;GreenScale * (1.0F/255.0F);</span>
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = c[2] * ctx-&gt;Visual-&gt;BlueScale  * (1.0F/255.0F);</span>
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = c[3] * ctx-&gt;Visual-&gt;AlphaScale * (1.0F/255.0F);</span>
+<span class="lineNum">     262 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     265 </span>                :            : 
+<span class="lineNum">     266 </span>                :            : 
+<span class="lineNum">     267 </span>                :            : /*
+<span class="lineNum">     268 </span>                :            :  * Used when colors are scaled to [0,255].
+<a name="269"><span class="lineNum">     269 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     270 </span>                :            :  */
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 : void gl_Color4ubv8bit( GLcontext *ctx, const GLubyte *c )</span>
+<span class="lineNum">     272 </span>                :            : {
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( ctx-&gt;Current.ByteColor, c );</span>
+<span class="lineNum">     274 </span>                :            :    ASSERT( !ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     276 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     277 </span>                :            : 
+<span class="lineNum">     278 </span>                :            : 
+<span class="lineNum">     279 </span>                :            : /*
+<span class="lineNum">     280 </span>                :            :  * glColor() which modifies material(s).
+<a name="281"><span class="lineNum">     281 </span>                :            :  * Caller:  context-&gt;API.Color3f pointer.</a>
+<span class="lineNum">     282 </span>                :            :  */
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat3f( GLcontext *ctx, GLfloat red, GLfloat green, GLfloat blue )</span>
+<span class="lineNum">     284 </span>                :            : {
+<span class="lineNum">     285 </span>                :            :    GLfloat color[4];
+<span class="lineNum">     286 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(red  , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     287 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(green, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     288 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(blue , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     290 </span>                :            :    /* update material */
+<span class="lineNum">     291 </span>                :            :    ASSERT( ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( color, red, green, blue, 1.0F );</span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :    gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     295 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     296 </span>                :            : 
+<span class="lineNum">     297 </span>                :            : 
+<span class="lineNum">     298 </span>                :            : /*
+<span class="lineNum">     299 </span>                :            :  * glColor() which modifies material(s).
+<a name="300"><span class="lineNum">     300 </span>                :            :  * Caller:  context-&gt;API.Color3fv pointer.</a>
+<span class="lineNum">     301 </span>                :            :  */
+<span class="lineNum">     302 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat3fv( GLcontext *ctx, const GLfloat *c )</span>
+<span class="lineNum">     303 </span>                :            : {
+<span class="lineNum">     304 </span>                :            :    GLfloat color[4];
+<span class="lineNum">     305 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(c[0], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     306 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(c[1], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     307 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(c[2], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     308 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     309 </span>                :            :    /* update material */
+<span class="lineNum">     310 </span>                :            :    ASSERT( ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     311 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( color, c[0], c[1], c[2], 1.0F );</span>
+<span class="lineNum">     312 </span>                :<span class="lineNoCov">          0 :    gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     314 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     315 </span>                :            : 
+<span class="lineNum">     316 </span>                :            : 
+<span class="lineNum">     317 </span>                :            : /*
+<span class="lineNum">     318 </span>                :            :  * glColor() which modifies material(s).
+<a name="319"><span class="lineNum">     319 </span>                :            :  * Caller:  context-&gt;API.Color4f pointer.</a>
+<span class="lineNum">     320 </span>                :            :  */
+<span class="lineNum">     321 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat4f( GLcontext *ctx,</span>
+<span class="lineNum">     322 </span>                :            :                     GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
+<span class="lineNum">     323 </span>                :            : {
+<span class="lineNum">     324 </span>                :            :    GLfloat color[4];
+<span class="lineNum">     325 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(red  , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     326 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(green, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     327 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(blue , 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     328 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = CLAMP(alpha, 0.0F, 1.0F) * ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     329 </span>                :            :    /* update material */
+<span class="lineNum">     330 </span>                :            :    ASSERT( ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     331 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( color, red, green, blue, alpha );</span>
+<span class="lineNum">     332 </span>                :<span class="lineNoCov">          0 :    gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     333 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     334 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>                :            : 
+<span class="lineNum">     337 </span>                :            : /*
+<span class="lineNum">     338 </span>                :            :  * glColor() which modifies material(s).
+<a name="339"><span class="lineNum">     339 </span>                :            :  * Caller:  context-&gt;API.Color4fv pointer.</a>
+<span class="lineNum">     340 </span>                :            :  */
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat4fv( GLcontext *ctx, const GLfloat *c )</span>
+<span class="lineNum">     342 </span>                :            : {
+<span class="lineNum">     343 </span>                :            :    GLfloat color[4];
+<span class="lineNum">     344 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[0] = CLAMP(c[0], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     345 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[1] = CLAMP(c[1], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     346 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[2] = CLAMP(c[2], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     347 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    ctx-&gt;Current.ByteColor[3] = CLAMP(c[3], 0.0F, 1.0F) * ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     348 </span>                :            :    /* update material */
+<span class="lineNum">     349 </span>                :            :    ASSERT( ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( color, c[0], c[1], c[2], c[3] );</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :    gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     352 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     353 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>                :            : 
+<span class="lineNum">     356 </span>                :            : /*
+<span class="lineNum">     357 </span>                :            :  * glColor which modifies material(s).
+<a name="358"><span class="lineNum">     358 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     359 </span>                :            :  */
+<span class="lineNum">     360 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat4ub( GLcontext *ctx,</span>
+<span class="lineNum">     361 </span>                :            :                      GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha )
+<span class="lineNum">     362 </span>                :            : {
+<span class="lineNum">     363 </span>                :            :    GLfloat color[4];
+<span class="lineNum">     364 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Visual-&gt;EightBitColor) {</span>
+<span class="lineNum">     365 </span>                :<span class="lineNoCov">          0 :       ASSIGN_4V( ctx-&gt;Current.ByteColor, red, green, blue, alpha );</span>
+<span class="lineNum">     366 </span>                :            :    }
+<span class="lineNum">     367 </span>                :            :    else {
+<span class="lineNum">     368 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Current.ByteColor[0] = red   * ctx-&gt;Visual-&gt;RedScale   * (1.0F/255.0F);</span>
+<span class="lineNum">     369 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Current.ByteColor[1] = green * ctx-&gt;Visual-&gt;GreenScale * (1.0F/255.0F);</span>
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Current.ByteColor[2] = blue  * ctx-&gt;Visual-&gt;BlueScale  * (1.0F/255.0F);</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Current.ByteColor[3] = alpha * ctx-&gt;Visual-&gt;AlphaScale * (1.0F/255.0F);</span>
+<span class="lineNum">     372 </span>                :            :    }
+<span class="lineNum">     373 </span>                :            :    /* update material */
+<span class="lineNum">     374 </span>                :            :    ASSERT( ctx-&gt;Light.ColorMaterialEnabled );
+<span class="lineNum">     375 </span>                :<span class="lineNoCov">          0 :    color[0] = red   * (1.0F/255.0F);</span>
+<span class="lineNum">     376 </span>                :<span class="lineNoCov">          0 :    color[1] = green * (1.0F/255.0F);</span>
+<span class="lineNum">     377 </span>                :<span class="lineNoCov">          0 :    color[2] = blue  * (1.0F/255.0F);</span>
+<span class="lineNum">     378 </span>                :<span class="lineNoCov">          0 :    color[3] = alpha * (1.0F/255.0F);</span>
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :    gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     380 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;VB-&gt;MonoColor = GL_FALSE;</span>
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     382 </span>                :            : 
+<span class="lineNum">     383 </span>                :            : 
+<span class="lineNum">     384 </span>                :            : /*
+<span class="lineNum">     385 </span>                :            :  * glColor which modifies material(s).
+<a name="386"><span class="lineNum">     386 </span>                :            :  * Caller:  context-&gt;API.Color4ub pointer.</a>
+<span class="lineNum">     387 </span>                :            :  */
+<span class="lineNum">     388 </span>                :<span class="lineNoCov">          0 : void gl_ColorMat4ubv( GLcontext *ctx, const GLubyte *c )</span>
+<span class="lineNum">     389 </span>                :            : {
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :    gl_ColorMat4ub( ctx, c[0], c[1], c[2], c[3] );</span>
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     392 </span>                :            : 
+<span class="lineNum">     393 </span>                :            : 
+<span class="lineNum">     394 </span>                :            : 
+<span class="lineNum">     395 </span>                :            : /**********************************************************************/
+<span class="lineNum">     396 </span>                :            : /******                  glEdgeFlag functions                     *****/
+<span class="lineNum">     397 </span>                :            : /**********************************************************************/
+<span class="lineNum">     398 </span>                :            : 
+<span class="lineNum">     399 </span>                :            : /*
+<a name="400"><span class="lineNum">     400 </span>                :            :  * Caller:  context-&gt;API.EdgeFlag pointer.</a>
+<span class="lineNum">     401 </span>                :            :  */
+<span class="lineNum">     402 </span>                :<span class="lineNoCov">          0 : void gl_EdgeFlag( GLcontext *ctx, GLboolean flag )</span>
+<span class="lineNum">     403 </span>                :            : {
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.EdgeFlag = flag;</span>
+<span class="lineNum">     405 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     406 </span>                :            : 
+<span class="lineNum">     407 </span>                :            : 
+<span class="lineNum">     408 </span>                :            : 
+<span class="lineNum">     409 </span>                :            : /**********************************************************************/
+<span class="lineNum">     410 </span>                :            : /*****                    glVertex functions                      *****/
+<span class="lineNum">     411 </span>                :            : /**********************************************************************/
+<span class="lineNum">     412 </span>                :            : 
+<span class="lineNum">     413 </span>                :            : /*
+<span class="lineNum">     414 </span>                :            :  * Used when in feedback mode.
+<a name="415"><span class="lineNum">     415 </span>                :            :  * Caller:  context-&gt;API.Vertex4f pointer.</a>
+<span class="lineNum">     416 </span>                :            :  */
+<span class="lineNum">     417 </span>                :<span class="lineNoCov">          0 : static void vertex4f_feedback( GLcontext *ctx,</span>
+<span class="lineNum">     418 </span>                :            :                                GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+<span class="lineNum">     419 </span>                :            : {
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     422 </span>                :            : 
+<span class="lineNum">     423 </span>                :            :    /* vertex */
+<span class="lineNum">     424 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( VB-&gt;Obj[count], x, y, z, w );</span>
+<span class="lineNum">     425 </span>                :            : 
+<span class="lineNum">     426 </span>                :            :    /* color */
+<span class="lineNum">     427 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     428 </span>                :            : 
+<span class="lineNum">     429 </span>                :            :    /* index */
+<span class="lineNum">     430 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Findex[count] = ctx-&gt;Current.Index;</span>
+<span class="lineNum">     431 </span>                :            : 
+<span class="lineNum">     432 </span>                :            :    /* normal */
+<span class="lineNum">     433 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     434 </span>                :            : 
+<span class="lineNum">     435 </span>                :            :    /* texcoord */
+<span class="lineNum">     436 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     437 </span>                :            : 
+<span class="lineNum">     438 </span>                :            :    /* edgeflag */
+<span class="lineNum">     439 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     440 </span>                :            : 
+<span class="lineNum">     441 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     442 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     443 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     444 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     445 </span>                :            :    }
+<span class="lineNum">     446 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="447"><span class="lineNum">     447 </span>                :            : </a>
+<span class="lineNum">     448 </span>                :            : 
+<span class="lineNum">     449 </span>                :<span class="lineNoCov">          0 : static void vertex3f_feedback( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     450 </span>                :            : {
+<span class="lineNum">     451 </span>                :<span class="lineNoCov">          0 :    vertex4f_feedback(ctx, x, y, z, 1.0F);</span>
+<span class="lineNum">     452 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="453"><span class="lineNum">     453 </span>                :            : </a>
+<span class="lineNum">     454 </span>                :            : 
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 : static void vertex2f_feedback( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     456 </span>                :            : {
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :    vertex4f_feedback(ctx, x, y, 0.0F, 1.0F);</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="459"><span class="lineNum">     459 </span>                :            : </a>
+<span class="lineNum">     460 </span>                :            : 
+<span class="lineNum">     461 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_feedback( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     462 </span>                :            : {
+<span class="lineNum">     463 </span>                :<span class="lineNoCov">          0 :    vertex4f_feedback(ctx, v[0], v[1], v[2], 1.0F);</span>
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     465 </span>                :            : 
+<span class="lineNum">     466 </span>                :            : 
+<span class="lineNum">     467 </span>                :            : 
+<span class="lineNum">     468 </span>                :            : /*
+<span class="lineNum">     469 </span>                :            :  * Only one glVertex4 function since it's not too popular.
+<a name="470"><span class="lineNum">     470 </span>                :            :  * Caller:  context-&gt;API.Vertex4f pointer.</a>
+<span class="lineNum">     471 </span>                :            :  */
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 : static void vertex4( GLcontext *ctx,</span>
+<span class="lineNum">     473 </span>                :            :                      GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+<span class="lineNum">     474 </span>                :            : {
+<span class="lineNum">     475 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     476 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     477 </span>                :            : 
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :    ASSIGN_4V( VB-&gt;Obj[count], x, y, z, w );</span>
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     481 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     483 </span>                :<span class="lineNoCov">          0 :    VB-&gt;VertexSizeMask = VERTEX4_BIT;</span>
+<span class="lineNum">     484 </span>                :            : 
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     486 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     487 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     489 </span>                :            :    }
+<span class="lineNum">     490 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     491 </span>                :            : 
+<span class="lineNum">     492 </span>                :            : 
+<span class="lineNum">     493 </span>                :            : 
+<span class="lineNum">     494 </span>                :            : /*
+<span class="lineNum">     495 </span>                :            :  * XYZ vertex, RGB color, normal, ST texture coords.
+<a name="496"><span class="lineNum">     496 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     497 </span>                :            :  */
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 : static void vertex3f_normal_color_tex2( GLcontext *ctx,</span>
+<span class="lineNum">     499 </span>                :            :                                         GLfloat x, GLfloat y, GLfloat z )
+<span class="lineNum">     500 </span>                :            : {
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     502 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     503 </span>                :            : 
+<span class="lineNum">     504 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     505 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     506 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     507 </span>                :<span class="lineNoCov">          0 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     508 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     509 </span>                :            : 
+<span class="lineNum">     510 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     511 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     512 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     513 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     514 </span>                :            :    }
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     516 </span>                :            : 
+<span class="lineNum">     517 </span>                :            : 
+<span class="lineNum">     518 </span>                :            : /*
+<span class="lineNum">     519 </span>                :            :  * XYZ vertex, RGB color, normal, STRQ texture coords.
+<a name="520"><span class="lineNum">     520 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     521 </span>                :            :  */
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 : static void vertex3f_normal_color_tex4( GLcontext *ctx,</span>
+<span class="lineNum">     523 </span>                :            :                                         GLfloat x, GLfloat y, GLfloat z )
+<span class="lineNum">     524 </span>                :            : {
+<span class="lineNum">     525 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     526 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     527 </span>                :            : 
+<span class="lineNum">     528 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     529 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     530 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     531 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     532 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     533 </span>                :            : 
+<span class="lineNum">     534 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     535 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     536 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     537 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     538 </span>                :            :    }
+<span class="lineNum">     539 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     540 </span>                :            : 
+<span class="lineNum">     541 </span>                :            : 
+<span class="lineNum">     542 </span>                :            : /*
+<span class="lineNum">     543 </span>                :            :  * XYZ vertex, normal.
+<a name="544"><span class="lineNum">     544 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     545 </span>                :            :  */
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 : static void vertex3f_normal( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     547 </span>                :            : {
+<span class="lineNum">     548 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     549 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     550 </span>                :            : 
+<span class="lineNum">     551 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     553 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     554 </span>                :            : 
+<span class="lineNum">     555 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     556 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     557 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     558 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     559 </span>                :            :    }
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     561 </span>                :            : 
+<span class="lineNum">     562 </span>                :            : 
+<span class="lineNum">     563 </span>                :            : /*
+<span class="lineNum">     564 </span>                :            :  * XYZ vertex, ST texture coords.
+<a name="565"><span class="lineNum">     565 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     566 </span>                :            :  */
+<span class="lineNum">     567 </span>                :<span class="lineNoCov">          0 : static void vertex3f_color_tex2( GLcontext *ctx,</span>
+<span class="lineNum">     568 </span>                :            :                                  GLfloat x, GLfloat y, GLfloat z )
+<span class="lineNum">     569 </span>                :            : {
+<span class="lineNum">     570 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     571 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     572 </span>                :            : 
+<span class="lineNum">     573 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     575 </span>                :<span class="lineNoCov">          0 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     576 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     577 </span>                :            : 
+<span class="lineNum">     578 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     579 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     580 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     581 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     582 </span>                :            :    }
+<span class="lineNum">     583 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     584 </span>                :            : 
+<span class="lineNum">     585 </span>                :            : 
+<span class="lineNum">     586 </span>                :            : /*
+<span class="lineNum">     587 </span>                :            :  * XYZ vertex, STRQ texture coords.
+<a name="588"><span class="lineNum">     588 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     589 </span>                :            :  */
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 : static void vertex3f_color_tex4( GLcontext *ctx,</span>
+<span class="lineNum">     591 </span>                :            :                                  GLfloat x, GLfloat y, GLfloat z )
+<span class="lineNum">     592 </span>                :            : {
+<span class="lineNum">     593 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     594 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     595 </span>                :            : 
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     598 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     599 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     600 </span>                :            : 
+<span class="lineNum">     601 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     603 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     605 </span>                :            :    }
+<span class="lineNum">     606 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     607 </span>                :            : 
+<span class="lineNum">     608 </span>                :            : 
+<span class="lineNum">     609 </span>                :            : /*
+<span class="lineNum">     610 </span>                :            :  * XYZ vertex, RGB color.
+<a name="611"><span class="lineNum">     611 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     612 </span>                :            :  */
+<span class="lineNum">     613 </span>                :<span class="lineNoCov">          0 : static void vertex3f_color( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     614 </span>                :            : {
+<span class="lineNum">     615 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     616 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     617 </span>                :            : 
+<span class="lineNum">     618 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     619 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     621 </span>                :            : 
+<span class="lineNum">     622 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     624 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     625 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     626 </span>                :            :    }
+<span class="lineNum">     627 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     628 </span>                :            : 
+<span class="lineNum">     629 </span>                :            : 
+<span class="lineNum">     630 </span>                :            : /*
+<span class="lineNum">     631 </span>                :            :  * XYZ vertex, color index.
+<a name="632"><span class="lineNum">     632 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     633 </span>                :            :  */
+<span class="lineNum">     634 </span>                :<span class="lineNoCov">          0 : static void vertex3f_index( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     635 </span>                :            : {
+<span class="lineNum">     636 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     637 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     638 </span>                :            : 
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, z );</span>
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Findex[count] = ctx-&gt;Current.Index;</span>
+<span class="lineNum">     641 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     642 </span>                :            : 
+<span class="lineNum">     643 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     645 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     646 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     647 </span>                :            :    }
+<span class="lineNum">     648 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     649 </span>                :            : 
+<span class="lineNum">     650 </span>                :            : 
+<span class="lineNum">     651 </span>                :            : 
+<span class="lineNum">     652 </span>                :            : /*
+<span class="lineNum">     653 </span>                :            :  * XY vertex, RGB color, normal, ST texture coords.
+<a name="654"><span class="lineNum">     654 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     655 </span>                :            :  */
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 : static void vertex2f_normal_color_tex2( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     657 </span>                :            : {
+<span class="lineNum">     658 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     659 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     660 </span>                :            : 
+<span class="lineNum">     661 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     662 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     663 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     664 </span>                :<span class="lineNoCov">          0 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     665 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     666 </span>                :            : 
+<span class="lineNum">     667 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     668 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     669 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     670 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     671 </span>                :            :    }
+<span class="lineNum">     672 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     673 </span>                :            : 
+<span class="lineNum">     674 </span>                :            : 
+<span class="lineNum">     675 </span>                :            : /*
+<span class="lineNum">     676 </span>                :            :  * XY vertex, RGB color, normal, STRQ texture coords.
+<a name="677"><span class="lineNum">     677 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     678 </span>                :            :  */
+<span class="lineNum">     679 </span>                :<span class="lineNoCov">          0 : static void vertex2f_normal_color_tex4( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     680 </span>                :            : {
+<span class="lineNum">     681 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     682 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     683 </span>                :            : 
+<span class="lineNum">     684 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     685 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     686 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     687 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     688 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     689 </span>                :            : 
+<span class="lineNum">     690 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     691 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     692 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     693 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     694 </span>                :            :    }
+<span class="lineNum">     695 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     696 </span>                :            : 
+<span class="lineNum">     697 </span>                :            : 
+<span class="lineNum">     698 </span>                :            : /*
+<span class="lineNum">     699 </span>                :            :  * XY vertex, normal.
+<a name="700"><span class="lineNum">     700 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     701 </span>                :            :  */
+<span class="lineNum">     702 </span>                :<span class="lineNoCov">          0 : static void vertex2f_normal( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     703 </span>                :            : {
+<span class="lineNum">     704 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     705 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     706 </span>                :            : 
+<span class="lineNum">     707 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     708 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     709 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     710 </span>                :            : 
+<span class="lineNum">     711 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     712 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     713 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     714 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     715 </span>                :            :    }
+<span class="lineNum">     716 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     717 </span>                :            : 
+<span class="lineNum">     718 </span>                :            : 
+<span class="lineNum">     719 </span>                :            : /*
+<span class="lineNum">     720 </span>                :            :  * XY vertex, ST texture coords.
+<a name="721"><span class="lineNum">     721 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     722 </span>                :            :  */
+<span class="lineNum">     723 </span>                :<span class="lineNoCov">          0 : static void vertex2f_color_tex2( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     724 </span>                :            : {
+<span class="lineNum">     725 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     726 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     727 </span>                :            : 
+<span class="lineNum">     728 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     729 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     730 </span>                :<span class="lineNoCov">          0 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     731 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     732 </span>                :            : 
+<span class="lineNum">     733 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     734 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     735 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     736 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     737 </span>                :            :    }
+<span class="lineNum">     738 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     739 </span>                :            : 
+<span class="lineNum">     740 </span>                :            : 
+<span class="lineNum">     741 </span>                :            : /*
+<span class="lineNum">     742 </span>                :            :  * XY vertex, STRQ texture coords.
+<a name="743"><span class="lineNum">     743 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     744 </span>                :            :  */
+<span class="lineNum">     745 </span>                :<span class="lineNoCov">          0 : static void vertex2f_color_tex4( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     746 </span>                :            : {
+<span class="lineNum">     747 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     748 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     749 </span>                :            : 
+<span class="lineNum">     750 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     751 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     752 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     753 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     754 </span>                :            : 
+<span class="lineNum">     755 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     756 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     757 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     758 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     759 </span>                :            :    }
+<span class="lineNum">     760 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     761 </span>                :            : 
+<span class="lineNum">     762 </span>                :            : 
+<span class="lineNum">     763 </span>                :            : /*
+<span class="lineNum">     764 </span>                :            :  * XY vertex, RGB color.
+<a name="765"><span class="lineNum">     765 </span>                :            :  * Caller:  context-&gt;API.Vertex2f pointer.</a>
+<span class="lineNum">     766 </span>                :            :  */
+<span class="lineNum">     767 </span>                :<span class="lineNoCov">          0 : static void vertex2f_color( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     768 </span>                :            : {
+<span class="lineNum">     769 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     770 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     771 </span>                :            : 
+<span class="lineNum">     772 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     773 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     774 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     775 </span>                :            : 
+<span class="lineNum">     776 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     777 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     778 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     779 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     780 </span>                :            :    }
+<span class="lineNum">     781 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     782 </span>                :            : 
+<span class="lineNum">     783 </span>                :            : 
+<span class="lineNum">     784 </span>                :            : /*
+<span class="lineNum">     785 </span>                :            :  * XY vertex, color index.
+<a name="786"><span class="lineNum">     786 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     787 </span>                :            :  */
+<span class="lineNum">     788 </span>                :<span class="lineNoCov">          0 : static void vertex2f_index( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     789 </span>                :            : {
+<span class="lineNum">     790 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     791 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     792 </span>                :            : 
+<span class="lineNum">     793 </span>                :<span class="lineNoCov">          0 :    ASSIGN_3V( VB-&gt;Obj[count], x, y, 0.0F );</span>
+<span class="lineNum">     794 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Findex[count] = ctx-&gt;Current.Index;</span>
+<span class="lineNum">     795 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     796 </span>                :            : 
+<span class="lineNum">     797 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     798 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     799 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     800 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     801 </span>                :            :    }
+<span class="lineNum">     802 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     803 </span>                :            : 
+<span class="lineNum">     804 </span>                :            : 
+<span class="lineNum">     805 </span>                :            : 
+<span class="lineNum">     806 </span>                :            : 
+<span class="lineNum">     807 </span>                :            : /*
+<span class="lineNum">     808 </span>                :            :  * XYZ vertex, RGB color, normal, ST texture coords.
+<a name="809"><span class="lineNum">     809 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     810 </span>                :            :  */
+<span class="lineNum">     811 </span>                :<span class="lineCov">   44700000 : static void vertex3fv_normal_color_tex2( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     812 </span>                :            : {
+<span class="lineNum">     813 </span>                :<span class="lineCov">   44700000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     814 </span>                :<span class="lineCov">   44700000 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     815 </span>                :            : 
+<span class="lineNum">     816 </span>                :<span class="lineCov">   44700000 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     817 </span>                :<span class="lineCov">   44700000 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     818 </span>                :<span class="lineCov">   44700000 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     819 </span>                :<span class="lineCov">   44700000 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     820 </span>                :<span class="lineCov">   44700000 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     821 </span>                :            : 
+<span class="lineNum">     822 </span>                :<span class="lineCov">   44700000 :    count++;</span>
+<span class="lineNum">     823 </span>                :<span class="lineCov">   44700000 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     824 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     825 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     826 </span>                :            :    }
+<span class="lineNum">     827 </span>                :<span class="lineCov">   44700000 : }</span>
+<span class="lineNum">     828 </span>                :            : 
+<span class="lineNum">     829 </span>                :            : 
+<span class="lineNum">     830 </span>                :            : /*
+<span class="lineNum">     831 </span>                :            :  * XYZ vertex, RGB color, normal, STRQ texture coords.
+<a name="832"><span class="lineNum">     832 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     833 </span>                :            :  */
+<span class="lineNum">     834 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_normal_color_tex4( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     835 </span>                :            : {
+<span class="lineNum">     836 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     837 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     838 </span>                :            : 
+<span class="lineNum">     839 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     840 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     841 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     842 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     843 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     844 </span>                :            : 
+<span class="lineNum">     845 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     846 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     847 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     848 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     849 </span>                :            :    }
+<span class="lineNum">     850 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     851 </span>                :            : 
+<span class="lineNum">     852 </span>                :            : 
+<span class="lineNum">     853 </span>                :            : /*
+<span class="lineNum">     854 </span>                :            :  * XYZ vertex, normal.
+<a name="855"><span class="lineNum">     855 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     856 </span>                :            :  */
+<span class="lineNum">     857 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_normal( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     858 </span>                :            : {
+<span class="lineNum">     859 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     860 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     861 </span>                :            : 
+<span class="lineNum">     862 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     863 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], ctx-&gt;Current.Normal );</span>
+<span class="lineNum">     864 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     865 </span>                :            : 
+<span class="lineNum">     866 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     867 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     868 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     869 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     870 </span>                :            :    }
+<span class="lineNum">     871 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     872 </span>                :            : 
+<span class="lineNum">     873 </span>                :            : 
+<span class="lineNum">     874 </span>                :            : /*
+<span class="lineNum">     875 </span>                :            :  * XYZ vertex, ST texture coords.
+<a name="876"><span class="lineNum">     876 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     877 </span>                :            :  */
+<span class="lineNum">     878 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_color_tex2( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     879 </span>                :            : {
+<span class="lineNum">     880 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     881 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     882 </span>                :            : 
+<span class="lineNum">     883 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     884 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     885 </span>                :<span class="lineNoCov">          0 :    COPY_2V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     886 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     887 </span>                :            : 
+<span class="lineNum">     888 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     889 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     890 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     891 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     892 </span>                :            :    }
+<span class="lineNum">     893 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     894 </span>                :            : 
+<span class="lineNum">     895 </span>                :            : 
+<span class="lineNum">     896 </span>                :            : /*
+<span class="lineNum">     897 </span>                :            :  * XYZ vertex, STRQ texture coords.
+<a name="898"><span class="lineNum">     898 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     899 </span>                :            :  */
+<span class="lineNum">     900 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_color_tex4( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     901 </span>                :            : {
+<span class="lineNum">     902 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     903 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     904 </span>                :            : 
+<span class="lineNum">     905 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     906 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     907 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], ctx-&gt;Current.TexCoord );</span>
+<span class="lineNum">     908 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     909 </span>                :            : 
+<span class="lineNum">     910 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     911 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     912 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     913 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     914 </span>                :            :    }
+<span class="lineNum">     915 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     916 </span>                :            : 
+<span class="lineNum">     917 </span>                :            : 
+<span class="lineNum">     918 </span>                :            : /*
+<span class="lineNum">     919 </span>                :            :  * XYZ vertex, RGB color.
+<a name="920"><span class="lineNum">     920 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     921 </span>                :            :  */
+<span class="lineNum">     922 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_color( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     923 </span>                :            : {
+<span class="lineNum">     924 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     925 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     926 </span>                :            : 
+<span class="lineNum">     927 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     928 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], ctx-&gt;Current.ByteColor );</span>
+<span class="lineNum">     929 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     930 </span>                :            : 
+<span class="lineNum">     931 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     932 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     933 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     934 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     935 </span>                :            :    }
+<span class="lineNum">     936 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     937 </span>                :            : 
+<span class="lineNum">     938 </span>                :            : 
+<span class="lineNum">     939 </span>                :            : /*
+<span class="lineNum">     940 </span>                :            :  * XYZ vertex, Color index
+<a name="941"><span class="lineNum">     941 </span>                :            :  * Caller:  context-&gt;API.Vertex3f pointer.</a>
+<span class="lineNum">     942 </span>                :            :  */
+<span class="lineNum">     943 </span>                :<span class="lineNoCov">          0 : static void vertex3fv_index( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     944 </span>                :            : {
+<span class="lineNum">     945 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     946 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;</span>
+<span class="lineNum">     947 </span>                :            : 
+<span class="lineNum">     948 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Obj[count], v );</span>
+<span class="lineNum">     949 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Findex[count] = ctx-&gt;Current.Index;</span>
+<span class="lineNum">     950 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">     951 </span>                :            : 
+<span class="lineNum">     952 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">     953 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">     954 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">     955 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">     956 </span>                :            :    }
+<span class="lineNum">     957 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     958 </span>                :            : 
+<span class="lineNum">     959 </span>                :            : 
+<span class="lineNum">     960 </span>                :            : 
+<span class="lineNum">     961 </span>                :            : /*
+<span class="lineNum">     962 </span>                :            :  * Called when outside glBegin/glEnd, raises an error.
+<a name="963"><span class="lineNum">     963 </span>                :            :  * Caller:  context-&gt;API.Vertex4f pointer.</a>
+<span class="lineNum">     964 </span>                :            :  */
+<span class="lineNum">     965 </span>                :<span class="lineNoCov">          0 : void gl_vertex4f_nop( GLcontext *ctx,</span>
+<span class="lineNum">     966 </span>                :            :                       GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+<span class="lineNum">     967 </span>                :            : {
+<span class="lineNum">     968 </span>                :<span class="lineNoCov">          0 :    gl_error( ctx, GL_INVALID_OPERATION, &quot;glVertex4&quot; );</span>
+<a name="969"><span class="lineNum">     969 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     970 </span>                :            : 
+<span class="lineNum">     971 </span>                :<span class="lineNoCov">          0 : void gl_vertex3f_nop( GLcontext *ctx, GLfloat x, GLfloat y, GLfloat z )</span>
+<span class="lineNum">     972 </span>                :            : {
+<span class="lineNum">     973 </span>                :<span class="lineNoCov">          0 :    gl_error( ctx, GL_INVALID_OPERATION, &quot;glVertex3&quot; );</span>
+<a name="974"><span class="lineNum">     974 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     975 </span>                :            : 
+<span class="lineNum">     976 </span>                :<span class="lineNoCov">          0 : void gl_vertex2f_nop( GLcontext *ctx, GLfloat x, GLfloat y )</span>
+<span class="lineNum">     977 </span>                :            : {
+<span class="lineNum">     978 </span>                :<span class="lineNoCov">          0 :    gl_error( ctx, GL_INVALID_OPERATION, &quot;glVertex2&quot; );</span>
+<a name="979"><span class="lineNum">     979 </span>                :<span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     980 </span>                :            : 
+<span class="lineNum">     981 </span>                :<span class="lineNoCov">          0 : void gl_vertex3fv_nop( GLcontext *ctx, const GLfloat v[3] )</span>
+<span class="lineNum">     982 </span>                :            : {
+<span class="lineNum">     983 </span>                :<span class="lineNoCov">          0 :    gl_error( ctx, GL_INVALID_OPERATION, &quot;glVertex3v&quot; );</span>
+<span class="lineNum">     984 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     985 </span>                :            : 
+<span class="lineNum">     986 </span>                :            : 
+<span class="lineNum">     987 </span>                :            : 
+<span class="lineNum">     988 </span>                :            : 
+<span class="lineNum">     989 </span>                :            : /**********************************************************************/
+<span class="lineNum">     990 </span>                :            : /******                   glTexCoord functions                    *****/
+<span class="lineNum">     991 </span>                :            : /**********************************************************************/
+<span class="lineNum">     992 </span>                :            : 
+<span class="lineNum">     993 </span>                :            : /*
+<a name="994"><span class="lineNum">     994 </span>                :            :  * Caller:  context-&gt;API.TexCoord2f pointer.</a>
+<span class="lineNum">     995 </span>                :            :  */
+<span class="lineNum">     996 </span>                :<span class="lineNoCov">          0 : void gl_TexCoord2f( GLcontext *ctx, GLfloat s, GLfloat t )</span>
+<span class="lineNum">     997 </span>                :            : {
+<span class="lineNum">     998 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[0] = s;</span>
+<span class="lineNum">     999 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[1] = t;</span>
+<span class="lineNum">    1000 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1001 </span>                :            : 
+<span class="lineNum">    1002 </span>                :            : 
+<span class="lineNum">    1003 </span>                :            : /*
+<span class="lineNum">    1004 </span>                :            :  * Caller:  context-&gt;API.TexCoord2f pointer.
+<a name="1005"><span class="lineNum">    1005 </span>                :            :  * This version of glTexCoord2 is called if glTexCoord[34] was a predecessor.</a>
+<span class="lineNum">    1006 </span>                :            :  */
+<span class="lineNum">    1007 </span>                :<span class="lineNoCov">          0 : void gl_TexCoord2f4( GLcontext *ctx, GLfloat s, GLfloat t )</span>
+<span class="lineNum">    1008 </span>                :            : {
+<span class="lineNum">    1009 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[0] = s;</span>
+<span class="lineNum">    1010 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[1] = t;</span>
+<span class="lineNum">    1011 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[2] = 0.0F;</span>
+<span class="lineNum">    1012 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[3] = 1.0F;</span>
+<span class="lineNum">    1013 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1014 </span>                :            : 
+<span class="lineNum">    1015 </span>                :            : 
+<span class="lineNum">    1016 </span>                :            : /*
+<a name="1017"><span class="lineNum">    1017 </span>                :            :  * Caller:  context-&gt;API.TexCoord4f pointer.</a>
+<span class="lineNum">    1018 </span>                :            :  */
+<span class="lineNum">    1019 </span>                :<span class="lineNoCov">          0 : void gl_TexCoord4f( GLcontext *ctx, GLfloat s, GLfloat t, GLfloat r, GLfloat q)</span>
+<span class="lineNum">    1020 </span>                :            : {
+<span class="lineNum">    1021 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[0] = s;</span>
+<span class="lineNum">    1022 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[1] = t;</span>
+<span class="lineNum">    1023 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[2] = r;</span>
+<span class="lineNum">    1024 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Current.TexCoord[3] = q;</span>
+<span class="lineNum">    1025 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;VB-&gt;TexCoordSize==2) {</span>
+<span class="lineNum">    1026 </span>                :            :       /* Have to switch to 4-component texture mode now */
+<span class="lineNum">    1027 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;VB-&gt;TexCoordSize = 4;</span>
+<span class="lineNum">    1028 </span>                :<span class="lineNoCov">          0 :       gl_set_vertex_function( ctx );</span>
+<span class="lineNum">    1029 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.TexCoord2f = ctx-&gt;API.TexCoord2f = gl_TexCoord2f4;</span>
+<span class="lineNum">    1030 </span>                :            :    }
+<span class="lineNum">    1031 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1032 </span>                :            : 
+<span class="lineNum">    1033 </span>                :            : 
+<span class="lineNum">    1034 </span>                :            : 
+<span class="lineNum">    1035 </span>                :            : 
+<span class="lineNum">    1036 </span>                :            : /*
+<span class="lineNum">    1037 </span>                :            :  * This function examines the current GL state and sets the
+<span class="lineNum">    1038 </span>                :            :  * ctx-&gt;Exec.Vertex[34]f pointers to point at the appropriate vertex
+<a name="1039"><span class="lineNum">    1039 </span>                :            :  * processing functions.</a>
+<span class="lineNum">    1040 </span>                :            :  */
+<span class="lineNum">    1041 </span>                :<span class="lineCov">          2 : void gl_set_vertex_function( GLcontext *ctx )</span>
+<span class="lineNum">    1042 </span>                :            : {
+<span class="lineNum">    1043 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (ctx-&gt;RenderMode==GL_FEEDBACK) {</span>
+<span class="lineNum">    1044 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Vertex4f = vertex4f_feedback;</span>
+<span class="lineNum">    1045 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Vertex3f = vertex3f_feedback;</span>
+<span class="lineNum">    1046 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Vertex2f = vertex2f_feedback;</span>
+<span class="lineNum">    1047 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Vertex3fv = vertex3fv_feedback;</span>
+<span class="lineNum">    1048 </span>                :            :    }
+<span class="lineNum">    1049 </span>                :            :    else {
+<span class="lineNum">    1050 </span>                :<span class="lineCov">          2 :       ctx-&gt;Exec.Vertex4f = vertex4;</span>
+<span class="lineNum">    1051 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :       if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">    1052 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :          if (ctx-&gt;NeedNormals) {</span>
+<span class="lineNum">    1053 </span>                :            :             /* lighting enabled, need normal vectors */
+<span class="lineNum">    1054 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :             if (ctx-&gt;Texture.Enabled) {</span>
+<span class="lineNum">    1055 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :                if (ctx-&gt;VB-&gt;TexCoordSize==2) {</span>
+<span class="lineNum">    1056 </span>                :<span class="lineCov">          1 :                   ctx-&gt;Exec.Vertex2f = vertex2f_normal_color_tex2;</span>
+<span class="lineNum">    1057 </span>                :<span class="lineCov">          1 :                   ctx-&gt;Exec.Vertex3f = vertex3f_normal_color_tex2;</span>
+<span class="lineNum">    1058 </span>                :<span class="lineCov">          1 :                   ctx-&gt;Exec.Vertex3fv = vertex3fv_normal_color_tex2;</span>
+<span class="lineNum">    1059 </span>                :            :                }
+<span class="lineNum">    1060 </span>                :            :                else {
+<span class="lineNum">    1061 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex2f = vertex2f_normal_color_tex4;</span>
+<span class="lineNum">    1062 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3f = vertex3f_normal_color_tex4;</span>
+<span class="lineNum">    1063 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3fv = vertex3fv_normal_color_tex4;</span>
+<span class="lineNum">    1064 </span>                :            :                }
+<span class="lineNum">    1065 </span>                :            :             }
+<span class="lineNum">    1066 </span>                :            :             else {
+<span class="lineNum">    1067 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Exec.Vertex2f = vertex2f_normal;</span>
+<span class="lineNum">    1068 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Exec.Vertex3f = vertex3f_normal;</span>
+<span class="lineNum">    1069 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Exec.Vertex3fv = vertex3fv_normal;</span>
+<span class="lineNum">    1070 </span>                :            :             }
+<span class="lineNum">    1071 </span>                :            :          }
+<span class="lineNum">    1072 </span>                :            :          else {
+<span class="lineNum">    1073 </span>                :            :             /* not lighting, need vertex color */
+<span class="lineNum">    1074 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :             if (ctx-&gt;Texture.Enabled) {</span>
+<span class="lineNum">    1075 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ctx-&gt;VB-&gt;TexCoordSize==2) {</span>
+<span class="lineNum">    1076 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex2f = vertex2f_color_tex2;</span>
+<span class="lineNum">    1077 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3f = vertex3f_color_tex2;</span>
+<span class="lineNum">    1078 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3fv = vertex3fv_color_tex2;</span>
+<span class="lineNum">    1079 </span>                :            :                }
+<span class="lineNum">    1080 </span>                :            :                else {
+<span class="lineNum">    1081 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex2f = vertex2f_color_tex4;</span>
+<span class="lineNum">    1082 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3f = vertex3f_color_tex4;</span>
+<span class="lineNum">    1083 </span>                :<span class="lineNoCov">          0 :                   ctx-&gt;Exec.Vertex3fv = vertex3fv_color_tex4;</span>
+<span class="lineNum">    1084 </span>                :            :                }
+<span class="lineNum">    1085 </span>                :            :             }
+<span class="lineNum">    1086 </span>                :            :             else {
+<span class="lineNum">    1087 </span>                :<span class="lineCov">          1 :                ctx-&gt;Exec.Vertex2f = vertex2f_color;</span>
+<span class="lineNum">    1088 </span>                :<span class="lineCov">          1 :                ctx-&gt;Exec.Vertex3f = vertex3f_color;</span>
+<span class="lineNum">    1089 </span>                :<span class="lineCov">          1 :                ctx-&gt;Exec.Vertex3fv = vertex3fv_color;</span>
+<span class="lineNum">    1090 </span>                :            :             }
+<span class="lineNum">    1091 </span>                :            :          }
+<span class="lineNum">    1092 </span>                :            :       }
+<span class="lineNum">    1093 </span>                :            :       else {
+<span class="lineNum">    1094 </span>                :            :          /* color index mode */
+<span class="lineNum">    1095 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Light.Enabled) {</span>
+<span class="lineNum">    1096 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex2f = vertex2f_normal;</span>
+<span class="lineNum">    1097 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex3f = vertex3f_normal;</span>
+<span class="lineNum">    1098 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex3fv = vertex3fv_normal;</span>
+<span class="lineNum">    1099 </span>                :            :          }
+<span class="lineNum">    1100 </span>                :            :          else {
+<span class="lineNum">    1101 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex2f = vertex2f_index;</span>
+<span class="lineNum">    1102 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex3f = vertex3f_index;</span>
+<span class="lineNum">    1103 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Exec.Vertex3fv = vertex3fv_index;</span>
+<span class="lineNum">    1104 </span>                :            :          }
+<span class="lineNum">    1105 </span>                :            :       }
+<span class="lineNum">    1106 </span>                :            :    }
+<span class="lineNum">    1107 </span>                :            : 
+<span class="lineNum">    1108 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :    if (!ctx-&gt;CompileFlag) {</span>
+<span class="lineNum">    1109 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Vertex2f = ctx-&gt;Exec.Vertex2f;</span>
+<span class="lineNum">    1110 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Vertex3f = ctx-&gt;Exec.Vertex3f;</span>
+<span class="lineNum">    1111 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Vertex4f = ctx-&gt;Exec.Vertex4f;</span>
+<span class="lineNum">    1112 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Vertex3fv = ctx-&gt;Exec.Vertex3fv;</span>
+<span class="lineNum">    1113 </span>                :            :    }
+<span class="lineNum">    1114 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">    1115 </span>                :            : 
+<span class="lineNum">    1116 </span>                :            : 
+<span class="lineNum">    1117 </span>                :            : 
+<span class="lineNum">    1118 </span>                :            : /*
+<span class="lineNum">    1119 </span>                :            :  * This function examines the current GL state and sets the
+<span class="lineNum">    1120 </span>                :            :  * ctx-&gt;Exec.Color[34]* pointers to point at the appropriate vertex
+<a name="1121"><span class="lineNum">    1121 </span>                :            :  * processing functions.</a>
+<span class="lineNum">    1122 </span>                :            :  */
+<span class="lineNum">    1123 </span>                :<span class="lineCov">          2 : void gl_set_color_function( GLcontext *ctx )</span>
+<span class="lineNum">    1124 </span>                :            : {
+<span class="lineNum">    1125 </span>                :            :    ASSERT( !INSIDE_BEGIN_END(ctx) );
+<span class="lineNum">    1126 </span>                :            : 
+<span class="lineNum">    1127 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (ctx-&gt;Light.ColorMaterialEnabled) {</span>
+<span class="lineNum">    1128 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color3f = gl_ColorMat3f;</span>
+<span class="lineNum">    1129 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color3fv = gl_ColorMat3fv;</span>
+<span class="lineNum">    1130 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color4f = gl_ColorMat4f;</span>
+<span class="lineNum">    1131 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color4fv = gl_ColorMat4fv;</span>
+<span class="lineNum">    1132 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color4ub = gl_ColorMat4ub;</span>
+<span class="lineNum">    1133 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Exec.Color4ubv = gl_ColorMat4ubv;</span>
+<span class="lineNum">    1134 </span>                :            :    }
+<span class="lineNum">    1135 </span>                :            :    else {
+<span class="lineNum">    1136 </span>                :<span class="lineCov">          2 :       ctx-&gt;Exec.Color3f = gl_Color3f;</span>
+<span class="lineNum">    1137 </span>                :<span class="lineCov">          2 :       ctx-&gt;Exec.Color3fv = gl_Color3fv;</span>
+<span class="lineNum">    1138 </span>                :<span class="lineCov">          2 :       ctx-&gt;Exec.Color4f = gl_Color4f;</span>
+<span class="lineNum">    1139 </span>                :<span class="lineCov">          2 :       ctx-&gt;Exec.Color4fv = gl_Color4fv;</span>
+<span class="lineNum">    1140 </span>                :            :       ctx-&gt;Exec.Color4ub
+<span class="lineNum">    1141 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :          = ctx-&gt;Visual-&gt;EightBitColor ? gl_Color4ub8bit : gl_Color4ub;</span>
+<span class="lineNum">    1142 </span>                :            :       ctx-&gt;Exec.Color4ubv
+<span class="lineNum">    1143 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :          = ctx-&gt;Visual-&gt;EightBitColor ? gl_Color4ubv8bit : gl_Color4ubv;</span>
+<span class="lineNum">    1144 </span>                :            :    }
+<span class="lineNum">    1145 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          2 :    if (!ctx-&gt;CompileFlag) {</span>
+<span class="lineNum">    1146 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color3f = ctx-&gt;Exec.Color3f;</span>
+<span class="lineNum">    1147 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color3fv = ctx-&gt;Exec.Color3fv;</span>
+<span class="lineNum">    1148 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color4f = ctx-&gt;Exec.Color4f;</span>
+<span class="lineNum">    1149 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color4fv = ctx-&gt;Exec.Color4fv;</span>
+<span class="lineNum">    1150 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color4ub = ctx-&gt;Exec.Color4ub;</span>
+<span class="lineNum">    1151 </span>                :<span class="lineCov">          2 :       ctx-&gt;API.Color4ubv = ctx-&gt;Exec.Color4ubv;</span>
+<span class="lineNum">    1152 </span>                :            :    }
+<span class="lineNum">    1153 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">    1154 </span>                :            : 
+<span class="lineNum">    1155 </span>                :            : 
+<span class="lineNum">    1156 </span>                :            : 
+<span class="lineNum">    1157 </span>                :            : /**********************************************************************/
+<span class="lineNum">    1158 </span>                :            : /*****                    Evaluator vertices                      *****/
+<span class="lineNum">    1159 </span>                :            : /**********************************************************************/
+<span class="lineNum">    1160 </span>                :            : 
+<span class="lineNum">    1161 </span>                :            : 
+<span class="lineNum">    1162 </span>                :            : /*
+<span class="lineNum">    1163 </span>                :            :  * Process a vertex produced by an evaluator.
+<span class="lineNum">    1164 </span>                :            :  * Caller:  eval.c
+<span class="lineNum">    1165 </span>                :            :  * Input:  vertex - the X,Y,Z,W vertex
+<span class="lineNum">    1166 </span>                :            :  *         normal - normal vector
+<span class="lineNum">    1167 </span>                :            :  *         color - 4 integer color components
+<span class="lineNum">    1168 </span>                :            :  *         index - color index
+<a name="1169"><span class="lineNum">    1169 </span>                :            :  *         texcoord - texture coordinate</a>
+<span class="lineNum">    1170 </span>                :            :  */
+<span class="lineNum">    1171 </span>                :<span class="lineNoCov">          0 : void gl_eval_vertex( GLcontext *ctx,</span>
+<span class="lineNum">    1172 </span>                :            :                      const GLfloat vertex[4], const GLfloat normal[3],
+<span class="lineNum">    1173 </span>                :            :                      const GLubyte color[4],
+<span class="lineNum">    1174 </span>                :            :                      GLuint index,
+<span class="lineNum">    1175 </span>                :            :                      const GLfloat texcoord[4] )
+<span class="lineNum">    1176 </span>                :            : {
+<span class="lineNum">    1177 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1178 </span>                :<span class="lineNoCov">          0 :    GLuint count = VB-&gt;Count;  /* copy to local var to encourage optimization */</span>
+<span class="lineNum">    1179 </span>                :            : 
+<span class="lineNum">    1180 </span>                :<span class="lineNoCov">          0 :    VB-&gt;VertexSizeMask = VERTEX4_BIT;</span>
+<span class="lineNum">    1181 </span>                :<span class="lineNoCov">          0 :    VB-&gt;MonoNormal = GL_FALSE;</span>
+<span class="lineNum">    1182 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;Obj[count], vertex );</span>
+<span class="lineNum">    1183 </span>                :<span class="lineNoCov">          0 :    COPY_3V( VB-&gt;Normal[count], normal );</span>
+<span class="lineNum">    1184 </span>                :<span class="lineNoCov">          0 :    COPY_4UBV( VB-&gt;Fcolor[count], color );</span>
+<span class="lineNum">    1185 </span>                :            :    
+<span class="lineNum">    1186 </span>                :            : #ifdef GL_VERSION_1_1
+<span class="lineNum">    1187 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Light.ColorMaterialEnabled</span>
+<span class="lineNum">    1188 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; (ctx-&gt;Eval.Map1Color4 || ctx-&gt;Eval.Map2Color4)) {</span>
+<span class="lineNum">    1189 </span>                :            :       GLfloat fcolor[4];
+<span class="lineNum">    1190 </span>                :<span class="lineNoCov">          0 :       fcolor[0] = color[0] * ctx-&gt;Visual-&gt;InvRedScale;</span>
+<span class="lineNum">    1191 </span>                :<span class="lineNoCov">          0 :       fcolor[1] = color[1] * ctx-&gt;Visual-&gt;InvGreenScale;</span>
+<span class="lineNum">    1192 </span>                :<span class="lineNoCov">          0 :       fcolor[2] = color[2] * ctx-&gt;Visual-&gt;InvBlueScale;</span>
+<span class="lineNum">    1193 </span>                :<span class="lineNoCov">          0 :       fcolor[3] = color[3] * ctx-&gt;Visual-&gt;InvAlphaScale;</span>
+<span class="lineNum">    1194 </span>                :<span class="lineNoCov">          0 :       gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, fcolor );</span>
+<span class="lineNum">    1195 </span>                :            :    }
+<span class="lineNum">    1196 </span>                :            : #endif
+<span class="lineNum">    1197 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Findex[count] = index;</span>
+<span class="lineNum">    1198 </span>                :<span class="lineNoCov">          0 :    COPY_4V( VB-&gt;TexCoord[count], texcoord );</span>
+<span class="lineNum">    1199 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Edgeflag[count] = ctx-&gt;Current.EdgeFlag;</span>
+<span class="lineNum">    1200 </span>                :            : 
+<span class="lineNum">    1201 </span>                :<span class="lineNoCov">          0 :    count++;</span>
+<span class="lineNum">    1202 </span>                :<span class="lineNoCov">          0 :    VB-&gt;Count = count;</span>
+<span class="lineNum">    1203 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (count==VB_MAX) {</span>
+<span class="lineNum">    1204 </span>                :<span class="lineNoCov">          0 :       gl_transform_vb_part1( ctx, GL_FALSE );</span>
+<span class="lineNum">    1205 </span>                :            :    }
+<span class="lineNum">    1206 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1207 </span>                :            : 
+<span class="lineNum">    1208 </span>                :            : 
+<span class="lineNum">    1209 </span>                :            : 
+<span class="lineNum">    1210 </span>                :            : 
+<span class="lineNum">    1211 </span>                :            : 
+<span class="lineNum">    1212 </span>                :            : /**********************************************************************/
+<span class="lineNum">    1213 </span>                :            : /*****                    glBegin / glEnd                         *****/
+<span class="lineNum">    1214 </span>                :            : /**********************************************************************/
+<span class="lineNum">    1215 </span>                :            : 
+<span class="lineNum">    1216 </span>                :            : 
+<span class="lineNum">    1217 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1218 </span>                :            : static GLdouble begin_time;
+<span class="lineNum">    1219 </span>                :            : #endif
+<a name="1220"><span class="lineNum">    1220 </span>                :            : </a>
+<span class="lineNum">    1221 </span>                :            : 
+<span class="lineNum">    1222 </span>                :<span class="lineCov">     149000 : void gl_Begin( GLcontext *ctx, GLenum p )</span>
+<span class="lineNum">    1223 </span>                :            : {
+<span class="lineNum">    1224 </span>                :<span class="lineCov">     149000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1225 </span>                :<span class="lineCov">     149000 :    struct pixel_buffer *PB = ctx-&gt;PB;</span>
+<span class="lineNum">    1226 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1227 </span>                :            :    begin_time = gl_time();
+<span class="lineNum">    1228 </span>                :            : #endif
+<span class="lineNum">    1229 </span>                :            : 
+<span class="lineNum">    1230 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">    1231 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glBegin&quot; );</span>
+<span class="lineNum">    1232 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">    1233 </span>                :            :    }
+<span class="lineNum">    1234 </span>        [<span class="branchCov" title="Branch 0 was taken 1000 times"> + </span><span class="branchCov" title="Branch 1 was taken 148000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">    1235 </span>                :<span class="lineCov">       1000 :       gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">    1236 </span>                :            :    }
+<span class="lineNum">    1237 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 148999 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;NewProjectionMatrix) {</span>
+<span class="lineNum">    1238 </span>                :<span class="lineCov">          1 :       gl_analyze_projection_matrix(ctx);</span>
+<span class="lineNum">    1239 </span>                :            :    }
+<span class="lineNum">    1240 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;NewState) {</span>
+<span class="lineNum">    1241 </span>                :<span class="lineNoCov">          0 :       gl_update_state(ctx);</span>
+<span class="lineNum">    1242 </span>                :            :    }
+<span class="lineNum">    1243 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    else if (ctx-&gt;Exec.Vertex3f==gl_vertex3f_nop) {</span>
+<span class="lineNum">    1244 </span>                :<span class="lineNoCov">          0 :       gl_set_vertex_function(ctx);</span>
+<span class="lineNum">    1245 </span>                :            :    }
+<span class="lineNum">    1246 </span>                :            : 
+<span class="lineNum">    1247 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Driver.Begin) {</span>
+<span class="lineNum">    1248 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.Begin)( ctx, p );</span>
+<span class="lineNum">    1249 </span>                :            :    }
+<span class="lineNum">    1250 </span>                :            : 
+<span class="lineNum">    1251 </span>                :<span class="lineCov">     149000 :    ctx-&gt;Primitive = p;</span>
+<span class="lineNum">    1252 </span>                :<span class="lineCov">     149000 :    VB-&gt;Start = VB-&gt;Count = 0;</span>
+<span class="lineNum">    1253 </span>                :            : 
+<span class="lineNum">    1254 </span>                :<span class="lineCov">     149000 :    VB-&gt;MonoColor = ctx-&gt;MonoPixels;</span>
+<span class="lineNum">    1255 </span>                :<span class="lineCov">     149000 :    VB-&gt;MonoNormal = GL_TRUE;</span>
+<span class="lineNum">    1256 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (VB-&gt;MonoColor) {</span>
+<span class="lineNum">    1257 </span>                :            :       /* All pixels generated are likely to be the same color so have
+<span class="lineNum">    1258 </span>                :            :        * the device driver set the &quot;monocolor&quot; now.
+<span class="lineNum">    1259 </span>                :            :        */
+<span class="lineNum">    1260 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">    1261 </span>                :<span class="lineNoCov">          0 :          GLubyte r = ctx-&gt;Current.ByteColor[0];</span>
+<span class="lineNum">    1262 </span>                :<span class="lineNoCov">          0 :          GLubyte g = ctx-&gt;Current.ByteColor[1];</span>
+<span class="lineNum">    1263 </span>                :<span class="lineNoCov">          0 :          GLubyte b = ctx-&gt;Current.ByteColor[2];</span>
+<span class="lineNum">    1264 </span>                :<span class="lineNoCov">          0 :          GLubyte a = ctx-&gt;Current.ByteColor[3];</span>
+<span class="lineNum">    1265 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.Color)( ctx, r, g, b, a );</span>
+<span class="lineNum">    1266 </span>                :            :       }
+<span class="lineNum">    1267 </span>                :            :       else {
+<span class="lineNum">    1268 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.Index)( ctx, ctx-&gt;Current.Index );</span>
+<span class="lineNum">    1269 </span>                :            :       }
+<span class="lineNum">    1270 </span>                :            :    }
+<span class="lineNum">    1271 </span>                :            : 
+<span class="lineNum">    1272 </span>                :            :    /* By default use front color/index.  Two-sided lighting may override. */
+<span class="lineNum">    1273 </span>                :<span class="lineCov">     149000 :    VB-&gt;Color = VB-&gt;Fcolor;</span>
+<span class="lineNum">    1274 </span>                :<span class="lineCov">     149000 :    VB-&gt;Index = VB-&gt;Findex;</span>
+<span class="lineNum">    1275 </span>                :            : 
+<span class="lineNum">    1276 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">     149000 :    switch (ctx-&gt;Primitive) {</span>
+<span class="lineNum">    1277 </span>                :            :       case GL_POINTS:
+<span class="lineNum">    1278 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;LightTwoSide = GL_FALSE;</span>
+<span class="lineNum">    1279 </span>                :<span class="lineNoCov">          0 :          PB_INIT( PB, GL_POINT );</span>
+<span class="lineNum">    1280 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">    1281 </span>                :            :       case GL_LINES:
+<span class="lineNum">    1282 </span>                :            :       case GL_LINE_STRIP:
+<span class="lineNum">    1283 </span>                :            :       case GL_LINE_LOOP:
+<span class="lineNum">    1284 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;LightTwoSide = GL_FALSE;</span>
+<span class="lineNum">    1285 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;StippleCounter = 0;</span>
+<span class="lineNum">    1286 </span>                :<span class="lineNoCov">          0 :          PB_INIT( PB, GL_LINE );</span>
+<span class="lineNum">    1287 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">    1288 </span>                :            :       case GL_TRIANGLES:
+<span class="lineNum">    1289 </span>                :            :       case GL_TRIANGLE_STRIP:
+<span class="lineNum">    1290 </span>                :            :       case GL_TRIANGLE_FAN:
+<span class="lineNum">    1291 </span>                :            :       case GL_QUADS:
+<span class="lineNum">    1292 </span>                :            :       case GL_QUAD_STRIP:
+<span class="lineNum">    1293 </span>                :            :       case GL_POLYGON:
+<span class="lineNum">    1294 </span>[<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :          ctx-&gt;LightTwoSide = ctx-&gt;Light.Enabled &amp;&amp; ctx-&gt;Light.Model.TwoSide;</span>
+<span class="lineNum">    1295 </span>                :<span class="lineCov">     149000 :          PB_INIT( PB, GL_POLYGON );</span>
+<span class="lineNum">    1296 </span>                :<span class="lineCov">     149000 :          break;</span>
+<span class="lineNum">    1297 </span>                :            :       default:
+<span class="lineNum">    1298 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glBegin&quot; );</span>
+<span class="lineNum">    1299 </span>                :<span class="lineCov">     149000 :          ctx-&gt;Primitive = GL_BITMAP;</span>
+<span class="lineNum">    1300 </span>                :            :    }
+<span class="lineNum">    1301 </span>                :            : }
+<span class="lineNum">    1302 </span>                :            : 
+<a name="1303"><span class="lineNum">    1303 </span>                :            : </a>
+<span class="lineNum">    1304 </span>                :            : 
+<span class="lineNum">    1305 </span>                :<span class="lineCov">     149000 : void gl_End( GLcontext *ctx )</span>
+<span class="lineNum">    1306 </span>                :            : {
+<span class="lineNum">    1307 </span>                :<span class="lineCov">     149000 :    struct pixel_buffer *PB = ctx-&gt;PB;</span>
+<span class="lineNum">    1308 </span>                :<span class="lineCov">     149000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1309 </span>                :            : 
+<span class="lineNum">    1310 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Primitive==GL_BITMAP) {</span>
+<span class="lineNum">    1311 </span>                :            :       /* glEnd without glBegin */
+<span class="lineNum">    1312 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glEnd&quot; );</span>
+<span class="lineNum">    1313 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">    1314 </span>                :            :    }
+<span class="lineNum">    1315 </span>                :            : 
+<span class="lineNum">    1316 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :    if (VB-&gt;Count &gt; VB-&gt;Start) {</span>
+<span class="lineNum">    1317 </span>                :<span class="lineCov">     149000 :       gl_transform_vb_part1( ctx, GL_TRUE );</span>
+<span class="lineNum">    1318 </span>                :            :    }
+<span class="lineNum">    1319 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (PB-&gt;count&gt;0) {</span>
+<span class="lineNum">    1320 </span>                :<span class="lineNoCov">          0 :       gl_flush_pb(ctx);</span>
+<span class="lineNum">    1321 </span>                :            :    }
+<span class="lineNum">    1322 </span>                :            : 
+<span class="lineNum">    1323 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Driver.End) {</span>
+<span class="lineNum">    1324 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.End)(ctx);</span>
+<span class="lineNum">    1325 </span>                :            :    }
+<span class="lineNum">    1326 </span>                :            : 
+<span class="lineNum">    1327 </span>                :<span class="lineCov">     149000 :    PB-&gt;primitive = ctx-&gt;Primitive = GL_BITMAP;  /* Default mode */</span>
+<span class="lineNum">    1328 </span>                :            : 
+<span class="lineNum">    1329 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1330 </span>                :            :    ctx-&gt;BeginEndTime += gl_time() - begin_time;
+<span class="lineNum">    1331 </span>                :            :    ctx-&gt;BeginEndCount++;
+<span class="lineNum">    1332 </span>                :            : #endif
+<span class="lineNum">    1333 </span>                :            : }
+<span class="lineNum">    1334 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

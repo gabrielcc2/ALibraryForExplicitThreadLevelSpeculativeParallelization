@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/qsortg.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - qsortg.c<span style="font-size: 80%;"> (source / <a href="qsortg.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">75</td>
+            <td class="headerCovTableEntry">77</td>
+            <td class="headerCovTableEntryHi">97.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">57</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntryHi">98.3 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : typedef struct csPinBox {</a>
+<span class="lineNum">       2 </span>                :            :     int pin  ; 
+<span class="lineNum">       3 </span>                :            :     short int xloc ; 
+<span class="lineNum">       4 </span>                :            :     short int yloc ; 
+<span class="lineNum">       5 </span>                :            :     short int top  ; 
+<span class="lineNum">       6 </span>                :            : }
+<span class="lineNum">       7 </span>                :            : *csPinPtr ,
+<span class="lineNum">       8 </span>                :            : csPinBox ;
+<span class="lineNum">       9 </span>                :            : 
+<span class="lineNum">      10 </span>                :            : typedef struct csGroup { 
+<span class="lineNum">      11 </span>                :            :     int extint  ; 
+<span class="lineNum">      12 </span>                :            :     int aveX    ; 
+<span class="lineNum">      13 </span>                :            :     int aveY    ; 
+<span class="lineNum">      14 </span>                :            :     short int poison  ; 
+<span class="lineNum">      15 </span>                :            :     short int edge1   ; 
+<span class="lineNum">      16 </span>                :            :     short int edge2   ; 
+<span class="lineNum">      17 </span>                :            :     short int unequiv ; 
+<span class="lineNum">      18 </span>                :            :     short int block   ; 
+<span class="lineNum">      19 </span>                :            :     short int check   ; 
+<span class="lineNum">      20 </span>                :            :     short int numPins ; 
+<span class="lineNum">      21 </span>                :            :     short int pinLimit ;
+<span class="lineNum">      22 </span>                :            :     short int flag    ; 
+<span class="lineNum">      23 </span>                :            :     csPinBox *pinArray ;
+<span class="lineNum">      24 </span>                :            : }
+<span class="lineNum">      25 </span>                :            : csGroup ;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : #define         THRESH          4       /* threshold for insertion */
+<span class="lineNum">      28 </span>                :            : #define         MTHRESH         6       /* threshold for median */
+<span class="lineNum">      29 </span>                :            : 
+<span class="lineNum">      30 </span>                :            : int     qsz;                    /* size of each record */
+<span class="lineNum">      31 </span>                :            : int     thresh;                 /* THRESHold in chars */
+<span class="lineNum">      32 </span>                :            : int     mthresh;                /* MTHRESHold in chars */
+<a name="33"><span class="lineNum">      33 </span>                :            : </a>
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :<span class="lineCov">       1888 : qsortg(base, n, size)</span>
+<span class="lineNum">      36 </span>                :            :         char    *base;
+<span class="lineNum">      37 </span>                :            :         int     n;
+<span class="lineNum">      38 </span>                :            :         int     size;
+<span class="lineNum">      39 </span>                :            : {
+<span class="lineNum">      40 </span>                :            :         register char c, *i, *j, *lo, *hi;
+<span class="lineNum">      41 </span>                :            :         char *min, *max;
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>        [<span class="branchCov" title="Branch 0 was taken 1888 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       1888 :         if (n &lt;= 1)</span>
+<span class="lineNum">      44 </span>                :            :                 return;
+<span class="lineNum">      45 </span>                :<span class="lineCov">       1888 :         qsz = size;</span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">       1888 :         thresh = qsz * THRESH;</span>
+<span class="lineNum">      47 </span>                :<span class="lineCov">       1888 :         mthresh = qsz * MTHRESH;</span>
+<span class="lineNum">      48 </span>                :<span class="lineCov">       1888 :         max = base + n * qsz;</span>
+<span class="lineNum">      49 </span>        [<span class="branchCov" title="Branch 0 was taken 32 times"> + </span><span class="branchCov" title="Branch 1 was taken 1856 times"> + </span>]:<span class="lineCov">       1888 :         if (n &gt;= THRESH) {</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">         32 :                 qstg(base, max);</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">         32 :                 hi = base + thresh;</span>
+<span class="lineNum">      52 </span>                :            :         } else {
+<span class="lineNum">      53 </span>                :<span class="lineCov">       1856 :                 hi = max;</span>
+<span class="lineNum">      54 </span>                :            :         }
+<span class="lineNum">      55 </span>        [<span class="branchCov" title="Branch 0 was taken 3103 times"> + </span><span class="branchCov" title="Branch 1 was taken 1888 times"> + </span>]:<span class="lineCov">       4991 :         for (j = lo = base; (lo += qsz) &lt; hi; )</span>
+<span class="lineNum">      56 </span>        [<span class="branchCov" title="Branch 0 was taken 1321 times"> + </span><span class="branchCov" title="Branch 1 was taken 1782 times"> + </span>]:<span class="lineCov">       3103 :                 if (compareg(j, lo) &gt; 0)</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">       1321 :                         j = lo;</span>
+<span class="lineNum">      58 </span>        [<span class="branchCov" title="Branch 0 was taken 1091 times"> + </span><span class="branchCov" title="Branch 1 was taken 797 times"> + </span>]:<span class="lineCov">       1888 :         if (j != base) {</span>
+<span class="lineNum">      59 </span>                :            :                 /* swap j into place */
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 0 was taken 39276 times"> + </span><span class="branchCov" title="Branch 1 was taken 1091 times"> + </span>]:<span class="lineCov">      40367 :                 for (i = base, hi = base + qsz; i &lt; hi; ) {</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">      39276 :                         c = *j;</span>
+<span class="lineNum">      62 </span>                :<span class="lineCov">      39276 :                         *j++ = *i;</span>
+<span class="lineNum">      63 </span>                :<span class="lineCov">      39276 :                         *i++ = c;</span>
+<span class="lineNum">      64 </span>                :            :                 }
+<span class="lineNum">      65 </span>                :            :         }
+<span class="lineNum">      66 </span>        [<span class="branchCov" title="Branch 0 was taken 3487 times"> + </span><span class="branchCov" title="Branch 1 was taken 1888 times"> + </span>]:<span class="lineCov">       5375 :         for (min = base; (hi = min += qsz) &lt; max; ) {</span>
+<span class="lineNum">      67 </span>        [<span class="branchCov" title="Branch 0 was taken 605 times"> + </span><span class="branchCov" title="Branch 1 was taken 3487 times"> + </span>]:<span class="lineCov">       4092 :                 while (compareg(hi -= qsz, min) &gt; 0)</span>
+<span class="lineNum">      68 </span>                :            :                         /* void */;
+<span class="lineNum">      69 </span>        [<span class="branchCov" title="Branch 0 was taken 596 times"> + </span><span class="branchCov" title="Branch 1 was taken 2891 times"> + </span>]:<span class="lineCov">       3487 :                 if ((hi += qsz) != min) {</span>
+<span class="lineNum">      70 </span>        [<span class="branchCov" title="Branch 0 was taken 21456 times"> + </span><span class="branchCov" title="Branch 1 was taken 596 times"> + </span>]:<span class="lineCov">      22052 :                         for (lo = min + qsz; --lo &gt;= min; ) {</span>
+<span class="lineNum">      71 </span>                :<span class="lineCov">      21456 :                                 c = *lo;</span>
+<span class="lineNum">      72 </span>        [<span class="branchCov" title="Branch 0 was taken 21780 times"> + </span><span class="branchCov" title="Branch 1 was taken 21456 times"> + </span>]:<span class="lineCov">      43236 :                                 for (i = j = lo; (j -= qsz) &gt;= hi; i = j)</span>
+<span class="lineNum">      73 </span>                :<span class="lineCov">      21780 :                                         *i = *j;</span>
+<span class="lineNum">      74 </span>                :<span class="lineCov">      21456 :                                 *i = c;</span>
+<span class="lineNum">      75 </span>                :            :                         }
+<span class="lineNum">      76 </span>                :            :                 }
+<span class="lineNum">      77 </span>                :            :         }
+<span class="lineNum">      78 </span>                :            : }
+<a name="79"><span class="lineNum">      79 </span>                :            : </a>
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :<span class="lineCov">         66 : qstg(base, max)</span>
+<span class="lineNum">      82 </span>                :            :         char *base, *max;
+<span class="lineNum">      83 </span>                :            : {
+<span class="lineNum">      84 </span>                :            :         register char c, *i, *j, *jj;
+<span class="lineNum">      85 </span>                :            :         register int ii;
+<span class="lineNum">      86 </span>                :            :         char *mid, *tmp;
+<span class="lineNum">      87 </span>                :            :         int lo, hi;
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :<span class="lineCov">         66 :         lo = max - base;                /* number of elements as chars */</span>
+<span class="lineNum">      90 </span>                :            :         do      {
+<span class="lineNum">      91 </span>                :<span class="lineCov">        155 :                 mid = i = base + qsz * ((lo / qsz) &gt;&gt; 1);</span>
+<span class="lineNum">      92 </span>        [<span class="branchCov" title="Branch 0 was taken 101 times"> + </span><span class="branchCov" title="Branch 1 was taken 54 times"> + </span>]:<span class="lineCov">        155 :                 if (lo &gt;= mthresh) {</span>
+<span class="lineNum">      93 </span>        [<span class="branchCov" title="Branch 0 was taken 47 times"> + </span><span class="branchCov" title="Branch 1 was taken 54 times"> + </span>]:<span class="lineCov">        101 :                         j = (compareg((jj = base), i) &gt; 0 ? jj : i);</span>
+<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 0 was taken 47 times"> + </span><span class="branchCov" title="Branch 1 was taken 54 times"> + </span>]:<span class="lineCov">        101 :                         if (compareg(j, (tmp = max - qsz)) &gt; 0) {</span>
+<span class="lineNum">      95 </span>                :            :                                 /* switch to first loser */
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 0 was taken 36 times"> + </span><span class="branchCov" title="Branch 1 was taken 11 times"> + </span>]:<span class="lineCov">         47 :                                 j = (j == jj ? i : jj);</span>
+<span class="lineNum">      97 </span>        [<span class="branchCov" title="Branch 0 was taken 9 times"> + </span><span class="branchCov" title="Branch 1 was taken 38 times"> + </span>]:<span class="lineCov">         47 :                                 if (compareg(j, tmp) &lt; 0)</span>
+<span class="lineNum">      98 </span>                :<span class="lineCov">          9 :                                         j = tmp;</span>
+<span class="lineNum">      99 </span>                :            :                         }
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 28 times"> + </span><span class="branchCov" title="Branch 1 was taken 73 times"> + </span>]:<span class="lineCov">        101 :                         if (j != i) {</span>
+<span class="lineNum">     101 </span>                :<span class="lineCov">         28 :                                 ii = qsz;</span>
+<span class="lineNum">     102 </span>                :            :                                 do      {
+<span class="lineNum">     103 </span>                :<span class="lineCov">       1008 :                                         c = *i;</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">       1008 :                                         *i++ = *j;</span>
+<span class="lineNum">     105 </span>                :<span class="lineCov">       1008 :                                         *j++ = c;</span>
+<span class="lineNum">     106 </span>        [<span class="branchCov" title="Branch 0 was taken 980 times"> + </span><span class="branchCov" title="Branch 1 was taken 28 times"> + </span>]:<span class="lineCov">       1008 :                                 } while (--ii);</span>
+<span class="lineNum">     107 </span>                :            :                         }
+<span class="lineNum">     108 </span>                :            :                 }
+<span class="lineNum">     109 </span>                :            :                 /*
+<span class="lineNum">     110 </span>                :            :                  * Semi-standard quicksort partitioning/swapping
+<span class="lineNum">     111 </span>                :            :                  */
+<span class="lineNum">     112 </span>                :<span class="lineCov">        155 :                 for (i = base, j = max - qsz; ; ) {</span>
+<span class="lineNum">     113 </span>[<span class="branchCov" title="Branch 0 was taken 593 times"> + </span><span class="branchCov" title="Branch 1 was taken 203 times"> + </span>][<span class="branchCov" title="Branch 2 was taken 329 times"> + </span><span class="branchCov" title="Branch 3 was taken 264 times"> + </span>]:<span class="lineCov">        796 :                         while (i &lt; mid &amp;&amp; compareg(i, mid) &lt;= 0)</span>
+<span class="lineNum">     114 </span>                :<span class="lineCov">        329 :                                 i += qsz;</span>
+<span class="lineNum">     115 </span>        [<span class="branchCov" title="Branch 0 was taken 538 times"> + </span><span class="branchCov" title="Branch 1 was taken 227 times"> + </span>]:<span class="lineCov">        765 :                         while (j &gt; mid) {</span>
+<span class="lineNum">     116 </span>        [<span class="branchCov" title="Branch 0 was taken 298 times"> + </span><span class="branchCov" title="Branch 1 was taken 240 times"> + </span>]:<span class="lineCov">        538 :                                 if (compareg(mid, j) &lt;= 0) {</span>
+<span class="lineNum">     117 </span>                :<span class="lineCov">        298 :                                         j -= qsz;</span>
+<span class="lineNum">     118 </span>                :<span class="lineCov">        298 :                                         continue;</span>
+<span class="lineNum">     119 </span>                :            :                                 }
+<span class="lineNum">     120 </span>                :<span class="lineCov">        240 :                                 tmp = i + qsz;  /* value of i after swap */</span>
+<span class="lineNum">     121 </span>        [<span class="branchCov" title="Branch 0 was taken 48 times"> + </span><span class="branchCov" title="Branch 1 was taken 192 times"> + </span>]:<span class="lineCov">        240 :                                 if (i == mid) {</span>
+<span class="lineNum">     122 </span>                :            :                                         /* j &lt;-&gt; mid, new mid is j */
+<span class="lineNum">     123 </span>                :<span class="lineCov">         48 :                                         mid = jj = j;</span>
+<span class="lineNum">     124 </span>                :            :                                 } else {
+<span class="lineNum">     125 </span>                :            :                                         /* i &lt;-&gt; j */
+<span class="lineNum">     126 </span>                :<span class="lineCov">        192 :                                         jj = j;</span>
+<span class="lineNum">     127 </span>                :<span class="lineCov">        192 :                                         j -= qsz;</span>
+<span class="lineNum">     128 </span>                :            :                                 }
+<span class="lineNum">     129 </span>                :            :                                 goto swap;
+<span class="lineNum">     130 </span>                :            :                         }
+<span class="lineNum">     131 </span>        [<span class="branchCov" title="Branch 0 was taken 72 times"> + </span><span class="branchCov" title="Branch 1 was taken 155 times"> + </span>]:<span class="lineCov">        227 :                         if (i == mid) {</span>
+<span class="lineNum">     132 </span>                :            :                                 break;
+<span class="lineNum">     133 </span>                :            :                         } else {
+<span class="lineNum">     134 </span>                :            :                                 /* i &lt;-&gt; mid, new mid is i */
+<span class="lineNum">     135 </span>                :<span class="lineCov">         72 :                                 jj = mid;</span>
+<span class="lineNum">     136 </span>                :<span class="lineCov">         72 :                                 tmp = mid = i;  /* value of i after swap */</span>
+<span class="lineNum">     137 </span>                :<span class="lineCov">         72 :                                 j -= qsz;</span>
+<span class="lineNum">     138 </span>                :            :                         }
+<span class="lineNum">     139 </span>                :            :                 swap:
+<span class="lineNum">     140 </span>                :<span class="lineCov">        312 :                         ii = qsz;</span>
+<span class="lineNum">     141 </span>                :            :                         do      {
+<span class="lineNum">     142 </span>                :<span class="lineCov">      11232 :                                 c = *i;</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">      11232 :                                 *i++ = *jj;</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">      11232 :                                 *jj++ = c;</span>
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 0 was taken 10920 times"> + </span><span class="branchCov" title="Branch 1 was taken 312 times"> + </span>]:<span class="lineCov">      11232 :                         } while (--ii);</span>
+<span class="lineNum">     146 </span>                :<span class="lineCov">        312 :                         i = tmp;</span>
+<span class="lineNum">     147 </span>                :<span class="lineCov">        312 :                 }</span>
+<span class="lineNum">     148 </span>                :<span class="lineCov">        155 :                 i = (j = mid) + qsz;</span>
+<span class="lineNum">     149 </span>        [<span class="branchCov" title="Branch 0 was taken 79 times"> + </span><span class="branchCov" title="Branch 1 was taken 76 times"> + </span>]:<span class="lineCov">        155 :                 if ((lo = j - base) &lt;= (hi = max - i)) {</span>
+<span class="lineNum">     150 </span>        [<span class="branchCov" title="Branch 0 was taken 23 times"> + </span><span class="branchCov" title="Branch 1 was taken 56 times"> + </span>]:<span class="lineCov">         79 :                         if (lo &gt;= thresh)</span>
+<span class="lineNum">     151 </span>                :<span class="lineCov">         23 :                                 qstg(base, j);</span>
+<span class="lineNum">     152 </span>                :<span class="lineCov">         79 :                         base = i;</span>
+<span class="lineNum">     153 </span>                :<span class="lineCov">         79 :                         lo = hi;</span>
+<span class="lineNum">     154 </span>                :            :                 } else {
+<span class="lineNum">     155 </span>        [<span class="branchCov" title="Branch 0 was taken 11 times"> + </span><span class="branchCov" title="Branch 1 was taken 65 times"> + </span>]:<span class="lineCov">         76 :                         if (hi &gt;= thresh)</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">         11 :                                 qstg(i, max);</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">         76 :                         max = j;</span>
+<span class="lineNum">     158 </span>                :            :                 }
+<span class="lineNum">     159 </span>        [<span class="branchCov" title="Branch 0 was taken 89 times"> + </span><span class="branchCov" title="Branch 1 was taken 66 times"> + </span>]:<span class="lineCov">        155 :         } while (lo &gt;= thresh);</span>
+<a name="160"><span class="lineNum">     160 </span>                :<span class="lineCov">         66 : }</span></a>
+<span class="lineNum">     161 </span>                :            : 
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 : compareg( a , b )</span>
+<span class="lineNum">     163 </span>                :            : csGroup *a , *b ;
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            : {
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :     return( a-&gt;aveX - b-&gt;aveX ) ;</span>
+<span class="lineNum">     167 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

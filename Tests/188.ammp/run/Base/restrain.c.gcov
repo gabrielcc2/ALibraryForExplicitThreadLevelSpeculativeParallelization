@@ -1,0 +1,383 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/restrain.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* restrain.c
+        -:    2:*
+        -:    3:* collection of routines to service restrain potentials
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of restraints, with the associated length and force constant
+        -:    9:* These are updateable - unlike bonds which are "permanent"
+        -:   10:*
+        -:   11:* (this could be table driven but what the hell memories cheap)
+        -:   12:*
+        -:   13:* the routines for potential value, force and (eventually) second
+        -:   14:* derivatives are here also
+        -:   15:*
+        -:   16:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   17:* this allows for parralellization if needed (on a PC?)
+        -:   18:*
+        -:   19:* forces are symmetric 
+        -:   20:*/
+        -:   21:/*
+        -:   22:*  copyright 1992 Robert W. Harrison
+        -:   23:*  
+        -:   24:*  This notice may not be removed
+        -:   25:*  This program may be copied for scientific use
+        -:   26:*  It may not be sold for profit without explicit
+        -:   27:*  permission of the author(s) who retain any
+        -:   28:*  commercial rights including the right to modify 
+        -:   29:*  this notice
+        -:   30:*/
+        -:   31:
+        -:   32:#define ANSI 1
+        -:   33:/* misc includes - ANSI and some are just to be safe */
+        -:   34:#include <stdio.h>
+        -:   35:#include <ctype.h>
+        -:   36:#include <math.h>
+        -:   37:#ifdef ANSI
+        -:   38:#include <stdlib.h>
+        -:   39:#endif
+        -:   40://#include "ammp.h"
+        -:   41:/* ATOM structure contains a serial number for indexing into
+        -:   42:* arrays and the like (a Hessian)
+        -:   43:* but otherwise is self-contained. Note the hooks for Non-restrained potentials
+        -:   44:*/
+        -:   45:typedef struct{
+        -:   46:	ATOM *atom1,*atom2;
+        -:   47:	float length,k;
+        -:   48:	void *next;
+        -:   49:	}  RESTRAIN;
+        -:   50:#define RLONG sizeof(RESTRAIN)
+        -:   51:
+        -:   52:RESTRAIN *restrain_first = NULL;
+        -:   53:RESTRAIN *restrain_last = NULL;
+        -:   54:/* function restrain adds a restrain to the restrain list
+        -:   55:* returns 1 if ok
+        -:   56:* returns 0 if not
+        -:   57:*  is passed the atom serial numbers, length and constant
+        -:   58:* allocates the new memory, initializes it and
+        -:   59:* returns
+        -:   60:*/
+function _Z8restrainiiff called 0 returned 0% blocks executed 0%
+    #####:   61:int restrain(int p1, int p2, float bl, float fk)
+        -:   62:	{
+        -:   63:	ATOM *ap1,*ap2,*a_m_serial(int);
+        -:   64:	RESTRAIN *new_p;
+        -:   65:	char line[80];
+        -:   66:/* get the atom pointers for the two serial numbers */
+    #####:   67:	ap1 = a_m_serial( p1 );
+call    0 never executed
+    #####:   68:	ap2 = a_m_serial( p2 );
+call    0 never executed
+    #####:   69:	if( (ap1 == NULL) || (ap2 == NULL) ) 
+branch  0 never executed
+branch  1 never executed
+        -:   70:	{
+        -:   71:	sprintf( line,"undefined atom in restrain %d %d \0",p1,p2);
+    #####:   72:	aaerror( line );
+call    0 never executed
+    #####:   73:	return 0;
+        -:   74:	}
+        -:   75:/* check to see if a restraint is already defined */
+    #####:   76:	new_p = restrain_first;
+    #####:   77:	if( new_p != NULL)
+branch  0 never executed
+branch  1 never executed
+        -:   78:	{
+    #####:   79:	while(1)
+        -:   80:	{
+    #####:   81:		if( new_p == NULL) break;
+branch  0 never executed
+branch  1 never executed
+    #####:   82:		if( (new_p->atom1 == ap1 && new_p->atom2 == ap2) ||
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+        -:   83:                    (new_p->atom1 == ap2 && new_p->atom2 == ap1) )
+        -:   84:		{
+    #####:   85:		new_p->length = bl; new_p->k = fk; return 1;
+        -:   86:		}
+    #####:   87:		if( new_p == (RESTRAIN*)new_p->next) break;
+branch  0 never executed
+branch  1 never executed
+    #####:   88:		new_p = (RESTRAIN*) new_p->next;
+        -:   89:	}
+        -:   90:	}
+    #####:   91:	if( ( new_p = (RESTRAIN*) malloc( RLONG ) ) == NULL)
+branch  0 never executed
+branch  1 never executed
+        -:   92:	{
+    #####:   93:	return 0;
+        -:   94:	}
+        -:   95:	/* initialize the pointers */
+    #####:   96:	if( restrain_first == NULL) restrain_first = new_p;
+branch  0 never executed
+branch  1 never executed
+    #####:   97:	if( restrain_last == NULL) restrain_last = new_p;
+branch  0 never executed
+branch  1 never executed
+    #####:   98:	new_p -> atom1 = ap1;
+    #####:   99:	new_p -> atom2 = ap2;
+    #####:  100:	new_p -> length = bl;
+    #####:  101:	new_p -> k = fk;
+    #####:  102:	new_p -> next = new_p;
+    #####:  103:	restrain_last -> next = new_p;
+    #####:  104:	restrain_last = new_p;
+    #####:  105:	return 1;
+        -:  106:	}
+        -:  107:
+        -:  108:
+        -:  109:/* v_restrain()
+        -:  110:* this function sums up the potentials
+        -:  111:* for the atoms defined in the RESTRAIN data structure.
+        -:  112:*/
+        -:  113:/* standard returns 0 if error (any) 1 if ok
+        -:  114:* V is the potential */
+function _Z10v_restrainPff called 0 returned 0% blocks executed 0%
+    #####:  115:int v_restrain(float *V, float lambda)
+        -:  116:{
+        -:  117:	RESTRAIN *bp;
+        -:  118:	float r,xt,yt,zt;
+        -:  119:	ATOM *a1,*a2;
+        -:  120:
+        -:  121:
+    #####:  122:	bp = restrain_first;
+    #####:  123:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  124:       while(1)
+        -:  125:       {
+    #####:  126:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  127:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  128:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  129:	{
+    #####:  130:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  131:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  132:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  133:	} else
+        -:  134:	{
+    #####:  135:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  136:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  137:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  138:	r = xt*xt+yt*yt+zt*zt;
+        -:  139:	}
+    #####:  140:	r = sqrt(r); *V += bp->k*( r - bp->length)*(r - bp->length);
+    #####:  141:	if( bp == (RESTRAIN*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  142:	bp = (RESTRAIN*) bp->next;
+        -:  143:       }
+        -:  144:}
+        -:  145:/* f_restrain()
+        -:  146:*
+        -:  147:* f_restrain increments the forces in the atom structures by the force
+        -:  148:* due to the restrain components.  NOTE THE WORD increment.
+        -:  149:* the forces should first be zero'd.
+        -:  150:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  151:* on bigger (and better?) machines the different potential terms
+        -:  152:* may be updated at random or in parrellel, if we assume that this routine
+        -:  153:* will initialize the forces then we can't do this.
+        -:  154:*/
+function _Z10f_restrainf called 0 returned 0% blocks executed 0%
+    #####:  155:int f_restrain(float lambda)
+        -:  156:/*  returns 0 if error, 1 if OK */
+        -:  157:{
+        -:  158:	RESTRAIN *bp;
+        -:  159:	float r,k,ux,uy,uz;
+        -:  160:	ATOM *a1,*a2;
+        -:  161:
+        -:  162:
+    #####:  163:	bp = restrain_first;
+    #####:  164:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  165:       while(1)
+        -:  166:       {
+    #####:  167:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  168:	k = bp->k;
+    #####:  169:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  170:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  171:	{
+    #####:  172:	ux = (a2->x - a1->x);
+    #####:  173:	uy = (a2->y - a1->y);
+    #####:  174:	uz = (a2->z - a1->z);
+        -:  175:	}else{
+    #####:  176:	ux = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  177:	uy = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  178:	uz = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+        -:  179:	}
+    #####:  180:	r = ux*ux + uy*uy + uz*uz;
+        -:  181:	 /* watch for FP errors*/
+    #####:  182:	 if( r <= 1.e-5)
+branch  0 never executed
+branch  1 never executed
+    #####:  183:	 { r = 0; ux = 1.; uy = 0.; uz = 0.; }else{
+    #####:  184:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  185:	}
+    #####:  186:	ux = 2*k*(r-bp->length)*ux; 
+    #####:  187:	uy = 2*k*(r-bp->length)*uy; 
+    #####:  188:	uz = 2*k*(r-bp->length)*uz;
+    #####:  189:	a1->fx += ux; 
+    #####:  190:	a1->fy += uy; 
+    #####:  191:	a1->fz += uz; 
+    #####:  192:	a2->fx -= ux; 
+    #####:  193:	a2->fy -= uy; 
+    #####:  194:	a2->fz -= uz; 
+    #####:  195:	if( bp == (RESTRAIN*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  196:	bp = (RESTRAIN*) bp->next;
+        -:  197:       }
+        -:  198:}
+        -:  199:/* function get_restrain( a1,restrained,10,inrestrain);
+        -:  200:* check the RESTRAINS list for atoms restrained to a1
+        -:  201:*/
+function _Z12get_restrainP4ATOMPS0_iPi called 0 returned 0% blocks executed 0%
+    #####:  202:void get_restrain(ATOM *a1, ATOM *restrained[], int mrestrain,int *inrestrain)
+        -:  203:{
+        -:  204:	RESTRAIN *mine;
+    #####:  205:	mine = restrain_first;
+    #####:  206:	*inrestrain = 0;
+        -:  207:	while(1)
+        -:  208:	{
+    #####:  209:	if( (mine == NULL) )
+branch  0 never executed
+branch  1 never executed
+        -:  210:	{
+        -:  211:		return;
+        -:  212:	}
+    #####:  213:	if( mine->atom1 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  214:	{
+    #####:  215:		restrained[(*inrestrain)++] = mine->atom2;
+        -:  216:	}
+    #####:  217:	if( mine->atom2 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  218:	{
+    #####:  219:		restrained[(*inrestrain)++] = mine->atom1;
+        -:  220:	}
+    #####:  221:	if( mine == (RESTRAIN*) mine->next) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  222:	mine = (RESTRAIN*) mine->next;
+    #####:  223:	if( *inrestrain == mrestrain ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  224:	}		
+        -:  225:}
+        -:  226:/* routine dump_restrains
+        -:  227:* this function outputs the restrain parameters
+        -:  228:* and does it in a simple form
+        -:  229:* restrain ser1,ser2,k,req
+        -:  230:* the rest is just free format
+        -:  231:*/
+        -:  232:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z14dump_restrainsP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  233:void dump_restrains( FILE *where )
+        -:  234:{
+        -:  235:	RESTRAIN *b;
+        -:  236:	ATOM *a1,*a2;
+    #####:  237:	b = restrain_first;
+    #####:  238:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  239:	while( ((RESTRAIN*)b->next != b) )
+branch  0 never executed
+branch  1 never executed
+        -:  240:	{
+    #####:  241:	if( (RESTRAIN*)b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  242:	a1 = b->atom1; a2 = b->atom2;
+        -:  243:	fprintf( where,"restrain %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  244:		b->length,b->k);
+    #####:  245:	b = (RESTRAIN*) b->next;
+        -:  246:	}
+    #####:  247:	if( (RESTRAIN*) b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  248:	a1 = b->atom1; a2 = b->atom2;
+        -:  249:	fprintf( where,"restrain %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  250:		b->length,b->k);
+        -:  251:}	
+        -:  252:
+        -:  253:/* a_restrain()
+        -:  254:* this function sums up the potentials
+        -:  255:* for the atoms defined in the RESTRAIN data structure.
+        -:  256:*/
+        -:  257:/* standard returns 0 if error (any) 1 if ok
+        -:  258:* V is the potential */
+function _Z10a_restrainPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  259:int a_restrain(float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  260:{
+        -:  261:	RESTRAIN *bp;
+        -:  262:	float r,xt,yt,zt;
+        -:  263:	ATOM *a1,*a2;
+        -:  264:
+        -:  265:
+    #####:  266:	bp = restrain_first;
+    #####:  267:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  268:       while(1)
+        -:  269:       {
+    #####:  270:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  271:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  272:	if(( a1->serial >= ilow && a1->serial <=ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+        -:  273:	 ||( a2->serial >= ilow && a2->serial <=ihigh))
+        -:  274:	{
+    #####:  275:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  276:	{
+    #####:  277:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  278:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  279:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  280:	} else
+        -:  281:	{
+    #####:  282:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  283:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  284:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  285:	r = xt*xt+yt*yt+zt*zt;
+        -:  286:	}
+    #####:  287:	r = sqrt(r); zt= bp->k*( r - bp->length)*(r - bp->length);
+    #####:  288:	*V += zt;
+        -:  289:	fprintf(op,"Restrain %d %d E %f value %f error %f\n"
+    #####:  290:		,a1->serial,a2->serial,zt,r,r-bp->length);
+        -:  291:	}
+    #####:  292:	if( bp == (RESTRAIN*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  293:	bp = (RESTRAIN*) bp->next;
+        -:  294:       }
+        -:  295:}

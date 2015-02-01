@@ -1,0 +1,131 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/random.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* random number generators for ammp
+        -:    2:*
+        -:    3:*  randf() returns float in the range from 0 - 1.
+        -:    4:*  randg() returns float gaussian distr sigma = 1
+        -:    5:*  rand3( float *x1,*x2,*x3)  returns random unit 3vector
+        -:    6:*/
+        -:    7:/*
+        -:    8:*  copyright 1992 Robert W. Harrison
+        -:    9:*  
+        -:   10:*  This notice may not be removed
+        -:   11:*  This program may be copied for scientific use
+        -:   12:*  It may not be sold for profit without explicit
+        -:   13:*  permission of the author(s) who retain any
+        -:   14:*  commercial rights including the right to modify 
+        -:   15:*  this notice
+        -:   16:*/
+        -:   17:
+        -:   18:#include <math.h>
+        -:   19://#include "ammp.h"
+function _Z5randfv called 0 returned 0% blocks executed 0%
+    #####:   20:float randf()
+        -:   21:{
+        -:   22:	static float buff[55];
+        -:   23:	static int ip = 0,jp = 0,kp;
+        -:   24:	int i,seed,get_i_variable(char*);
+        -:   25:	 float xva; 
+    #####:   26:	if( ip == 0 && jp == 0)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   27:	{
+        -:   28:/* retrieve the seed from the storage */
+    #####:   29:	seed = get_i_variable("seed");
+call    0 never executed
+        -:   30:/* initialize when the pointers are both zero   */
+    #####:   31:	for( ip=0; ip < 55; ip++)
+branch  0 never executed
+branch  1 never executed
+    #####:   32:	    { seed = (seed*2349+14867)%32767;
+    #####:   33:		buff[ip] = (float)seed/32767.;
+    #####:   34:		if( buff[ip] > 1.) buff[ip] = buff[ip]-1.;
+branch  0 never executed
+branch  1 never executed
+    #####:   35:		if( buff[ip] < 0.) buff[ip] = buff[ip]+1.;
+branch  0 never executed
+branch  1 never executed
+        -:   36:		}
+    #####:   37:	ip = 24; jp=55-ip; kp = 0;
+        -:   38:	}
+    #####:   39:	i = kp;
+    #####:   40:	xva = buff[jp]+buff[ip];
+    #####:   41:	if( xva > 1.) xva = xva -1.;
+branch  0 never executed
+branch  1 never executed
+    #####:   42:	buff[kp] = xva;
+    #####:   43:	kp = (kp+1)%55;
+    #####:   44:	ip = (ip+1)%55;
+    #####:   45:	jp = (jp+1)%55;
+    #####:   46:	return buff[i];
+        -:   47:}
+        -:   48:/* randg()
+        -:   49:* return random guassian with unit sigma 
+        -:   50:*
+        -:   51:* use the polar method (see knuth) with a slight twist.
+        -:   52:*
+        -:   53:* rwh 5792
+        -:   54:*/
+function _Z5randgv called 0 returned 0% blocks executed 0%
+    #####:   55:float randg()
+        -:   56:{
+        -:   57:	float randf();
+        -:   58:	float x1,x2,norm;
+        -:   59:	
+    #####:   60:	norm = 2.;
+    #####:   61:	while( norm > 1.)
+branch  0 never executed
+branch  1 never executed
+        -:   62:	{
+    #####:   63:		x1 = 2.*randf()-1; x2 = 2.*randf()-1;
+call    0 never executed
+call    1 never executed
+    #####:   64:		norm = x1*x1 + x2*x2;
+        -:   65:	}
+        -:   66:
+    #####:   67:	if( norm < 1.e-9) norm = 1.e-9;
+branch  0 never executed
+branch  1 never executed
+    #####:   68:	return x1*sqrt( -2.*log(norm)/norm );
+        -:   69:}
+        -:   70:/* rand3( float *x,*y,*z)
+        -:   71:*
+        -:   72:* return a random unit three vector
+        -:   73:* use knop's method (knuth v.2,p131)
+        -:   74:*
+        -:   75:* rwh 5/7/92
+        -:   76:*/
+        -:   77:/* SPEC declare in modern style rather than K&R, to match proto jh/9/22/99 */
+function _Z5rand3PfS_S_ called 0 returned 0% blocks executed 0%
+    #####:   78:void rand3( float *x, float *y, float *z )
+        -:   79:{
+        -:   80:	float randf();
+        -:   81:	float alpha,norm,x1,x2;
+    #####:   82:	norm = 2.;
+    #####:   83:	while( norm > 1.)
+branch  0 never executed
+branch  1 never executed
+        -:   84:	{
+    #####:   85:		x1 = 2.*randf()-1; x2 = 2.*randf()-1;
+call    0 never executed
+call    1 never executed
+    #####:   86:		norm = x1*x1 + x2*x2;
+        -:   87:	}
+        -:   88:/*	alpha = 2.*sqrt(1.-norm);
+        -:   89:	*x = x1*alpha;
+        -:   90:	*y = x2*alpha;
+        -:   91:	*z = 2.*norm-1.;
+        -:   92:*/
+    #####:   93:	*x = x1; *y = x2;
+    #####:   94:	norm = sqrt(1.-norm);
+    #####:   95:	*z = norm;
+    #####:   96:	if( randf() < 0.5) *z = -norm;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   97:}

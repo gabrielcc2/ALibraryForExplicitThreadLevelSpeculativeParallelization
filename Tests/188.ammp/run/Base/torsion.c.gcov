@@ -1,0 +1,676 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/torsion.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* torsion.c
+        -:    2:*
+        -:    3:* collection of routines to service bond torsion  potentials
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of torsion, with the associated length and force constant
+        -:    9:*
+        -:   10:* (this could be table driven but what the hell memories cheap)
+        -:   11:*
+        -:   12:* the routines for potential value, force and (eventually) second
+        -:   13:* derivatives are here also
+        -:   14:*
+        -:   15:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   16:* this allows for parralellization if needed (on a PC?)
+        -:   17:*
+        -:   18:* forces are bond wise symmetric - so we don't have to mess around with
+        -:   19:* s matrices and the like.
+        -:   20:*/
+        -:   21:/*
+        -:   22:*  copyright 1992 Robert W. Harrison
+        -:   23:*  
+        -:   24:*  This notice may not be removed
+        -:   25:*  This program may be copied for scientific use
+        -:   26:*  It may not be sold for profit without explicit
+        -:   27:*  permission of the author(s) who retain any
+        -:   28:*  commercial rights including the right to modify 
+        -:   29:*  this notice
+        -:   30:*/
+        -:   31:
+        -:   32:#define ANSI 1
+        -:   33:/* misc includes - ANSI and some are just to be safe */
+        -:   34:#include <stdio.h>
+        -:   35:#include <ctype.h>
+        -:   36:#include <math.h>
+        -:   37:#ifdef ANSI
+        -:   38:#include <stdlib.h>
+        -:   39:#endif
+        -:   40:/* global defs */
+        -:   41:#define TOO_SMALL 1.e-8
+        -:   42:#define doublefloat double
+        -:   43:
+        -:   44://#include "ammp.h"
+        -:   45:/* ATOM structure contains a serial number for indexing into
+        -:   46:* arrays and the like (a Hessian)
+        -:   47:* but otherwise is self-contained. Note the hooks for Non-torsioned potentials
+        -:   48:*/
+        -:   49:typedef struct{
+        -:   50:	ATOM *atom1,*atom2,*atom3,*atom4;
+        -:   51:	float k,offset;
+        -:   52:	int   n;
+        -:   53:	void *next;
+        -:   54:	}  TORSION;
+        -:   55:#define TLONG sizeof(TORSION)
+        -:   56:
+        -:   57:TORSION *torsion_first = NULL;
+        -:   58:TORSION *torsion_last = NULL;
+        -:   59:/* function torsion adds a torsion to the torsion list
+        -:   60:* returns 1 if ok
+        -:   61:* returns 0 if not
+        -:   62:*  is passed the array pointers, length and constant
+        -:   63:* allocates the new memory, initializes it and
+        -:   64:* returns
+        -:   65:*/
+function _Z7torsioniiiifif called 8650 returned 100% blocks executed 74%
+     8650:   66:int torsion(int p1, int p2, int p3, int p4, float fk, int n, float off)
+        -:   67:	{
+        -:   68:	TORSION *new_p;
+        -:   69:	ATOM *ap1,*ap2,*ap3,*ap4,*a_m_serial(int);
+        -:   70:	char line[80];
+        -:   71:/* consistancy checks */
+     8650:   72:	if(  p1 == p2 || p1 == p3 || p1 == p4
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+branch  4 taken 0% (fallthrough)
+branch  5 taken 100%
+        -:   73:	|| p2 == p3 || p2 == p4 || p3 == p4)
+        -:   74:	{
+        -:   75:	sprintf( line," same atom in torsion %d %d %d %d \0",p1,p2,p3,p4);
+    #####:   76:	aaerror( line );
+call    0 never executed
+    #####:   77:	return 1;
+        -:   78:	}
+     8650:   79:	if( fk == 0.) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   80:/* get the atom pointers for the two serial numbers */
+     8650:   81:	ap1 = a_m_serial( p1 );
+call    0 returned 100%
+     8650:   82:	ap2 = a_m_serial( p2 );
+call    0 returned 100%
+     8650:   83:	ap3 = a_m_serial( p3 );
+call    0 returned 100%
+     8650:   84:	ap4 = a_m_serial( p4 );
+call    0 returned 100%
+     8650:   85:	if( (ap1 == NULL) || (ap2 == NULL) || (ap3==NULL) || (ap4==NULL) ) 
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+        -:   86:	{
+        -:   87:	sprintf( line,"undefined atom in torsion %d %d %d %d \0",p1,p2,p3,p4);
+    #####:   88:	aaerror( line );
+call    0 never executed
+    #####:   89:	return 0;
+        -:   90:	}
+        -:   91:
+     8650:   92:	if( ( new_p = (TORSION*) malloc( TLONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   93:	{
+    #####:   94:	return 0;
+        -:   95:	}
+        -:   96:	/* initialize the pointers */
+     8650:   97:	if( torsion_first == NULL) torsion_first = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     8650:   98:	if( torsion_last == NULL) torsion_last = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     8650:   99:	new_p -> atom1 = ap1;
+     8650:  100:	new_p -> atom2 = ap2;
+     8650:  101:	new_p -> atom3 = ap3;
+     8650:  102:	new_p -> atom4 = ap4;
+     8650:  103:	new_p -> offset = off;
+     8650:  104:	new_p -> k = fk;
+     8650:  105:	new_p -> n = n;
+     8650:  106:	new_p -> next = new_p;
+     8650:  107:	torsion_last -> next = new_p;
+     8650:  108:	torsion_last = new_p;
+     8650:  109:	return 1;
+        -:  110:	}
+        -:  111:
+        -:  112:
+        -:  113:/* v_torsion()
+        -:  114:* this function sums up the potentials
+        -:  115:* for the atoms defined in the torsion data structure.
+        -:  116:*/
+        -:  117:/* standard returns 0 if error (any) 1 if ok
+        -:  118:* V is the potential */
+function _Z9v_torsionPff called 3 returned 100% blocks executed 67%
+        3:  119:int v_torsion(float *V, float lambda)
+        -:  120:{
+        -:  121:	TORSION *bp;
+        -:  122:/* difference vectors */
+        -:  123:	doublefloat x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  124:/* cross products and storage for normalizing */
+        -:  125:	doublefloat r,cx1,cy1,cz1,cx2,cy2,cz2;
+        -:  126:	doublefloat dp;
+        -:  127:	ATOM *a1,*a2,*a3,*a4;
+        -:  128:
+        -:  129:
+        3:  130:       bp = torsion_first;
+        3:  131:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    25947:  132:       while(1)
+        -:  133:       {
+    25950:  134:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    25950:  135:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    25950:  136:	a4 = bp->atom4;
+    25950:  137:	if( a1->active|| a2->active || a3->active || a4->active) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+    25950:  138:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    25950:  139:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    25950:  140:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    25950:  141:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    25950:  142:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    25950:  143:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    25950:  144:	x3 = (a4->x -a3->x +lambda*(a4->dx-a3->dx));
+    25950:  145:	y3 = (a4->y -a3->y +lambda*(a4->dy-a3->dy));
+    25950:  146:	z3 = (a4->z -a3->z +lambda*(a4->dz-a3->dz));
+        -:  147:/* 1 cross 2 */
+    25950:  148:	cx1 = y1*z2 - y2*z1;
+    25950:  149:	cy1 = -x1*z2 + x2*z1;
+    25950:  150:	cz1 = x1*y2 - x2*y1;
+    25950:  151:	r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    25950:  152:	if( r < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+    25950:  153:	r = one/sqrt(r);
+    25950:  154:	cx1 = cx1*r;
+    25950:  155:	cy1 = cy1*r;
+    25950:  156:	cz1 = cz1*r;
+        -:  157:/* 3 cross 2 */
+    25950:  158:	cx2 = y3*z2 - y2*z3;
+    25950:  159:	cy2 = -x3*z2 + x2*z3;
+    25950:  160:	cz2 = x3*y2 - x2*y3;
+    25950:  161:	r = cx2*cx2 + cy2*cy2 + cz2*cz2;
+    25950:  162:	if( r < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+    25950:  163:	r = one/sqrt(r);
+    25950:  164:	cx2 = cx2*r;
+    25950:  165:	cy2 = cy2*r;
+    25950:  166:	cz2 = cz2*r;
+        -:  167:/* if here everything is well determined */
+    25950:  168:	dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */
+    25950:  169:	if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    25950:  170:	dp = acos(dp);
+        -:  171:/* determine the sign by triple product */
+    25950:  172:	r = cx1*x3 + cy1*y3 + cz1*z3;
+    25950:  173:	if( r > 0 ) dp =  -dp ;
+branch  0 taken 50% (fallthrough)
+branch  1 taken 50%
+    25950:  174:	*V += .5*(bp->k)*( 1. + cos( bp->n * dp - bp->offset   )) ; 
+        -:  175:	}
+        -:  176:SKIP:
+    25950:  177:	if( bp == (TORSION*) bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+    25947:  178:	bp = (TORSION*) bp->next;
+        -:  179:       }
+        -:  180:}
+        -:  181:/* f_torsion()
+        -:  182:*
+        -:  183:* f_torsion increments the forces in the atom structures by the force
+        -:  184:* due to the torsion components.  NOTE THE WORD increment.
+        -:  185:* the forces should first be zero'd.
+        -:  186:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  187:* on bigger (and better?) machines the different potential terms
+        -:  188:* may be updated at random or in parrellel, if we assume that this routine
+        -:  189:* will initialize the forces then we can't do this.
+        -:  190:*/
+function _Z9f_torsionf called 1002 returned 100% blocks executed 77%
+     1002:  191:int f_torsion(float lambda)
+        -:  192:/*  returns 0 if error, 1 if OK */
+        -:  193:{
+        -:  194:	TORSION *bp;
+        -:  195:/* difference vectors */
+        -:  196:	doublefloat x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  197:/* cross products and storage for normalizing */
+        -:  198:	doublefloat r,cx1,cy1,cz1,cx2,cy2,cz2;
+        -:  199:	doublefloat dp,sdp;
+        -:  200:	doublefloat r1,r2,r3,c1,c2,s1,s2;
+        -:  201:	doublefloat ux,uy,uz;
+        -:  202:	int i;	
+        -:  203:	ATOM *a1,*a2,*a3,*a4;
+        -:  204:
+        -:  205:
+     1002:  206:	bp = torsion_first;
+     1002:  207:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+     1002:  208:       i = 0;
+  8666298:  209:       while(1)
+        -:  210:       {
+        -:  211:/* debugging a mysterious error	
+        -:  212:* there was a crash at the a1= line
+        -:  213:* seems to have been when atom1 and atom2 where the
+        -:  214:* same
+        -:  215:	printf(" torsion %d\n",i++);
+        -:  216:	printf(" %s\n",bp->atom1->name);
+        -:  217:	printf(" %s\n",bp->atom2->name);
+        -:  218:	printf(" %s\n",bp->atom3->name);
+        -:  219:	printf(" %s\n",bp->atom4->name);
+        -:  220:*/
+  8667300:  221:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  8667300:  222:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+  8667300:  223:	a4 = bp->atom4;
+  8667300:  224:	if( a1->active|| a2->active || a3->active || a4->active) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+  8667300:  225:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+  8667300:  226:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+  8667300:  227:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+  8667300:  228:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+  8667300:  229:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+  8667300:  230:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+  8667300:  231:	x3 = (a4->x -a3->x +lambda*(a4->dx-a3->dx));
+  8667300:  232:	y3 = (a4->y -a3->y +lambda*(a4->dy-a3->dy));
+  8667300:  233:	z3 = (a4->z -a3->z +lambda*(a4->dz-a3->dz));
+        -:  234:/* lengths for normalization */
+  8667300:  235:	r1 = sqrt( x1*x1 + y1*y1 + z1*z1);
+  8667300:  236:	r2 = sqrt( x2*x2 + y2*y2 + z2*z2);
+  8667300:  237:	r3 = sqrt( x3*x3 + y3*y3 + z3*z3);
+  8667300:  238:	c1 = (x1*x2 + y1*y2 + z1*z2)/r1/r2;
+  8667300:  239:	c2 = -(x2*x3 + y2*y3 + z2*z3)/r2/r3;
+        -:  240:	/*
+        -:  241:	s1 = sqrt( 1. - c1*c1); s2 = sqrt( 1. -c2*c2);
+        -:  242:	*/
+  8667300:  243:	s1 = ( 1. - c1*c1); s2 = ( 1. -c2*c2);
+  8667300:  244:	if( s1 < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  245:	if( s2 < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  246:/* 1 cross 2 */
+  8667300:  247:	cx1 = y1*z2 - y2*z1;
+  8667300:  248:	cy1 = -x1*z2 + x2*z1;
+  8667300:  249:	cz1 = x1*y2 - x2*y1;
+  8667300:  250:	r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+  8667300:  251:	if( r < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  252:	r = one/sqrt(r);
+  8667300:  253:	cx1 = cx1*r;
+  8667300:  254:	cy1 = cy1*r;
+  8667300:  255:	cz1 = cz1*r;
+        -:  256:/* 3 cross 2 */
+  8667300:  257:	cx2 = y3*z2 - y2*z3;
+  8667300:  258:	cy2 = -x3*z2 + x2*z3;
+  8667300:  259:	cz2 = x3*y2 - x2*y3;
+  8667300:  260:	r = cx2*cx2 + cy2*cy2 + cz2*cz2;
+  8667300:  261:	if( r < TOO_SMALL) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  262:	r = one/sqrt(r);
+  8667300:  263:	cx2 = cx2*r;
+  8667300:  264:	cy2 = cy2*r;
+  8667300:  265:	cz2 = cz2*r;
+        -:  266:/* if here everything is well determined */
+  8667300:  267:	dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */
+  8667300:  268:	if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+  8667300:  269:	dp = acos(dp);
+        -:  270:/* determine the sign by triple product */
+        -:  271:/*	r = cx1*x3 + cy1*y3 + cz1*z3;  */
+  8667300:  272:	r = sqrt(x3*x3 +y3*y3 +z3*z3)*
+  8667300:  273:	    sqrt(x2*x2+y2*y2+z2*z2);
+  8667300:  274:	sdp = x3*x2 + y3*y2 + z3*z2;
+  8667300:  275:	sdp = sdp/r;
+  8667300:  276:	ux = x3 - sdp*x2;
+  8667300:  277:	uy = y3 - sdp*y2;
+  8667300:  278:	uz = z3 - sdp*z2;
+  8667300:  279:	r = cx1*ux + cy1*uy + cz1*uz;
+        -:  280:
+  8667300:  281:	if( r >= 0 ) dp = -dp  ; 
+branch  0 taken 50% (fallthrough)
+branch  1 taken 50%
+        -:  282:
+        -:  283:/*
+        -:  284:*	printf(" dp target %f %f %f %f\n",dp,bp->n*dp-bp->offset,
+        -:  285:*	-sin(bp->n*dp-bp->offset),1.+cos(bp->n*dp-bp->offset));
+        -:  286:*/
+        -:  287:
+        -:  288:/* the potential */
+        -:  289:/*	*V += .5*(bp->k)*( 1. + cos( bp->n * dp -bp->offset  )) ;  */
+        -:  290:/* its derivative */
+  8667300:  291:	r = -.5*bp->k*bp->n*sin( bp->n*dp - bp->offset);
+        -:  292:/*
+        -:  293:	if( bp->n == 1)
+        -:  294:	{
+        -:  295:	r = -.5*bp->k*sin(dp);
+        -:  296:	} else if( bp->n == 2)
+        -:  297:	{
+        -:  298:	r = -bp->k*(sin(dp+dp));
+        -:  299:	} else if( bp->n == 3)
+        -:  300:	{
+        -:  301:	r = cos(dp);
+        -:  302:	r = -.5*(12*r*r-3)*sin(dp);
+        -:  303:	} else
+        -:  304:	{
+        -:  305:	r =   -.5*(bp->k)*( (bp->n)*sin(bp->n*dp  ));
+        -:  306:	}
+        -:  307:	if( bp->offset > 1.e-5 || bp->offset < -1.e-5)
+        -:  308:		r = -r;
+        -:  309:*/	
+  8667300:  310:	s1 = one/s1;
+  8667300:  311:	s2 = one/s2;
+        -:  312:
+  8667300:  313:	if( a1->active){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  314:	a1->fx -= r*cx1/r1*s1;
+  8667300:  315:	a1->fy -= r*cy1/r1*s1;
+  8667300:  316:	a1->fz -= r*cz1/r1*s1;
+        -:  317:	}
+        -:  318:
+  8667300:  319:	if( a2->active){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  320:	a2->fx += r*cx1*(r2-c1*r1)/r2/r1*s1;
+  8667300:  321:	a2->fy += r*cy1*(r2-c1*r1)/r2/r1*s1;
+  8667300:  322:	a2->fz += r*cz1*(r2-c1*r1)/r2/r1*s1;
+  8667300:  323:	a2->fx -= r*cx2*c2/r2*s2;
+  8667300:  324:	a2->fy -= r*cy2*c2/r2*s2;
+  8667300:  325:	a2->fz -= r*cz2*c2/r2*s2;
+        -:  326:	}
+        -:  327:
+  8667300:  328:	if( a3->active){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  329:	a3->fx -= r*cx2*(r2-c2*r3)/r2/r3*s2;
+  8667300:  330:	a3->fy -= r*cy2*(r2-c2*r3)/r2/r3*s2;
+  8667300:  331:	a3->fz -= r*cz2*(r2-c2*r3)/r2/r3*s2;
+  8667300:  332:	a3->fx += r*cx1*c1/r2*s1;
+  8667300:  333:	a3->fy += r*cy1*c1/r2*s1;
+  8667300:  334:	a3->fz += r*cz1*c1/r2*s1;
+        -:  335:	}
+        -:  336:
+  8667300:  337:	if( a4->active){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  8667300:  338:	a4->fx += r*cx2/r3*s2;
+  8667300:  339:	a4->fy += r*cy2/r3*s2;
+  8667300:  340:	a4->fz += r*cz2/r3*s2;
+        -:  341:	}
+        -:  342:
+        -:  343:
+        -:  344:	}
+        -:  345:SKIP:
+  8667300:  346:	if( bp == (TORSION*) bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  8666298:  347:	bp = (TORSION*) bp->next;
+        -:  348:       }
+        -:  349:}
+        -:  350:/* function get_torsion( a1,bonded,10,inbond);
+        -:  351:* check the torsion list for atoms 1-4 ed to a1
+        -:  352:*/
+function _Z11get_torsionP4ATOMPS0_iPi called 0 returned 0% blocks executed 0%
+    #####:  353:void get_torsion(ATOM* a1, ATOM* bonded[],int mbond,int *inbond)
+        -:  354:{
+        -:  355:	TORSION *mine;
+    #####:  356:	mine = torsion_first;
+    #####:  357:	*inbond = 0;
+        -:  358:	while(1)
+        -:  359:	{
+    #####:  360:	if( (mine == NULL) )
+branch  0 never executed
+branch  1 never executed
+        -:  361:	{
+        -:  362:		return;
+        -:  363:	}
+    #####:  364:	if( mine->atom1 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  365:	{
+    #####:  366:		bonded[(*inbond)++] = mine->atom4;
+        -:  367:	}
+    #####:  368:	if( mine->atom4 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  369:	{
+    #####:  370:		bonded[(*inbond)++] = mine->atom1;
+        -:  371:	}
+    #####:  372:	if( mine == (TORSION*) mine->next) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  373:	mine = (TORSION*) mine->next;
+    #####:  374:	if( *inbond == mbond ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  375:	}		
+        -:  376:}
+        -:  377:/* routine dump_torsions
+        -:  378:* this function outputs the torsion parameters
+        -:  379:* and does it in a simple form
+        -:  380:* torsion ser1,ser2,ser3,k,theta (in degrees )
+        -:  381:* the rest is just free format
+        -:  382:*/
+        -:  383:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z13dump_torsionsP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  384:void dump_torsions( FILE *where )
+        -:  385:{
+        -:  386:	TORSION *b;
+        -:  387:	ATOM *a1,*a2,*a3,*a4;
+        -:  388:	float rtodeg;
+    #####:  389:	b = torsion_first;
+    #####:  390:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  391:	rtodeg = 180./acos(-1.);
+    #####:  392:	while( ((TORSION*) b->next != b)  )
+branch  0 never executed
+branch  1 never executed
+        -:  393:	{
+    #####:  394:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  395:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3; a4 = b->atom4;
+        -:  396:	fprintf( where,"torsion %d %d %d %d %f %d %f ;\n",
+        -:  397:		a1->serial,a2->serial,
+    #####:  398:		a3-> serial,a4->serial,b->k,b->n,b->offset*rtodeg);
+    #####:  399:	b = (TORSION*) b->next;
+        -:  400:	}
+    #####:  401:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  402:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3; a4 = b->atom4;
+        -:  403:	fprintf( where,"torsion %d %d %d %d %f %d %f ;\n",
+        -:  404:		a1->serial,a2->serial,
+    #####:  405:		a3-> serial,a4->serial,b->k,b->n,b->offset*rtodeg);
+        -:  406:}	
+        -:  407:
+        -:  408:/* a_torsion()
+        -:  409:* this function sums up the potentials
+        -:  410:* for the atoms defined in the torsion data structure.
+        -:  411:*/
+        -:  412:/* standard returns 0 if error (any) 1 if ok
+        -:  413:* V is the potential */
+function _Z9a_torsionPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  414:int a_torsion(float *V, float lambda, int ilow, int ihigh, FILE* op)
+        -:  415:{
+        -:  416:	TORSION *bp;
+        -:  417:/* difference vectors */
+        -:  418:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  419:/* cross products and storage for normalizing */
+        -:  420:	float r,cx1,cy1,cz1,cx2,cy2,cz2;
+        -:  421:	float dp;
+        -:  422:	ATOM *a1,*a2,*a3,*a4;
+        -:  423:
+        -:  424:
+    #####:  425:	bp = torsion_first;
+    #####:  426:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  427:       while(1)
+        -:  428:       {
+    #####:  429:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  430:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  431:	a4 = bp->atom4;
+    #####:  432:	if( (a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+branch 12 never executed
+branch 13 never executed
+branch 14 never executed
+branch 15 never executed
+        -:  433:	||  (a2->serial >= ilow && a2->serial <= ihigh)
+        -:  434:	||  (a3->serial >= ilow && a3->serial <= ihigh) 
+        -:  435:	||  (a4->serial >= ilow && a4->serial <= ihigh) )
+        -:  436:	{
+    #####:  437:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  438:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  439:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  440:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  441:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  442:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  443:	x3 = (a4->x -a3->x +lambda*(a4->dx-a3->dx));
+    #####:  444:	y3 = (a4->y -a3->y +lambda*(a4->dy-a3->dy));
+    #####:  445:	z3 = (a4->z -a3->z +lambda*(a4->dz-a3->dz));
+        -:  446:/* 1 cross 2 */
+    #####:  447:	cx1 = y1*z2 - y2*z1;
+    #####:  448:	cy1 = -x1*z2 + x2*z1;
+    #####:  449:	cz1 = x1*y2 - x2*y1;
+    #####:  450:	r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  451:	if( r < TOO_SMALL) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  452:	r = sqrt(r);
+    #####:  453:	cx1 = cx1/r;
+    #####:  454:	cy1 = cy1/r;
+    #####:  455:	cz1 = cz1/r;
+        -:  456:/* 3 cross 2 */
+    #####:  457:	cx2 = y3*z2 - y2*z3;
+    #####:  458:	cy2 = -x3*z2 + x2*z3;
+    #####:  459:	cz2 = x3*y2 - x2*y3;
+    #####:  460:	r = cx2*cx2 + cy2*cy2 + cz2*cz2;
+    #####:  461:	if( r < TOO_SMALL) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  462:	r = sqrt(r);
+    #####:  463:	cx2 = cx2/r;
+    #####:  464:	cy2 = cy2/r;
+    #####:  465:	cz2 = cz2/r;
+        -:  466:/* if here everything is well determined */
+    #####:  467:	dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */
+    #####:  468:	if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  469:	dp = acos(dp);
+        -:  470:/* determine the sign by triple product */
+    #####:  471:	r = cx1*x3 + cy1*y3 + cz1*z3;
+    #####:  472:	if( r > 0 ) dp =  -dp ;
+branch  0 never executed
+branch  1 never executed
+    #####:  473:	z2 = .5*(bp->k)*( 1. + cos( bp->n * dp - bp->offset   )) ; 
+    #####:  474:	*V += z2;
+        -:  475:	fprintf(op,"Torsion %s %d %s %d %s %d %s %d E %f Angle %f error %f\n"
+        -:  476:		,a1->name,a1->serial,a2->name,a2->serial,a3->name,a3->serial,
+        -:  477:		a4->name,a4->serial, z2,dp*180./3.14159265
+    #####:  478:	,acos(-(cos(bp->n*dp-bp->offset)))*180./3.14159265 );
+        -:  479:	}
+        -:  480:SKIP:
+    #####:  481:	if( bp == (TORSION*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  482:	bp = (TORSION*) bp->next;
+        -:  483:       }
+        -:  484:}
+function _Z12gsdg_torsionP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  485:int gsdg_torsion(ATOM* ap )
+        -:  486:{
+        -:  487:TORSION *tp;
+        -:  488:float bond_length(ATOM*, ATOM*);
+        -:  489:float b1,b2,b3;
+        -:  490:
+    #####:  491:	tp =torsion_first;
+    #####:  492:	while( 1)
+        -:  493:	{ 
+    #####:  494:		if( tp == NULL ) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  495:		if( tp->atom1 == ap)
+branch  0 never executed
+branch  1 never executed
+        -:  496:		{
+    #####:  497:			b1 = bond_length(ap,tp->atom2);
+call    0 never executed
+    #####:  498:			b2 = bond_length(tp->atom2,tp->atom3);
+call    0 never executed
+    #####:  499:			b3 = bond_length(tp->atom3,tp->atom4);
+call    0 never executed
+    #####:  500:			ap->vx = b2 + .75*(b1+b3);
+    #####:  501:			ap->vx *= ap->vx;
+    #####:  502:			ap->vy = 10.;
+        -:  503:		}
+    #####:  504:		if( tp->atom4 == ap)
+branch  0 never executed
+branch  1 never executed
+        -:  505:		{
+    #####:  506:			b1 = bond_length(ap,tp->atom3);
+call    0 never executed
+    #####:  507:			b2 = bond_length(tp->atom2,tp->atom3);
+call    0 never executed
+    #####:  508:			b3 = bond_length(tp->atom2,tp->atom1);
+call    0 never executed
+    #####:  509:			ap->vx = b2 + .75*(b1+b3);
+    #####:  510:			ap->vx *= ap->vx;
+    #####:  511:			ap->vy = 10.;
+        -:  512:		}
+    #####:  513:		if( tp == (TORSION*) tp->next) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  514:		tp = (TORSION*) tp->next;
+        -:  515:	}
+        -:  516:}

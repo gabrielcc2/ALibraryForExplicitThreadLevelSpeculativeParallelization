@@ -1,0 +1,679 @@
+desc: (none)
+cmd: ../SPEC/equake_with_parallel_loop_and_mutexes
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=2003545199
+mem_heap_B=33574012
+mem_heap_extra_B=11562892
+mem_stacks_B=0
+heap_tree=peak
+n19: 33574012 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1810372 in 20 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=2
+#-----------
+time=6348251134
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=10098142437
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=13488883019
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=18335827618
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=20875987547
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=24011858540
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=28519674902
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=31410556495
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=36555339003
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=39985205929
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=42729095118
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=46844916431
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=49400244820
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=detailed
+n19: 33575056 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1811416 in 41 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=15
+#-----------
+time=54194616091
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=58366877857
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=61355755195
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=detailed
+n19: 33575056 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1811416 in 41 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=18
+#-----------
+time=66150124902
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=69139001894
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=72086634695
+mem_heap_B=33574988
+mem_heap_extra_B=11563004
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=75704738742
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=79085595688
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=82032904393
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=86933023280
+mem_heap_B=33575004
+mem_heap_extra_B=11562988
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=89914159007
+mem_heap_B=33574988
+mem_heap_extra_B=11562996
+mem_stacks_B=0
+heap_tree=detailed
+n19: 33574988 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1811348 in 41 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=26
+#-----------
+time=92861467745
+mem_heap_B=33574988
+mem_heap_extra_B=11563004
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=96822864331
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=101730103232
+mem_heap_B=33574988
+mem_heap_extra_B=11563004
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=105691499828
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=108638808914
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=111578998125
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=114560135608
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=117507445232
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=122407563348
+mem_heap_B=33574988
+mem_heap_extra_B=11563004
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=125388699967
+mem_heap_B=33574988
+mem_heap_extra_B=11562996
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=129406524476
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=detailed
+n19: 33575056 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1811416 in 41 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=37
+#-----------
+time=134551319933
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=137638191689
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=141754024368
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=143811935300
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=147927768784
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=151014640895
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=155130473860
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=158217345674
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=162333179114
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=167477961665
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=171593795463
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=174680667179
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=178796501338
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=180854412611
+mem_heap_B=33575036
+mem_heap_extra_B=11563012
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=182912335157
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=detailed
+n19: 33575056 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 5293104 0x804B074: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B05E: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 5293104 0x804B08B: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 5293104 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2646552 0x804B042: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2646552 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2418768 0x804909A: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2418768 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 2172168 0x804AFE2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 2172168 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n0: 1811416 in 41 places, all below massif's threshold (01.00%)
+ n1: 882188 0x804916E: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882188 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 882184 0x804B016: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 882184 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x8048F92: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE12: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AE5A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEA2: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AEEA: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF32: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 724056 0x804AF7A: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 724056 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x804ADD6: mem_init() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3CD: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049078: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+ n1: 604692 0x8049061: _Z12readpackfileP8_IO_FILEP7options.clone.173 (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+  n0: 604692 0x804C3C8: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC/equake_with_parallel_loop_and_mutexes)
+#-----------
+snapshot=52
+#-----------
+time=184970246270
+mem_heap_B=33575036
+mem_heap_extra_B=11563012
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=187028168226
+mem_heap_B=33575056
+mem_heap_extra_B=11563016
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=189086079192
+mem_heap_B=33575036
+mem_heap_extra_B=11563012
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=191143991232
+mem_heap_B=33574988
+mem_heap_extra_B=11562996
+mem_stacks_B=0
+heap_tree=empty

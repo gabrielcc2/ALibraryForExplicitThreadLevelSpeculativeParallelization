@@ -1,0 +1,399 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/parallel_loop_in_batches.h
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <pthread.h>
+        -:    2:#include <map>
+        -:    3:#include <vector>
+        -:    4:#include <string.h>
+        -:    5:#include <signal.h>
+        -:    6:#include <set>
+        -:    7:
+        -:    8:using namespace std;
+        -:    9:
+        -:   10:// Definition of type script_function, that masks a void* (*)(void*
+        -:   11:typedef void* (*script_function)(void*); 
+        -:   12:// Definition of type script_vector, a std::vector of type script_function
+        -:   13:typedef std::vector<script_function> script_vector;
+        -:   14:
+        -:   15:
+        -:   16://
+        -:   17:// structure: _parallel_loop_thread, used to encapsulate a pthread, 
+        -:   18://           which will run a thread for parallel loop execution in batches, 
+        -:   19://           keeping as well some related data. 
+        -:   20://
+        -:   21:struct _parallel_loop_thread{ 
+        -:   22:	pthread_mutex_t _thread_mutex;
+        -:   23:	pthread_t _thread;
+        -:   24:	
+        -:   25:	bool _commit;//helps to determine if the loop iteration 
+        -:   26:	//that the _loop_spec_thread represents has commited or not.
+        -:   27:
+        -:   28:	_parallel_loop_thread(){
+        -:   29:		pthread_mutex_init (&_thread_mutex, NULL);
+        -:   30:		_commit=false;
+        -:   31:	};
+        -:   32:	
+        -:   33:};
+        -:   34:
+        -:   35://!
+        -:   36://! \class  parallel_loop_in_batches
+        -:   37://!
+        -:   38://! \brief  implements a class that takes a window of n ordered interations from a loop and 
+        -:   39://!         executes them in parallel without consistency checking. To ensure that all the
+        -:   40://!         iterations are completed, the class relies on a commit function.
+        -:   41://!         
+        -:   42://!         Additional functionality is provided with an append function.
+        -:   43://!
+        -:   44://!         This class is the same as loop_speculator, but without the dependency tracking.
+        -:   45://!
+function _ZN24parallel_loop_in_batchesD2Ev called 1 returned 100% blocks executed 100%
+        2:   46:class parallel_loop_in_batches {
+call    0 returned 100%
+        -:   47:private: 
+        -:   48:
+        -:   49:     	//bool values to set if the object is active, or has control
+        -:   50:	//of the pre-loop section 
+        -:   51:	bool _is_active, _has_pre_loop; 
+        -:   52:
+        -:   53:	//mutex for synchronized use of the previous group of variables
+        -:   54:	pthread_mutex_t _is_active_mutex; 
+        -:   55:
+        -:   56:	//thread to manage the pre-loop section, boolean value to check if
+        -:   57:	//it has ended it's execution & related mutex
+        -:   58:	pthread_t _pl; 
+        -:   59:	bool _pl_commit; 
+        -:   60:	pthread_mutex_t _pl_mutex; 
+        -:   61:
+        -:   62:	//the parallel loop threads and it's data
+        -:   63:	vector <_parallel_loop_thread> _loop_threads;
+        -:   64:
+        -:   65:	//red-black tree, used as a thread index to relate a pthread_id with 
+        -:   66:	//it's model id, i.e. it's position in _loop_threads
+        -:   67:	map <pthread_t, int> _thread_index; 
+        -:   68:
+        -:   69:	//mutex for a synchronized access to both of the former
+        -:   70:	pthread_mutex_t _loop_threads_mutex;
+        -:   71:
+        -:   72:	
+        -:   73:        //! private method that allows to cancel threads whose
+        -:   74:        //! positions are passed as an argument. It is used if there is a 
+        -:   75:	//! error on starting the execution, and also for resetting the object.
+        -:   76:        //!
+        -:   77:        //! TO BE NOTED:
+        -:   78:        //! * this method takes all class mutexes. On invocation
+        -:   79:	//!   _loop_threads_mutex should be on hold and no other class mutex, 
+        -:   80:	//!   save those related to a thread that is not about to be canceled or restarted.
+        -:   81:	//! 
+        -:   82:	//! * if called with an empty vector, it will reset all logs and
+        -:   83:	//! wait for the threads in deferred cancel to finish.
+        -:   84:	//! 
+        -:   85:	//! 
+        -:   86:	void _cancel_loop_threads_and_reset_logs (vector <int> threads_to_delete){
+        -:   87:
+        -:   88:		int i;
+        -:   89:		bool valid_arguments=true;
+        -:   90:
+        -:   91:		if (!threads_to_delete.empty()){
+        -:   92:
+        -:   93:			for (i=0; i<threads_to_delete.size(); i++){
+        -:   94:
+        -:   95:				if (threads_to_delete[i]<0 || threads_to_delete[i]> static_cast<int>(_loop_threads.size())){
+        -:   96:					valid_arguments=false; //one thread has an invalid id.
+        -:   97:					i=threads_to_delete.size();
+        -:   98:				}
+        -:   99:					
+        -:  100:			}
+        -:  101:		}
+        -:  102:		else{
+        -:  103:			valid_arguments=false; //no threads to delete
+        -:  104:
+        -:  105:			/*This option will be used to initialize the object, reseting it's inner arrays*/
+        -:  106:
+        -:  107:			pthread_mutex_lock(&_is_active_mutex);
+        -:  108:
+        -:  109:			if (_has_pre_loop)
+        -:  110:	
+        -:  111:				pthread_mutex_lock(&_pl_mutex);
+        -:  112:
+        -:  113:			if (!_loop_threads.empty()){
+        -:  114:				_loop_threads.clear(); 
+        -:  115:			}				
+        -:  116:
+        -:  117:
+        -:  118:			if (!_thread_index.empty()){ 
+        -:  119:
+        -:  120:				/*in order to clear the _thread_index, it will be necessary to guarantee that all the threads in deferred
+        -:  121:				cancel have finished, and thus will not use the object*/
+        -:  122:
+        -:  123:				if (_has_pre_loop)
+        -:  124:					pthread_mutex_unlock(&_pl_mutex);
+        -:  125:		
+        -:  126:				pthread_mutex_unlock(&_is_active_mutex);
+        -:  127:
+        -:  128:				pthread_mutex_unlock(&_loop_threads_mutex);
+        -:  129:					
+        -:  130:				map <pthread_t, int>::iterator it;
+        -:  131:				for (it=_thread_index.begin(); it!=_thread_index.end(); it++){
+        -:  132:					if (it->second==-1){
+        -:  133:						int a;
+        -:  134:						do {
+        -:  135:							a= pthread_kill(it->first, 0);
+        -:  136:						} while (a==0);
+        -:  137:					}
+        -:  138:				}
+        -:  139:				
+        -:  140:				pthread_mutex_lock(&_loop_threads_mutex);
+        -:  141:
+        -:  142:				_thread_index.clear();
+        -:  143:
+        -:  144:			}
+        -:  145:			else {
+        -:  146:				if (_has_pre_loop)
+        -:  147:			
+        -:  148:					pthread_mutex_unlock(&_pl_mutex);
+        -:  149:		
+        -:  150:				pthread_mutex_unlock(&_is_active_mutex);
+        -:  151:
+        -:  152:			}			
+        -:  153:			
+        -:  154:		}
+        -:  155:
+        -:  156:
+        -:  157:		if (valid_arguments){
+        -:  158:	
+        -:  159:			for (unsigned int i=threads_to_delete.size()-1; i>=0; i--){
+        -:  160:				pthread_mutex_lock(&_loop_threads[threads_to_delete[i]]._thread_mutex);
+        -:  161:			}
+        -:  162:
+        -:  163:			pthread_t thrd_id=pthread_self();
+        -:  164:
+        -:  165:			pthread_mutex_lock(&_is_active_mutex);
+        -:  166:
+        -:  167:			if (_has_pre_loop)
+        -:  168:	
+        -:  169:				pthread_mutex_lock(&_pl_mutex);		
+        -:  170:
+        -:  171:			for (unsigned int i=0; i<threads_to_delete.size(); i++){
+        -:  172:				if (pthread_equal(_loop_threads[threads_to_delete[i]]._thread, thrd_id)==0){
+        -:  173:					if (pthread_kill(_loop_threads[threads_to_delete[i]]._thread, 0)==0){
+        -:  174:						pthread_cancel(_loop_threads[threads_to_delete[i]]._thread);
+        -:  175:					}
+        -:  176:					_thread_index[_loop_threads[threads_to_delete[i]]._thread]= -1;
+        -:  177:					pthread_mutex_destroy(&_loop_threads[threads_to_delete[i]]._thread_mutex); 
+        -:  178:				}
+        -:  179:				
+        -:  180:			}
+        -:  181:	
+        -:  182:			if (_has_pre_loop)
+        -:  183:				pthread_mutex_unlock(&_pl_mutex);
+        -:  184:
+        -:  185:			pthread_mutex_unlock(&_is_active_mutex);
+        -:  186:
+        -:  187:		}
+        -:  188:	};
+        -:  189:	
+        -:  190:public: 
+        -:  191:
+        -:  192:	//!
+        -:  193:        //! default constructor
+        -:  194:        //!
+function _ZN24parallel_loop_in_batchesC2Ev called 1 returned 100% blocks executed 100%
+        2:  195:	parallel_loop_in_batches(){
+        -:  196:
+        1:  197:		_is_active=false;
+        1:  198:		_pl_commit=false;
+        1:  199:		_has_pre_loop=false;
+        1:  200:		pthread_mutex_init (&_is_active_mutex, NULL); 
+call    0 returned 100%
+        1:  201:		pthread_mutex_init (&_pl_mutex, NULL); 
+call    0 returned 100%
+        1:  202:		pthread_mutex_init (&_loop_threads_mutex, NULL); 	
+call    0 returned 100%
+        1:  203:	};
+        -:  204:
+        -:  205:
+        -:  206:	//!
+        -:  207:        //! required function that signals that a given thread has ended
+        -:  208:        //! it's execution, it is assumed to be called from a valid 
+        -:  209:	//! thread
+        -:  210:	//!
+        -:  211:	void commit (){ 
+        -:  212:		pthread_t thread_id=pthread_self();
+        -:  213:		if (_thread_index.find(thread_id)!=_thread_index.end()){
+        -:  214:			int pos=_thread_index.find(thread_id)->second;
+        -:  215:			if (pos>=0){ //valid thread
+        -:  216:				_loop_threads[pos]._commit=true;
+        -:  217:			}
+        -:  218:		}
+        -:  219:		else {	//unmanaged pre-loop				
+        -:  220:			_pl_commit=true;					
+        -:  221:		}
+        -:  222:	};
+        -:  223:
+        -:  224:	
+        -:  225:	//!
+        -:  226:        //! function that permits the pre_loop section to dynamically append
+        -:  227:        //! a new thread at the end of the array in an on-going
+        -:  228:	//! execution.
+        -:  229:        //! no checks are made, in order to keep performance.
+        -:  230:        //! 
+        -:  231:	int append(void* (f)(void*), void* consts){
+        -:  232:		pthread_attr_t attr;
+        -:  233:		pthread_attr_init (&attr);
+        -:  234:		pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+        -:  235://                pthread_attr_setstacksize(&attr, 16384);
+        -:  236:		int success;
+        -:  237:	
+        -:  238:		int i=_loop_threads.size();
+        -:  239:			
+        -:  240:		_loop_threads.resize(i+1);
+        -:  241:		_loop_threads[i]._commit=false;
+        -:  242:		success=pthread_create(&_loop_threads[i]._thread, &attr, f, consts);
+        -:  243:		if (success!=0){
+        -:  244:			_thread_index.insert(pair<pthread_t, int>(_loop_threads[i]._thread, -1));
+        -:  245:			return -1;
+        -:  246:		}
+        -:  247:		_thread_index.insert(pair<pthread_t, int>(_loop_threads[i]._thread, i));
+        -:  248:		return 0;
+        -:  249:	};	
+        -:  250:
+        -:  251:
+        -:  252:
+        -:  253:	//!
+        -:  254:        //! run: a complete function that takes orderly the instructions and arguments
+        -:  255:        //! of n loop iterations from a window; and starts their parallel execution, while 
+        -:  256:	//! maintaining the sequential consistency with an un-managed pre-loop section.
+        -:  257:	//! This function will return in the shared data, the results of the computation, when
+        -:  258:	//! get_results is called.
+        -:  259:	//!
+        -:  260:	//! TO BE NOTED:
+        -:  261:	//!    * In this version of the function, the object is not in control of the pre-
+        -:  262:	//!    loop section. This means that on invocation, the caller only blocks for the creation
+        -:  263:	//!    of the threads, and can resume it's execution as a possible pre-loop, until
+        -:  264:	//!    calling get_results(), when the caller blocks until all valid loop iterations/threads return.
+        -:  265:	//!
+        -:  266:	int run (script_vector thread_instructions, vector <void*> const_args){
+        -:  267:
+        -:  268:		_is_active=true; 
+        -:  269:	
+        -:  270:		pthread_mutex_lock(&_loop_threads_mutex);
+        -:  271:	
+        -:  272:		vector <int> threads_to_cancel;//a selective reset is performed, waiting for the threads in
+        -:  273:		_cancel_loop_threads_and_reset_logs(threads_to_cancel);//deferred cancel to finish, and reseting the
+        -:  274:		//arrays that the execution uses.
+        -:  275:
+        -:  276:		_has_pre_loop=false; 
+        -:  277:
+        -:  278:		pthread_mutex_lock(&_pl_mutex);
+        -:  279:		_pl_commit=false;
+        -:  280:		pthread_mutex_unlock(&_pl_mutex);
+        -:  281:	
+        -:  282:		pthread_attr_t attr;
+        -:  283:		pthread_attr_init (&attr);
+        -:  284:		pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+        -:  285://                pthread_attr_setstacksize(&attr, 16384);
+        -:  286:
+        -:  287:		//the threads are created
+        -:  288:		int success;
+        -:  289:		_loop_threads.resize(thread_instructions.size());		
+        -:  290:		
+        -:  291:		for (unsigned int i=0; i<thread_instructions.size(); i++){
+        -:  292:			pthread_mutex_lock(&_loop_threads[i]._thread_mutex);
+        -:  293:		}
+        -:  294:		for (unsigned int i=0; i<thread_instructions.size(); i++){
+        -:  295:
+        -:  296:			success=pthread_create (&_loop_threads[i]._thread, &attr, thread_instructions[i], const_args[i]);
+        -:  297:			
+        -:  298:			if (success==0){
+        -:  299:				_thread_index.insert(pair<pthread_t, int>(_loop_threads[i]._thread, i));
+        -:  300:			}
+        -:  301:
+        -:  302:			pthread_mutex_unlock(&_loop_threads[i]._thread_mutex);
+        -:  303:
+        -:  304:			if (success!=0){
+        -:  305:				for (unsigned int j=i+1; j<thread_instructions.size(); j++){
+        -:  306:					pthread_mutex_unlock(&_loop_threads[j]._thread_mutex);
+        -:  307:				}
+        -:  308:				for (unsigned int j=0; j<i; j++){
+        -:  309:					threads_to_cancel.push_back(j);
+        -:  310:				}
+        -:  311:				_cancel_loop_threads_and_reset_logs(threads_to_cancel);
+        -:  312:					
+        -:  313:				pthread_mutex_unlock(&_loop_threads_mutex);
+        -:  314:
+        -:  315:				pthread_mutex_lock(&_is_active_mutex);
+        -:  316:				_is_active=false;
+        -:  317:				pthread_mutex_unlock(&_is_active_mutex);
+        -:  318:				return -1;// a thread could not be created.
+        -:  319:			}
+        -:  320:		}
+        -:  321:		pthread_mutex_unlock(&_loop_threads_mutex);
+        -:  322:		return 0;
+        -:  323:	};
+        -:  324:
+        -:  325:	//!
+        -:  326:        //! function to get the results of the execution once the un-managed pre-
+        -:  327:        //! loop section has ended it's execution. 
+        -:  328:        //! 
+        -:  329:	//! TO BE NOTED: If some join is not possible, no check is made.
+        -:  330:        //! 
+        -:  331:	int get_results(){
+        -:  332:		bool commit_made=false;
+        -:  333:		unsigned int joined_but_didnt_commit=0;
+        -:  334:		int success;
+        -:  335:		do{
+        -:  336:			success=-1;
+        -:  337:			if (success!=0){
+        -:  338:				pthread_mutex_lock(&_pl_mutex);
+        -:  339:				if (_pl_commit){
+        -:  340:					commit_made=true;
+        -:  341:				}
+        -:  342:				else{
+        -:  343:					if (joined_but_didnt_commit<10){ 
+        -:  344:						success=0;
+        -:  345:						joined_but_didnt_commit++;
+        -:  346:					}
+        -:  347:				}
+        -:  348:				pthread_mutex_unlock(&_pl_mutex); 
+        -:  349:			}
+        -:  350:			
+        -:  351:		} while (success==0);
+        -:  352:
+        -:  353:		int i=0; 
+        -:  354:
+        -:  355:		while (_loop_threads.size()>i){
+        -:  356:
+        -:  357:			pthread_t thread_to_join=_loop_threads[i]._thread;
+        -:  358:
+        -:  359:			commit_made=false;
+        -:  360:			joined_but_didnt_commit=0;
+        -:  361:	
+        -:  362:			do{
+        -:  363:			
+        -:  364:				success=pthread_join (thread_to_join, NULL);
+        -:  365:
+        -:  366:
+        -:  367:			} while (success==0);	
+        -:  368:			i++;
+        -:  369:		}
+        -:  370:
+        -:  371:		pthread_mutex_lock(&_is_active_mutex);
+        -:  372:		_is_active=false;
+        -:  373:		pthread_mutex_unlock(&_is_active_mutex);
+        -:  374:		return 0;
+        -:  375:	};
+        -:  376:
+        -:  377: 	int cancel_iteration (int a){
+        -:  378:		if (_loop_threads[a]._commit)
+        -:  379:			return 0;
+        -:  380:                _loop_threads[a]._commit=true;
+        -:  381://		if (pthread_kill(_loop_threads[a]._thread, 0)==0){
+        -:  382:			pthread_cancel(_loop_threads[a]._thread);
+        -:  383:			_thread_index[_loop_threads[a]._thread]= -1;
+        -:  384://		}
+        -:  385:		return 0;
+        -:  386:	}
+        -:  387:	
+        -:  388:};

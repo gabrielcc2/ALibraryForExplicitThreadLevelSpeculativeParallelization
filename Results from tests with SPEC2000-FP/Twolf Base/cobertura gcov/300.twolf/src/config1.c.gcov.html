@@ -1,0 +1,707 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/config1.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - config1.c<span style="font-size: 80%;"> (source / <a href="config1.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">72</td>
+            <td class="headerCovTableEntry">355</td>
+            <td class="headerCovTableEntryLo">20.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">190</td>
+            <td class="headerCovTableEntryLo">18.9 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : /*  
+<span class="lineNum">       3 </span>                :            :  *  Configure the rows of standard cells along with possibly
+<span class="lineNum">       4 </span>                :            :  *  one or more macro blocks;  The macro blocks may be 
+<span class="lineNum">       5 </span>                :            :  *  specified as: MUL,MUR,MLL,MLR, ML,MR,MB,MT, MM, MTT, or MBB
+<span class="lineNum">       6 </span>                :            :  */
+<span class="lineNum">       7 </span>                :            : #define MAXMACRO 50 
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : typedef struct macrobox {
+<span class="lineNum">      10 </span>                :            :     int mx ;
+<span class="lineNum">      11 </span>                :            :     int my ;
+<span class="lineNum">      12 </span>                :            : } MACROBOX ;
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : extern int celllen ;
+<span class="lineNum">      15 </span>                :            : extern double rowSep ;
+<span class="lineNum">      16 </span>                :            : extern double indent ;
+<span class="lineNum">      17 </span>                :            : int *blkToRow ;
+<span class="lineNum">      18 </span>                :            : extern FILE *fpo ;
+<span class="lineNum">      19 </span>                :            : int rowHeight ;
+<span class="lineNum">      20 </span>                :            : extern double macspace[] ;
+<span class="lineNum">      21 </span>                :            : extern double *padspace ;
+<span class="lineNum">      22 </span>                :            : extern double *relativeLen ;
+<span class="lineNum">      23 </span>                :            : extern int *fixLRBT ;
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :            : BBOXPTR boxptr , *oldbarray ;
+<span class="lineNum">      26 </span>                :            : CBOXPTR cellptr ;
+<span class="lineNum">      27 </span>                :            : MACROBOX *macroArray ;
+<span class="lineNum">      28 </span>                :            : int *filledTo , *endRow ;
+<span class="lineNum">      29 </span>                :            : int macNumber , row , totalR ;
+<span class="lineNum">      30 </span>                :            : int totalBlock , borient , empty , cell , middleRow ;
+<span class="lineNum">      31 </span>                :            : int extraSpace , pad , height , width , rows , bot , top , trow ;
+<span class="lineNum">      32 </span>                :            : int brow , rite , left , coreHeight , coreWidth , count , macro ;
+<span class="lineNum">      33 </span>                :            : int maxHeight , space , separation , yshift , xshift , last ;
+<span class="lineNum">      34 </span>                :            : int coreTop , coreRite , block , maxWidth , *padArray , numMacro ;
+<span class="lineNum">      35 </span>                :            : int URmacro , Rmacro , edge ;
+<span class="lineNum">      36 </span>                :            : int k , blk , zxshift , zyshift ;
+<span class="lineNum">      37 </span>                :            : int mttshift , mbbshift ;
+<a name="38"><span class="lineNum">      38 </span>                :            : double dsum , ratio ;</a>
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :<span class="lineCov">          1 : config1() </span>
+<span class="lineNum">      41 </span>                :            : {
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :            : double totalF , modulation , constant ;
+<span class="lineNum">      44 </span>                :            : int M , r , topRowY , centerY ;
+<span class="lineNum">      45 </span>                :            : int count_mtt , count_mbb ;
+<span class="lineNum">      46 </span>                :            : CBOXPTR padptr ;
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :<span class="lineCov">          1 : macroArray = (MACROBOX *) safe_malloc((MAXMACRO + 1) * sizeof(MACROBOX));</span>
+<span class="lineNum">      49 </span>                :<span class="lineCov">          1 : macNumber = 0 ;</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">          1 : numRows = numblock ;</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">          1 : rowArray = (ROWBOX *) safe_malloc( (numRows + 1) * sizeof( ROWBOX ) ) ;</span>
+<span class="lineNum">      52 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">         16 :     rowArray[row].endx1   = -1 ;</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">         16 :     rowArray[row].startx2 = -1 ;</span>
+<span class="lineNum">      55 </span>                :            : }
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :            : /*
+<span class="lineNum">      58 </span>                :            :     Total cell length = totalRowLength = totalR ;
+<span class="lineNum">      59 </span>                :            :     numRows is entered by the user ;
+<span class="lineNum">      60 </span>                :            :     rowSep is also entered by the user ;
+<span class="lineNum">      61 </span>                :            :     row center-to-center spacing = (rowSep + 1) * rowHeight ;
+<span class="lineNum">      62 </span>                :            : */
+<span class="lineNum">      63 </span>                :<span class="lineCov">          1 : totalR = celllen ;</span>
+<span class="lineNum">      64 </span>                :<span class="lineCov">          1 : rowHeight = 0 ;</span>
+<span class="lineNum">      65 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">      66 </span>                :<span class="lineCov">         16 :     rowHeight += barray[row]-&gt;btop - barray[row]-&gt;bbottom ;</span>
+<span class="lineNum">      67 </span>                :            : }
+<span class="lineNum">      68 </span>                :<span class="lineCov">          1 : rowHeight /= numRows ;</span>
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :            : /* Let bottom = 0 and 
+<span class="lineNum">      71 </span>                :            :             top = (numRows - 1) * (rowSep + 1) * rowHeight + 
+<span class="lineNum">      72 </span>                :            :                                                 rowHeight / 2 ;
+<span class="lineNum">      73 </span>                :            : 
+<span class="lineNum">      74 </span>                :            :     Position of each row n is as follows:
+<span class="lineNum">      75 </span>                :            :        starts at x = 0 ;
+<span class="lineNum">      76 </span>                :            :        y = (n - 1) * (rowSep + 1) * rowHeight + rowHeight / 2 ;
+<span class="lineNum">      77 </span>                :            : */
+<span class="lineNum">      78 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">      79 </span>                :<span class="lineCov">         16 :     rowArray[row].startx = 0 ;</span>
+<span class="lineNum">      80 </span>                :<span class="lineCov">         32 :     rowArray[row].ypos = (row - 1) * (rowSep + 1) * rowHeight +</span>
+<span class="lineNum">      81 </span>                :<span class="lineCov">         16 :                                                 rowHeight / 2 ;</span>
+<span class="lineNum">      82 </span>                :            : }
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 : if( numRows &gt; 1 ) {</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">          1 :     totalF = 0.0 ;</span>
+<span class="lineNum">      86 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 :     for( r = 1 ; r &lt;= numRows ; r++ ) {</span>
+<span class="lineNum">      87 </span>                :<span class="lineCov">         16 :         totalF += relativeLen[r] ;</span>
+<span class="lineNum">      88 </span>                :            :     }
+<span class="lineNum">      89 </span>                :<span class="lineCov">          1 :     topRowY = rowArray[numRows].ypos ;</span>
+<span class="lineNum">      90 </span>                :<span class="lineCov">          1 :     centerY = (topRowY + rowArray[1].ypos) / 2 ;</span>
+<span class="lineNum">      91 </span>                :<span class="lineCov">          1 :     M = (int) ( (double) totalR / totalF ) ;</span>
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>                :<span class="lineCov">          1 :     dsum = 0.0 ;</span>
+<span class="lineNum">      94 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 :     for( r = 1 ; r &lt;= numRows ; r++ ) {</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">         32 :         dsum += relativeLen[r] * </span>
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">         16 :                             (double)(ABS(rowArray[r].ypos - centerY));</span>
+<span class="lineNum">      97 </span>                :            :     }
+<span class="lineNum">      98 </span>                :<span class="lineCov">          1 :     dsum /= totalF ;</span>
+<span class="lineNum">      99 </span>                :<span class="lineCov">          1 :     dsum *= 1.0 / (double)( topRowY - centerY ) ;</span>
+<span class="lineNum">     100 </span>                :            : 
+<span class="lineNum">     101 </span>                :<span class="lineCov">          1 :     constant = 1.0 + (1.0 - indent) * (1.0 - dsum) ;</span>
+<span class="lineNum">     102 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 :     for( r = 1 ; r &lt;= numRows ; r++ ) {</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">         32 :         rowArray[r].endx = (int)((double) M * </span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">         16 :                                     constant * relativeLen[r]);</span>
+<span class="lineNum">     105 </span>                :<span class="lineCov">         32 :         modulation = 1.0 + (1.0 - indent) * ( </span>
+<span class="lineNum">     106 </span>        [<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">         16 :                           ((double)(ABS(rowArray[r].ypos - centerY)) / </span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">         32 :                            (double)(topRowY - centerY)) - dsum);</span>
+<span class="lineNum">     108 </span>                :<span class="lineCov">         48 :         rowArray[r].desiredL = (int) ( </span>
+<span class="lineNum">     109 </span>                :<span class="lineCov">         32 :                     (double) M * relativeLen[r] * modulation ) + 1 ;</span>
+<span class="lineNum">     110 </span>                :            :     }
+<span class="lineNum">     111 </span>                :            : } else {
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :     rowArray[1].endx = totalR ;</span>
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :     rowArray[1].desiredL = rowArray[1].endx ;</span>
+<span class="lineNum">     114 </span>                :            : }
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>                :            : /*
+<span class="lineNum">     117 </span>                :            :     Define extra space = rowSep * rowHeight
+<span class="lineNum">     118 </span>                :            : */
+<span class="lineNum">     119 </span>                :<span class="lineCov">          1 : extraSpace = rowSep * rowHeight ;</span>
+<span class="lineNum">     120 </span>        [<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         16 : for( k = 1 ; k &lt;= 15 ; k++ ) {</span>
+<span class="lineNum">     121 </span>        [<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         15 :     if( macspace[k] &lt; 0.0 ) {</span>
+<span class="lineNum">     122 </span>                :<span class="lineCov">         15 :         macspace[k] = extraSpace ;</span>
+<span class="lineNum">     123 </span>                :            :     } else {
+<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :         macspace[k] *= rowHeight ;</span>
+<span class="lineNum">     125 </span>                :            :     }
+<span class="lineNum">     126 </span>                :            : }
+<span class="lineNum">     127 </span>                :<span class="lineCov">          1 : middleRow = numRows / 2 ;</span>
+<span class="lineNum">     128 </span>                :            : 
+<span class="lineNum">     129 </span>                :            : /*
+<span class="lineNum">     130 </span>                :            :     Now its time to add in a macro block.  Suppose we have such
+<span class="lineNum">     131 </span>                :            :     a macro block with a location specification as:
+<span class="lineNum">     132 </span>                :            :     MUL,MUR,MLL,MLR, ML,MR,MB,MT, or MM
+<span class="lineNum">     133 </span>                :            :     ---macro is height units tall and width units wide.
+<span class="lineNum">     134 </span>                :            : */
+<span class="lineNum">     135 </span>                :<span class="lineCov">          1 : padArray = (int *) safe_malloc( (numterms + 1) * sizeof( int ) ) ;</span>
+<span class="lineNum">     136 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = 1 ; pad &lt;= numterms ; pad++ ) {</span>
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :     padArray[pad] = 0 ;</span>
+<span class="lineNum">     138 </span>                :            : }
+<span class="lineNum">     139 </span>                :<span class="lineCov">          1 : numMacro = 0 ;</span>
+<span class="lineNum">     140 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     141 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( carray[pad]-&gt;padside == MUL || carray[pad]-&gt;padside == ML ||</span>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :                                     carray[pad]-&gt;padside == MLL ) {</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         padArray[++numMacro] = pad ;</span>
+<span class="lineNum">     144 </span>                :            :     }
+<span class="lineNum">     145 </span>                :            : }
+<span class="lineNum">     146 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     147 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( carray[pad]-&gt;padside == MT || carray[pad]-&gt;padside == MM ||</span>
+<span class="lineNum">     148 </span>                :            :                                     carray[pad]-&gt;padside == MB ) {
+<span class="lineNum">     149 </span>                :<span class="lineNoCov">          0 :         padArray[++numMacro] = pad ;</span>
+<span class="lineNum">     150 </span>                :            :     }
+<span class="lineNum">     151 </span>                :            : }
+<span class="lineNum">     152 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     153 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( carray[pad]-&gt;padside == MUR ) {</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :         padArray[++numMacro] = pad ;</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :         URmacro = numMacro ;</span>
+<span class="lineNum">     156 </span>                :            :     }
+<span class="lineNum">     157 </span>                :            : }
+<span class="lineNum">     158 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     159 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( carray[pad]-&gt;padside == MR ) {</span>
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :         padArray[++numMacro] = pad ;</span>
+<span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :         Rmacro = numMacro ;</span>
+<span class="lineNum">     162 </span>                :            :     }
+<span class="lineNum">     163 </span>                :            : }
+<span class="lineNum">     164 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     165 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( carray[pad]-&gt;padside == MLR ) {</span>
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :         padArray[++numMacro] = pad ;</span>
+<span class="lineNum">     167 </span>                :            :     }
+<span class="lineNum">     168 </span>                :            : }
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( macro = 1 ; macro &lt;= numMacro ; macro++ ) {</span>
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :     pad = padArray[macro] ;</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :     padptr = carray[pad] ;</span>
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :     height = padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :     width  = padptr-&gt;tileptr-&gt;right - padptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :     macNumber++ ;</span>
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :     switch( padptr-&gt;padside ) {</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span> 
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     180 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       case MUL : for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     181 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + </span>
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :                                 rowSep * rowHeight * 0.33 &lt;= </span>
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :                                 rowArray[numRows].ypos - height ) {</span>
+<span class="lineNum">     184 </span>                :            :                         break ;
+<span class="lineNum">     185 </span>                :            :                     }
+<span class="lineNum">     186 </span>                :            :                 }
+<span class="lineNum">     187 </span>                :            :                 /*  shorten the rows between row + 1 and numRows by:
+<span class="lineNum">     188 </span>                :            :                     width + macspace[MUL] ;
+<span class="lineNum">     189 </span>                :            :                     Number of &quot;rows&quot; affected is: numRows - row ;
+<span class="lineNum">     190 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     191 </span>                :            :                         (rows * (width + macspace[MUL]) ) / numRows ;
+<span class="lineNum">     192 </span>                :            :                 */
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :                 rows = numRows - row ;</span>
+<span class="lineNum">     194 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row++ ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx = width + macspace[MUL] ;</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[MUL] ;</span>
+<span class="lineNum">     197 </span>                :            :                 }
+<span class="lineNum">     198 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     199 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MUL]) ) / numRows ;</span>
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MUL]) ) / numRows ;</span>
+<span class="lineNum">     203 </span>                :            :                 }
+<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = width / 2 ;</span>
+<span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my =</span>
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 :                         (rowArray[numRows].ypos + rowHeight / 2) -</span>
+<span class="lineNum">     207 </span>                :<span class="lineNoCov">          0 :                                                         height / 2 ;</span>
+<span class="lineNum">     208 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     209 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       case MUR : for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     210 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + </span>
+<span class="lineNum">     211 </span>                :<span class="lineNoCov">          0 :                                  rowSep * rowHeight * 0.33 &lt;= </span>
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :                                  rowArray[numRows].ypos - height ) {</span>
+<span class="lineNum">     213 </span>                :            :                         break ;
+<span class="lineNum">     214 </span>                :            :                     }
+<span class="lineNum">     215 </span>                :            :                 }
+<span class="lineNum">     216 </span>                :            :                 /*  shorten the rows between row + 1 and numRows by:
+<span class="lineNum">     217 </span>                :            :                     width + macspace[MUR] ;
+<span class="lineNum">     218 </span>                :            :                     Number of &quot;rows&quot; affected is: numRows - row ;
+<span class="lineNum">     219 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     220 </span>                :            :                         (rows * (width + macspace[MUR]) ) / numRows ;
+<span class="lineNum">     221 </span>                :            :                 */
+<span class="lineNum">     222 </span>                :<span class="lineNoCov">          0 :                 rows = numRows - row ;</span>
+<span class="lineNum">     223 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row++ ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx -= width + macspace[MUR] ;</span>
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[MUR] ;</span>
+<span class="lineNum">     226 </span>                :            :                 }
+<span class="lineNum">     227 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MUR]) ) / numRows ;</span>
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MUR]) ) / numRows ;</span>
+<span class="lineNum">     232 </span>                :            :                 }
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = rowArray[numRows].endx +</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :                                            macspace[MUR] + width / 2 ;</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my =</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :                         (rowArray[numRows].ypos + rowHeight / 2) -</span>
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :                                                         height / 2 ;</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     239 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       case MLL : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     240 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - </span>
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :                                         rowSep * rowHeight * 0.33 &gt;= </span>
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :                                         rowArray[1].ypos + height ) {</span>
+<span class="lineNum">     243 </span>                :            :                         break ;
+<span class="lineNum">     244 </span>                :            :                     }
+<span class="lineNum">     245 </span>                :            :                 }
+<span class="lineNum">     246 </span>                :            :                 /*  shorten the rows between 1 and row - 1 by:
+<span class="lineNum">     247 </span>                :            :                     width + macspace[MLL] ;
+<span class="lineNum">     248 </span>                :            :                     Number of &quot;rows&quot; affected is: row - 1 ;
+<span class="lineNum">     249 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     250 </span>                :            :                         (rows * (width + macspace[MLL]) ) / numRows ;
+<span class="lineNum">     251 </span>                :            :                 */
+<span class="lineNum">     252 </span>                :<span class="lineNoCov">          0 :                 rows = row - 1 ;</span>
+<span class="lineNum">     253 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row-- ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx = width + macspace[MLL] ;</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[MLL] ;</span>
+<span class="lineNum">     256 </span>                :            :                 }
+<span class="lineNum">     257 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MLL]) ) / numRows ;</span>
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MLL]) ) / numRows ;</span>
+<span class="lineNum">     262 </span>                :            :                 }
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = width / 2 ;</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my =</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :                         (rowArray[1].ypos - rowHeight / 2) +</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :                                                         height / 2 ;</span>
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     268 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       case MLR : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     269 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - </span>
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :                                         rowSep * rowHeight * 0.33 &gt;= </span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :                                         rowArray[1].ypos + height ) {</span>
+<span class="lineNum">     272 </span>                :            :                         break ;
+<span class="lineNum">     273 </span>                :            :                     }
+<span class="lineNum">     274 </span>                :            :                 }
+<span class="lineNum">     275 </span>                :            :                 /*  shorten the rows between 1 and row - 1 by:
+<span class="lineNum">     276 </span>                :            :                     width + macspace[MLR] ;
+<span class="lineNum">     277 </span>                :            :                     Number of &quot;rows&quot; affected is: row - 1 ;
+<span class="lineNum">     278 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     279 </span>                :            :                         (rows * (width + macspace[MLR]) ) / numRows ;
+<span class="lineNum">     280 </span>                :            :                 */
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :                 rows = row - 1 ;</span>
+<span class="lineNum">     282 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row-- ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx -= width + macspace[MLR] ;</span>
+<span class="lineNum">     284 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[MLR] ;</span>
+<span class="lineNum">     285 </span>                :            :                 }
+<span class="lineNum">     286 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MLR]) ) / numRows ;</span>
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MLR]) ) / numRows ;</span>
+<span class="lineNum">     291 </span>                :            :                 }
+<span class="lineNum">     292 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( URmacro != 0 ) {</span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :                     macroArray[URmacro].mx += (rows *</span>
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :                             (width + macspace[MLR]) ) / numRows ;</span>
+<span class="lineNum">     295 </span>                :            :                 }
+<span class="lineNum">     296 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( Rmacro != 0 ) {</span>
+<span class="lineNum">     297 </span>                :<span class="lineNoCov">          0 :                     macroArray[Rmacro].mx += (rows *</span>
+<span class="lineNum">     298 </span>                :<span class="lineNoCov">          0 :                             (width + macspace[MLR]) ) / numRows ;</span>
+<span class="lineNum">     299 </span>                :            :                 }
+<span class="lineNum">     300 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = rowArray[1].endx +</span>
+<span class="lineNum">     301 </span>                :<span class="lineNoCov">          0 :                                            macspace[MLR] + width / 2 ;</span>
+<span class="lineNum">     302 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my =</span>
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :                         (rowArray[1].ypos - rowHeight / 2) +</span>
+<span class="lineNum">     304 </span>                :<span class="lineNoCov">          0 :                                                         height / 2 ;</span>
+<span class="lineNum">     305 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     306 </span>                :<span class="lineNoCov">          0 :       case ML  : bot = rowArray[middleRow].ypos - height / 2 ;</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :                 top = bot + height ;</span>
+<span class="lineNum">     308 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     309 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - rowHeight / 2 - </span>
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :                             rowSep * rowHeight * 0.33 &gt;= top ) {</span>
+<span class="lineNum">     311 </span>                :            :                         break ;
+<span class="lineNum">     312 </span>                :            :                     }
+<span class="lineNum">     313 </span>                :            :                 }
+<span class="lineNum">     314 </span>                :<span class="lineNoCov">          0 :                 trow = row ;</span>
+<span class="lineNum">     315 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     316 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + rowHeight / 2 + </span>
+<span class="lineNum">     317 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.33 &lt;= bot ) {</span>
+<span class="lineNum">     318 </span>                :            :                         break ;
+<span class="lineNum">     319 </span>                :            :                     }
+<span class="lineNum">     320 </span>                :            :                 }
+<span class="lineNum">     321 </span>                :<span class="lineNoCov">          0 :                 brow = row ;</span>
+<span class="lineNum">     322 </span>                :            :                 /*  shorten the rows between brow and trow by:
+<span class="lineNum">     323 </span>                :            :                     width + macspace[ML] ;
+<span class="lineNum">     324 </span>                :            :                     Number of &quot;rows&quot; affected is: trow - brow - 1 ;
+<span class="lineNum">     325 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     326 </span>                :            :                         (rows * (width + macspace[ML]) ) / numRows ;
+<span class="lineNum">     327 </span>                :            :                 */
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :                 rows = trow - brow - 1 ;</span>
+<span class="lineNum">     329 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = brow + 1 ; row &lt; trow ; row++ ) {</span>
+<span class="lineNum">     330 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx = width + macspace[ML] ;</span>
+<span class="lineNum">     331 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[ML] ;</span>
+<span class="lineNum">     332 </span>                :            :                 }
+<span class="lineNum">     333 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     334 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     335 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[ML]) ) / numRows ;</span>
+<span class="lineNum">     336 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     337 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[ML]) ) / numRows ;</span>
+<span class="lineNum">     338 </span>                :            :                 }
+<span class="lineNum">     339 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = width / 2 ;</span>
+<span class="lineNum">     340 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my = rowArray[middleRow].ypos;</span>
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     342 </span>                :<span class="lineNoCov">          0 :       case MR  : bot = rowArray[middleRow].ypos - height / 2 ;</span>
+<span class="lineNum">     343 </span>                :<span class="lineNoCov">          0 :                 top = bot + height ;</span>
+<span class="lineNum">     344 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     345 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - rowHeight / 2 -</span>
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.33 &gt;= top ) {</span>
+<span class="lineNum">     347 </span>                :            :                         break ;
+<span class="lineNum">     348 </span>                :            :                     }
+<span class="lineNum">     349 </span>                :            :                 }
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :                 trow = row ;</span>
+<span class="lineNum">     351 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     352 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + rowHeight / 2 +</span>
+<span class="lineNum">     353 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.33 &lt;= bot ) {</span>
+<span class="lineNum">     354 </span>                :            :                         break ;
+<span class="lineNum">     355 </span>                :            :                     }
+<span class="lineNum">     356 </span>                :            :                 }
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 :                 brow = row ;</span>
+<span class="lineNum">     358 </span>                :            :                 /*  shorten the rows between brow and trow by:
+<span class="lineNum">     359 </span>                :            :                     width + macspace[MR] ;
+<span class="lineNum">     360 </span>                :            :                     Number of &quot;rows&quot; affected is: trow - brow - 1 ;
+<span class="lineNum">     361 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     362 </span>                :            :                         (rows * (width + macspace[MR]) ) / numRows ;
+<span class="lineNum">     363 </span>                :            :                 */
+<span class="lineNum">     364 </span>                :<span class="lineNoCov">          0 :                 rows = trow - brow - 1 ;</span>
+<span class="lineNum">     365 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = brow + 1 ; row &lt; trow ; row++ ) {</span>
+<span class="lineNum">     366 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx -= width + macspace[MR] ;</span>
+<span class="lineNum">     367 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL -= width + macspace[MR] ;</span>
+<span class="lineNum">     368 </span>                :            :                 }
+<span class="lineNum">     369 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MR]) ) / numRows ;</span>
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     373 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MR]) ) / numRows ;</span>
+<span class="lineNum">     374 </span>                :            :                 }
+<span class="lineNum">     375 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( URmacro != 0 ) {</span>
+<span class="lineNum">     376 </span>                :<span class="lineNoCov">          0 :                     macroArray[URmacro].mx += (rows *</span>
+<span class="lineNum">     377 </span>                :<span class="lineNoCov">          0 :                                 (width + macspace[MR]) ) / numRows ;</span>
+<span class="lineNum">     378 </span>                :            :                 }
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = </span>
+<span class="lineNum">     380 </span>                :<span class="lineNoCov">          0 :                                     rowArray[middleRow].endx +</span>
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 :                                     macspace[MR] + width / 2 ;</span>
+<span class="lineNum">     382 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my = rowArray[middleRow].ypos;</span>
+<span class="lineNum">     383 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     384 </span>                :<span class="lineNoCov">          0 :       case MM  : bot = rowArray[middleRow].ypos - height / 2 ;</span>
+<span class="lineNum">     385 </span>                :<span class="lineNoCov">          0 :                 top = bot + height ;</span>
+<span class="lineNum">     386 </span>                :            :                 /*
+<span class="lineNum">     387 </span>                :            :                 left = (rowArray[middleRow].startx + 
+<span class="lineNum">     388 </span>                :            :                         rowArray[middleRow].endx ) / 2 - width / 2 ;
+<span class="lineNum">     389 </span>                :            :                 */
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :                 left = (rowArray[middleRow].startx + </span>
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :                         rowArray[middleRow].endx ) / 2 ;</span>
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :                 rite = left + width ;</span>
+<span class="lineNum">     393 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     394 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - rowHeight / 2 -</span>
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.67 &gt;= top ) {</span>
+<span class="lineNum">     396 </span>                :            :                         break ;
+<span class="lineNum">     397 </span>                :            :                     }
+<span class="lineNum">     398 </span>                :            :                 }
+<span class="lineNum">     399 </span>                :<span class="lineNoCov">          0 :                 trow = row ;</span>
+<span class="lineNum">     400 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     401 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + rowHeight / 2 +</span>
+<span class="lineNum">     402 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.67 &lt;= bot ) {</span>
+<span class="lineNum">     403 </span>                :            :                         break ;
+<span class="lineNum">     404 </span>                :            :                     }
+<span class="lineNum">     405 </span>                :            :                 }
+<span class="lineNum">     406 </span>                :<span class="lineNoCov">          0 :                 brow = row ;</span>
+<span class="lineNum">     407 </span>                :            :                 /*  split the rows between brow and trow by:
+<span class="lineNum">     408 </span>                :            :                     width + 2 * macspace[MM] ;
+<span class="lineNum">     409 </span>                :            :                     Number of &quot;rows&quot; affected is: trow - brow - 1 ;
+<span class="lineNum">     410 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     411 </span>                :            :                       (rows * (width + 2 * macspace[MM]) ) / numRows ;
+<span class="lineNum">     412 </span>                :            :                 */
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :                 rows = trow - brow - 1 ;</span>
+<span class="lineNum">     414 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = brow + 1 ; row &lt; trow ; row++ ) {</span>
+<span class="lineNum">     415 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx1   = left - macspace[MM] ;</span>
+<span class="lineNum">     416 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx2 = rite + macspace[MM] ;</span>
+<span class="lineNum">     417 </span>                :<span class="lineNoCov">          0 :                    rowArray[row].desiredL -= width + 2 * macspace[MM];</span>
+<span class="lineNum">     418 </span>                :            :                 }
+<span class="lineNum">     419 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :                               (width + 2 * macspace[MM]) ) / numRows ;</span>
+<span class="lineNum">     422 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     423 </span>                :<span class="lineNoCov">          0 :                               (width + 2 * macspace[MM]) ) / numRows ;</span>
+<span class="lineNum">     424 </span>                :            :                 }
+<span class="lineNum">     425 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = (left + rite) / 2 ;</span>
+<span class="lineNum">     426 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my = (bot + top) / 2 ;</span>
+<span class="lineNum">     427 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     428 </span>                :<span class="lineNoCov">          0 :       case MB  : bot = rowArray[1].ypos - rowHeight / 2 ;</span>
+<span class="lineNum">     429 </span>                :<span class="lineNoCov">          0 :                 top = bot + height ;</span>
+<span class="lineNum">     430 </span>                :<span class="lineNoCov">          0 :                 left = (rowArray[1].startx + </span>
+<span class="lineNum">     431 </span>                :<span class="lineNoCov">          0 :                                 rowArray[1].endx ) / 2 - width / 2 ;</span>
+<span class="lineNum">     432 </span>                :<span class="lineNoCov">          0 :                 rite = left + width ;</span>
+<span class="lineNum">     433 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     434 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos - rowHeight / 2 -</span>
+<span class="lineNum">     435 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.67 &gt;= top ) {</span>
+<span class="lineNum">     436 </span>                :            :                         break ;
+<span class="lineNum">     437 </span>                :            :                     }
+<span class="lineNum">     438 </span>                :            :                 }
+<span class="lineNum">     439 </span>                :<span class="lineNoCov">          0 :                 trow = row ;</span>
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :                 brow = 0 ;</span>
+<span class="lineNum">     441 </span>                :            :                 /*  split the rows between brow and trow by:
+<span class="lineNum">     442 </span>                :            :                     width + 2 * macspace[MB] ;
+<span class="lineNum">     443 </span>                :            :                     Number of &quot;rows&quot; affected is: trow - brow - 1 ;
+<span class="lineNum">     444 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     445 </span>                :            :                       (rows * (width + 2 * macspace[MB]) ) / numRows ;
+<span class="lineNum">     446 </span>                :            :                 */
+<span class="lineNum">     447 </span>                :<span class="lineNoCov">          0 :                 rows = trow - brow - 1 ;</span>
+<span class="lineNum">     448 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = brow + 1 ; row &lt; trow ; row++ ) {</span>
+<span class="lineNum">     449 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx1   = left - macspace[MB] ;</span>
+<span class="lineNum">     450 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx2 = rite + macspace[MB] ;</span>
+<span class="lineNum">     451 </span>                :<span class="lineNoCov">          0 :                    rowArray[row].desiredL -= width + 2 * macspace[MB];</span>
+<span class="lineNum">     452 </span>                :            :                 }
+<span class="lineNum">     453 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     454 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 :                         (width + 2 * macspace[MB]) ) / numRows ;</span>
+<span class="lineNum">     456 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :                         (width + 2 * macspace[MB]) ) / numRows ;</span>
+<span class="lineNum">     458 </span>                :            :                 }
+<span class="lineNum">     459 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = (left + rite) / 2 ;</span>
+<span class="lineNum">     460 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my = (bot + top) / 2 ;</span>
+<span class="lineNum">     461 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     462 </span>                :<span class="lineNoCov">          0 :       case MT  : top = rowArray[numRows].ypos + rowHeight / 2 ;</span>
+<span class="lineNum">     463 </span>                :<span class="lineNoCov">          0 :                 bot = top - height ;</span>
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 :                 left = (rowArray[numRows].startx + </span>
+<span class="lineNum">     465 </span>                :<span class="lineNoCov">          0 :                         rowArray[numRows].endx ) / 2 - width / 2 ;</span>
+<span class="lineNum">     466 </span>                :<span class="lineNoCov">          0 :                 rite = left + width ;</span>
+<span class="lineNum">     467 </span>                :<span class="lineNoCov">          0 :                 trow = numRows + 1 ;</span>
+<span class="lineNum">     468 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = numRows ; row &gt;= 1 ; row-- ) {</span>
+<span class="lineNum">     469 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if( rowArray[row].ypos + rowHeight / 2 +</span>
+<span class="lineNum">     470 </span>                :<span class="lineNoCov">          0 :                                     rowSep * rowHeight * 0.67 &lt;= bot ) {</span>
+<span class="lineNum">     471 </span>                :            :                         break ;
+<span class="lineNum">     472 </span>                :            :                     }
+<span class="lineNum">     473 </span>                :            :                 }
+<span class="lineNum">     474 </span>                :<span class="lineNoCov">          0 :                 brow = row ;</span>
+<span class="lineNum">     475 </span>                :            :                 /*  split the rows between brow and trow by:
+<span class="lineNum">     476 </span>                :            :                     width + 2 * macspace[MT] ;
+<span class="lineNum">     477 </span>                :            :                     Number of &quot;rows&quot; affected is: trow - brow - 1 ;
+<span class="lineNum">     478 </span>                :            :                     Add to all &quot;rows&quot; by the amount:
+<span class="lineNum">     479 </span>                :            :                       (rows * (width + 2 * macspace[MT]) ) / numRows ;
+<span class="lineNum">     480 </span>                :            :                 */
+<span class="lineNum">     481 </span>                :<span class="lineNoCov">          0 :                 rows = trow - brow - 1 ;</span>
+<span class="lineNum">     482 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = brow + 1 ; row &lt; trow ; row++ ) {</span>
+<span class="lineNum">     483 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx1   = left - macspace[MT] ;</span>
+<span class="lineNum">     484 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].startx2 = rite + macspace[MT] ;</span>
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 :                    rowArray[row].desiredL -= width + 2 * macspace[MT];</span>
+<span class="lineNum">     486 </span>                :            :                 }
+<span class="lineNum">     487 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].endx += (rows * </span>
+<span class="lineNum">     489 </span>                :<span class="lineNoCov">          0 :                              (width + 2 * macspace[MT]) ) / numRows ;</span>
+<span class="lineNum">     490 </span>                :<span class="lineNoCov">          0 :                     rowArray[row].desiredL += (rows * </span>
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :                              (width + 2 * macspace[MT]) ) / numRows ;</span>
+<span class="lineNum">     492 </span>                :            :                 }
+<span class="lineNum">     493 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].mx = (left + rite) / 2 ;</span>
+<span class="lineNum">     494 </span>                :<span class="lineNoCov">          0 :                 macroArray[macNumber].my = (bot + top) / 2 ;</span>
+<span class="lineNum">     495 </span>                :<span class="lineNoCov">          0 :                 break ;</span>
+<span class="lineNum">     496 </span>                :<span class="lineNoCov">          0 :         default: fprintf(fpo,&quot;screwup in finding padside\n&quot;);</span>
+<span class="lineNum">     497 </span>                :<span class="lineNoCov">          0 :                  exit(TW_FAIL);</span>
+<span class="lineNum">     498 </span>                :            :                  break ;
+<span class="lineNum">     499 </span>                :            :     }
+<span class="lineNum">     500 </span>                :            : }
+<span class="lineNum">     501 </span>                :            : 
+<span class="lineNum">     502 </span>                :            : /*  
+<span class="lineNum">     503 </span>                :            :  *  Now its time to generate a pad placement around the
+<span class="lineNum">     504 </span>                :            :  *  periphery of the just defined core topology.
+<span class="lineNum">     505 </span>                :            :  *  First determine coreWidth and coreHeight.
+<span class="lineNum">     506 </span>                :            :  */
+<span class="lineNum">     507 </span>                :<span class="lineCov">          1 : coreHeight = rowArray[numRows].ypos + rowHeight - rowHeight / 2 ;</span>
+<span class="lineNum">     508 </span>                :<span class="lineCov">          1 : coreWidth = 0 ;</span>
+<span class="lineNum">     509 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 : for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     510 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 15 times"> + </span>]:<span class="lineCov">         16 :     if( rowArray[row].endx &gt; coreWidth ) {</span>
+<span class="lineNum">     511 </span>                :<span class="lineCov">          1 :         coreWidth = rowArray[row].endx ;</span>
+<span class="lineNum">     512 </span>                :            :     }
+<span class="lineNum">     513 </span>                :            : }
+<span class="lineNum">     514 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( macro = 1 ; macro &lt;= numMacro ; macro++ ) {</span>
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :     pad = padArray[macro] ;</span>
+<span class="lineNum">     516 </span>                :<span class="lineNoCov">          0 :     edge = macroArray[macro].mx + carray[pad]-&gt;tileptr-&gt;right ;</span>
+<span class="lineNum">     517 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( edge &gt; coreWidth ) {</span>
+<span class="lineNum">     518 </span>                :<span class="lineNoCov">          0 :         coreWidth = edge ;</span>
+<span class="lineNum">     519 </span>                :            :     }
+<span class="lineNum">     520 </span>                :            : }
+<span class="lineNum">     521 </span>                :            : 
+<span class="lineNum">     522 </span>                :            : /*
+<span class="lineNum">     523 </span>                :            :  *  Add in the MTT and MBB macros, if there are any
+<span class="lineNum">     524 </span>                :            :  */
+<span class="lineNum">     525 </span>                :<span class="lineCov">          1 : mbbshift = 0 ;</span>
+<span class="lineNum">     526 </span>                :<span class="lineCov">          1 : height   = 0 ;</span>
+<span class="lineNum">     527 </span>                :<span class="lineCov">          1 : width    = 0 ;</span>
+<span class="lineNum">     528 </span>                :<span class="lineCov">          1 : count_mbb = 0 ;</span>
+<span class="lineNum">     529 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     530 </span>                :<span class="lineNoCov">          0 :     padptr = carray[pad] ;</span>
+<span class="lineNum">     531 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( padptr-&gt;padside == MBB ) {</span>
+<span class="lineNum">     532 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom &gt; height ){</span>
+<span class="lineNum">     533 </span>                :<span class="lineNoCov">          0 :             height = padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     534 </span>                :            :         }
+<span class="lineNum">     535 </span>                :<span class="lineNoCov">          0 :         width += padptr-&gt;tileptr-&gt;right - padptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     536 </span>                :<span class="lineNoCov">          0 :         count_mbb++ ;</span>
+<span class="lineNum">     537 </span>                :            :     }
+<span class="lineNum">     538 </span>                :            : }
+<span class="lineNum">     539 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : if( count_mbb &gt; 0 ) {</span>
+<span class="lineNum">     540 </span>                :<span class="lineNoCov">          0 :     mbbshift = height + rowSep * rowHeight ;</span>
+<span class="lineNum">     541 </span>                :            :     /*
+<span class="lineNum">     542 </span>                :            :      *   Shift all rows up by height + rowSep * rowHeight
+<span class="lineNum">     543 </span>                :            :      */
+<span class="lineNum">     544 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( row = 1 ; row &lt;= numRows ; row++ ) {</span>
+<span class="lineNum">     545 </span>                :<span class="lineNoCov">          0 :         rowArray[row].ypos += mbbshift ;</span>
+<span class="lineNum">     546 </span>                :            :     }
+<span class="lineNum">     547 </span>                :<span class="lineNoCov">          0 :     coreHeight += mbbshift ;</span>
+<span class="lineNum">     548 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( width &gt; coreWidth ) {</span>
+<span class="lineNum">     549 </span>                :<span class="lineNoCov">          0 :         coreWidth = width ;</span>
+<span class="lineNum">     550 </span>                :            :     }
+<span class="lineNum">     551 </span>                :<span class="lineNoCov">          0 :     space = coreWidth - width ;</span>
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :     separation = space / (count_mbb + 1) ;</span>
+<span class="lineNum">     553 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( separation &lt; 0 ) {</span>
+<span class="lineNum">     554 </span>                :<span class="lineNoCov">          0 :         separation = 0 ;</span>
+<span class="lineNum">     555 </span>                :            :     }
+<span class="lineNum">     556 </span>                :            : 
+<span class="lineNum">     557 </span>                :<span class="lineNoCov">          0 :     maxHeight = height ;</span>
+<span class="lineNum">     558 </span>                :<span class="lineNoCov">          0 :     height    = 0 ;</span>
+<span class="lineNum">     559 </span>                :<span class="lineNoCov">          0 :     width     = 0 ;</span>
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :     last      = separation ;</span>
+<span class="lineNum">     561 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     562 </span>                :<span class="lineNoCov">          0 :         padptr = carray[pad] ;</span>
+<span class="lineNum">     563 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( padptr-&gt;padside == MBB ) {</span>
+<span class="lineNum">     564 </span>                :<span class="lineNoCov">          0 :             height = padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     565 </span>                :<span class="lineNoCov">          0 :             width  = padptr-&gt;tileptr-&gt;right - padptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     566 </span>                :            : 
+<span class="lineNum">     567 </span>                :<span class="lineNoCov">          0 :             padptr-&gt;cxcenter = last + width / 2  ;</span>
+<span class="lineNum">     568 </span>                :<span class="lineNoCov">          0 :             padptr-&gt;cycenter = maxHeight - height / 2 - 1 ;</span>
+<span class="lineNum">     569 </span>                :<span class="lineNoCov">          0 :             last += separation + width ;</span>
+<span class="lineNum">     570 </span>                :            :         }
+<span class="lineNum">     571 </span>                :            :     }
+<span class="lineNum">     572 </span>                :            : }
+<span class="lineNum">     573 </span>                :            : 
+<span class="lineNum">     574 </span>                :            : 
+<span class="lineNum">     575 </span>                :<span class="lineCov">          1 : mttshift = 0 ;</span>
+<span class="lineNum">     576 </span>                :<span class="lineCov">          1 : height   = 0 ;</span>
+<span class="lineNum">     577 </span>                :<span class="lineCov">          1 : width    = 0 ;</span>
+<span class="lineNum">     578 </span>                :<span class="lineCov">          1 : count_mtt = 0 ;</span>
+<span class="lineNum">     579 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     580 </span>                :<span class="lineNoCov">          0 :     padptr = carray[pad] ;</span>
+<span class="lineNum">     581 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( padptr-&gt;padside == MTT ) {</span>
+<span class="lineNum">     582 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom &gt; height ){</span>
+<span class="lineNum">     583 </span>                :<span class="lineNoCov">          0 :             height = padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     584 </span>                :            :         }
+<span class="lineNum">     585 </span>                :<span class="lineNoCov">          0 :         width += padptr-&gt;tileptr-&gt;right - padptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :         count_mtt++ ;</span>
+<span class="lineNum">     587 </span>                :            : 
+<span class="lineNum">     588 </span>                :            :     }
+<span class="lineNum">     589 </span>                :            : }
+<span class="lineNum">     590 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : if( count_mtt &gt; 0 ) {</span>
+<span class="lineNum">     591 </span>                :<span class="lineNoCov">          0 :     mttshift = height + rowSep * rowHeight ;</span>
+<span class="lineNum">     592 </span>                :<span class="lineNoCov">          0 :     coreHeight += mttshift ;</span>
+<span class="lineNum">     593 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( width &gt; coreWidth ) {</span>
+<span class="lineNum">     594 </span>                :<span class="lineNoCov">          0 :         coreWidth = width ;</span>
+<span class="lineNum">     595 </span>                :            :     }
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :     space = coreWidth - width ;</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :     separation = space / (count_mtt + 1) ;</span>
+<span class="lineNum">     598 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( separation &lt; 0 ) {</span>
+<span class="lineNum">     599 </span>                :<span class="lineNoCov">          0 :         separation = 0 ;</span>
+<span class="lineNum">     600 </span>                :            :     }
+<span class="lineNum">     601 </span>                :            : 
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :     height    = 0 ;</span>
+<span class="lineNum">     603 </span>                :<span class="lineNoCov">          0 :     width     = 0 ;</span>
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :     last      = separation ;</span>
+<span class="lineNum">     605 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineCov">          1 :     for( pad = numcells + 1 ; pad &lt;= numcells + numterms ; pad++ ) {</span>
+<span class="lineNum">     606 </span>                :<span class="lineNoCov">          0 :         padptr = carray[pad] ;</span>
+<span class="lineNum">     607 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( padptr-&gt;padside == MTT ) {</span>
+<span class="lineNum">     608 </span>                :<span class="lineNoCov">          0 :             height = padptr-&gt;tileptr-&gt;top - padptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     609 </span>                :<span class="lineNoCov">          0 :             width  = padptr-&gt;tileptr-&gt;right - padptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     610 </span>                :            : 
+<span class="lineNum">     611 </span>                :<span class="lineNoCov">          0 :             padptr-&gt;cxcenter = last + width / 2  ;</span>
+<span class="lineNum">     612 </span>                :<span class="lineNoCov">          0 :             padptr-&gt;cycenter = coreHeight + rowSep * rowHeight + </span>
+<span class="lineNum">     613 </span>                :<span class="lineNoCov">          0 :                                                     height / 2 ;</span>
+<span class="lineNum">     614 </span>                :<span class="lineNoCov">          0 :             last += separation + width ;</span>
+<span class="lineNum">     615 </span>                :            :         }
+<span class="lineNum">     616 </span>                :            :     }
+<span class="lineNum">     617 </span>                :            : }
+<span class="lineNum">     618 </span>                :            : 
+<span class="lineNum">     619 </span>                :            : return ;
+<span class="lineNum">     620 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

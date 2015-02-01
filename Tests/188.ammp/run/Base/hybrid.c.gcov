@@ -1,0 +1,774 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/hybrid.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* hybrid.c
+        -:    2:*
+        -:    3:* collection of routines to service bond hybrid  potentials
+        -:    4:*
+        -:    5:* these are the planar and pyrmid height potentials
+        -:    6:*
+        -:    7:*  
+        -:    8:*
+        -:    9:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:   10:*
+        -:   11:* these routines hold a data base (in terms of array indeces)
+        -:   12:* of hybrid, with the associated length and force constant
+        -:   13:*
+        -:   14:* (this could be table driven but what the hell memories cheap)
+        -:   15:*
+        -:   16:* the routines for potential value, force and (eventually) second
+        -:   17:* derivatives are here also
+        -:   18:*
+        -:   19:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   20:* this allows for parralellization if needed (on a PC?)
+        -:   21:*
+        -:   22:* forces are bond wise symmetric - so we don't have to mess around with
+        -:   23:* s matrices and the like.
+        -:   24:*/
+        -:   25:/*
+        -:   26:*  copyright 1992 Robert W. Harrison
+        -:   27:*  
+        -:   28:*  This notice may not be removed
+        -:   29:*  This program may be copied for scientific use
+        -:   30:*  It may not be sold for profit without explicit
+        -:   31:*  permission of the author(s) who retain any
+        -:   32:*  commercial rights including the right to modify 
+        -:   33:*  this notice
+        -:   34:*/
+        -:   35:
+        -:   36:#define ANSI 1
+        -:   37:/* misc includes - ANSI and some are just to be safe */
+        -:   38:#include <stdio.h>
+        -:   39:#include <ctype.h>
+        -:   40:#include <math.h>
+        -:   41:#ifdef ANSI
+        -:   42:#include <stdlib.h>
+        -:   43:#endif
+        -:   44://#include "ammp.h"
+        -:   45:/* ATOM structure contains a serial number for indexing into
+        -:   46:* arrays and the like (a Hessian)
+        -:   47:* but otherwise is self-contained. Note the hooks for Non-hybrided potentials
+        -:   48:*/
+        -:   49:/*
+        -:   50:* order is origin, right left apex (center), force constant and target value 
+        -:   51:*/
+        -:   52:typedef struct{
+        -:   53:	ATOM  *atom1, *atom2, *atom3, *atom4;
+        -:   54:	float k,offset;
+        -:   55:	void  *next;
+        -:   56:	}  HYBRID;
+        -:   57:#define HLONG sizeof(HYBRID)
+        -:   58:
+        -:   59:HYBRID  *hybrid_first = NULL;
+        -:   60:HYBRID  *hybrid_last = NULL;
+        -:   61:/* function hybrid adds a hybrid to the hybrid list
+        -:   62:* returns 1 if ok
+        -:   63:* returns 0 if not
+        -:   64:*  is passed the array pointers, length and constant
+        -:   65:* allocates the new memory, initializes it and
+        -:   66:* returns
+        -:   67:*/
+function _Z6hybridiiiiff called 973 returned 100% blocks executed 81%
+      973:   68:int hybrid(int p1,int p2,int p3, int p4, float fk, float off)
+        -:   69:{
+        -:   70:	HYBRID  *new_p;
+        -:   71:	ATOM  *ap1, *ap2, *ap3, *ap4, *a_m_serial(int);
+        -:   72:	char line[80];
+        -:   73:/* get the atom pointers for the two serial numbers */
+      973:   74:	ap1 = a_m_serial( p1 );
+call    0 returned 100%
+      973:   75:	ap2 = a_m_serial( p2 );
+call    0 returned 100%
+      973:   76:	ap3 = a_m_serial( p3 );
+call    0 returned 100%
+      973:   77:	ap4 = a_m_serial( p4 );
+call    0 returned 100%
+      973:   78:	if( (ap1 == NULL) || (ap2 == NULL) || (ap3==NULL) || (ap4==NULL) ) 
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+        -:   79:	{
+        -:   80:	sprintf( line,"undefined atom in hybrid %d %d %d %d \0",p1,p2,p3,p4);
+    #####:   81:	aaerror( line );
+call    0 never executed
+    #####:   82:	return 0;
+        -:   83:	}
+        -:   84:
+      973:   85:	if( ( new_p = (HYBRID*) malloc((unsigned int) HLONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   86:	{
+    #####:   87:	return 0;
+        -:   88:	}
+        -:   89:	/* initialize the pointers */
+      973:   90:	if( hybrid_first == NULL) hybrid_first = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+      973:   91:	if( hybrid_last == NULL) hybrid_last = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+      973:   92:	new_p -> atom1 = ap1;
+      973:   93:	new_p -> atom2 = ap2;
+      973:   94:	new_p -> atom3 = ap3;
+      973:   95:	new_p -> atom4 = ap4;
+      973:   96:	new_p -> offset = off;
+      973:   97:	new_p -> k = fk;
+      973:   98:	new_p -> next = new_p;
+      973:   99:	hybrid_last -> next = new_p;
+      973:  100:	hybrid_last = new_p;
+      973:  101:	return 1;
+        -:  102:}
+        -:  103:
+        -:  104:
+        -:  105:/* v_hybrid()
+        -:  106:* this function sums up the potentials
+        -:  107:* for the atoms defined in the hybrid data structure.
+        -:  108:*/
+        -:  109:/* standard returns 0 if error (any) 1 if ok
+        -:  110:* V is the potential */
+function _Z8v_hybridPff called 3 returned 100% blocks executed 64%
+        3:  111:int v_hybrid( float *V, float lambda)
+        -:  112:{
+        -:  113:	HYBRID  *bp;
+        -:  114:/* difference vectors */
+        -:  115:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  116:/* cross products and storage for normalizing */
+        -:  117:	float r,cx1,cy1,cz1;
+        -:  118:	float hite;
+        -:  119:	ATOM  *a1, *a2, *a3, *a4;
+        -:  120:
+        -:  121:
+        3:  122:	bp = hybrid_first;
+        3:  123:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+     2916:  124:       while(1)
+        -:  125:       {
+     2919:  126:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+     2919:  127:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+     2919:  128:	a4 = bp->atom4;
+     2919:  129:	if( a1->active || a2->active || a3->active || a4->active){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+     2919:  130:        x1 = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+     2919:  131:        y1 = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+     2919:  132:        z1 = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+     2919:  133:        x2 = (a3->x -a1->x +lambda*(a3->dx-a1->dx));
+     2919:  134:        y2 = (a3->y -a1->y +lambda*(a3->dy-a1->dy));
+     2919:  135:        z2 = (a3->z -a1->z +lambda*(a3->dz-a1->dz));
+     2919:  136:        x3 = (a4->x -a1->x +lambda*(a4->dx-a1->dx));
+     2919:  137:        y3 = (a4->y -a1->y +lambda*(a4->dy-a1->dy));
+     2919:  138:        z3 = (a4->z -a1->z +lambda*(a4->dz-a1->dz));
+        -:  139:/* 1 cross 2 */
+     2919:  140:        cx1 = y1*z2 - y2*z1;
+     2919:  141:        cy1 = -x1*z2 + x2*z1;
+     2919:  142:        cz1 = x1*y2 - x2*y1;
+     2919:  143:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+     2919:  144:	if( r < 1.e-16) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     2919:  145:        r = sqrt(r);
+        -:  146:/* height is x3 vectordot cx1( normalized) */
+     2919:  147:	hite = cx1*x3 + cy1*y3 + cz1*z3; hite = hite/r;
+     2919:  148:	*V += (bp->k)*(hite - bp->offset)*(hite - bp->offset) ; 
+        -:  149:	}
+        -:  150:SKIP:
+     2919:  151:	if( bp == (HYBRID*) bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     2916:  152:	bp = (HYBRID*) bp->next;
+        -:  153:       }
+        -:  154:}
+        -:  155:
+        -:  156:/* f_hybrid()
+        -:  157:*
+        -:  158:* f_hybrid increments the forces in the atom structures by the force
+        -:  159:* due to the hybrid components.  NOTE THE WORD increment.
+        -:  160:* the forces should first be zero'd.
+        -:  161:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  162:* on bigger (and better?) machines the different potential terms
+        -:  163:* may be updated at random or in parrellel, if we assume that this routine
+        -:  164:* will initialize the forces then we can't do this.
+        -:  165:*/
+function _Z8f_hybridf called 1002 returned 100% blocks executed 63%
+     1002:  166:int f_hybrid(float lambda)
+        -:  167:/*  returns 0 if error, 1 if OK */
+        -:  168:{
+        -:  169:	HYBRID  *bp;
+        -:  170:/* difference vectors */
+        -:  171:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  172:/* cross products and storage for normalizing */
+        -:  173:	float r,cx1,cy1,cz1;
+        -:  174:	float dx,dy,dz;
+        -:  175:	float hite;
+        -:  176:	float df;
+        -:  177:	float r3,c;
+        -:  178:	ATOM  *a1, *a2, *a3,  *a4, *at;
+        -:  179:	int i;
+        -:  180:
+        -:  181:
+     1002:  182:	bp = hybrid_first;
+     1002:  183:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   973944:  184:       while(1)
+        -:  185:       {
+   974946:  186:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   974946:  187:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+   974946:  188:	a4 = bp->atom4;
+   974946:  189:	if( a1->active || a2->active || a3->active || a4->active){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+  3899784:  190:	for( i=0; i< 3; i++)
+branch  0 taken 75%
+branch  1 taken 25% (fallthrough)
+        -:  191:	{
+  2924838:  192:        x1 = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+  2924838:  193:        y1 = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+  2924838:  194:        z1 = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+  2924838:  195:        x2 = (a3->x -a1->x +lambda*(a3->dx-a1->dx));
+  2924838:  196:        y2 = (a3->y -a1->y +lambda*(a3->dy-a1->dy));
+  2924838:  197:        z2 = (a3->z -a1->z +lambda*(a3->dz-a1->dz));
+  2924838:  198:        x3 = (a4->x -a1->x +lambda*(a4->dx-a1->dx));
+  2924838:  199:        y3 = (a4->y -a1->y +lambda*(a4->dy-a1->dy));
+  2924838:  200:        z3 = (a4->z -a1->z +lambda*(a4->dz-a1->dz));
+        -:  201:/* 1 cross 2 */
+  2924838:  202:        cx1 = y1*z2 - y2*z1;
+  2924838:  203:        cy1 = -x1*z2 + x2*z1;
+  2924838:  204:        cz1 = x1*y2 - x2*y1;
+  2924838:  205:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+  2924838:  206:	if( r < 1.e-16) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  2924838:  207:        r = sqrt(r);r3 = r*r*r;
+        -:  208:/* height is x3 vectordot cx1( normalized) */
+  2924838:  209:	hite = cx1*x3 + cy1*y3 + cz1*z3; hite = hite/r;
+  2924838:  210:	df =  2*bp->k*(bp->offset - hite)/3;
+        -:  211:/* do the apex derivatives now (easy) */
+  2924838:  212:	a4->fx += df/r*cx1;
+  2924838:  213:	a4->fy += df/r*cy1;
+  2924838:  214:	a4->fz += df/r*cz1;
+  2924838:  215:	a1->fx -= df/r*cx1;
+  2924838:  216:	a1->fy -= df/r*cy1;
+  2924838:  217:	a1->fz -= df/r*cz1;
+        -:  218:/* now the side derivative (messy) */
+        -:  219:/* dot product of r3 and cx1 components */
+  2924838:  220:	dx =  -cx1*x3/r3*df;
+  2924838:  221:	dy =  -cy1*y3/r3*df;
+  2924838:  222:	dz =  -cz1*z3/r3*df;
+  2924838:  223:	c = df*( (-y3*z2+z3*y2)/r) ;
+  2924838:  224:	c += dx*( y2*(x1*y2-x2*y1) - z2*(x2*z1-x1*z2));
+  2924838:  225:	a2->fx += c; a1->fx -= c;
+  2924838:  226:	c = df*( (-z3*x2+x3*z2)/r) ;
+  2924838:  227:	c += dy*( z2*(y1*z2-y2*z1) - x2*(x1*y2-x2*y1));
+  2924838:  228:	a2->fy += c; a1->fy -= c;
+  2924838:  229:	c = df*( (-x3*y2+y3*x2)/r) ;
+  2924838:  230:	c += dz*( x2*(x2*z1-x1*z2) - y2*(y1*z2-y2*z1));
+  2924838:  231:	a2->fz += c; a1->fz -= c;
+  2924838:  232:	c = df*( (-z3*y1+y3*z1)/r) ;
+  2924838:  233:	c -= dx*( y1*(x1*y2-x2*y1) - z1*(x2*z1-x1*z2));
+  2924838:  234:	a3->fx += c; a1->fx -= c;
+  2924838:  235:	c = df*( (-x3*z1+z3*x1)/r) ;
+  2924838:  236:	c -= dy*( z1*(y1*z2-y2*z1) - x1*(x1*y2-x2*y1));
+  2924838:  237:	a3->fy += c; a1->fy -= c;
+  2924838:  238:	c = df*( (-y3*x1+x3*y1)/r) ;
+  2924838:  239:	c -= dz*( x1*(x2*z1-x1*z2) - y1*(y1*z2-y2*z1));
+  2924838:  240:	a3->fz += c; a1->fz -= c;
+        -:  241:/* circularly shift the base atoms */
+  2924838:  242:	at = a1; a1 = a2; a2 = a3; a3 = at;
+        -:  243:	}
+   974946:  244:	if( a1->active == 0){ a1->fx = 0; a1->fy = 0.; a1->fz = 0;}
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   974946:  245:	if( a2->active == 0){ a2->fx = 0; a2->fy = 0.; a2->fz = 0;}
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   974946:  246:	if( a3->active == 0){ a3->fx = 0; a3->fy = 0.; a3->fz = 0;}
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+   974946:  247:	if( a4->active == 0){ a4->fx = 0; a4->fy = 0.; a4->fz = 0;}
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  248:	}
+        -:  249:SKIP:
+   974946:  250:	if( bp == (HYBRID*) bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+   973944:  251:	bp = (HYBRID*) bp->next;
+        -:  252:       }
+        -:  253:}
+        -:  254:/* function get_hybrid( a1,bonded,10,inbond);
+        -:  255:* check the hybrid list for atoms 1-4 ed to a1
+        -:  256:*/
+function _Z10get_hybridP4ATOMPS0_iPi called 0 returned 0% blocks executed 0%
+    #####:  257:void get_hybrid(ATOM  *a1, ATOM *bonded[], int mbond, int *inbond)
+        -:  258:{
+        -:  259:	HYBRID  *mine;
+    #####:  260:	mine = hybrid_first;
+    #####:  261:	*inbond = 0;
+        -:  262:	while(1)
+        -:  263:	{
+    #####:  264:	if( (mine == NULL) )
+branch  0 never executed
+branch  1 never executed
+        -:  265:	{
+        -:  266:		return;
+        -:  267:	}
+    #####:  268:	if( mine->atom1 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  269:	{
+    #####:  270:		bonded[(*inbond)++] = mine->atom4;
+        -:  271:	}
+    #####:  272:	if( mine->atom4 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  273:	{
+    #####:  274:		bonded[(*inbond)++] = mine->atom1;
+        -:  275:	}
+    #####:  276:	if( mine == (HYBRID*) mine->next) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  277:	mine = (HYBRID*) mine->next;
+    #####:  278:	if( *inbond == mbond ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  279:	}		
+        -:  280:}
+        -:  281:/* routine dump_hybrids
+        -:  282:* this function outputs the hybrid parameters
+        -:  283:* and does it in a simple form
+        -:  284:* hybrid ser1,ser2,ser3,k,theta (in degrees )
+        -:  285:* the rest is just free format
+        -:  286:*/
+        -:  287:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z12dump_hybridsP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  288:void dump_hybrids( FILE *where )
+        -:  289:{
+        -:  290:	HYBRID  *b;
+        -:  291:	ATOM  *a1, *a2, *a3, *a4;
+    #####:  292:	b = hybrid_first;
+    #####:  293:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  294:	while( ((HYBRID*)b->next != b)  )
+branch  0 never executed
+branch  1 never executed
+        -:  295:	{
+    #####:  296:	if( (HYBRID*)b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  297:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3; a4 = b->atom4;
+        -:  298:	fprintf( where,"hybrid %d %d %d %d %f %f ;\n",
+        -:  299:		a1->serial,a2->serial,
+    #####:  300:		a3-> serial,a4->serial,b->k,b->offset);
+    #####:  301:	b = (HYBRID*)b->next;
+        -:  302:	}
+    #####:  303:	if( (HYBRID*)b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  304:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3; a4 = b->atom4;
+        -:  305:	fprintf( where,"hybrid %d %d %d %d %f %f ;\n",
+        -:  306:		a1->serial,a2->serial,
+    #####:  307:		a3-> serial,a4->serial,b->k,b->offset);
+        -:  308:}	
+        -:  309:
+        -:  310:/* a_hybrid()
+        -:  311:* this function sums up the potentials
+        -:  312:* for the atoms defined in the hybrid data structure.
+        -:  313:*/
+        -:  314:/* standard returns 0 if error (any) 1 if ok
+        -:  315:* V is the potential */
+function _Z8a_hybridPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  316:int a_hybrid(float *V, float lambda, int ilow,int ihigh, FILE *op)
+        -:  317:{
+        -:  318:	HYBRID  *bp;
+        -:  319:/* difference vectors */
+        -:  320:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  321:/* cross products and storage for normalizing */
+        -:  322:	float r,cx1,cy1,cz1;
+        -:  323:	float hite;
+        -:  324:	ATOM  *a1, *a2, *a3, *a4;
+        -:  325:
+        -:  326:
+    #####:  327:	bp = hybrid_first;
+    #####:  328:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  329:       while(1)
+        -:  330:       {
+    #####:  331:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  332:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  333:	a4 = bp->atom4;
+    #####:  334:	if( (a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+branch 12 never executed
+branch 13 never executed
+branch 14 never executed
+branch 15 never executed
+        -:  335:	||  (a2->serial >= ilow && a2->serial <= ihigh)
+        -:  336:	||  (a3->serial >= ilow && a3->serial <= ihigh) 
+        -:  337:	||  (a4->serial >= ilow && a4->serial <= ihigh) )
+        -:  338:	{
+        -:  339:
+    #####:  340:        x1 = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  341:        y1 = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  342:        z1 = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+    #####:  343:        x2 = (a3->x -a1->x +lambda*(a3->dx-a1->dx));
+    #####:  344:        y2 = (a3->y -a1->y +lambda*(a3->dy-a1->dy));
+    #####:  345:        z2 = (a3->z -a1->z +lambda*(a3->dz-a1->dz));
+    #####:  346:        x3 = (a4->x -a1->x +lambda*(a4->dx-a1->dx));
+    #####:  347:        y3 = (a4->y -a1->y +lambda*(a4->dy-a1->dy));
+    #####:  348:        z3 = (a4->z -a1->z +lambda*(a4->dz-a1->dz));
+        -:  349:/* 1 cross 2 */
+    #####:  350:        cx1 = y1*z2 - y2*z1;
+    #####:  351:        cy1 = -x1*z2 + x2*z1;
+    #####:  352:        cz1 = x1*y2 - x2*y1;
+    #####:  353:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  354:	if( r < 1.e-16) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  355:        r = sqrt(r);
+        -:  356:/* height is x3 vectordot cx1( normalized) */
+    #####:  357:	hite = cx1*x3 + cy1*y3 + cz1*z3; hite = hite/r;
+    #####:  358:	z2 = (bp->k)*(hite - bp->offset)*(hite - bp->offset) ;
+    #####:  359:	*V += z2; 
+        -:  360:	fprintf(op,"Hybrid %s %d %s %d %s %d %s %d E %f value %f error %f\n",
+        -:  361:	a1->name,a1->serial,a2->name,a2->serial,a3->name,a3->serial,a4->name,
+    #####:  362:	a4->serial,z2,hite,hite- bp->offset);
+        -:  363:	}
+        -:  364:SKIP:
+    #####:  365:	if( bp == (HYBRID*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  366:	bp = (HYBRID*) bp->next;
+        -:  367:       }
+        -:  368:}
+        -:  369:/* v_ho_hybrid()
+        -:  370:* this function sums up the potentials
+        -:  371:* for the atoms defined in the hybrid data structure.
+        -:  372:*
+        -:  373:* homotopy version
+        -:  374:*/
+        -:  375:/* standard returns 0 if error (any) 1 if ok
+        -:  376:* V is the potential */
+function _Z11v_ho_hybridPff called 0 returned 0% blocks executed 0%
+    #####:  377:int v_ho_hybrid(float *V, float lambda)
+        -:  378:{
+        -:  379:	HYBRID  *bp;
+        -:  380:/* difference vectors */
+        -:  381:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  382:/* cross products and storage for normalizing */
+        -:  383:	float r,cx1,cy1,cz1;
+        -:  384:	float hite;
+        -:  385:	ATOM  *a1, *a2, *a3, *a4;
+        -:  386:	float get_f_variable(char*);
+        -:  387:	float hol;
+        -:  388:
+    #####:  389:	hol = get_f_variable("lambda");
+call    0 never executed
+    #####:  390:	if( hol >= 1.) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  391:	if( hol <= 0.) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+        -:  392:
+    #####:  393:	bp = hybrid_first;
+    #####:  394:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  395:       while(1)
+        -:  396:       {
+    #####:  397:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  398:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  399:	a4 = bp->atom4;
+    #####:  400:	if( a1->active || a2->active || a3->active || a4->active){
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+    #####:  401:        x1 = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  402:        y1 = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  403:        z1 = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+    #####:  404:        x2 = (a3->x -a1->x +lambda*(a3->dx-a1->dx));
+    #####:  405:        y2 = (a3->y -a1->y +lambda*(a3->dy-a1->dy));
+    #####:  406:        z2 = (a3->z -a1->z +lambda*(a3->dz-a1->dz));
+    #####:  407:        x3 = (a4->x -a1->x +lambda*(a4->dx-a1->dx));
+    #####:  408:        y3 = (a4->y -a1->y +lambda*(a4->dy-a1->dy));
+    #####:  409:        z3 = (a4->z -a1->z +lambda*(a4->dz-a1->dz));
+        -:  410:/* 1 cross 2 */
+    #####:  411:        cx1 = y1*z2 - y2*z1;
+    #####:  412:        cy1 = -x1*z2 + x2*z1;
+    #####:  413:        cz1 = x1*y2 - x2*y1;
+    #####:  414:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  415:	if( r < 1.e-16) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  416:        r = sqrt(r);
+        -:  417:/* height is x3 vectordot cx1( normalized) */
+    #####:  418:	hite = cx1*x3 + cy1*y3 + cz1*z3; hite = hite/r;
+    #####:  419:	r =  hite*(one+hol) - bp->offset*(one-hol)  ;
+    #####:  420:	*V += (bp->k)*r*r ; 
+        -:  421:	}
+        -:  422:SKIP:
+    #####:  423:	if( bp == (HYBRID*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  424:	bp = (HYBRID*) bp->next;
+        -:  425:       }
+        -:  426:}
+        -:  427:
+        -:  428:/* f_ho_hybrid()
+        -:  429:*
+        -:  430:* f_ho_hybrid increments the forces in the atom structures by the force
+        -:  431:* due to the hybrid components.  NOTE THE WORD increment.
+        -:  432:* the forces should first be zero'd.
+        -:  433:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  434:* on bigger (and better?) machines the different potential terms
+        -:  435:* may be updated at random or in parrellel, if we assume that this routine
+        -:  436:* will initialize the forces then we can't do this.
+        -:  437:*
+        -:  438:* homotopy method version
+        -:  439:*  
+        -:  440:*/
+function _Z11f_ho_hybridf called 0 returned 0% blocks executed 0%
+    #####:  441:int f_ho_hybrid(float lambda)
+        -:  442:/*  returns 0 if error, 1 if OK */
+        -:  443:{
+        -:  444:	HYBRID  *bp;
+        -:  445:/* difference vectors */
+        -:  446:	float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  447:/* cross products and storage for normalizing */
+        -:  448:	float r,cx1,cy1,cz1;
+        -:  449:	float dx,dy,dz;
+        -:  450:	float hite;
+        -:  451:	float df;
+        -:  452:	float r3,c;
+        -:  453:	ATOM  *a1, *a2, *a3,  *a4, *at;
+        -:  454:	int i;
+        -:  455:	float get_f_variable(char*),hol;
+        -:  456:
+    #####:  457:	hol = get_f_variable("lambda");
+call    0 never executed
+    #####:  458:	if( hol >= 1.) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  459:	if( hol <= 0.) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+        -:  460:
+    #####:  461:	bp = hybrid_first;
+    #####:  462:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  463:       while(1)
+        -:  464:       {
+    #####:  465:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  466:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  467:	a4 = bp->atom4;
+    #####:  468:	if( a1->active || a2->active || a3->active || a4->active){
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+    #####:  469:	for( i=0; i< 3; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  470:	{
+    #####:  471:        x1 = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  472:        y1 = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  473:        z1 = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+    #####:  474:        x2 = (a3->x -a1->x +lambda*(a3->dx-a1->dx));
+    #####:  475:        y2 = (a3->y -a1->y +lambda*(a3->dy-a1->dy));
+    #####:  476:        z2 = (a3->z -a1->z +lambda*(a3->dz-a1->dz));
+    #####:  477:        x3 = (a4->x -a1->x +lambda*(a4->dx-a1->dx));
+    #####:  478:        y3 = (a4->y -a1->y +lambda*(a4->dy-a1->dy));
+    #####:  479:        z3 = (a4->z -a1->z +lambda*(a4->dz-a1->dz));
+        -:  480:/* 1 cross 2 */
+    #####:  481:        cx1 = y1*z2 - y2*z1;
+    #####:  482:        cy1 = -x1*z2 + x2*z1;
+    #####:  483:        cz1 = x1*y2 - x2*y1;
+    #####:  484:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  485:	if( r < 1.e-16) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  486:        r = sqrt(r);r3 = r*r*r;
+        -:  487:/* height is x3 vectordot cx1( normalized) */
+    #####:  488:	hite = cx1*x3 + cy1*y3 + cz1*z3; hite = hite/r;
+        -:  489:/*
+        -:  490:	df =  2*bp->k*(bp->offset - hite)/3;
+        -:  491:*/
+    #####:  492:	df =  2*bp->k*(one-hol)*((one-hol)*bp->offset - (one+hol)*hite)/3;
+        -:  493:/* do the apex derivatives now (easy) */
+    #####:  494:	a4->fx += df/r*cx1;
+    #####:  495:	a4->fy += df/r*cy1;
+    #####:  496:	a4->fz += df/r*cz1;
+    #####:  497:	a1->fx -= df/r*cx1;
+    #####:  498:	a1->fy -= df/r*cy1;
+    #####:  499:	a1->fz -= df/r*cz1;
+        -:  500:/* now the side derivative (messy) */
+        -:  501:/* dot product of r3 and cx1 components */
+    #####:  502:	dx =  -cx1*x3/r3*df;
+    #####:  503:	dy =  -cy1*y3/r3*df;
+    #####:  504:	dz =  -cz1*z3/r3*df;
+    #####:  505:	c = df*( (-y3*z2+z3*y2)/r) ;
+    #####:  506:	c += dx*( y2*(x1*y2-x2*y1) - z2*(x2*z1-x1*z2));
+    #####:  507:	a2->fx += c; a1->fx -= c;
+    #####:  508:	c = df*( (-z3*x2+x3*z2)/r) ;
+    #####:  509:	c += dy*( z2*(y1*z2-y2*z1) - x2*(x1*y2-x2*y1));
+    #####:  510:	a2->fy += c; a1->fy -= c;
+    #####:  511:	c = df*( (-x3*y2+y3*x2)/r) ;
+    #####:  512:	c += dz*( x2*(x2*z1-x1*z2) - y2*(y1*z2-y2*z1));
+    #####:  513:	a2->fz += c; a1->fz -= c;
+    #####:  514:	c = df*( (-z3*y1+y3*z1)/r) ;
+    #####:  515:	c -= dx*( y1*(x1*y2-x2*y1) - z1*(x2*z1-x1*z2));
+    #####:  516:	a3->fx += c; a1->fx -= c;
+    #####:  517:	c = df*( (-x3*z1+z3*x1)/r) ;
+    #####:  518:	c -= dy*( z1*(y1*z2-y2*z1) - x1*(x1*y2-x2*y1));
+    #####:  519:	a3->fy += c; a1->fy -= c;
+    #####:  520:	c = df*( (-y3*x1+x3*y1)/r) ;
+    #####:  521:	c -= dz*( x1*(x2*z1-x1*z2) - y1*(y1*z2-y2*z1));
+    #####:  522:	a3->fz += c; a1->fz -= c;
+        -:  523:/* circularly shift the base atoms */
+    #####:  524:	at = a1; a1 = a2; a2 = a3; a3 = at;
+        -:  525:	}
+    #####:  526:	if( a1->active == 0){ a1->fx = 0; a1->fy = 0.; a1->fz = 0;}
+branch  0 never executed
+branch  1 never executed
+    #####:  527:	if( a2->active == 0){ a2->fx = 0; a2->fy = 0.; a2->fz = 0;}
+branch  0 never executed
+branch  1 never executed
+    #####:  528:	if( a3->active == 0){ a3->fx = 0; a3->fy = 0.; a3->fz = 0;}
+branch  0 never executed
+branch  1 never executed
+    #####:  529:	if( a4->active == 0){ a4->fx = 0; a4->fy = 0.; a4->fz = 0;}
+branch  0 never executed
+branch  1 never executed
+        -:  530:	}
+        -:  531:SKIP:
+    #####:  532:	if( bp ==(HYBRID*) bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  533:	bp = (HYBRID*) bp->next;
+        -:  534:       }
+        -:  535:}
+        -:  536:/* gsdg_hybrid( atom *who)
+        -:  537:*  if *who is active make it have the right hybrid value
+        -:  538:*  to be used before other regularizations in both
+        -:  539:* gsdg and bell
+        -:  540:*
+        -:  541:*/
+function _Z11gsdg_hybridP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  542:int gsdg_hybrid(ATOM *who)
+        -:  543:{
+        -:  544:	ATOM *a1,*a2,*a3,*a4;
+        -:  545:	int i;
+        -:  546:	float x3,y3,z3; 
+        -:  547:	float x1,y1,z1; 
+        -:  548:	float x2,y2,z2;
+        -:  549:	float hite,r,cx1,cy1,cz1;
+        -:  550:	HYBRID *hp;
+    #####:  551:	if( hybrid_first == NULL ) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  552:	hp = hybrid_first;
+    #####:  553:	if( !who->active ) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  554:	while( hp != NULL)
+branch  0 never executed
+branch  1 never executed
+        -:  555:	{
+        -:  556:		
+    #####:  557:	a1 = hp->atom1; a2 = hp->atom2; a3 = hp->atom3;
+    #####:  558:	a4 = hp->atom4;
+    #####:  559:	if( a4 == who){
+branch  0 never executed
+branch  1 never executed
+    #####:  560:        x1 = (a2->x -a1->x );
+    #####:  561:        y1 = (a2->y -a1->y );
+    #####:  562:        z1 = (a2->z -a1->z );
+    #####:  563:        x2 = (a3->x -a1->x );
+    #####:  564:        y2 = (a3->y -a1->y );
+    #####:  565:        z2 = (a3->z -a1->z );
+    #####:  566:        x3 = (a4->x -a1->x );
+    #####:  567:        y3 = (a4->y -a1->y );
+    #####:  568:        z3 = (a4->z -a1->z );
+        -:  569:/* 1 cross 2 */
+    #####:  570:        cx1 = y1*z2 - y2*z1;
+    #####:  571:        cy1 = -x1*z2 + x2*z1;
+    #####:  572:        cz1 = x1*y2 - x2*y1;
+    #####:  573:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  574:	if( r < 1.e-16) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  575:       	r = sqrt(r);r = 1./r;
+    #####:  576:	cx1 *= r;
+    #####:  577:	cy1 *= r;
+    #####:  578:	cz1 *= r;
+        -:  579:/* height is x3 vectordot cx1( normalized) */
+    #####:  580:	hite = cx1*x3 + cy1*y3 + cz1*z3;
+    #####:  581:	hite = hp->offset - hite;
+    #####:  582:	cx1 *= hite;
+    #####:  583:	cy1 *= hite;
+    #####:  584:	cz1 *= hite;
+    #####:  585:	a4->x += cx1;
+    #####:  586:	a4->y += cy1;
+    #####:  587:	a4->z += cz1;
+        -:  588:SKIP: ;
+        -:  589:	}/* a4 is target atom */
+    #####:  590:	if((HYBRID*)hp->next == hp) break;
+branch  0 never executed
+branch  1 never executed
+    #####:  591:		hp = (HYBRID*)hp->next;
+        -:  592:	}
+        -:  593:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  594:        /*        any callers actually look at this return value       */
+        -:  595:        /*        - j.henning 21-sep-99                                */
+    #####:  596:        return 1;
+        -:  597:}/* end of gsdg_hybrid */

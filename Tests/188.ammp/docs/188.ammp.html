@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>188.ammp: SPEC CPU2000 Benchmark Description</TITLE>
+<META GENERATOR="Cloyce+VIM 5.3">
+<META REVISION="$Id: 188.ammp.html,v 1.1 1999/10/14 17:06:28 cloyce Exp $">
+</HEAD>
+
+<BODY>
+<CENTER><H1>188.ammp<BR>
+SPEC CPU2000 Benchmark Description File</H1></CENTER>
+
+<H2>Benchmark Name</H2>
+<P>188.ammp</P>
+<HR>
+
+<H2>Benchmark Author</H2>
+<P>Robert W. Harrison</P>
+<HR>
+
+<H2>Benchmark Program General Category</H2>
+<P>Computational Chemistry.  Modeling large systems of molecules usually
+associated with Biology.</P>
+<HR>
+
+<H2>Benchmark Description</H2>
+<P>The benchmark runs molecular dynamics (i.e. solves the ODE defined
+by Newton's equations for the motions of the atoms in the system) on a
+protein-inhibitor complex which is embedded in water (see <A HREF="#harrison">Harrison 1993</A> for
+descriptions of the algorithm and stability analysis on it). The energy is
+approximated by a classical potential or "force field".   The protein is
+HIV protease complexed with the inhibitor indinavir.  There are 9582
+atoms in the water and protein making this representative of a typical
+large simulation.  This benchmark is derived from published work on
+understanding drug resistance in HIV (<A HREF="#wh">Weber and Harrison 1999</A>).</P>
+<HR>
+
+<H2>Input Description</H2>
+<P>The problem tracks how the atoms move from an initial
+coorinates and initial velocities.</P>
+<HR>
+
+<H2>Output Description</H2>
+<P>The output is the energy of the final configuration of atoms.</P>
+<HR>
+
+<H2>Programming Language</H2>
+<P>C</P>
+<HR>
+
+<H2>Known portability issues</H2>
+<P>None</P>
+<HR>
+
+<H2>Reference</H2>
+
+<P><A HREF="http://asterix.jci.tju.edu/ammp.html">AMMP web site</A></P>
+
+<P><A HREF="http://asterix.jci.tju.edu/harrisoncv.html">Harrison CV</A></P>
+<DL>
+<A NAME="harrison"><DT>Dynamics in AMMP<DD></A>
+   Harrison R.W. (1993) Stiffness and energy conservation in molecular
+   dynamics, an improved integrator J. Comp. Chem 14,1112-1122.
+
+<A NAME="wh"><DT>Background on the benchmark<DD></A>
+   Weber I.T. and Harrison R.W. (1999) Molecular mechanics analysis of drug
+   resistant mutations of HIV protease Protein Engineering 12,469-474.
+</DL>
+<HR>
+Last Updated: 14 October 1999
+</BODY>
+</HTML>

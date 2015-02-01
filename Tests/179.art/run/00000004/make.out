@@ -1,0 +1,2 @@
+gcc -c -o scanner.o            -O3    scanner.c
+gcc     -O3    scanner.o   -lm  -o art

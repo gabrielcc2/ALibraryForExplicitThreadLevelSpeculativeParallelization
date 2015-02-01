@@ -1,0 +1,1173 @@
+desc: (none)
+cmd: ../Base/ammp_parallel
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=3753374736
+mem_heap_B=12583588
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=peak
+n7: 12583588 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 613248 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 613248 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 613248 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 25 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=2
+#-----------
+time=8885262865
+mem_heap_B=12583588
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=13107126431
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12276964 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 306624 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 306624 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 306624 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 29 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=4
+#-----------
+time=16926335996
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=22112959189
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=25625003112
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=30473975890
+mem_heap_B=12583588
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=34312620077
+mem_heap_B=12583588
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=38254504057
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=44429228984
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12430276 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 459936 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 459936 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 459936 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 29 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=11
+#-----------
+time=50909639304
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=54382241356
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=60441366952
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=66097735068
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12430276 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 459936 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 459936 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 459936 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 29 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=15
+#-----------
+time=72709147540
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=76720355214
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=82196781972
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=85973269386
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=90486669001
+mem_heap_B=12276964
+mem_heap_extra_B=282220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=97153271119
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=101792893609
+mem_heap_B=11970340
+mem_heap_extra_B=282204
+mem_stacks_B=0
+heap_tree=detailed
+n6: 11970340 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 30 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=22
+#-----------
+time=106870204196
+mem_heap_B=12430276
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=114310973217
+mem_heap_B=11970340
+mem_heap_extra_B=282204
+mem_stacks_B=0
+heap_tree=detailed
+n6: 11970340 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221884 in 30 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=24
+#-----------
+time=120029582083
+mem_heap_B=12123652
+mem_heap_extra_B=282212
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=125389978330
+mem_heap_B=12583628
+mem_heap_extra_B=282260
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=132733341934
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=140429033206
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=145556146701
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=149905459098
+mem_heap_B=12123692
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=156735967500
+mem_heap_B=11970376
+mem_heap_extra_B=282216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=161622162232
+mem_heap_B=12277004
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=165290484762
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12430316 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 459936 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 459936 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 459936 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221924 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=33
+#-----------
+time=171818884409
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=175661749202
+mem_heap_B=11970380
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=180731016071
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=183645342675
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=189543878521
+mem_heap_B=12277004
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12277004 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 306624 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 306624 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 306624 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221924 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=38
+#-----------
+time=193812482486
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=197386612683
+mem_heap_B=12123692
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=203642579579
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=210950401477
+mem_heap_B=11970380
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=detailed
+n6: 11970380 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221924 in 33 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=42
+#-----------
+time=216442852457
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=223060378976
+mem_heap_B=12277004
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=228621703267
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=236228875772
+mem_heap_B=12430316
+mem_heap_extra_B=282252
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12430316 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 459936 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 459936 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 459936 0x425973C: clone (clone.S:130)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 221924 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=46
+#-----------
+time=241130024914
+mem_heap_B=11623428
+mem_heap_extra_B=282172
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=246865460161
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=253148754514
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=257124241257
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12118652 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 216884 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 153312 0x425973C: clone (clone.S:130)
+#-----------
+snapshot=50
+#-----------
+time=260402397467
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=263624457344
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=266842563322
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=270067382500
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=273211830618
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=276160513638
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=279292111116
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=282963956858
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=286130242729
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=289229680816
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12118652 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 216884 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 153312 0x425973C: clone (clone.S:130)
+#-----------
+snapshot=60
+#-----------
+time=292410455571
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=295607683962
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=298867992753
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=302002719786
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=305049533347
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=308702216472
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=311920383112
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=315089187797
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=318084276015
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=321650053033
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=detailed
+n6: 11965340 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 216884 in 33 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+#-----------
+snapshot=70
+#-----------
+time=324735837643
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=328155014962
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=331286910639
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=334355789069
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=337316812085
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=341096534679
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=344325764264
+mem_heap_B=11965340
+mem_heap_extra_B=282228
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=347502287020
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=350478726647
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=353639072081
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=detailed
+n7: 12118652 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10885152 0x8050915: atom(float, float, float, int, float, float, float, float, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 10885152 0x806786F: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 10885152 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 10885152 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 10885152 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 276800 0x8054EFE: torsion(int, int, int, int, float, int, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 276800 0x8067BC8: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 276800 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 276800 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 276800 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 239680 0x806392B: bond(int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 239680 0x80679E7: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 239680 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 239680 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 239680 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n0: 216884 in 32 places, all below massif's threshold (01.00%)
+ n1: 193512 0x8063750: angle(int, int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 193512 0x8067996: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 193512 0x8068624: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 193512 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n0: 193512 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806BF8C: parallel_mm_fv_update(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x806DCB5: fv_update_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+   n1: 153312 0x806EBB8: f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+    n1: 153312 0x806F219: u_f_nonbon(float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+     n1: 153312 0x8056E27: tpac(int (**)(float), int, int, float, float) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+      n1: 153312 0x8069045: eval(_IO_FILE*, _IO_FILE*, char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+       n1: 153312 0x8062D19: read_eval_do(_IO_FILE*, _IO_FILE*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+        n0: 153312 0x806A940: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+ n1: 153312 0x806AB4A: loop_9(void*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_parallel)
+  n1: 153312 0x4047E97: start_thread (pthread_create.c:304)
+   n0: 153312 0x425973C: clone (clone.S:130)
+#-----------
+snapshot=80
+#-----------
+time=356893005217
+mem_heap_B=12118652
+mem_heap_extra_B=282236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=359853200243
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=363138007368
+mem_heap_B=12271964
+mem_heap_extra_B=282244
+mem_stacks_B=0
+heap_tree=empty

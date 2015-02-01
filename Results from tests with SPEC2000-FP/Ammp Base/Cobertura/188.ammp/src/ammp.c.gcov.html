@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 188.ammp/src/ammp.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">188.ammp/src</a> - ammp.c<span style="font-size: 80%;"> (source / <a href="ammp.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryMed">83.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* just the main routine of ammp </a>
+<span class="lineNum">       2 </span>                :            : *  read_eval_do and eval are cut out into eval.c and
+<span class="lineNum">       3 </span>                :            : * used there.
+<span class="lineNum">       4 </span>                :            : *
+<span class="lineNum">       5 </span>                :            : * this allows ammp to be called directly from a program
+<span class="lineNum">       6 </span>                :            : * by making calls to eval or read_eval_do 
+<span class="lineNum">       7 </span>                :            : *
+<span class="lineNum">       8 </span>                :            : *  RWH 8/13/93  
+<span class="lineNum">       9 </span>                :            : */
+<span class="lineNum">      10 </span>                :            : /* ammp.c
+<span class="lineNum">      11 </span>                :            : * Another Molecular Mechanics Program
+<span class="lineNum">      12 </span>                :            : *
+<span class="lineNum">      13 </span>                :            : *  this essentially runs the intermediate code for 
+<span class="lineNum">      14 </span>                :            : *  a molecular mechanics program
+<span class="lineNum">      15 </span>                :            : *
+<span class="lineNum">      16 </span>                :            : * instructions are of the form
+<span class="lineNum">      17 </span>                :            : *  ident &lt;parameters&gt; ;
+<span class="lineNum">      18 </span>                :            : *  # &lt;stuff&gt; ; is a comment
+<span class="lineNum">      19 </span>                :            : *  most instructions can be nested, but NOT loop&lt;if&gt; and labels 
+<span class="lineNum">      20 </span>                :            : *
+<span class="lineNum">      21 </span>                :            : *  allowed idents
+<span class="lineNum">      22 </span>                :            : *
+<span class="lineNum">      23 </span>                :            : *       atom   - atom record
+<span class="lineNum">      24 </span>                :            : *       bond   - bond record
+<span class="lineNum">      25 </span>                :            : *       morse  - morse record
+<span class="lineNum">      26 </span>                :            : *       angle  - angle record
+<span class="lineNum">      27 </span>                :            : *       torsion - torsion record
+<span class="lineNum">      28 </span>                :            : *       hybrid  - hybrid (pyramid height) record
+<span class="lineNum">      29 </span>                :            : *       abc    - angle bond correlation record
+<span class="lineNum">      30 </span>                :            : *       velocity  - velocity record
+<span class="lineNum">      31 </span>                :            : *       read &lt;file&gt;  open and read from file untill done
+<span class="lineNum">      32 </span>                :            : *       output &lt;file&gt; &lt;vers&gt;  open and use for output file
+<span class="lineNum">      33 </span>                :            : *       dump &lt;atom,bond,angle,abc,torsion,hybrid,morse,pdb,variable,velocity,force&gt; 
+<span class="lineNum">      34 </span>                :            : *                         write out the results
+<span class="lineNum">      35 </span>                :            : *       analyze ilow,ihigh  write out the errors in the current potential for atoms 
+<span class="lineNum">      36 </span>                :            : *                               ilow to ihigh. if ilow &gt; ihigh ilow to ilow
+<span class="lineNum">      37 </span>                :            : *       close           close the current output file if not stdout
+<span class="lineNum">      38 </span>                :            : *       steep  niter,toler   steepest descents
+<span class="lineNum">      39 </span>                :            : *       bfgs  niter,toler  bfgs quasi newton 
+<span class="lineNum">      40 </span>                :            : *       cngdel  niter,ncut,toler  conjugate del  
+<span class="lineNum">      41 </span>                :            : *       trust   niter,dtoler,toler   trust optimizer
+<span class="lineNum">      42 </span>                :            : *       echo &lt;off&gt;   echo to the user (turn off when dumping !!)
+<span class="lineNum">      43 </span>                :            : *       use  &lt; none,bond,angle,abc,torsion,nonbon,morse,restrain,tether,periodic,
+<span class="lineNum">      44 </span>                :            : *              mmbond,mmangle,cangle&gt;
+<span class="lineNum">      45 </span>                :            : *               flag on potentials
+<span class="lineNum">      46 </span>                :            : *       restrain    - restrain a distance 
+<span class="lineNum">      47 </span>                :            : *       tether      - tether an atom to a positon
+<span class="lineNum">      48 </span>                :            : *          tether serial fk x y z
+<span class="lineNum">      49 </span>                :            : *          tether all fk x y z  do all of them
+<span class="lineNum">      50 </span>                :            : *       tailor  qab   number q a b  - set the qab parameters of an atom
+<span class="lineNum">      51 </span>                :            : *       tailor  exclude  number number  - add an interaction to the nonbon exclude list
+<span class="lineNum">      52 </span>                :            : *       tailor  include number number  - delete an interaction from the nonbon exclude list
+<span class="lineNum">      53 </span>                :            : *       setf name value  set a float into the variable store
+<span class="lineNum">      54 </span>                :            : *       seti name value   set an int into the variable store
+<span class="lineNum">      55 </span>                :            : *       loopi label init max delta  loop to label while init &lt; max integer vers.
+<span class="lineNum">      56 </span>                :            : *       loopf label init max delta  loop to label while init &lt; max float vers.
+<span class="lineNum">      57 </span>                :            : *       label:    
+<span class="lineNum">      58 </span>                :            : *       monitor    find potential energy and kinetic energy, and calculate the forces
+<span class="lineNum">      59 </span>                :            : *       v_maxwell  temperature,dx,dy,dz
+<span class="lineNum">      60 </span>                :            : *       v_rescale   temperature
+<span class="lineNum">      61 </span>                :            : *       verlet       nstep,dtime (dtime is in m/s = .01A/ps)
+<span class="lineNum">      62 </span>                :            : *       pac          nstep,dtime (dtime is in m/s = .01A/ps)
+<span class="lineNum">      63 </span>                :            : *       tpac          nstep,dtime,Temp (dtime in m/s = .01A/ps,1fs = .00001)
+<span class="lineNum">      64 </span>                :            : *       hpac          nstep,dtime,Htarget (dtime in m/s = .01A/ps,1fs = .00001)
+<span class="lineNum">      65 </span>                :            : *       pacpac       nstep,dtime (dtime is in m/s = .01A/ps)
+<span class="lineNum">      66 </span>                :            : *       dipole first,last  calculate the dipole moment for atoms first to last
+<span class="lineNum">      67 </span>                :            : *                          assumes sequential atom numbers...
+<span class="lineNum">      68 </span>                :            : *       tgroup id serial1 serial2 serial3 serial4 base number
+<span class="lineNum">      69 </span>                :            : *            define a tgroup( torsion by serial numbers) base = zeropoint
+<span class="lineNum">      70 </span>                :            : *            number == number of steps.  The group of atoms is everything bonded to 
+<span class="lineNum">      71 </span>                :            : *             serial3 that isn't serial 2.
+<span class="lineNum">      72 </span>                :            : *       tsearch id id id id (up to 8  - terminated by 0 or ; ) 
+<span class="lineNum">      73 </span>                :            : *             search the tgroups defined
+<span class="lineNum">      74 </span>                :            : *
+<span class="lineNum">      75 </span>                :            : *       mompar  serial,chi,jaa  add electronegativity and self colomb to atom serial
+<span class="lineNum">      76 </span>                :            : *       momadd  serial serial  adds atoms to the MOM stack( can just be called with one)
+<span class="lineNum">      77 </span>                :            : *       mom   tq, niter   solves current mom stack for charges  
+<span class="lineNum">      78 </span>                :            : *                       tq = total charge, niter = number of iterations (20 default)
+<span class="lineNum">      79 </span>                :            : *
+<span class="lineNum">      80 </span>                :            : *
+<span class="lineNum">      81 </span>                :            : *       math routines  see math.c
+<span class="lineNum">      82 </span>                :            : *               add a b ;
+<span class="lineNum">      83 </span>                :            : *               sub a b ;
+<span class="lineNum">      84 </span>                :            : *               mul a b;
+<span class="lineNum">      85 </span>                :            : *               div a b;
+<span class="lineNum">      86 </span>                :            : *               nop a;  these routines can work with atomic parameters 
+<span class="lineNum">      87 </span>                :            : *               mov a b;  variables, and imeadiate values.
+<span class="lineNum">      88 </span>                :            : *               max a b;
+<span class="lineNum">      89 </span>                :            : *               min a b;
+<span class="lineNum">      90 </span>                :            : *               randf a ;
+<span class="lineNum">      91 </span>                :            : *
+<span class="lineNum">      92 </span>                :            : *         serial a i atomid;  put the serial number or residue i, atom atomid
+<span class="lineNum">      93 </span>                :            : *                   into a
+<span class="lineNum">      94 </span>                :            : *       index a i;  put the serial number of the ith atom into a;
+<span class="lineNum">      95 </span>                :            : *
+<span class="lineNum">      96 </span>                :            : *        je a b label: ;   jump a == b
+<span class="lineNum">      97 </span>                :            : *        jl a b label: ;   jump a &lt; b
+<span class="lineNum">      98 </span>                :            : *        jg a b label: ;   jump a &gt; b
+<span class="lineNum">      99 </span>                :            : *       jes a string label: ; dump to label if a-&gt;name == string
+<span class="lineNum">     100 </span>                :            : *       jnes a string label: ; dump to label if a-&gt;name != string
+<span class="lineNum">     101 </span>                :            : *           jumps are restricted to the current file
+<span class="lineNum">     102 </span>                :            : *
+<span class="lineNum">     103 </span>                :            : *       exit         - exit the routine - in case EOF is not defined
+<span class="lineNum">     104 </span>                :            : *
+<span class="lineNum">     105 </span>                :            : *
+<span class="lineNum">     106 </span>                :            : *       others like fix,and... TBD
+<span class="lineNum">     107 </span>                :            : *   first nonblank == '#' is a comment and the line is skipped 
+<span class="lineNum">     108 </span>                :            : */
+<span class="lineNum">     109 </span>                :            : /*
+<span class="lineNum">     110 </span>                :            : *  copyright 1992,1993 Robert W. Harrison
+<span class="lineNum">     111 </span>                :            : *  
+<span class="lineNum">     112 </span>                :            : *  This notice may not be removed
+<span class="lineNum">     113 </span>                :            : *  This program may be copied for scientific use
+<span class="lineNum">     114 </span>                :            : *  It may not be sold for profit without explicit
+<span class="lineNum">     115 </span>                :            : *  permission of the author(s) who retain any
+<span class="lineNum">     116 </span>                :            : *  commercial rights including the right to modify 
+<span class="lineNum">     117 </span>                :            : *  this notice
+<span class="lineNum">     118 </span>                :            : */
+<span class="lineNum">     119 </span>                :            : #define ANSI 1
+<span class="lineNum">     120 </span>                :            : #define MAXTOKEN 10 
+<span class="lineNum">     121 </span>                :            : #define TOKENLENGTH 80 
+<span class="lineNum">     122 </span>                :            : /* misc includes - ANSI and some are just to be safe */
+<span class="lineNum">     123 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">     124 </span>                :            : #include &lt;ctype.h&gt;
+<span class="lineNum">     125 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">     126 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">     127 </span>                :            : #ifdef ANSI
+<span class="lineNum">     128 </span>                :            : #include &lt;stdlib.h&gt;
+<a name="129"><span class="lineNum">     129 </span>                :            : #endif</a>
+<span class="lineNum">     130 </span>                :            : #include &quot;ammp.h&quot;
+<span class="lineNum">     131 </span>                :<span class="lineCov">          1 : int main()</span>
+<span class="lineNum">     132 </span>                :            : {
+<span class="lineNum">     133 </span>                :            : void read_eval_do();
+<span class="lineNum">     134 </span>                :            : /* set some defaults */
+<span class="lineNum">     135 </span>                :<span class="lineCov">          1 :         set_f_variable( &quot;mxdq&quot;,  .05);</span>
+<span class="lineNum">     136 </span>                :            : /* mxcut of 6 requires NCLOSE == 100 */
+<span class="lineNum">     137 </span>                :            : /* mxcut of 8 requires NCLOSE == 200 */
+<span class="lineNum">     138 </span>                :<span class="lineCov">          1 :         set_f_variable( &quot;mxcut&quot;,  6.);</span>
+<span class="lineNum">     139 </span>                :<span class="lineCov">          1 :         set_i_variable( &quot;nostep&quot;, 1);</span>
+<span class="lineNum">     140 </span>                :            : /* read_eval_do is called this way so it can recurse */
+<span class="lineNum">     141 </span>                :<span class="lineCov">          1 :         read_eval_do( stdin,stdout);</span>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">     143 </span>                :            : }
+<span class="lineNum">     144 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

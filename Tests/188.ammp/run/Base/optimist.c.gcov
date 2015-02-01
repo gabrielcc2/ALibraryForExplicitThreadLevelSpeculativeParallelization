@@ -1,0 +1,344 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/optimist.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/*
+        -:    2:* optimist.c
+        -:    3:*
+        -:    4:* optimiser routines for AMMP
+        -:    5:*
+        -:    6:*  steepest descents
+        -:    7:*  conjugate gradients
+        -:    8:*  line search    routines
+        -:    9:*
+        -:   10:*/
+        -:   11:/*
+        -:   12:*  copyright 1992 Robert W. Harrison
+        -:   13:*  
+        -:   14:*  This notice may not be removed
+        -:   15:*  This program may be copied for scientific use
+        -:   16:*  It may not be sold for profit without explicit
+        -:   17:*  permission of the author(s) who retain any
+        -:   18:*  commercial rights including the right to modify 
+        -:   19:*  this notice
+        -:   20:*/
+        -:   21:
+        -:   22:#define ANSI 1
+        -:   23:#include <stdio.h>
+        -:   24:#include <math.h>
+        -:   25:#ifdef ANSI
+        -:   26:#include <stdlib.h>
+        -:   27:#endif
+        -:   28:
+        -:   29://#include "ammp.h"
+        -:   30:
+        -:   31:/* SPEC add function protos to reduce compiler warnings jh/9/21/99 */
+        -:   32:int a_f_zero();
+        -:   33:int a_ftodx(float,float);
+        -:   34:
+        -:   35:/* function steep()
+        -:   36:* steepest descents optimiser
+        -:   37:*
+        -:   38:* passed a set of functions vfs for the potential
+        -:   39:* passed a set of functions ffs for the force
+        -:   40:*  how many functions  nfs
+        -:   41:*  how many steps to try
+        -:   42:*  when to stop
+        -:   43:*/
+function _Z5steepPPFiPffEPPFiiEiif called 0 returned 0% blocks executed 0%
+    #####:   44:int steep(int (*vfs[])(float*, float),int (*ffs[])(int),int nfs, int nstep, float toler)
+        -:   45:{
+        -:   46:	int i,j,ifs;
+        -:   47:	float vb,vt,vto;
+        -:   48:	float a_max_f(),lam;
+        -:   49:/*  do at most nstep steps */
+    #####:   50:	for( i=0; i< nstep ; i++)
+branch  0 never executed
+branch  1 never executed
+        -:   51:	{
+    #####:   52:	vb = 0.;
+    #####:   53:	for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:   54:		(*vfs[ifs])(&vb,  0.);
+call    0 never executed
+    #####:   55:	a_f_zero();
+call    0 never executed
+    #####:   56:	for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:   57:		(*ffs[ifs])( 0.);
+call    0 never executed
+    #####:   58:	lam = a_max_f();
+call    0 never executed
+    #####:   59:	if( lam <= toler) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:   60:	if( lam <= 1. )
+branch  0 never executed
+branch  1 never executed
+    #####:   61:	{ a_ftodx(1.,0.); } else { a_ftodx( 1./sqrt(lam),0. ); }
+call    0 never executed
+call    1 never executed
+    #####:   62:	vto = vb;
+    #####:   63:	lam = 0.;
+        -:   64:/* this is a fibonacci line search 
+        -:   65:* rather odd, the steps keep getting
+        -:   66:* bigger until
+        -:   67:* either the end
+        -:   68:* or we go up
+        -:   69:*/
+    #####:   70:	for( j=0; j< 200; j++)
+branch  0 never executed
+branch  1 never executed
+        -:   71:	{
+    #####:   72:		vt = 0.;
+    #####:   73:		 lam = lam + .01*j;
+    #####:   74:		for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:   75:		       (*vfs[ifs])(&vt, lam);
+call    0 never executed
+    #####:   76:		if( vt > vto && j == 0 )
+branch  0 never executed
+branch  1 never executed
+    #####:   77:		{ a_ftodx(0., .1);   }
+call    0 never executed
+    #####:   78:		else if( vt > vto )
+branch  0 never executed
+branch  1 never executed
+    #####:   79:		{ lam = lam -.01*j; break; }
+    #####:   80:		vto = vt;
+        -:   81:	}
+    #####:   82:	a_inc_d( lam );
+call    0 never executed
+        -:   83:	}
+    #####:   84:	return 0;
+        -:   85:}
+        -:   86:
+        -:   87:/* function cngdel()
+        -:   88:* conjugate gradients optimiser
+        -:   89:*
+        -:   90:* passed a set of functions vfs for the potential
+        -:   91:* passed a set of functions ffs for the force
+        -:   92:*  how many functions  nfs
+        -:   93:*  how many steps to try
+        -:   94:*  when to stop
+        -:   95:*/
+function _Z6cngdelPPFiPffEPPFiiEiiifi called 0 returned 0% blocks executed 0%
+    #####:   96:int cngdel(int (*vfs[])(float*,float),int (*ffs[])(int),int nfs, int nstep, int nreset, float toler, int echo)
+        -:   97:{
+        -:   98:/* SPEC add function protos to reduce compiler warnings jh/9/21/99 */
+        -:   99:int a_f_zero();
+        -:  100:int a_ftodx(float,float);
+        -:  101:	int i,j,ifs;
+        -:  102:	float vb,vt,vto;
+        -:  103:	float a_max_f(),lam;
+        -:  104:	float linmin(int(*[])(float*,float),int,float), a_max_d();
+        -:  105:	float a_pr_beta();
+        -:  106:	float beta,betad,a_l2_f(),a_l2_g();
+        -:  107:/*  do at most nstep steps */
+    #####:  108:	if( nreset < 1) nreset = nstep;
+branch  0 never executed
+branch  1 never executed
+        -:  109:	//a_g_zero();
+        -:  110:	//a_d_zero();
+    #####:  111:	for( i=0; i< nstep ; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  112:	{
+    #####:  113:	vb = 0.;
+    #####:  114:	for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:  115:		(*vfs[ifs])( &vb,  0.);
+call    0 never executed
+    #####:  116:	a_f_zero();
+call    0 never executed
+    #####:  117:	for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:  118:		(*ffs[ifs])( 0.);
+call    0 never executed
+    #####:  119:	lam = a_max_f();
+call    0 never executed
+        -:  120:/* make up the beta *
+        -:  121:/* use just the simple one */
+        -:  122:/*	beta = a_l2_f();
+        -:  123:	betad = a_l2_g();
+        -:  124:	if( betad < 1.e-4) {betad = 1.;beta = 0.;}
+        -:  125:	beta = -beta/betad;
+        -:  126:*/
+    #####:  127: 	beta = a_pr_beta(); 
+call    0 never executed
+        -:  128:
+    #####:  129:	if( (i%nreset) == 0) beta = 0.; 
+branch  0 never executed
+branch  1 never executed
+    #####:  130:	if( echo) printf(" vb, maxf %f %f %f \n",vb,lam,beta);
+branch  0 never executed
+branch  1 never executed
+    #####:  131:	if( lam <= toler) return 1;
+branch  0 never executed
+branch  1 never executed
+        -:  132:/*	printf(" max f max d  %f %f \n",a_max_f(),a_max_d() ); */
+        -:  133:/* and make up the descent direction */
+    #####:  134:	lam = a_max_f();
+call    0 never executed
+    #####:  135:	 a_ftodx(1.,beta); 
+call    0 never executed
+        -:  136:	//a_ftogx( 1.,0.);
+    #####:  137:	lam = linmin( vfs,nfs, sqrt(a_max_d()) );
+call    0 never executed
+call    1 never executed
+    #####:  138:        if( lam < 1.e-6)
+branch  0 never executed
+branch  1 never executed
+        -:  139:        {
+    #####:  140:        a_f_zero();
+call    0 never executed
+    #####:  141:        for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:  142:                (*ffs[ifs])(0. );
+call    0 never executed
+    #####:  143:        lam = sqrt(a_max_f()); if( lam < 1.) lam = 1.;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  144:        a_ftodx( 1./(lam), 0.);
+call    0 never executed
+    #####:  145:        lam = linmin(vfs,nfs,1. );
+call    0 never executed
+    #####:  146:        if( lam < 1.e-6) return 0;
+branch  0 never executed
+branch  1 never executed
+        -:  147:        }
+    #####:  148:	a_inc_d( lam );
+call    0 never executed
+        -:  149:	}
+    #####:  150:	return 0;
+        -:  151:}
+        -:  152:
+        -:  153:
+        -:  154:
+        -:  155:/*line minimization routine linmin( x, search, n, f )
+        -:  156:*
+        -:  157:* returns step size for approximate line minimizer
+        -:  158:*  recursive line minimizer
+        -:  159:*/
+function _Z6linminPPFiPffEif called 0 returned 0% blocks executed 0%
+    #####:  160:float linmin(int (*ffs[])(float*, float), int nfs, float damp)
+        -:  161:{
+        -:  162:	int i,iter,jter,imin;
+        -:  163:	float alpha[401],fval[401],dstep,step,stpmin,fvt,fmin,fold;
+        -:  164:	int nostep,get_i_variable(char*);
+        -:  165:	float mxdq, get_f_variable(char*);
+        -:  166:
+    #####:  167:	nostep = get_i_variable("nostep");
+call    0 never executed
+    #####:  168:	if( nostep < 1) nostep = 8;
+branch  0 never executed
+branch  1 never executed
+    #####:  169:	mxdq = get_f_variable("mxdq");
+call    0 never executed
+    #####:  170:	set_f_variable("mxdq" , 100.);
+call    0 never executed
+        -:  171:	
+    #####:  172:	dstep = 1.;
+    #####:  173:	step = 0;
+    #####:  174:	stpmin = 0.;
+    #####:  175:	imin = 0;
+    #####:  176:	alpha[0] = 0;
+    #####:  177:	fval[0] = 0;
+        -:  178:/*	 if( damp < 1.) {dstep = .25;}else{ dstep = .01/sqrt(damp);} */
+    #####:  179:	 if( damp < 1.) {dstep = .25;}else{ dstep = 1./damp;}
+branch  0 never executed
+branch  1 never executed
+        -:  180:
+    #####:  181:	for( i=0; i< nfs ; i++)	
+branch  0 never executed
+branch  1 never executed
+    #####:  182:	 (*ffs[i])(&fval[0],0.);
+call    0 never executed
+    #####:  183:	fmin = fval[0]; fold = fmin;
+        -:  184:/* recheck is to find a descent stp length */
+    #####:  185:	imin++;
+        -:  186:recheck:
+    #####:  187:	alpha[imin] = dstep; 
+    #####:  188:	fval[imin] = 0.;
+    #####:  189:	for( i=0; i< nfs ; i++)	
+branch  0 never executed
+branch  1 never executed
+    #####:  190:	 (*ffs[i])(&fval[imin],dstep);
+call    0 never executed
+    #####:  191:	if( fval[imin] > fval[0]) 
+branch  0 never executed
+branch  1 never executed
+        -:  192:		{
+    #####:  193:		    dstep = dstep*.25;
+    #####:  194:			if( dstep > 1.e-8) goto recheck;
+branch  0 never executed
+branch  1 never executed
+        -:  195:			goto cleanup;
+        -:  196:		}
+        -:  197:/* if here we have dstep small enough to use */
+        -:  198:/*	for( iter=0; iter< 8; iter++)
+        -:  199:*/
+    #####:  200:	for( iter=0; iter< nostep; iter++)
+branch  0 never executed
+branch  1 never executed
+        -:  201:	{
+    #####:  202:		for(jter=1; jter<100; jter++)
+branch  0 never executed
+branch  1 never executed
+        -:  203:		{
+    #####:  204:			step += dstep;
+        -:  205:/* get the function value */
+    #####:  206:			for( i=0; i< imin; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  207:			{
+    #####:  208:				if( alpha[i] == step)
+branch  0 never executed
+branch  1 never executed
+        -:  209:				{
+    #####:  210:					fvt = fval[i]; goto FOUND ;
+        -:  211:				}
+        -:  212:			}
+    #####:  213:		fvt = 0.;
+    #####:  214:		for( i=0; i< nfs ; i++)	
+branch  0 never executed
+branch  1 never executed
+    #####:  215:			 (*ffs[i])(&fvt,step);
+call    0 never executed
+    #####:  216:			alpha[imin] = step;  fval[imin++] = fvt; 
+    #####:  217:			if( imin > 400) imin = 400;
+branch  0 never executed
+branch  1 never executed
+        -:  218:FOUND:
+        -:  219:/*		printf("\n %f %f %f %f", step,fvt,fmin,fold);  */ 
+    #####:  220:			if( fvt< fmin)
+branch  0 never executed
+branch  1 never executed
+        -:  221:			{
+    #####:  222:				fmin = fvt; stpmin = step;
+        -:  223:			}
+    #####:  224:			if( fvt > fold)
+branch  0 never executed
+branch  1 never executed
+        -:  225:			{
+    #####:  226:				dstep = -dstep/2; break;
+        -:  227:			}
+    #####:  228:			fold = fvt;
+        -:  229:		}
+        -:  230:		
+        -:  231:	}
+        -:  232:cleanup:
+        -:  233:/* do not allow 0 steps */
+        -:  234:/*	if( stpmin == 0.) stpmin = dstep/2; */
+    #####:  235:	set_f_variable("mxdq" , mxdq);
+call    0 never executed
+    #####:  236:	return(stpmin);
+        -:  237:}

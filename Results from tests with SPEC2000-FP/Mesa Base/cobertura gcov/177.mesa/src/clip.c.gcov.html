@@ -1,0 +1,1151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/clip.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - clip.c<span style="font-size: 80%;"> (source / <a href="clip.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">221</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">346</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: clip.c,v 1.14 1997/07/24 01:24:45 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.4
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: clip.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.14  1997/07/24 01:24:45  brianp
+<span class="lineNum">      27 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.13  1997/05/28 03:23:48  brianp
+<span class="lineNum">      30 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.12  1997/04/02 03:10:06  brianp
+<span class="lineNum">      33 </span>                :            :  * call gl_analyze_modelview_matrix instead of gl_compute_modelview_inverse
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.11  1997/02/13 21:16:09  brianp
+<span class="lineNum">      36 </span>                :            :  * if too many vertices in polygon return VB_SIZE-1, not VB_SIZE
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.10  1997/02/10 21:16:12  brianp
+<span class="lineNum">      39 </span>                :            :  * added checks in polygon clippers to prevent array overflows
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.9  1997/02/04 19:39:39  brianp
+<span class="lineNum">      42 </span>                :            :  * changed size of vlist2[] arrays to VB_SIZE per Randy Frank
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.8  1996/12/02 20:10:07  brianp
+<span class="lineNum">      45 </span>                :            :  * changed the macros in gl_viewclip_polygon() to be like gl_viewclip_line()
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.7  1996/10/29 02:55:02  brianp
+<span class="lineNum">      48 </span>                :            :  * fixed duplicate vertex bug in gl_viewclip_polygon()
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.6  1996/10/07 23:48:33  brianp
+<span class="lineNum">      51 </span>                :            :  * changed temporaries to GLdouble in gl_viewclip_polygon()
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.5  1996/10/03 01:43:45  brianp
+<span class="lineNum">      54 </span>                :            :  * changed INSIDE() macro in gl_viewclip_polygon() to work like other macros
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.4  1996/10/03 01:36:33  brianp
+<span class="lineNum">      57 </span>                :            :  * changed COMPUTE_INTERSECTION macros in gl_viewclip_polygon to avoid
+<span class="lineNum">      58 </span>                :            :  * potential roundoff errors
+<span class="lineNum">      59 </span>                :            :  *
+<span class="lineNum">      60 </span>                :            :  * Revision 1.3  1996/09/27 01:24:23  brianp
+<span class="lineNum">      61 </span>                :            :  * removed unused variables
+<span class="lineNum">      62 </span>                :            :  *
+<span class="lineNum">      63 </span>                :            :  * Revision 1.2  1996/09/15 01:48:58  brianp
+<span class="lineNum">      64 </span>                :            :  * removed #define NULL 0
+<span class="lineNum">      65 </span>                :            :  *
+<span class="lineNum">      66 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      67 </span>                :            :  * Initial revision
+<span class="lineNum">      68 </span>                :            :  *
+<span class="lineNum">      69 </span>                :            :  */
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      73 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      74 </span>                :            : #else
+<span class="lineNum">      75 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      76 </span>                :            : #include &quot;clip.h&quot;
+<span class="lineNum">      77 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">      78 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">      79 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      80 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">      81 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      82 </span>                :            : #include &quot;vb.h&quot;
+<span class="lineNum">      83 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">      84 </span>                :            : #endif
+<span class="lineNum">      85 </span>                :            : 
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :            : /* Linear interpolation between A and B: */
+<span class="lineNum">      90 </span>                :            : #define LINTERP( T, A, B )   ( (A) + (T) * ( (B) - (A) ) )
+<span class="lineNum">      91 </span>                :            : 
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>                :            : #define EYE_SPACE 1
+<span class="lineNum">      94 </span>                :            : #define CLIP_SPACE 2
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>                :            : static GLuint Space;
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :            : /*
+<span class="lineNum">     101 </span>                :            :  * This function is used to interpolate colors, indexes, and texture
+<span class="lineNum">     102 </span>                :            :  * coordinates when clipping has to be done.  In general, we compute
+<span class="lineNum">     103 </span>                :            :  *     aux[dst] = aux[in] + t * (aux[out] - aux[in])
+<span class="lineNum">     104 </span>                :            :  * where aux is the quantity to be interpolated.
+<span class="lineNum">     105 </span>                :            :  * Input:  dst - index of array position to store interpolated value
+<span class="lineNum">     106 </span>                :            :  *         t - a value in [0,1]
+<span class="lineNum">     107 </span>                :            :  *         in - index of array position corresponding to 'inside' vertex
+<a name="108"><span class="lineNum">     108 </span>                :            :  *         out - index of array position corresponding to 'outside' vertex</a>
+<span class="lineNum">     109 </span>                :            :  */
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 : static void interpolate_aux( GLcontext* ctx,</span>
+<span class="lineNum">     111 </span>                :            :                              GLuint dst, GLfloat t, GLuint in, GLuint out )
+<span class="lineNum">     112 </span>                :            : {
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer* VB = ctx-&gt;VB;</span>
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;ClipMask &amp; CLIP_FCOLOR_BIT) {</span>
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Fcolor[dst][0] = LINTERP( t, VB-&gt;Fcolor[in][0], VB-&gt;Fcolor[out][0] );</span>
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Fcolor[dst][1] = LINTERP( t, VB-&gt;Fcolor[in][1], VB-&gt;Fcolor[out][1] );</span>
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Fcolor[dst][2] = LINTERP( t, VB-&gt;Fcolor[in][2], VB-&gt;Fcolor[out][2] );</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Fcolor[dst][3] = LINTERP( t, VB-&gt;Fcolor[in][3], VB-&gt;Fcolor[out][3] );</span>
+<span class="lineNum">     120 </span>                :            :    }
+<span class="lineNum">     121 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (ctx-&gt;ClipMask &amp; CLIP_FINDEX_BIT) {</span>
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Findex[dst] = (GLuint) (GLint) LINTERP( t, (GLfloat) VB-&gt;Findex[in],</span>
+<span class="lineNum">     123 </span>                :            :                                                  (GLfloat) VB-&gt;Findex[out] );
+<span class="lineNum">     124 </span>                :            :    }
+<span class="lineNum">     125 </span>                :            : 
+<span class="lineNum">     126 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;ClipMask &amp; CLIP_BCOLOR_BIT) {</span>
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Bcolor[dst][0] = LINTERP( t, VB-&gt;Bcolor[in][0], VB-&gt;Bcolor[out][0] );</span>
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Bcolor[dst][1] = LINTERP( t, VB-&gt;Bcolor[in][1], VB-&gt;Bcolor[out][1] );</span>
+<span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Bcolor[dst][2] = LINTERP( t, VB-&gt;Bcolor[in][2], VB-&gt;Bcolor[out][2] );</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Bcolor[dst][3] = LINTERP( t, VB-&gt;Bcolor[in][3], VB-&gt;Bcolor[out][3] );</span>
+<span class="lineNum">     131 </span>                :            :    }
+<span class="lineNum">     132 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (ctx-&gt;ClipMask &amp; CLIP_BINDEX_BIT) {</span>
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :       VB-&gt;Bindex[dst] = (GLuint) (GLint) LINTERP( t, (GLfloat) VB-&gt;Bindex[in],</span>
+<span class="lineNum">     134 </span>                :            :                                                  (GLfloat) VB-&gt;Bindex[out] );
+<span class="lineNum">     135 </span>                :            :    }
+<span class="lineNum">     136 </span>                :            : 
+<span class="lineNum">     137 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;ClipMask &amp; CLIP_TEXTURE_BIT) {</span>
+<span class="lineNum">     138 </span>                :            :       /* TODO: is more sophisticated texture coord interpolation needed?? */
+<span class="lineNum">     139 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (Space==CLIP_SPACE) {</span>
+<span class="lineNum">     140 </span>                :            :          /* also interpolate eye Z component */
+<span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :          VB-&gt;Eye[dst][2] = LINTERP( t, VB-&gt;Eye[in][2], VB-&gt;Eye[out][2] );</span>
+<span class="lineNum">     142 </span>                :            :       }
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :       VB-&gt;TexCoord[dst][0] = LINTERP(t,VB-&gt;TexCoord[in][0],VB-&gt;TexCoord[out][0]);</span>
+<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :       VB-&gt;TexCoord[dst][1] = LINTERP(t,VB-&gt;TexCoord[in][1],VB-&gt;TexCoord[out][1]);</span>
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :       VB-&gt;TexCoord[dst][2] = LINTERP(t,VB-&gt;TexCoord[in][2],VB-&gt;TexCoord[out][2]);</span>
+<span class="lineNum">     146 </span>                :<span class="lineNoCov">          0 :       VB-&gt;TexCoord[dst][3] = LINTERP(t,VB-&gt;TexCoord[in][3],VB-&gt;TexCoord[out][3]);</span>
+<span class="lineNum">     147 </span>                :            :    }
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>                :            : 
+<a name="152"><span class="lineNum">     152 </span>                :            : </a>
+<span class="lineNum">     153 </span>                :            : 
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 : void gl_ClipPlane( GLcontext* ctx, GLenum plane, const GLfloat *equation )</span>
+<span class="lineNum">     155 </span>                :            : {
+<span class="lineNum">     156 </span>                :            :    GLint p;
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :    p = (GLint) plane - (GLint) GL_CLIP_PLANE0;</span>
+<span class="lineNum">     159 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (p&lt;0 || p&gt;=MAX_CLIP_PLANES) {</span>
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glClipPlane&quot; );</span>
+<span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     162 </span>                :            :    }
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>                :            :    /*
+<span class="lineNum">     165 </span>                :            :     * The equation is transformed by the transpose of the inverse of the
+<span class="lineNum">     166 </span>                :            :     * current modelview matrix and stored in the resulting eye coordinates.
+<span class="lineNum">     167 </span>                :            :     */
+<span class="lineNum">     168 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :       gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">     170 </span>                :            :    }
+<span class="lineNum">     171 </span>                :<span class="lineNoCov">          0 :    gl_transform_vector( ctx-&gt;Transform.ClipEquation[p], equation,</span>
+<span class="lineNum">     172 </span>                :            :                         ctx-&gt;ModelViewInv );
+<span class="lineNum">     173 </span>                :            : }
+<span class="lineNum">     174 </span>                :            : 
+<a name="175"><span class="lineNum">     175 </span>                :            : </a>
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 : void gl_GetClipPlane( GLcontext* ctx, GLenum plane, GLdouble *equation )</span>
+<span class="lineNum">     178 </span>                :            : {
+<span class="lineNum">     179 </span>                :            :    GLint p;
+<span class="lineNum">     180 </span>                :            : 
+<span class="lineNum">     181 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetClipPlane&quot; );</span>
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     184 </span>                :            :    }
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :    p = (GLint) (plane - GL_CLIP_PLANE0);</span>
+<span class="lineNum">     187 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (p&lt;0 || p&gt;=MAX_CLIP_PLANES) {</span>
+<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetClipPlane&quot; );</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     190 </span>                :            :    }
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :    equation[0] = (GLdouble) ctx-&gt;Transform.ClipEquation[p][0];</span>
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :    equation[1] = (GLdouble) ctx-&gt;Transform.ClipEquation[p][1];</span>
+<span class="lineNum">     194 </span>                :<span class="lineNoCov">          0 :    equation[2] = (GLdouble) ctx-&gt;Transform.ClipEquation[p][2];</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :    equation[3] = (GLdouble) ctx-&gt;Transform.ClipEquation[p][3];</span>
+<span class="lineNum">     196 </span>                :            : }
+<span class="lineNum">     197 </span>                :            : 
+<span class="lineNum">     198 </span>                :            : 
+<span class="lineNum">     199 </span>                :            : 
+<span class="lineNum">     200 </span>                :            : 
+<span class="lineNum">     201 </span>                :            : /**********************************************************************/
+<span class="lineNum">     202 </span>                :            : /*                         View volume clipping.                      */
+<span class="lineNum">     203 </span>                :            : /**********************************************************************/
+<span class="lineNum">     204 </span>                :            : 
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :            : /*
+<span class="lineNum">     207 </span>                :            :  * Clip a point against the view volume.
+<span class="lineNum">     208 </span>                :            :  * Input:  v - vertex-vector describing the point to clip
+<span class="lineNum">     209 </span>                :            :  * Return:  0 = outside view volume
+<a name="210"><span class="lineNum">     210 </span>                :            :  *          1 = inside view volume</a>
+<span class="lineNum">     211 </span>                :            :  */
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 : GLuint gl_viewclip_point( const GLfloat v[] )</span>
+<span class="lineNum">     213 </span>                :            : {
+<span class="lineNum">     214 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (   v[0] &gt; v[3] || v[0] &lt; -v[3]</span>
+<span class="lineNum">     215 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        || v[1] &gt; v[3] || v[1] &lt; -v[3]</span>
+<span class="lineNum">     216 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        || v[2] &gt; v[3] || v[2] &lt; -v[3] ) {</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :       return 0;</span>
+<span class="lineNum">     218 </span>                :            :    }
+<span class="lineNum">     219 </span>                :            :    else {
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :       return 1;</span>
+<span class="lineNum">     221 </span>                :            :    }
+<span class="lineNum">     222 </span>                :            : }
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>                :            : 
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>                :            : /*
+<span class="lineNum">     228 </span>                :            :  * Clip a line segment against the view volume defined by -w&lt;=x,y,z&lt;=w.
+<span class="lineNum">     229 </span>                :            :  * Input:  i, j - indexes into VB-&gt;V* of endpoints of the line
+<span class="lineNum">     230 </span>                :            :  * Return:  0 = line completely outside of view
+<a name="231"><span class="lineNum">     231 </span>                :            :  *          1 = line is inside view.</a>
+<span class="lineNum">     232 </span>                :            :  */
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 : GLuint gl_viewclip_line( GLcontext* ctx, GLuint *i, GLuint *j )</span>
+<span class="lineNum">     234 </span>                :            : {
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer* VB = ctx-&gt;VB;</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :    GLfloat (*coord)[4] = VB-&gt;Clip;</span>
+<span class="lineNum">     237 </span>                :            : 
+<span class="lineNum">     238 </span>                :            :    GLfloat t, dx, dy, dz, dw;
+<span class="lineNum">     239 </span>                :            :    register GLuint ii, jj;
+<span class="lineNum">     240 </span>                :            : 
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :    Space = CLIP_SPACE;</span>
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :    ii = *i;</span>
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :    jj = *j;</span>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :            : /*
+<span class="lineNum">     246 </span>                :            :  * We use 6 instances of this code to clip agains the 6 planes.
+<span class="lineNum">     247 </span>                :            :  * For each plane, we define the OUTSIDE and COMPUTE_INTERSECTION
+<span class="lineNum">     248 </span>                :            :  * macros apprpriately.
+<span class="lineNum">     249 </span>                :            :  */
+<span class="lineNum">     250 </span>                :            : #define GENERAL_CLIP                                                    \
+<span class="lineNum">     251 </span>                :            :    if (OUTSIDE(ii)) {                                                   \
+<span class="lineNum">     252 </span>                :            :       if (OUTSIDE(jj)) {                                                \
+<span class="lineNum">     253 </span>                :            :          /* both verts are outside ==&gt; return 0 */                   \
+<span class="lineNum">     254 </span>                :            :          return 0;                                                      \
+<span class="lineNum">     255 </span>                :            :       }                                                                 \
+<span class="lineNum">     256 </span>                :            :       else {                                                            \
+<span class="lineNum">     257 </span>                :            :          /* ii is outside, jj is inside ==&gt; clip */                  \
+<span class="lineNum">     258 </span>                :            :          /* new vertex put in position VB-&gt;Free */                   \
+<span class="lineNum">     259 </span>                :            :          COMPUTE_INTERSECTION( VB-&gt;Free, jj, ii )                            \
+<span class="lineNum">     260 </span>                :            :          if (ctx-&gt;ClipMask)                                          \
+<span class="lineNum">     261 </span>                :            :             interpolate_aux( ctx, VB-&gt;Free, t, jj, ii );             \
+<span class="lineNum">     262 </span>                :            :          ii = VB-&gt;Free;                                                      \
+<span class="lineNum">     263 </span>                :            :          VB-&gt;Free++;                                                 \
+<span class="lineNum">     264 </span>                :            :          if (VB-&gt;Free==VB_SIZE)  VB-&gt;Free = 1;                            \
+<span class="lineNum">     265 </span>                :            :       }                                                                 \
+<span class="lineNum">     266 </span>                :            :    }                                                                    \
+<span class="lineNum">     267 </span>                :            :    else {                                                               \
+<span class="lineNum">     268 </span>                :            :       if (OUTSIDE(jj)) {                                                \
+<span class="lineNum">     269 </span>                :            :          /* ii is inside, jj is outside ==&gt; clip */                  \
+<span class="lineNum">     270 </span>                :            :          /* new vertex put in position VB-&gt;Free */                   \
+<span class="lineNum">     271 </span>                :            :          COMPUTE_INTERSECTION( VB-&gt;Free, ii, jj );                           \
+<span class="lineNum">     272 </span>                :            :          if (ctx-&gt;ClipMask)                                          \
+<span class="lineNum">     273 </span>                :            :             interpolate_aux( ctx, VB-&gt;Free, t, ii, jj );             \
+<span class="lineNum">     274 </span>                :            :          jj = VB-&gt;Free;                                                      \
+<span class="lineNum">     275 </span>                :            :          VB-&gt;Free++;                                                 \
+<span class="lineNum">     276 </span>                :            :          if (VB-&gt;Free==VB_SIZE)  VB-&gt;Free = 1;                            \
+<span class="lineNum">     277 </span>                :            :       }                                                                 \
+<span class="lineNum">     278 </span>                :            :       /* else both verts are inside ==&gt; do nothing */                \
+<span class="lineNum">     279 </span>                :            :    }
+<span class="lineNum">     280 </span>                :            : 
+<span class="lineNum">     281 </span>                :            : 
+<span class="lineNum">     282 </span>                :            : #define X(I)    coord[I][0]
+<span class="lineNum">     283 </span>                :            : #define Y(I)    coord[I][1]
+<span class="lineNum">     284 </span>                :            : #define Z(I)    coord[I][2]
+<span class="lineNum">     285 </span>                :            : #define W(I)    coord[I][3]
+<span class="lineNum">     286 </span>                :            : 
+<span class="lineNum">     287 </span>                :            : /*
+<span class="lineNum">     288 </span>                :            :  * Begin clipping
+<span class="lineNum">     289 </span>                :            :  */
+<span class="lineNum">     290 </span>                :            : 
+<span class="lineNum">     291 </span>                :            :    /*** Clip against +X side ***/
+<span class="lineNum">     292 </span>                :            : #define OUTSIDE(K)      (X(K) &gt; W(K))
+<span class="lineNum">     293 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     294 </span>                :            :         dx = X(out) - X(in);                            \
+<span class="lineNum">     295 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     296 </span>                :            :         t = (X(in) - W(in)) / (dw-dx);                  \
+<span class="lineNum">     297 </span>                :            :         X(new) = X(in) + t * dx;                        \
+<span class="lineNum">     298 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     299 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     300 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     301 </span>                :            : 
+<span class="lineNum">     302 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     303 </span>                :            : 
+<span class="lineNum">     304 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     305 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     306 </span>                :            : 
+<span class="lineNum">     307 </span>                :            : 
+<span class="lineNum">     308 </span>                :            :    /*** Clip against -X side ***/
+<span class="lineNum">     309 </span>                :            : #define OUTSIDE(K)      (X(K) &lt; -W(K))
+<span class="lineNum">     310 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     311 </span>                :            :         dx = X(out) - X(in);                            \
+<span class="lineNum">     312 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     313 </span>                :            :         t = -(X(in) + W(in)) / (dw+dx);                 \
+<span class="lineNum">     314 </span>                :            :         X(new) = X(in) + t * dx;                        \
+<span class="lineNum">     315 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     316 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     317 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     318 </span>                :            : 
+<span class="lineNum">     319 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     322 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     323 </span>                :            : 
+<span class="lineNum">     324 </span>                :            : 
+<span class="lineNum">     325 </span>                :            :    /*** Clip against +Y side ***/
+<span class="lineNum">     326 </span>                :            : #define OUTSIDE(K)      (Y(K) &gt; W(K))
+<span class="lineNum">     327 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     328 </span>                :            :         dy = Y(out) - Y(in);                            \
+<span class="lineNum">     329 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     330 </span>                :            :         t = (Y(in) - W(in)) / (dw-dy);                  \
+<span class="lineNum">     331 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     332 </span>                :            :         Y(new) = Y(in) + t * dy;                        \
+<span class="lineNum">     333 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     334 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     335 </span>                :            : 
+<span class="lineNum">     336 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     337 </span>                :            : 
+<span class="lineNum">     338 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     339 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>                :            : 
+<span class="lineNum">     342 </span>                :            :    /*** Clip against -Y side ***/
+<span class="lineNum">     343 </span>                :            : #define OUTSIDE(K)      (Y(K) &lt; -W(K))
+<span class="lineNum">     344 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     345 </span>                :            :         dy = Y(out) - Y(in);                            \
+<span class="lineNum">     346 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     347 </span>                :            :         t = -(Y(in) + W(in)) / (dw+dy);                 \
+<span class="lineNum">     348 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     349 </span>                :            :         Y(new) = Y(in) + t * dy;                        \
+<span class="lineNum">     350 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     351 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     352 </span>                :            : 
+<span class="lineNum">     353 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     356 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     357 </span>                :            : 
+<span class="lineNum">     358 </span>                :            : 
+<span class="lineNum">     359 </span>                :            :    /*** Clip against +Z side ***/
+<span class="lineNum">     360 </span>                :            : #define OUTSIDE(K)      (Z(K) &gt; W(K))
+<span class="lineNum">     361 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     362 </span>                :            :         dz = Z(out) - Z(in);                            \
+<span class="lineNum">     363 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     364 </span>                :            :         t = (Z(in) - W(in)) / (dw-dz);                  \
+<span class="lineNum">     365 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     366 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     367 </span>                :            :         Z(new) = Z(in) + t * dz;                        \
+<span class="lineNum">     368 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     369 </span>                :            : 
+<span class="lineNum">     370 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     371 </span>                :            : 
+<span class="lineNum">     372 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     373 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     374 </span>                :            : 
+<span class="lineNum">     375 </span>                :            : 
+<span class="lineNum">     376 </span>                :            :    /*** Clip against -Z side ***/
+<span class="lineNum">     377 </span>                :            : #define OUTSIDE(K)      (Z(K) &lt; -W(K))
+<span class="lineNum">     378 </span>                :            : #define COMPUTE_INTERSECTION( new, in, out )            \
+<span class="lineNum">     379 </span>                :            :         dz = Z(out) - Z(in);                            \
+<span class="lineNum">     380 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     381 </span>                :            :         t = -(Z(in) + W(in)) / (dw+dz);                 \
+<span class="lineNum">     382 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     383 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     384 </span>                :            :         Z(new) = Z(in) + t * dz;                        \
+<span class="lineNum">     385 </span>                :            :         W(new) = W(in) + t * dw;
+<span class="lineNum">     386 </span>                :            : 
+<span class="lineNum">     387 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     388 </span>                :            : 
+<span class="lineNum">     389 </span>                :            : #undef OUTSIDE
+<span class="lineNum">     390 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     391 </span>                :            : 
+<span class="lineNum">     392 </span>                :            : #undef GENERAL_CLIP
+<span class="lineNum">     393 </span>                :            : 
+<span class="lineNum">     394 </span>                :<span class="lineNoCov">          0 :    *i = ii;</span>
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :    *j = jj;</span>
+<span class="lineNum">     396 </span>                :<span class="lineNoCov">          0 :    return 1;</span>
+<span class="lineNum">     397 </span>                :            : }
+<span class="lineNum">     398 </span>                :            : 
+<span class="lineNum">     399 </span>                :            : 
+<span class="lineNum">     400 </span>                :            : 
+<span class="lineNum">     401 </span>                :            : 
+<span class="lineNum">     402 </span>                :            : /*
+<span class="lineNum">     403 </span>                :            :  * Clip a polygon against the view volume defined by -w&lt;=x,y,z&lt;=w.
+<span class="lineNum">     404 </span>                :            :  * Input:  n - number of vertices in input polygon.
+<span class="lineNum">     405 </span>                :            :  *         vlist - list of indexes into VB-&gt;V* of polygon to clip.
+<span class="lineNum">     406 </span>                :            :  * Output:  vlist - modified list of vertex indexes
+<a name="407"><span class="lineNum">     407 </span>                :            :  * Return:  number of vertices in resulting polygon</a>
+<span class="lineNum">     408 </span>                :            :  */
+<span class="lineNum">     409 </span>                :<span class="lineNoCov">          0 : GLuint gl_viewclip_polygon( GLcontext* ctx, GLuint n, GLuint vlist[] )</span>
+<span class="lineNum">     410 </span>                :            : 
+<span class="lineNum">     411 </span>                :            : {
+<span class="lineNum">     412 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer* VB = ctx-&gt;VB;</span>
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :    GLfloat (*coord)[4] = VB-&gt;Clip;</span>
+<span class="lineNum">     414 </span>                :            : 
+<span class="lineNum">     415 </span>                :            :    GLuint previ, prevj;
+<span class="lineNum">     416 </span>                :            :    GLuint curri, currj;
+<span class="lineNum">     417 </span>                :            :    GLuint vlist2[VB_SIZE];
+<span class="lineNum">     418 </span>                :            :    GLuint n2;
+<span class="lineNum">     419 </span>                :            :    GLdouble dx, dy, dz, dw, t, neww;
+<span class="lineNum">     420 </span>                :            : 
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :    Space = CLIP_SPACE;</span>
+<span class="lineNum">     422 </span>                :            : 
+<span class="lineNum">     423 </span>                :            : /*
+<span class="lineNum">     424 </span>                :            :  * We use 6 instances of this code to implement clipping against the
+<span class="lineNum">     425 </span>                :            :  * 6 sides of the view volume.  Prior to each we define the macros:
+<span class="lineNum">     426 </span>                :            :  *    INLIST = array which lists input vertices
+<span class="lineNum">     427 </span>                :            :  *    OUTLIST = array which lists output vertices
+<span class="lineNum">     428 </span>                :            :  *    INCOUNT = variable which is the number of vertices in INLIST[]
+<span class="lineNum">     429 </span>                :            :  *    OUTCOUNT = variable which is the number of vertices in OUTLIST[]
+<span class="lineNum">     430 </span>                :            :  *    INSIDE(i) = test if vertex v[i] is inside the view volume
+<span class="lineNum">     431 </span>                :            :  *    COMPUTE_INTERSECTION(in,out,new) = compute intersection of line
+<span class="lineNum">     432 </span>                :            :  *              from v[in] to v[out] with the clipping plane and store
+<span class="lineNum">     433 </span>                :            :  *              the result in v[new]
+<span class="lineNum">     434 </span>                :            :  */
+<span class="lineNum">     435 </span>                :            : 
+<span class="lineNum">     436 </span>                :            : #define GENERAL_CLIP                                                    \
+<span class="lineNum">     437 </span>                :            :    if (INCOUNT&lt;3)  return 0;                                         \
+<span class="lineNum">     438 </span>                :            :    previ = INCOUNT-1;           /* let previous = last vertex */        \
+<span class="lineNum">     439 </span>                :            :    prevj = INLIST[previ];                                               \
+<span class="lineNum">     440 </span>                :            :    OUTCOUNT = 0;                                                        \
+<span class="lineNum">     441 </span>                :            :    for (curri=0;curri&lt;INCOUNT;curri++) {                             \
+<span class="lineNum">     442 </span>                :            :       currj = INLIST[curri];                                            \
+<span class="lineNum">     443 </span>                :            :       if (INSIDE(currj)) {                                              \
+<span class="lineNum">     444 </span>                :            :          if (INSIDE(prevj)) {                                           \
+<span class="lineNum">     445 </span>                :            :             /* both verts are inside ==&gt; copy current to outlist */     \
+<span class="lineNum">     446 </span>                :            :             OUTLIST[OUTCOUNT] = currj;                                  \
+<span class="lineNum">     447 </span>                :            :             OUTCOUNT++;                                                 \
+<span class="lineNum">     448 </span>                :            :          }                                                              \
+<span class="lineNum">     449 </span>                :            :          else {                                                         \
+<span class="lineNum">     450 </span>                :            :             /* current is inside and previous is outside ==&gt; clip */ \
+<span class="lineNum">     451 </span>                :            :             COMPUTE_INTERSECTION( currj, prevj, VB-&gt;Free )           \
+<span class="lineNum">     452 </span>                :            :             /* if new point not coincident with previous point... */    \
+<span class="lineNum">     453 </span>                :            :             if (t&gt;0.0) {                                             \
+<span class="lineNum">     454 </span>                :            :                /* interpolate aux info using the value of t */          \
+<span class="lineNum">     455 </span>                :            :                if (ctx-&gt;ClipMask)                                    \
+<span class="lineNum">     456 </span>                :            :                   interpolate_aux( ctx, VB-&gt;Free, t, currj, prevj ); \
+<span class="lineNum">     457 </span>                :            :                VB-&gt;Edgeflag[VB-&gt;Free] = VB-&gt;Edgeflag[prevj];           \
+<span class="lineNum">     458 </span>                :            :                /* output new point */                                   \
+<span class="lineNum">     459 </span>                :            :                OUTLIST[OUTCOUNT] = VB-&gt;Free;                         \
+<span class="lineNum">     460 </span>                :            :                VB-&gt;Free++;                                           \
+<span class="lineNum">     461 </span>                :            :                if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;                     \
+<span class="lineNum">     462 </span>                :            :                OUTCOUNT++;                                              \
+<span class="lineNum">     463 </span>                :            :             }                                                           \
+<span class="lineNum">     464 </span>                :            :             /* Output current */                                        \
+<span class="lineNum">     465 </span>                :            :             OUTLIST[OUTCOUNT] = currj;                                  \
+<span class="lineNum">     466 </span>                :            :             OUTCOUNT++;                                                 \
+<span class="lineNum">     467 </span>                :            :          }                                                              \
+<span class="lineNum">     468 </span>                :            :       }                                                                 \
+<span class="lineNum">     469 </span>                :            :       else {                                                            \
+<span class="lineNum">     470 </span>                :            :          if (INSIDE(prevj)) {                                           \
+<span class="lineNum">     471 </span>                :            :             /* current is outside and previous is inside ==&gt; clip */ \
+<span class="lineNum">     472 </span>                :            :             COMPUTE_INTERSECTION( prevj, currj, VB-&gt;Free )           \
+<span class="lineNum">     473 </span>                :            :             /* if new point not coincident with previous point... */    \
+<span class="lineNum">     474 </span>                :            :             if (t&gt;0.0) {                                             \
+<span class="lineNum">     475 </span>                :            :                /* interpolate aux info using the value of t */          \
+<span class="lineNum">     476 </span>                :            :                if (ctx-&gt;ClipMask)                                    \
+<span class="lineNum">     477 </span>                :            :                   interpolate_aux( ctx, VB-&gt;Free, t, prevj, currj ); \
+<span class="lineNum">     478 </span>                :            :                VB-&gt;Edgeflag[VB-&gt;Free] = VB-&gt;Edgeflag[prevj];           \
+<span class="lineNum">     479 </span>                :            :                /* output new point */                                   \
+<span class="lineNum">     480 </span>                :            :                OUTLIST[OUTCOUNT] = VB-&gt;Free;                         \
+<span class="lineNum">     481 </span>                :            :                VB-&gt;Free++;                                           \
+<span class="lineNum">     482 </span>                :            :                if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;                     \
+<span class="lineNum">     483 </span>                :            :                OUTCOUNT++;                                              \
+<span class="lineNum">     484 </span>                :            :             }                                                           \
+<span class="lineNum">     485 </span>                :            :          }                                                              \
+<span class="lineNum">     486 </span>                :            :          /* else both verts are outside ==&gt; do nothing */            \
+<span class="lineNum">     487 </span>                :            :       }                                                                 \
+<span class="lineNum">     488 </span>                :            :       /* let previous = current */                                      \
+<span class="lineNum">     489 </span>                :            :       previ = curri;                                                    \
+<span class="lineNum">     490 </span>                :            :       prevj = currj;                                                    \
+<span class="lineNum">     491 </span>                :            :       /* check for overflowing vertex buffer */                         \
+<span class="lineNum">     492 </span>                :            :       if (OUTCOUNT&gt;=VB_SIZE-1) {                                     \
+<span class="lineNum">     493 </span>                :            :          /* Too many vertices */                                        \
+<span class="lineNum">     494 </span>                :            :          if (OUTLIST==vlist2) {                                         \
+<span class="lineNum">     495 </span>                :            :             /* copy OUTLIST[] to vlist[] */                             \
+<span class="lineNum">     496 </span>                :            :             int i;                                                      \
+<span class="lineNum">     497 </span>                :            :             for (i=0;i&lt;VB_SIZE;i++) {                                        \
+<span class="lineNum">     498 </span>                :            :                vlist[i] = OUTLIST[i];                                   \
+<span class="lineNum">     499 </span>                :            :             }                                                           \
+<span class="lineNum">     500 </span>                :            :          }                                                              \
+<span class="lineNum">     501 </span>                :            :          return VB_SIZE-1;                                              \
+<span class="lineNum">     502 </span>                :            :       }                                                                 \
+<span class="lineNum">     503 </span>                :            :    }
+<span class="lineNum">     504 </span>                :            : 
+<span class="lineNum">     505 </span>                :            : 
+<span class="lineNum">     506 </span>                :            : #define X(I)    coord[I][0]
+<span class="lineNum">     507 </span>                :            : #define Y(I)    coord[I][1]
+<span class="lineNum">     508 </span>                :            : #define Z(I)    coord[I][2]
+<span class="lineNum">     509 </span>                :            : #define W(I)    coord[I][3]
+<span class="lineNum">     510 </span>                :            : 
+<span class="lineNum">     511 </span>                :            : /*
+<span class="lineNum">     512 </span>                :            :  * Clip against +X
+<span class="lineNum">     513 </span>                :            :  */
+<span class="lineNum">     514 </span>                :            : #define INCOUNT n
+<span class="lineNum">     515 </span>                :            : #define OUTCOUNT n2
+<span class="lineNum">     516 </span>                :            : #define INLIST vlist
+<span class="lineNum">     517 </span>                :            : #define OUTLIST vlist2
+<span class="lineNum">     518 </span>                :            : #define INSIDE(K)      (X(K) &lt;= W(K))
+<span class="lineNum">     519 </span>                :            : 
+<span class="lineNum">     520 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     521 </span>                :            :         dx = X(out) - X(in);                            \
+<span class="lineNum">     522 </span>                :            :         dw = W(out) - W(in);                            \
+<span class="lineNum">     523 </span>                :            :         t = (X(in)-W(in)) / (dw-dx);                    \
+<span class="lineNum">     524 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     525 </span>                :            :         X(new) = neww;                                  \
+<span class="lineNum">     526 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     527 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     528 </span>                :            :         W(new) = neww;
+<span class="lineNum">     529 </span>                :            : 
+<span class="lineNum">     530 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>]
+<span class="lineNum">     531 </span>                :            : 
+<span class="lineNum">     532 </span>                :            : #undef INCOUNT
+<span class="lineNum">     533 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     534 </span>                :            : #undef INLIST
+<span class="lineNum">     535 </span>                :            : #undef OUTLIST
+<span class="lineNum">     536 </span>                :            : #undef INSIDE
+<span class="lineNum">     537 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     538 </span>                :            : 
+<span class="lineNum">     539 </span>                :            : 
+<span class="lineNum">     540 </span>                :            : /*
+<span class="lineNum">     541 </span>                :            :  * Clip against -X
+<span class="lineNum">     542 </span>                :            :  */
+<span class="lineNum">     543 </span>                :            : #define INCOUNT n2
+<span class="lineNum">     544 </span>                :            : #define OUTCOUNT n
+<span class="lineNum">     545 </span>                :            : #define INLIST vlist2
+<span class="lineNum">     546 </span>                :            : #define OUTLIST vlist
+<span class="lineNum">     547 </span>                :            : #define INSIDE(K)       (X(K) &gt;= -W(K))
+<span class="lineNum">     548 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     549 </span>                :            :         dx = X(out)-X(in);                              \
+<span class="lineNum">     550 </span>                :            :         dw = W(out)-W(in);                              \
+<span class="lineNum">     551 </span>                :            :         t = -(X(in)+W(in)) / (dw+dx);                   \
+<span class="lineNum">     552 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     553 </span>                :            :         X(new) = -neww;                                 \
+<span class="lineNum">     554 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     555 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     556 </span>                :            :         W(new) = neww;
+<span class="lineNum">     557 </span>                :            : 
+<span class="lineNum">     558 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>                :            : #undef INCOUNT
+<span class="lineNum">     561 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     562 </span>                :            : #undef INLIST
+<span class="lineNum">     563 </span>                :            : #undef OUTLIST
+<span class="lineNum">     564 </span>                :            : #undef INSIDE
+<span class="lineNum">     565 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     566 </span>                :            : 
+<span class="lineNum">     567 </span>                :            : 
+<span class="lineNum">     568 </span>                :            : /*
+<span class="lineNum">     569 </span>                :            :  * Clip against +Y
+<span class="lineNum">     570 </span>                :            :  */
+<span class="lineNum">     571 </span>                :            : #define INCOUNT n
+<span class="lineNum">     572 </span>                :            : #define OUTCOUNT n2
+<span class="lineNum">     573 </span>                :            : #define INLIST vlist
+<span class="lineNum">     574 </span>                :            : #define OUTLIST vlist2
+<span class="lineNum">     575 </span>                :            : #define INSIDE(K)       (Y(K) &lt;= W(K))
+<span class="lineNum">     576 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     577 </span>                :            :         dy = Y(out)-Y(in);                              \
+<span class="lineNum">     578 </span>                :            :         dw = W(out)-W(in);                              \
+<span class="lineNum">     579 </span>                :            :         t = (Y(in)-W(in)) / (dw-dy);                    \
+<span class="lineNum">     580 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     581 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     582 </span>                :            :         Y(new) = neww;                                  \
+<span class="lineNum">     583 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     584 </span>                :            :         W(new) = neww;
+<span class="lineNum">     585 </span>                :            : 
+<span class="lineNum">     586 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>]
+<span class="lineNum">     587 </span>                :            : 
+<span class="lineNum">     588 </span>                :            : #undef INCOUNT
+<span class="lineNum">     589 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     590 </span>                :            : #undef INLIST
+<span class="lineNum">     591 </span>                :            : #undef OUTLIST
+<span class="lineNum">     592 </span>                :            : #undef INSIDE
+<span class="lineNum">     593 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     594 </span>                :            : 
+<span class="lineNum">     595 </span>                :            : 
+<span class="lineNum">     596 </span>                :            : /*
+<span class="lineNum">     597 </span>                :            :  * Clip against -Y
+<span class="lineNum">     598 </span>                :            :  */
+<span class="lineNum">     599 </span>                :            : #define INCOUNT n2
+<span class="lineNum">     600 </span>                :            : #define OUTCOUNT n
+<span class="lineNum">     601 </span>                :            : #define INLIST vlist2
+<span class="lineNum">     602 </span>                :            : #define OUTLIST vlist
+<span class="lineNum">     603 </span>                :            : #define INSIDE(K)       (Y(K) &gt;= -W(K))
+<span class="lineNum">     604 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     605 </span>                :            :         dy = Y(out)-Y(in);                              \
+<span class="lineNum">     606 </span>                :            :         dw = W(out)-W(in);                              \
+<span class="lineNum">     607 </span>                :            :         t = -(Y(in)+W(in)) / (dw+dy);                   \
+<span class="lineNum">     608 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     609 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     610 </span>                :            :         Y(new) = -neww;                                 \
+<span class="lineNum">     611 </span>                :            :         Z(new) = Z(in) + t * (Z(out) - Z(in));          \
+<span class="lineNum">     612 </span>                :            :         W(new) = neww;
+<span class="lineNum">     613 </span>                :            : 
+<span class="lineNum">     614 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">     615 </span>                :            : 
+<span class="lineNum">     616 </span>                :            : #undef INCOUNT
+<span class="lineNum">     617 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     618 </span>                :            : #undef INLIST
+<span class="lineNum">     619 </span>                :            : #undef OUTLIST
+<span class="lineNum">     620 </span>                :            : #undef INSIDE
+<span class="lineNum">     621 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     622 </span>                :            : 
+<span class="lineNum">     623 </span>                :            : 
+<span class="lineNum">     624 </span>                :            : 
+<span class="lineNum">     625 </span>                :            : /*
+<span class="lineNum">     626 </span>                :            :  * Clip against +Z
+<span class="lineNum">     627 </span>                :            :  */
+<span class="lineNum">     628 </span>                :            : #define INCOUNT n
+<span class="lineNum">     629 </span>                :            : #define OUTCOUNT n2
+<span class="lineNum">     630 </span>                :            : #define INLIST vlist
+<span class="lineNum">     631 </span>                :            : #define OUTLIST vlist2
+<span class="lineNum">     632 </span>                :            : #define INSIDE(K)       (Z(K) &lt;= W(K))
+<span class="lineNum">     633 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     634 </span>                :            :         dz = Z(out)-Z(in);                              \
+<span class="lineNum">     635 </span>                :            :         dw = W(out)-W(in);                              \
+<span class="lineNum">     636 </span>                :            :         t = (Z(in)-W(in)) / (dw-dz);                    \
+<span class="lineNum">     637 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     638 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     639 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     640 </span>                :            :         Z(new) = neww;                                  \
+<span class="lineNum">     641 </span>                :            :         W(new) = neww;
+<span class="lineNum">     642 </span>                :            : 
+<span class="lineNum">     643 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>]
+<span class="lineNum">     644 </span>                :            : 
+<span class="lineNum">     645 </span>                :            : #undef INCOUNT
+<span class="lineNum">     646 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     647 </span>                :            : #undef INLIST
+<span class="lineNum">     648 </span>                :            : #undef OUTLIST
+<span class="lineNum">     649 </span>                :            : #undef INSIDE
+<span class="lineNum">     650 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     651 </span>                :            : 
+<span class="lineNum">     652 </span>                :            : 
+<span class="lineNum">     653 </span>                :            : /*
+<span class="lineNum">     654 </span>                :            :  * Clip against -Z
+<span class="lineNum">     655 </span>                :            :  */
+<span class="lineNum">     656 </span>                :            : #define INCOUNT n2
+<span class="lineNum">     657 </span>                :            : #define OUTCOUNT n
+<span class="lineNum">     658 </span>                :            : #define INLIST vlist2
+<span class="lineNum">     659 </span>                :            : #define OUTLIST vlist
+<span class="lineNum">     660 </span>                :            : #define INSIDE(K)       (Z(K) &gt;= -W(K))
+<span class="lineNum">     661 </span>                :            : #define COMPUTE_INTERSECTION( in, out, new )            \
+<span class="lineNum">     662 </span>                :            :         dz = Z(out)-Z(in);                              \
+<span class="lineNum">     663 </span>                :            :         dw = W(out)-W(in);                              \
+<span class="lineNum">     664 </span>                :            :         t = -(Z(in)+W(in)) / (dw+dz);                   \
+<span class="lineNum">     665 </span>                :            :         neww = W(in) + t * dw;                          \
+<span class="lineNum">     666 </span>                :            :         X(new) = X(in) + t * (X(out) - X(in));          \
+<span class="lineNum">     667 </span>                :            :         Y(new) = Y(in) + t * (Y(out) - Y(in));          \
+<span class="lineNum">     668 </span>                :            :         Z(new) = -neww;                                 \
+<span class="lineNum">     669 </span>                :            :         W(new) = neww;
+<span class="lineNum">     670 </span>                :            : 
+<span class="lineNum">     671 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    GENERAL_CLIP</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 13 was not executed"> # </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span>][<span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>][<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>][<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>][<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>]
+<span class="lineNum">     672 </span>                :            : 
+<span class="lineNum">     673 </span>                :            : #undef INCOUNT
+<span class="lineNum">     674 </span>                :            : #undef INLIST
+<span class="lineNum">     675 </span>                :            : #undef OUTLIST
+<span class="lineNum">     676 </span>                :            : #undef INSIDE
+<span class="lineNum">     677 </span>                :            : #undef COMPUTE_INTERSECTION
+<span class="lineNum">     678 </span>                :            : 
+<span class="lineNum">     679 </span>                :            :    /* 'OUTCOUNT' clipped vertices are now back in v[] */
+<span class="lineNum">     680 </span>                :<span class="lineNoCov">          0 :    return OUTCOUNT;</span>
+<span class="lineNum">     681 </span>                :            : 
+<span class="lineNum">     682 </span>                :            : #undef GENERAL_CLIP
+<span class="lineNum">     683 </span>                :            : #undef OUTCOUNT
+<span class="lineNum">     684 </span>                :            : }
+<span class="lineNum">     685 </span>                :            : 
+<span class="lineNum">     686 </span>                :            : 
+<span class="lineNum">     687 </span>                :            : 
+<span class="lineNum">     688 </span>                :            : 
+<span class="lineNum">     689 </span>                :            : /**********************************************************************/
+<span class="lineNum">     690 </span>                :            : /*         Clipping against user-defined clipping planes.             */
+<span class="lineNum">     691 </span>                :            : /**********************************************************************/
+<span class="lineNum">     692 </span>                :            : 
+<span class="lineNum">     693 </span>                :            : 
+<span class="lineNum">     694 </span>                :            : 
+<span class="lineNum">     695 </span>                :            : /*
+<span class="lineNum">     696 </span>                :            :  * If the dot product of the eye coordinates of a vertex with the
+<span class="lineNum">     697 </span>                :            :  * stored plane equation components is positive or zero, the vertex
+<span class="lineNum">     698 </span>                :            :  * is in with respect to that clipping plane, otherwise it is out.
+<span class="lineNum">     699 </span>                :            :  */
+<span class="lineNum">     700 </span>                :            : 
+<span class="lineNum">     701 </span>                :            : 
+<span class="lineNum">     702 </span>                :            : 
+<span class="lineNum">     703 </span>                :            : /*
+<span class="lineNum">     704 </span>                :            :  * Clip a point against the user clipping planes.
+<span class="lineNum">     705 </span>                :            :  * Input:  v - vertex-vector describing the point to clip.
+<span class="lineNum">     706 </span>                :            :  * Return:  0 = point was clipped
+<a name="707"><span class="lineNum">     707 </span>                :            :  *          1 = point not clipped</a>
+<span class="lineNum">     708 </span>                :            :  */
+<span class="lineNum">     709 </span>                :<span class="lineNoCov">          0 : GLuint gl_userclip_point( GLcontext* ctx, const GLfloat v[] )</span>
+<span class="lineNum">     710 </span>                :            : {
+<span class="lineNum">     711 </span>                :            :    GLuint p;
+<span class="lineNum">     712 </span>                :            : 
+<span class="lineNum">     713 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (p=0;p&lt;MAX_CLIP_PLANES;p++) {</span>
+<span class="lineNum">     714 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Transform.ClipEnabled[p]) {</span>
+<span class="lineNum">     715 </span>                :<span class="lineNoCov">          0 :          GLfloat dot = v[0] * ctx-&gt;Transform.ClipEquation[p][0]</span>
+<span class="lineNum">     716 </span>                :<span class="lineNoCov">          0 :                      + v[1] * ctx-&gt;Transform.ClipEquation[p][1]</span>
+<span class="lineNum">     717 </span>                :<span class="lineNoCov">          0 :                      + v[2] * ctx-&gt;Transform.ClipEquation[p][2]</span>
+<span class="lineNum">     718 </span>                :<span class="lineNoCov">          0 :                      + v[3] * ctx-&gt;Transform.ClipEquation[p][3];</span>
+<span class="lineNum">     719 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (dot &lt; 0.0F) {</span>
+<span class="lineNum">     720 </span>                :<span class="lineNoCov">          0 :             return 0;</span>
+<span class="lineNum">     721 </span>                :            :          }
+<span class="lineNum">     722 </span>                :            :       }
+<span class="lineNum">     723 </span>                :            :    }
+<span class="lineNum">     724 </span>                :            : 
+<span class="lineNum">     725 </span>                :<span class="lineNoCov">          0 :    return 1;</span>
+<span class="lineNum">     726 </span>                :            : }
+<span class="lineNum">     727 </span>                :            : 
+<span class="lineNum">     728 </span>                :            : 
+<span class="lineNum">     729 </span>                :            : #define MAGIC_NUMBER -0.8e-03F
+<span class="lineNum">     730 </span>                :            : 
+<span class="lineNum">     731 </span>                :            : 
+<span class="lineNum">     732 </span>                :            : /* Test if VB-&gt;Eye[J] is inside the clipping plane defined by A,B,C,D */
+<span class="lineNum">     733 </span>                :            : #define INSIDE( J, A, B, C, D )                                 \
+<span class="lineNum">     734 </span>                :            :    ( (VB-&gt;Eye[J][0] * A + VB-&gt;Eye[J][1] * B                       \
+<span class="lineNum">     735 </span>                :            :     + VB-&gt;Eye[J][2] * C + VB-&gt;Eye[J][3] * D) &gt;= MAGIC_NUMBER )
+<span class="lineNum">     736 </span>                :            : 
+<span class="lineNum">     737 </span>                :            : 
+<span class="lineNum">     738 </span>                :            : /* Test if VB-&gt;Eye[J] is outside the clipping plane defined by A,B,C,D */
+<span class="lineNum">     739 </span>                :            : #define OUTSIDE( J, A, B, C, D )                                \
+<span class="lineNum">     740 </span>                :            :    ( (VB-&gt;Eye[J][0] * A + VB-&gt;Eye[J][1] * B                       \
+<span class="lineNum">     741 </span>                :            :     + VB-&gt;Eye[J][2] * C + VB-&gt;Eye[J][3] * D) &lt; MAGIC_NUMBER )
+<span class="lineNum">     742 </span>                :            : 
+<span class="lineNum">     743 </span>                :            : 
+<span class="lineNum">     744 </span>                :            : /*
+<span class="lineNum">     745 </span>                :            :  * Clip a line against the user clipping planes.
+<span class="lineNum">     746 </span>                :            :  * Input:  i, j - indexes into VB-&gt;V*[] of endpoints
+<span class="lineNum">     747 </span>                :            :  * Output:  i, j - indexes into VB-&gt;V*[] of (possibly clipped) endpoints
+<span class="lineNum">     748 </span>                :            :  * Return:  0 = line completely clipped
+<a name="749"><span class="lineNum">     749 </span>                :            :  *          1 = line is visible</a>
+<span class="lineNum">     750 </span>                :            :  */
+<span class="lineNum">     751 </span>                :<span class="lineNoCov">          0 : GLuint gl_userclip_line( GLcontext* ctx, GLuint *i, GLuint *j )</span>
+<span class="lineNum">     752 </span>                :            : {
+<span class="lineNum">     753 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer* VB = ctx-&gt;VB;</span>
+<span class="lineNum">     754 </span>                :            : 
+<span class="lineNum">     755 </span>                :            :    GLuint p, ii, jj;
+<span class="lineNum">     756 </span>                :            : 
+<span class="lineNum">     757 </span>                :<span class="lineNoCov">          0 :    Space = EYE_SPACE;</span>
+<span class="lineNum">     758 </span>                :            : 
+<span class="lineNum">     759 </span>                :<span class="lineNoCov">          0 :    ii = *i;</span>
+<span class="lineNum">     760 </span>                :<span class="lineNoCov">          0 :    jj = *j;</span>
+<span class="lineNum">     761 </span>                :            : 
+<span class="lineNum">     762 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (p=0;p&lt;MAX_CLIP_PLANES;p++) {</span>
+<span class="lineNum">     763 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Transform.ClipEnabled[p]) {</span>
+<span class="lineNum">     764 </span>                :            :          register GLfloat a, b, c, d;
+<span class="lineNum">     765 </span>                :<span class="lineNoCov">          0 :          a = ctx-&gt;Transform.ClipEquation[p][0];</span>
+<span class="lineNum">     766 </span>                :<span class="lineNoCov">          0 :          b = ctx-&gt;Transform.ClipEquation[p][1];</span>
+<span class="lineNum">     767 </span>                :<span class="lineNoCov">          0 :          c = ctx-&gt;Transform.ClipEquation[p][2];</span>
+<span class="lineNum">     768 </span>                :<span class="lineNoCov">          0 :          d = ctx-&gt;Transform.ClipEquation[p][3];</span>
+<span class="lineNum">     769 </span>                :            : 
+<span class="lineNum">     770 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (OUTSIDE( ii, a,b,c,d  )) {</span>
+<span class="lineNum">     771 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (OUTSIDE( jj, a,b,c,d )) {</span>
+<span class="lineNum">     772 </span>                :            :                /* ii and jj outside ==&gt; quit */
+<span class="lineNum">     773 </span>                :<span class="lineNoCov">          0 :                return 0;</span>
+<span class="lineNum">     774 </span>                :            :             }
+<span class="lineNum">     775 </span>                :            :             else {
+<span class="lineNum">     776 </span>                :            :                /* ii is outside, jj is inside ==&gt; clip */
+<span class="lineNum">     777 </span>                :            :                GLfloat dx, dy, dz, dw, t, denom;
+<span class="lineNum">     778 </span>                :<span class="lineNoCov">          0 :                dx = VB-&gt;Eye[ii][0] - VB-&gt;Eye[jj][0];</span>
+<span class="lineNum">     779 </span>                :<span class="lineNoCov">          0 :                dy = VB-&gt;Eye[ii][1] - VB-&gt;Eye[jj][1];</span>
+<span class="lineNum">     780 </span>                :<span class="lineNoCov">          0 :                dz = VB-&gt;Eye[ii][2] - VB-&gt;Eye[jj][2];</span>
+<span class="lineNum">     781 </span>                :<span class="lineNoCov">          0 :                dw = VB-&gt;Eye[ii][3] - VB-&gt;Eye[jj][3];</span>
+<span class="lineNum">     782 </span>                :<span class="lineNoCov">          0 :                denom = dx*a + dy*b + dz*c + dw*d;</span>
+<span class="lineNum">     783 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (denom==0.0) {</span>
+<span class="lineNum">     784 </span>                :<span class="lineNoCov">          0 :                   t = 0.0;</span>
+<span class="lineNum">     785 </span>                :            :                }
+<span class="lineNum">     786 </span>                :            :                else {
+<span class="lineNum">     787 </span>                :<span class="lineNoCov">          0 :                   t = -(VB-&gt;Eye[jj][0]*a+VB-&gt;Eye[jj][1]*b</span>
+<span class="lineNum">     788 </span>                :<span class="lineNoCov">          0 :                        +VB-&gt;Eye[jj][2]*c+VB-&gt;Eye[jj][3]*d) / denom;</span>
+<span class="lineNum">     789 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (t&gt;1.0F)  t = 1.0F;</span>
+<span class="lineNum">     790 </span>                :            :                }
+<span class="lineNum">     791 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][0] = VB-&gt;Eye[jj][0] + t * dx;</span>
+<span class="lineNum">     792 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][1] = VB-&gt;Eye[jj][1] + t * dy;</span>
+<span class="lineNum">     793 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][2] = VB-&gt;Eye[jj][2] + t * dz;</span>
+<span class="lineNum">     794 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][3] = VB-&gt;Eye[jj][3] + t * dw;</span>
+<span class="lineNum">     795 </span>                :            : 
+<span class="lineNum">     796 </span>                :            :                /* Interpolate colors, indexes, and/or texture coords */
+<span class="lineNum">     797 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ctx-&gt;ClipMask)</span>
+<span class="lineNum">     798 </span>                :<span class="lineNoCov">          0 :                   interpolate_aux( ctx, VB-&gt;Free, t, jj, ii );</span>
+<span class="lineNum">     799 </span>                :            : 
+<span class="lineNum">     800 </span>                :<span class="lineNoCov">          0 :                ii = VB-&gt;Free;</span>
+<span class="lineNum">     801 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Free++;</span>
+<span class="lineNum">     802 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;</span>
+<span class="lineNum">     803 </span>                :            :             }
+<span class="lineNum">     804 </span>                :            :          }
+<span class="lineNum">     805 </span>                :            :          else {
+<span class="lineNum">     806 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (OUTSIDE( jj, a,b,c,d )) {</span>
+<span class="lineNum">     807 </span>                :            :                /* ii is inside, jj is outside ==&gt; clip */
+<span class="lineNum">     808 </span>                :            :                GLfloat dx, dy, dz, dw, t, denom;
+<span class="lineNum">     809 </span>                :<span class="lineNoCov">          0 :                dx = VB-&gt;Eye[jj][0] - VB-&gt;Eye[ii][0];</span>
+<span class="lineNum">     810 </span>                :<span class="lineNoCov">          0 :                dy = VB-&gt;Eye[jj][1] - VB-&gt;Eye[ii][1];</span>
+<span class="lineNum">     811 </span>                :<span class="lineNoCov">          0 :                dz = VB-&gt;Eye[jj][2] - VB-&gt;Eye[ii][2];</span>
+<span class="lineNum">     812 </span>                :<span class="lineNoCov">          0 :                dw = VB-&gt;Eye[jj][3] - VB-&gt;Eye[ii][3];</span>
+<span class="lineNum">     813 </span>                :<span class="lineNoCov">          0 :                denom = dx*a + dy*b + dz*c + dw*d;</span>
+<span class="lineNum">     814 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (denom==0.0) {</span>
+<span class="lineNum">     815 </span>                :<span class="lineNoCov">          0 :                   t = 0.0;</span>
+<span class="lineNum">     816 </span>                :            :                }
+<span class="lineNum">     817 </span>                :            :                else {
+<span class="lineNum">     818 </span>                :<span class="lineNoCov">          0 :                   t = -(VB-&gt;Eye[ii][0]*a+VB-&gt;Eye[ii][1]*b</span>
+<span class="lineNum">     819 </span>                :<span class="lineNoCov">          0 :                        +VB-&gt;Eye[ii][2]*c+VB-&gt;Eye[ii][3]*d) / denom;</span>
+<span class="lineNum">     820 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (t&gt;1.0F)  t = 1.0F;</span>
+<span class="lineNum">     821 </span>                :            :                }
+<span class="lineNum">     822 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][0] = VB-&gt;Eye[ii][0] + t * dx;</span>
+<span class="lineNum">     823 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][1] = VB-&gt;Eye[ii][1] + t * dy;</span>
+<span class="lineNum">     824 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][2] = VB-&gt;Eye[ii][2] + t * dz;</span>
+<span class="lineNum">     825 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Eye[VB-&gt;Free][3] = VB-&gt;Eye[ii][3] + t * dw;</span>
+<span class="lineNum">     826 </span>                :            : 
+<span class="lineNum">     827 </span>                :            :                /* Interpolate colors, indexes, and/or texture coords */
+<span class="lineNum">     828 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ctx-&gt;ClipMask)</span>
+<span class="lineNum">     829 </span>                :<span class="lineNoCov">          0 :                   interpolate_aux( ctx, VB-&gt;Free, t, ii, jj );</span>
+<span class="lineNum">     830 </span>                :            : 
+<span class="lineNum">     831 </span>                :<span class="lineNoCov">          0 :                jj = VB-&gt;Free;</span>
+<span class="lineNum">     832 </span>                :<span class="lineNoCov">          0 :                VB-&gt;Free++;</span>
+<span class="lineNum">     833 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;</span>
+<span class="lineNum">     834 </span>                :            :             }
+<span class="lineNum">     835 </span>                :            :             else {
+<span class="lineNum">     836 </span>                :            :                /* ii and jj inside ==&gt; do nothing */
+<span class="lineNum">     837 </span>                :            :             }
+<span class="lineNum">     838 </span>                :            :          }
+<span class="lineNum">     839 </span>                :            :       }
+<span class="lineNum">     840 </span>                :            :    }
+<span class="lineNum">     841 </span>                :            : 
+<span class="lineNum">     842 </span>                :<span class="lineNoCov">          0 :    *i = ii;</span>
+<span class="lineNum">     843 </span>                :<span class="lineNoCov">          0 :    *j = jj;</span>
+<span class="lineNum">     844 </span>                :<span class="lineNoCov">          0 :    return 1;</span>
+<span class="lineNum">     845 </span>                :            : }
+<span class="lineNum">     846 </span>                :            : 
+<span class="lineNum">     847 </span>                :            : 
+<span class="lineNum">     848 </span>                :            : 
+<span class="lineNum">     849 </span>                :            : 
+<span class="lineNum">     850 </span>                :            : /*
+<span class="lineNum">     851 </span>                :            :  * Clip a polygon against the user clipping planes defined in eye coordinates.
+<span class="lineNum">     852 </span>                :            :  * Input:  n - number of vertices.
+<span class="lineNum">     853 </span>                :            :  *         vlist - list of vertices in input polygon.
+<span class="lineNum">     854 </span>                :            :  * Output:  vlist - list of vertices in output polygon.
+<a name="855"><span class="lineNum">     855 </span>                :            :  * Return:  number of vertices after clipping.</a>
+<span class="lineNum">     856 </span>                :            :  */
+<span class="lineNum">     857 </span>                :<span class="lineNoCov">          0 : GLuint gl_userclip_polygon( GLcontext* ctx, GLuint n, GLuint vlist[] )</span>
+<span class="lineNum">     858 </span>                :            : {
+<span class="lineNum">     859 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer* VB = ctx-&gt;VB;</span>
+<span class="lineNum">     860 </span>                :            : 
+<span class="lineNum">     861 </span>                :            :    GLuint vlist2[VB_SIZE];
+<span class="lineNum">     862 </span>                :            :    GLuint *inlist, *outlist;
+<span class="lineNum">     863 </span>                :            :    GLuint incount, outcount;
+<span class="lineNum">     864 </span>                :            :    GLuint curri, currj;
+<span class="lineNum">     865 </span>                :            :    GLuint previ, prevj;
+<span class="lineNum">     866 </span>                :            :    GLuint p;
+<span class="lineNum">     867 </span>                :            : 
+<span class="lineNum">     868 </span>                :<span class="lineNoCov">          0 :    Space = EYE_SPACE;</span>
+<span class="lineNum">     869 </span>                :            : 
+<span class="lineNum">     870 </span>                :            :    /* initialize input vertex list */
+<span class="lineNum">     871 </span>                :<span class="lineNoCov">          0 :    incount = n;</span>
+<span class="lineNum">     872 </span>                :<span class="lineNoCov">          0 :    inlist = vlist;</span>
+<span class="lineNum">     873 </span>                :<span class="lineNoCov">          0 :    outlist = vlist2;</span>
+<span class="lineNum">     874 </span>                :            : 
+<span class="lineNum">     875 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (p=0;p&lt;MAX_CLIP_PLANES;p++) {</span>
+<span class="lineNum">     876 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Transform.ClipEnabled[p]) {</span>
+<span class="lineNum">     877 </span>                :<span class="lineNoCov">          0 :          register float a = ctx-&gt;Transform.ClipEquation[p][0];</span>
+<span class="lineNum">     878 </span>                :<span class="lineNoCov">          0 :          register float b = ctx-&gt;Transform.ClipEquation[p][1];</span>
+<span class="lineNum">     879 </span>                :<span class="lineNoCov">          0 :          register float c = ctx-&gt;Transform.ClipEquation[p][2];</span>
+<span class="lineNum">     880 </span>                :<span class="lineNoCov">          0 :          register float d = ctx-&gt;Transform.ClipEquation[p][3];</span>
+<span class="lineNum">     881 </span>                :            : 
+<span class="lineNum">     882 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (incount&lt;3)  return 0;</span>
+<span class="lineNum">     883 </span>                :            : 
+<span class="lineNum">     884 </span>                :            :          /* initialize prev to be last in the input list */
+<span class="lineNum">     885 </span>                :<span class="lineNoCov">          0 :          previ = incount - 1;</span>
+<span class="lineNum">     886 </span>                :<span class="lineNoCov">          0 :          prevj = inlist[previ];</span>
+<span class="lineNum">     887 </span>                :            : 
+<span class="lineNum">     888 </span>                :<span class="lineNoCov">          0 :          outcount = 0;</span>
+<span class="lineNum">     889 </span>                :            : 
+<span class="lineNum">     890 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (curri=0;curri&lt;incount;curri++) {</span>
+<span class="lineNum">     891 </span>                :<span class="lineNoCov">          0 :             currj = inlist[curri];</span>
+<span class="lineNum">     892 </span>                :            : 
+<span class="lineNum">     893 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (INSIDE(currj, a,b,c,d)) {</span>
+<span class="lineNum">     894 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (INSIDE(prevj, a,b,c,d)) {</span>
+<span class="lineNum">     895 </span>                :            :                   /* both verts are inside ==&gt; copy current to outlist */
+<span class="lineNum">     896 </span>                :<span class="lineNoCov">          0 :                   outlist[outcount++] = currj;</span>
+<span class="lineNum">     897 </span>                :            :                }
+<span class="lineNum">     898 </span>                :            :                else {
+<span class="lineNum">     899 </span>                :            :                   /* current is inside and previous is outside ==&gt; clip */
+<span class="lineNum">     900 </span>                :            :                   GLfloat dx, dy, dz, dw, t, denom;
+<span class="lineNum">     901 </span>                :            :                   /* compute t */
+<span class="lineNum">     902 </span>                :<span class="lineNoCov">          0 :                   dx = VB-&gt;Eye[prevj][0] - VB-&gt;Eye[currj][0];</span>
+<span class="lineNum">     903 </span>                :<span class="lineNoCov">          0 :                   dy = VB-&gt;Eye[prevj][1] - VB-&gt;Eye[currj][1];</span>
+<span class="lineNum">     904 </span>                :<span class="lineNoCov">          0 :                   dz = VB-&gt;Eye[prevj][2] - VB-&gt;Eye[currj][2];</span>
+<span class="lineNum">     905 </span>                :<span class="lineNoCov">          0 :                   dw = VB-&gt;Eye[prevj][3] - VB-&gt;Eye[currj][3];</span>
+<span class="lineNum">     906 </span>                :<span class="lineNoCov">          0 :                   denom = dx*a + dy*b + dz*c + dw*d;</span>
+<span class="lineNum">     907 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (denom==0.0) {</span>
+<span class="lineNum">     908 </span>                :<span class="lineNoCov">          0 :                      t = 0.0;</span>
+<span class="lineNum">     909 </span>                :            :                   }
+<span class="lineNum">     910 </span>                :            :                   else {
+<span class="lineNum">     911 </span>                :<span class="lineNoCov">          0 :                      t = -(VB-&gt;Eye[currj][0]*a+VB-&gt;Eye[currj][1]*b</span>
+<span class="lineNum">     912 </span>                :<span class="lineNoCov">          0 :                        +VB-&gt;Eye[currj][2]*c+VB-&gt;Eye[currj][3]*d) / denom;</span>
+<span class="lineNum">     913 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                      if (t&gt;1.0F) {</span>
+<span class="lineNum">     914 </span>                :<span class="lineNoCov">          0 :                         t = 1.0F;</span>
+<span class="lineNum">     915 </span>                :            :                      }
+<span class="lineNum">     916 </span>                :            :                   }
+<span class="lineNum">     917 </span>                :            :                   /* interpolate new vertex position */
+<span class="lineNum">     918 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][0] = VB-&gt;Eye[currj][0] + t*dx;</span>
+<span class="lineNum">     919 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][1] = VB-&gt;Eye[currj][1] + t*dy;</span>
+<span class="lineNum">     920 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][2] = VB-&gt;Eye[currj][2] + t*dz;</span>
+<span class="lineNum">     921 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][3] = VB-&gt;Eye[currj][3] + t*dw;</span>
+<span class="lineNum">     922 </span>                :            : 
+<span class="lineNum">     923 </span>                :            :                   /* interpolate color, index, and/or texture coord */
+<span class="lineNum">     924 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (ctx-&gt;ClipMask) {</span>
+<span class="lineNum">     925 </span>                :<span class="lineNoCov">          0 :                      interpolate_aux( ctx, VB-&gt;Free, t, currj, prevj);</span>
+<span class="lineNum">     926 </span>                :            :                   }
+<span class="lineNum">     927 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Edgeflag[VB-&gt;Free] = VB-&gt;Edgeflag[prevj];</span>
+<span class="lineNum">     928 </span>                :            : 
+<span class="lineNum">     929 </span>                :            :                   /* output new vertex */
+<span class="lineNum">     930 </span>                :<span class="lineNoCov">          0 :                   outlist[outcount++] = VB-&gt;Free;</span>
+<span class="lineNum">     931 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Free++;</span>
+<span class="lineNum">     932 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;</span>
+<span class="lineNum">     933 </span>                :            :                   /* output current vertex */
+<span class="lineNum">     934 </span>                :<span class="lineNoCov">          0 :                   outlist[outcount++] = currj;</span>
+<span class="lineNum">     935 </span>                :            :                }
+<span class="lineNum">     936 </span>                :            :             }
+<span class="lineNum">     937 </span>                :            :             else {
+<span class="lineNum">     938 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (INSIDE(prevj, a,b,c,d)) {</span>
+<span class="lineNum">     939 </span>                :            :                   /* current is outside and previous is inside ==&gt; clip */
+<span class="lineNum">     940 </span>                :            :                   GLfloat dx, dy, dz, dw, t, denom;
+<span class="lineNum">     941 </span>                :            :                   /* compute t */
+<span class="lineNum">     942 </span>                :<span class="lineNoCov">          0 :                   dx = VB-&gt;Eye[currj][0]-VB-&gt;Eye[prevj][0];</span>
+<span class="lineNum">     943 </span>                :<span class="lineNoCov">          0 :                   dy = VB-&gt;Eye[currj][1]-VB-&gt;Eye[prevj][1];</span>
+<span class="lineNum">     944 </span>                :<span class="lineNoCov">          0 :                   dz = VB-&gt;Eye[currj][2]-VB-&gt;Eye[prevj][2];</span>
+<span class="lineNum">     945 </span>                :<span class="lineNoCov">          0 :                   dw = VB-&gt;Eye[currj][3]-VB-&gt;Eye[prevj][3];</span>
+<span class="lineNum">     946 </span>                :<span class="lineNoCov">          0 :                   denom = dx*a + dy*b + dz*c + dw*d;</span>
+<span class="lineNum">     947 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (denom==0.0) {</span>
+<span class="lineNum">     948 </span>                :<span class="lineNoCov">          0 :                      t = 0.0;</span>
+<span class="lineNum">     949 </span>                :            :                   }
+<span class="lineNum">     950 </span>                :            :                   else {
+<span class="lineNum">     951 </span>                :<span class="lineNoCov">          0 :                      t = -(VB-&gt;Eye[prevj][0]*a+VB-&gt;Eye[prevj][1]*b</span>
+<span class="lineNum">     952 </span>                :<span class="lineNoCov">          0 :                        +VB-&gt;Eye[prevj][2]*c+VB-&gt;Eye[prevj][3]*d) / denom;</span>
+<span class="lineNum">     953 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                      if (t&gt;1.0F) {</span>
+<span class="lineNum">     954 </span>                :<span class="lineNoCov">          0 :                         t = 1.0F;</span>
+<span class="lineNum">     955 </span>                :            :                      }
+<span class="lineNum">     956 </span>                :            :                   }
+<span class="lineNum">     957 </span>                :            :                   /* interpolate new vertex position */
+<span class="lineNum">     958 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][0] = VB-&gt;Eye[prevj][0] + t*dx;</span>
+<span class="lineNum">     959 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][1] = VB-&gt;Eye[prevj][1] + t*dy;</span>
+<span class="lineNum">     960 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][2] = VB-&gt;Eye[prevj][2] + t*dz;</span>
+<span class="lineNum">     961 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Eye[VB-&gt;Free][3] = VB-&gt;Eye[prevj][3] + t*dw;</span>
+<span class="lineNum">     962 </span>                :            : 
+<span class="lineNum">     963 </span>                :            :                   /* interpolate color, index, and/or texture coord */
+<span class="lineNum">     964 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (ctx-&gt;ClipMask) {</span>
+<span class="lineNum">     965 </span>                :<span class="lineNoCov">          0 :                      interpolate_aux( ctx, VB-&gt;Free, t, prevj, currj);</span>
+<span class="lineNum">     966 </span>                :            :                   }
+<span class="lineNum">     967 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Edgeflag[VB-&gt;Free] = VB-&gt;Edgeflag[prevj];</span>
+<span class="lineNum">     968 </span>                :            : 
+<span class="lineNum">     969 </span>                :            :                   /* output new vertex */
+<span class="lineNum">     970 </span>                :<span class="lineNoCov">          0 :                   outlist[outcount++] = VB-&gt;Free;</span>
+<span class="lineNum">     971 </span>                :<span class="lineNoCov">          0 :                   VB-&gt;Free++;</span>
+<span class="lineNum">     972 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (VB-&gt;Free==VB_SIZE)   VB-&gt;Free = 1;</span>
+<span class="lineNum">     973 </span>                :            :                }
+<span class="lineNum">     974 </span>                :            :                /* else  both verts are outside ==&gt; do nothing */
+<span class="lineNum">     975 </span>                :            :             }
+<span class="lineNum">     976 </span>                :            : 
+<span class="lineNum">     977 </span>                :<span class="lineNoCov">          0 :             previ = curri;</span>
+<span class="lineNum">     978 </span>                :<span class="lineNoCov">          0 :             prevj = currj;</span>
+<span class="lineNum">     979 </span>                :            : 
+<span class="lineNum">     980 </span>                :            :             /* check for overflowing vertex buffer */
+<span class="lineNum">     981 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (outcount&gt;=VB_SIZE-1) {</span>
+<span class="lineNum">     982 </span>                :            :                /* Too many vertices */
+<span class="lineNum">     983 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (outlist!=vlist2) {</span>
+<span class="lineNum">     984 </span>                :<span class="lineNoCov">          0 :                   MEMCPY( vlist, vlist2, outcount * sizeof(GLuint) );</span>
+<span class="lineNum">     985 </span>                :            :                }
+<span class="lineNum">     986 </span>                :<span class="lineNoCov">          0 :                return VB_SIZE-1;</span>
+<span class="lineNum">     987 </span>                :            :             }
+<span class="lineNum">     988 </span>                :            : 
+<span class="lineNum">     989 </span>                :            :          }  /* for i */
+<span class="lineNum">     990 </span>                :            : 
+<span class="lineNum">     991 </span>                :            :          /* swap inlist and outlist pointers */
+<span class="lineNum">     992 </span>                :            :          {
+<span class="lineNum">     993 </span>                :            :             GLuint *tmp;
+<span class="lineNum">     994 </span>                :<span class="lineNoCov">          0 :             tmp = inlist;</span>
+<span class="lineNum">     995 </span>                :<span class="lineNoCov">          0 :             inlist = outlist;</span>
+<span class="lineNum">     996 </span>                :<span class="lineNoCov">          0 :             outlist = tmp;</span>
+<span class="lineNum">     997 </span>                :<span class="lineNoCov">          0 :             incount = outcount;</span>
+<span class="lineNum">     998 </span>                :            :          }
+<span class="lineNum">     999 </span>                :            : 
+<span class="lineNum">    1000 </span>                :            :       } /* if */
+<span class="lineNum">    1001 </span>                :            :    } /* for p */
+<span class="lineNum">    1002 </span>                :            : 
+<span class="lineNum">    1003 </span>                :            :    /* outlist points to the list of vertices resulting from the last */
+<span class="lineNum">    1004 </span>                :            :    /* clipping.  If outlist == vlist2 then we have to copy the vertices */
+<span class="lineNum">    1005 </span>                :            :    /* back to vlist */
+<span class="lineNum">    1006 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (outlist!=vlist2) {</span>
+<span class="lineNum">    1007 </span>                :<span class="lineNoCov">          0 :       MEMCPY( vlist, vlist2, outcount * sizeof(GLuint) );</span>
+<span class="lineNum">    1008 </span>                :            :    }
+<span class="lineNum">    1009 </span>                :            : 
+<span class="lineNum">    1010 </span>                :<span class="lineNoCov">          0 :    return outcount;</span>
+<span class="lineNum">    1011 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1012 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

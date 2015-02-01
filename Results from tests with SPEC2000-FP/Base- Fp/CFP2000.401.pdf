@@ -1,0 +1,1685 @@
+%PDF-1.3
+%‚„œ”
+5 0 obj
+<</Length 6 0 R
+>>
+stream
+q
+1 0 0 1 36 36 cm
+0 0 540 720 re
+S
+q
+1 0 0 1 0 0 cm
+q
+0.9 G
+0.9 g
+0 0 540 36 re
+f
+Q
+q
+0 0 540 36 re
+S
+Q
+BT
+1 0 0 1 4.5 22.5 Tm
+1 0 0 1 270 22.5 Tm
+1 0 0 1 186.4 22.5 Tm
+/F0 9 Tf
+9 TL
+(Standard Performance Evaluation Corporation)Tj
+1 0 0 1 243.5 13.5 Tm
+(info@spec.org)Tj
+1 0 0 1 233.3 4.5 Tm
+(http://www.spec.org)Tj
+ET
+Q
+1 0 0 1 0 36 cm
+q
+1 0 0 1 0 648 cm
+0 0 540 36 re
+S
+BT
+1 0 0 1 270 10.08 Tm
+1 0 0 1 170.4 10.08 Tm
+/F1 28.8 Tf
+28.8 TL
+(CFP2000 Result)Tj
+1 0 0 1 177.7 2.88 Tm
+/F2 7.2 Tf
+7.2 TL
+(„)Tj
+/F0 7.2 Tf
+7.2 TL
+( Copyright 1999, Standard Performance Evaluation Corporation)Tj
+ET
+Q
+q
+1 0 0 1 0 594 cm
+0 0 302.4 54 re
+S
+1 0 0 1 5.4 9 cm
+BT
+1 0 0 1 0 21.6 Tm
+/F0 21.6 Tf
+21.6 TL
+(--)Tj
+1 0 0 1 0 0 Tm
+(--)Tj
+ET
+Q
+q
+1 0 0 1 302.4 594 cm
+q
+0 0 237.6 27 re
+0.8 G
+0.8 g
+f
+Q
+0 0 237.6 54 re
+S
+1 0 0 1 5.4 5.4 cm
+BT
+1 0 0 1 0 25.2 Tm
+/F0 17.28 Tf
+17.28 TL
+(SPECfp2000 = )Tj
+1 0 0 1 0 6.221 Tm
+(SPECfp_base2000 = )Tj
+1 0 0 1 226.8 27.82 Tm
+1 0 0 1 207.3 27.82 Tm
+(--)Tj
+1 0 0 1 226.8 6.221 Tm
+1 0 0 1 200.9 6.221 Tm
+(808)Tj
+ET
+Q
+q
+1 0 0 1 0 585 cm
+0 0 540 9 re
+S
+0 0 64.8 9 re
+S
+BT
+1 0 0 1 0.9 2.592 Tm
+/F0 7.2 Tf
+7.2 TL
+(SPEC license #:)Tj
+1 0 0 1 63.9 2.592 Tm
+1 0 0 1 55.78 2.592 Tm
+(--)Tj
+ET
+64.8 0 135 9 re
+S
+BT
+1 0 0 1 65.7 2.592 Tm
+(Tested by:)Tj
+1 0 0 1 198.9 2.592 Tm
+1 0 0 1 190.8 2.592 Tm
+(--)Tj
+ET
+199.8 0 113.4 9 re
+S
+BT
+1 0 0 1 200.7 2.592 Tm
+(Test date:)Tj
+1 0 0 1 312.3 2.592 Tm
+1 0 0 1 304.2 2.592 Tm
+(--)Tj
+ET
+313.2 0 113.4 9 re
+S
+BT
+1 0 0 1 314.1 2.592 Tm
+(Hardware Avail:)Tj
+1 0 0 1 425.7 2.592 Tm
+1 0 0 1 417.6 2.592 Tm
+(--)Tj
+ET
+426.6 0 113.4 9 re
+S
+BT
+1 0 0 1 427.5 2.592 Tm
+(Software Avail:)Tj
+1 0 0 1 539.1 2.592 Tm
+1 0 0 1 531 2.592 Tm
+(--)Tj
+ET
+Q
+q
+1 0 0 1 0 585 cm
+0 -20 270 20 re
+S
+0 -20 67.5 20 re
+S
+BT
+1 0 0 1 33.75 -8 Tm
+1 0 0 1 33.75 -8 Tm
+/F1 8.5 Tf
+8.5 TL
+()Tj
+1 0 0 1 33.75 -16 Tm
+1 0 0 1 12.5 -16 Tm
+(Benchmark)Tj
+ET
+67.5 -20 40.5 20 re
+S
+BT
+1 0 0 1 87.75 -8 Tm
+1 0 0 1 69.58 -8 Tm
+(Reference)Tj
+1 0 0 1 87.75 -16 Tm
+1 0 0 1 78.31 -16 Tm
+(Time)Tj
+ET
+108 -20 40.5 20 re
+S
+BT
+1 0 0 1 128.2 -8 Tm
+1 0 0 1 119.8 -8 Tm
+(Base)Tj
+1 0 0 1 128.2 -16 Tm
+1 0 0 1 112.4 -16 Tm
+(Runtime)Tj
+ET
+148.5 -20 40.5 20 re
+S
+BT
+1 0 0 1 168.8 -8 Tm
+1 0 0 1 160.2 -8 Tm
+(Base)Tj
+1 0 0 1 168.8 -16 Tm
+1 0 0 1 158.8 -16 Tm
+(Ratio)Tj
+ET
+189 -20 40.5 20 re
+S
+BT
+1 0 0 1 209.2 -8 Tm
+1 0 0 1 209.2 -8 Tm
+()Tj
+1 0 0 1 209.2 -16 Tm
+1 0 0 1 193.4 -16 Tm
+(Runtime)Tj
+ET
+229.5 -20 40.5 20 re
+S
+BT
+1 0 0 1 249.8 -8 Tm
+1 0 0 1 249.8 -8 Tm
+()Tj
+1 0 0 1 249.8 -16 Tm
+1 0 0 1 239.8 -16 Tm
+(Ratio)Tj
+ET
+q
+302.5 -19 m
+302.5 -15 l
+S
+286.2 -19 m
+286.2 -17 l
+S
+318.8 -19 m
+318.8 -17 l
+S
+278.1 -19 m
+278.1 -18 l
+S
+294.4 -19 m
+294.4 -18 l
+S
+310.6 -19 m
+310.6 -18 l
+S
+326.9 -19 m
+326.9 -18 l
+S
+Q
+BT
+1 0 0 1 335 -11.75 Tm
+1 0 0 1 327.5 -11.75 Tm
+/F0 10 Tf
+10 TL
+(500)Tj
+ET
+335 -19 m
+335 -14 l
+S
+q
+367.5 -19 m
+367.5 -15 l
+S
+351.2 -19 m
+351.2 -17 l
+S
+383.8 -19 m
+383.8 -17 l
+S
+343.1 -19 m
+343.1 -18 l
+S
+359.4 -19 m
+359.4 -18 l
+S
+375.6 -19 m
+375.6 -18 l
+S
+391.9 -19 m
+391.9 -18 l
+S
+Q
+BT
+1 0 0 1 400 -11.75 Tm
+1 0 0 1 390 -11.75 Tm
+(1000)Tj
+ET
+400 -19 m
+400 -14 l
+S
+q
+432.5 -19 m
+432.5 -15 l
+S
+416.2 -19 m
+416.2 -17 l
+S
+448.8 -19 m
+448.8 -17 l
+S
+408.1 -19 m
+408.1 -18 l
+S
+424.4 -19 m
+424.4 -18 l
+S
+440.6 -19 m
+440.6 -18 l
+S
+456.9 -19 m
+456.9 -18 l
+S
+Q
+BT
+1 0 0 1 465 -11.75 Tm
+1 0 0 1 455 -11.75 Tm
+(1500)Tj
+ET
+465 -19 m
+465 -14 l
+S
+q
+497.5 -19 m
+497.5 -15 l
+S
+481.2 -19 m
+481.2 -17 l
+S
+513.8 -19 m
+513.8 -17 l
+S
+473.1 -19 m
+473.1 -18 l
+S
+489.4 -19 m
+489.4 -18 l
+S
+505.6 -19 m
+505.6 -18 l
+S
+521.9 -19 m
+521.9 -18 l
+S
+Q
+BT
+1 0 0 1 530 -11.75 Tm
+1 0 0 1 510 -11.75 Tm
+(2000)Tj
+ET
+530 -19 m
+530 -15 l
+S
+q
+0.9 G
+0.9 g
+0 -35 67.5 15 re
+f
+Q
+0 -35 67.5 15 re
+S
+BT
+1 0 0 1 5 -32.75 Tm
+(168.wupwise)Tj
+ET
+67.5 -35 40.5 15 re
+S
+BT
+1 0 0 1 103 -32.75 Tm
+1 0 0 1 83 -32.75 Tm
+(1600
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -35 40.5 15 re
+f
+Q
+108 -35 40.5 15 re
+S
+BT
+1 0 0 1 136 -32.75 Tm
+1 0 0 1 121 -32.75 Tm
+(142)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -35 40.5 15 re
+f
+Q
+148.5 -35 40.5 15 re
+S
+BT
+1 0 0 1 184 -32.75 Tm
+1 0 0 1 164 -32.75 Tm
+(1126)Tj
+ET
+189 -35 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -32.75 Tm
+1 0 0 1 224.5 -32.75 Tm
+()Tj
+ET
+229.5 -35 40.5 15 re
+S
+BT
+1 0 0 1 265 -32.75 Tm
+1 0 0 1 265 -32.75 Tm
+()Tj
+ET
+270 -35 -270 15 re
+S
+BT
+1 0 0 1 -5 -32.75 Tm
+1 0 0 1 -5 -32.75 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -27.5 146.4 -5 re
+f
+Q
+270 -27.5 146.4 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -50 67.5 15 re
+f
+Q
+0 -50 67.5 15 re
+S
+BT
+1 0 0 1 5 -47.75 Tm
+(171.swim)Tj
+ET
+67.5 -50 40.5 15 re
+S
+BT
+1 0 0 1 103 -47.75 Tm
+1 0 0 1 83 -47.75 Tm
+(3100
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -50 40.5 15 re
+f
+Q
+108 -50 40.5 15 re
+S
+BT
+1 0 0 1 136 -47.75 Tm
+1 0 0 1 121 -47.75 Tm
+(213)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -50 40.5 15 re
+f
+Q
+148.5 -50 40.5 15 re
+S
+BT
+1 0 0 1 184 -47.75 Tm
+1 0 0 1 164 -47.75 Tm
+(1455)Tj
+ET
+189 -50 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -47.75 Tm
+1 0 0 1 224.5 -47.75 Tm
+()Tj
+ET
+229.5 -50 40.5 15 re
+S
+BT
+1 0 0 1 265 -47.75 Tm
+1 0 0 1 265 -47.75 Tm
+()Tj
+ET
+270 -50 -270 15 re
+S
+BT
+1 0 0 1 -5 -47.75 Tm
+1 0 0 1 -5 -47.75 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -42.5 189.2 -5 re
+f
+Q
+270 -42.5 189.2 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -65 67.5 15 re
+f
+Q
+0 -65 67.5 15 re
+S
+BT
+1 0 0 1 5 -62.75 Tm
+(172.mgrid)Tj
+ET
+67.5 -65 40.5 15 re
+S
+BT
+1 0 0 1 103 -62.75 Tm
+1 0 0 1 83 -62.75 Tm
+(1800
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -65 40.5 15 re
+f
+Q
+108 -65 40.5 15 re
+S
+BT
+1 0 0 1 136 -62.75 Tm
+1 0 0 1 121 -62.75 Tm
+(444)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -65 40.5 15 re
+f
+Q
+148.5 -65 40.5 15 re
+S
+BT
+1 0 0 1 184 -62.75 Tm
+1 0 0 1 169 -62.75 Tm
+(406)Tj
+ET
+189 -65 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -62.75 Tm
+1 0 0 1 224.5 -62.75 Tm
+()Tj
+ET
+229.5 -65 40.5 15 re
+S
+BT
+1 0 0 1 265 -62.75 Tm
+1 0 0 1 265 -62.75 Tm
+()Tj
+ET
+270 -65 -270 15 re
+S
+BT
+1 0 0 1 -5 -62.75 Tm
+1 0 0 1 -5 -62.75 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -57.5 52.74 -5 re
+f
+Q
+270 -57.5 52.74 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -80 67.5 15 re
+f
+Q
+0 -80 67.5 15 re
+S
+BT
+1 0 0 1 5 -77.75 Tm
+(173.applu)Tj
+ET
+67.5 -80 40.5 15 re
+S
+BT
+1 0 0 1 103 -77.75 Tm
+1 0 0 1 83 -77.75 Tm
+(2100
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -80 40.5 15 re
+f
+Q
+108 -80 40.5 15 re
+S
+BT
+1 0 0 1 136 -77.75 Tm
+1 0 0 1 121 -77.75 Tm
+(248)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -80 40.5 15 re
+f
+Q
+148.5 -80 40.5 15 re
+S
+BT
+1 0 0 1 184 -77.75 Tm
+1 0 0 1 169 -77.75 Tm
+(847)Tj
+ET
+189 -80 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -77.75 Tm
+1 0 0 1 224.5 -77.75 Tm
+()Tj
+ET
+229.5 -80 40.5 15 re
+S
+BT
+1 0 0 1 265 -77.75 Tm
+1 0 0 1 265 -77.75 Tm
+()Tj
+ET
+270 -80 -270 15 re
+S
+BT
+1 0 0 1 -5 -77.75 Tm
+1 0 0 1 -5 -77.75 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -72.5 110.1 -5 re
+f
+Q
+270 -72.5 110.1 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -95 67.5 15 re
+f
+Q
+0 -95 67.5 15 re
+S
+BT
+1 0 0 1 5 -92.75 Tm
+(177.mesa)Tj
+ET
+67.5 -95 40.5 15 re
+S
+BT
+1 0 0 1 103 -92.75 Tm
+1 0 0 1 83 -92.75 Tm
+(1400
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -95 40.5 15 re
+f
+Q
+108 -95 40.5 15 re
+S
+BT
+1 0 0 1 136 -92.75 Tm
+1 0 0 1 121 -92.75 Tm
+(175)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -95 40.5 15 re
+f
+Q
+148.5 -95 40.5 15 re
+S
+BT
+1 0 0 1 184 -92.75 Tm
+1 0 0 1 169 -92.75 Tm
+(799)Tj
+ET
+189 -95 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -92.75 Tm
+1 0 0 1 224.5 -92.75 Tm
+()Tj
+ET
+229.5 -95 40.5 15 re
+S
+BT
+1 0 0 1 265 -92.75 Tm
+1 0 0 1 265 -92.75 Tm
+()Tj
+ET
+270 -95 -270 15 re
+S
+BT
+1 0 0 1 -5 -92.75 Tm
+1 0 0 1 -5 -92.75 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -87.5 103.9 -5 re
+f
+Q
+270 -87.5 103.9 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -110 67.5 15 re
+f
+Q
+0 -110 67.5 15 re
+S
+BT
+1 0 0 1 5 -107.8 Tm
+(178.galgel)Tj
+ET
+67.5 -110 40.5 15 re
+S
+BT
+1 0 0 1 103 -107.8 Tm
+1 0 0 1 83 -107.8 Tm
+(2900
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -110 40.5 15 re
+f
+Q
+108 -110 40.5 15 re
+S
+BT
+1 0 0 1 136 -107.8 Tm
+1 0 0 1 121 -107.8 Tm
+(387)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -110 40.5 15 re
+f
+Q
+148.5 -110 40.5 15 re
+S
+BT
+1 0 0 1 184 -107.8 Tm
+1 0 0 1 169 -107.8 Tm
+(749)Tj
+ET
+189 -110 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -107.8 Tm
+1 0 0 1 224.5 -107.8 Tm
+()Tj
+ET
+229.5 -110 40.5 15 re
+S
+BT
+1 0 0 1 265 -107.8 Tm
+1 0 0 1 265 -107.8 Tm
+()Tj
+ET
+270 -110 -270 15 re
+S
+BT
+1 0 0 1 -5 -107.8 Tm
+1 0 0 1 -5 -107.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -102.5 97.31 -5 re
+f
+Q
+270 -102.5 97.31 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -125 67.5 15 re
+f
+Q
+0 -125 67.5 15 re
+S
+BT
+1 0 0 1 5 -122.8 Tm
+(179.art)Tj
+ET
+67.5 -125 40.5 15 re
+S
+BT
+1 0 0 1 103 -122.8 Tm
+1 0 0 1 83 -122.8 Tm
+(2600
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -125 40.5 15 re
+f
+Q
+108 -125 40.5 15 re
+S
+BT
+1 0 0 1 136 -122.8 Tm
+1 0 0 1 121 -122.8 Tm
+(382)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -125 40.5 15 re
+f
+Q
+148.5 -125 40.5 15 re
+S
+BT
+1 0 0 1 184 -122.8 Tm
+1 0 0 1 169 -122.8 Tm
+(680)Tj
+ET
+189 -125 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -122.8 Tm
+1 0 0 1 224.5 -122.8 Tm
+()Tj
+ET
+229.5 -125 40.5 15 re
+S
+BT
+1 0 0 1 265 -122.8 Tm
+1 0 0 1 265 -122.8 Tm
+()Tj
+ET
+270 -125 -270 15 re
+S
+BT
+1 0 0 1 -5 -122.8 Tm
+1 0 0 1 -5 -122.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -117.5 88.37 -5 re
+f
+Q
+270 -117.5 88.37 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -140 67.5 15 re
+f
+Q
+0 -140 67.5 15 re
+S
+BT
+1 0 0 1 5 -137.8 Tm
+(183.equake)Tj
+ET
+67.5 -140 40.5 15 re
+S
+BT
+1 0 0 1 103 -137.8 Tm
+1 0 0 1 83 -137.8 Tm
+(1300
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -140 40.5 15 re
+f
+Q
+108 -140 40.5 15 re
+S
+BT
+1 0 0 1 143.5 -137.8 Tm
+1 0 0 1 126 -137.8 Tm
+(94.9)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -140 40.5 15 re
+f
+Q
+148.5 -140 40.5 15 re
+S
+BT
+1 0 0 1 184 -137.8 Tm
+1 0 0 1 164 -137.8 Tm
+(1370)Tj
+ET
+189 -140 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -137.8 Tm
+1 0 0 1 224.5 -137.8 Tm
+()Tj
+ET
+229.5 -140 40.5 15 re
+S
+BT
+1 0 0 1 265 -137.8 Tm
+1 0 0 1 265 -137.8 Tm
+()Tj
+ET
+270 -140 -270 15 re
+S
+BT
+1 0 0 1 -5 -137.8 Tm
+1 0 0 1 -5 -137.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -132.5 178.1 -5 re
+f
+Q
+270 -132.5 178.1 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -155 67.5 15 re
+f
+Q
+0 -155 67.5 15 re
+S
+BT
+1 0 0 1 5 -152.8 Tm
+(187.facerec)Tj
+ET
+67.5 -155 40.5 15 re
+S
+BT
+1 0 0 1 103 -152.8 Tm
+1 0 0 1 83 -152.8 Tm
+(1900
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -155 40.5 15 re
+f
+Q
+108 -155 40.5 15 re
+S
+BT
+1 0 0 1 136 -152.8 Tm
+1 0 0 1 121 -152.8 Tm
+(361)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -155 40.5 15 re
+f
+Q
+148.5 -155 40.5 15 re
+S
+BT
+1 0 0 1 184 -152.8 Tm
+1 0 0 1 169 -152.8 Tm
+(527)Tj
+ET
+189 -155 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -152.8 Tm
+1 0 0 1 224.5 -152.8 Tm
+()Tj
+ET
+229.5 -155 40.5 15 re
+S
+BT
+1 0 0 1 265 -152.8 Tm
+1 0 0 1 265 -152.8 Tm
+()Tj
+ET
+270 -155 -270 15 re
+S
+BT
+1 0 0 1 -5 -152.8 Tm
+1 0 0 1 -5 -152.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -147.5 68.49 -5 re
+f
+Q
+270 -147.5 68.49 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -170 67.5 15 re
+f
+Q
+0 -170 67.5 15 re
+S
+BT
+1 0 0 1 5 -167.8 Tm
+(188.ammp)Tj
+ET
+67.5 -170 40.5 15 re
+S
+BT
+1 0 0 1 103 -167.8 Tm
+1 0 0 1 83 -167.8 Tm
+(2200
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -170 40.5 15 re
+f
+Q
+108 -170 40.5 15 re
+S
+BT
+1 0 0 1 136 -167.8 Tm
+1 0 0 1 121 -167.8 Tm
+(347)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -170 40.5 15 re
+f
+Q
+148.5 -170 40.5 15 re
+S
+BT
+1 0 0 1 184 -167.8 Tm
+1 0 0 1 169 -167.8 Tm
+(635)Tj
+ET
+189 -170 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -167.8 Tm
+1 0 0 1 224.5 -167.8 Tm
+()Tj
+ET
+229.5 -170 40.5 15 re
+S
+BT
+1 0 0 1 265 -167.8 Tm
+1 0 0 1 265 -167.8 Tm
+()Tj
+ET
+270 -170 -270 15 re
+S
+BT
+1 0 0 1 -5 -167.8 Tm
+1 0 0 1 -5 -167.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -162.5 82.5 -5 re
+f
+Q
+270 -162.5 82.5 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -185 67.5 15 re
+f
+Q
+0 -185 67.5 15 re
+S
+BT
+1 0 0 1 5 -182.8 Tm
+(189.lucas)Tj
+ET
+67.5 -185 40.5 15 re
+S
+BT
+1 0 0 1 103 -182.8 Tm
+1 0 0 1 83 -182.8 Tm
+(2000
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -185 40.5 15 re
+f
+Q
+108 -185 40.5 15 re
+S
+BT
+1 0 0 1 136 -182.8 Tm
+1 0 0 1 121 -182.8 Tm
+(158)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -185 40.5 15 re
+f
+Q
+148.5 -185 40.5 15 re
+S
+BT
+1 0 0 1 184 -182.8 Tm
+1 0 0 1 164 -182.8 Tm
+(1266)Tj
+ET
+189 -185 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -182.8 Tm
+1 0 0 1 224.5 -182.8 Tm
+()Tj
+ET
+229.5 -185 40.5 15 re
+S
+BT
+1 0 0 1 265 -182.8 Tm
+1 0 0 1 265 -182.8 Tm
+()Tj
+ET
+270 -185 -270 15 re
+S
+BT
+1 0 0 1 -5 -182.8 Tm
+1 0 0 1 -5 -182.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -177.5 164.6 -5 re
+f
+Q
+270 -177.5 164.6 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -200 67.5 15 re
+f
+Q
+0 -200 67.5 15 re
+S
+BT
+1 0 0 1 5 -197.8 Tm
+(191.fma3d)Tj
+ET
+67.5 -200 40.5 15 re
+S
+BT
+1 0 0 1 103 -197.8 Tm
+1 0 0 1 83 -197.8 Tm
+(2100
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -200 40.5 15 re
+f
+Q
+108 -200 40.5 15 re
+S
+BT
+1 0 0 1 136 -197.8 Tm
+1 0 0 1 121 -197.8 Tm
+(227)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -200 40.5 15 re
+f
+Q
+148.5 -200 40.5 15 re
+S
+BT
+1 0 0 1 184 -197.8 Tm
+1 0 0 1 169 -197.8 Tm
+(925)Tj
+ET
+189 -200 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -197.8 Tm
+1 0 0 1 224.5 -197.8 Tm
+()Tj
+ET
+229.5 -200 40.5 15 re
+S
+BT
+1 0 0 1 265 -197.8 Tm
+1 0 0 1 265 -197.8 Tm
+()Tj
+ET
+270 -200 -270 15 re
+S
+BT
+1 0 0 1 -5 -197.8 Tm
+1 0 0 1 -5 -197.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -192.5 120.3 -5 re
+f
+Q
+270 -192.5 120.3 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -215 67.5 15 re
+f
+Q
+0 -215 67.5 15 re
+S
+BT
+1 0 0 1 5 -212.8 Tm
+(200.sixtrack)Tj
+ET
+67.5 -215 40.5 15 re
+S
+BT
+1 0 0 1 103 -212.8 Tm
+1 0 0 1 83 -212.8 Tm
+(1100
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -215 40.5 15 re
+f
+Q
+108 -215 40.5 15 re
+S
+BT
+1 0 0 1 136 -212.8 Tm
+1 0 0 1 121 -212.8 Tm
+(256)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -215 40.5 15 re
+f
+Q
+148.5 -215 40.5 15 re
+S
+BT
+1 0 0 1 184 -212.8 Tm
+1 0 0 1 169 -212.8 Tm
+(430)Tj
+ET
+189 -215 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -212.8 Tm
+1 0 0 1 224.5 -212.8 Tm
+()Tj
+ET
+229.5 -215 40.5 15 re
+S
+BT
+1 0 0 1 265 -212.8 Tm
+1 0 0 1 265 -212.8 Tm
+()Tj
+ET
+270 -215 -270 15 re
+S
+BT
+1 0 0 1 -5 -212.8 Tm
+1 0 0 1 -5 -212.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -207.5 55.95 -5 re
+f
+Q
+270 -207.5 55.95 -5 re
+S
+q
+0.9 G
+0.9 g
+0 -230 67.5 15 re
+f
+Q
+0 -230 67.5 15 re
+S
+BT
+1 0 0 1 5 -227.8 Tm
+(301.apsi)Tj
+ET
+67.5 -230 40.5 15 re
+S
+BT
+1 0 0 1 103 -227.8 Tm
+1 0 0 1 83 -227.8 Tm
+(2600
+)Tj
+ET
+q
+0.9 G
+0.9 g
+108 -230 40.5 15 re
+f
+Q
+108 -230 40.5 15 re
+S
+BT
+1 0 0 1 136 -227.8 Tm
+1 0 0 1 121 -227.8 Tm
+(273)Tj
+ET
+q
+0.9 G
+0.9 g
+148.5 -230 40.5 15 re
+f
+Q
+148.5 -230 40.5 15 re
+S
+BT
+1 0 0 1 184 -227.8 Tm
+1 0 0 1 169 -227.8 Tm
+(953)Tj
+ET
+189 -230 40.5 15 re
+S
+BT
+1 0 0 1 224.5 -227.8 Tm
+1 0 0 1 224.5 -227.8 Tm
+()Tj
+ET
+229.5 -230 40.5 15 re
+S
+BT
+1 0 0 1 265 -227.8 Tm
+1 0 0 1 265 -227.8 Tm
+()Tj
+ET
+270 -230 -270 15 re
+S
+BT
+1 0 0 1 -5 -227.8 Tm
+1 0 0 1 -5 -227.8 Tm
+()Tj
+ET
+q
+0.8 G
+0.8 g
+270 -222.5 123.9 -5 re
+f
+Q
+270 -222.5 123.9 -5 re
+S
+q
+[2 2] 0 d
+375 -225 m
+375 -25 l
+S
+Q
+270 -225 m
+270 -25 l
+S
+Q
+q
+BT
+1 0 0 1 135 343 Tm
+1 0 0 1 108.7 343 Tm
+/F1 12 Tf
+12 TL
+(Hardware)Tj
+1 0 0 1 10 331 Tm
+/F0 10 Tf
+10 TL
+(CPU:)Tj
+1 0 0 1 108 331 Tm
+(--)Tj
+1 0 0 1 10 321 Tm
+(CPU MHz:)Tj
+1 0 0 1 108 321 Tm
+(--)Tj
+1 0 0 1 10 311 Tm
+(FPU:)Tj
+1 0 0 1 108 311 Tm
+(--)Tj
+1 0 0 1 10 301 Tm
+(CPU\(s\) enabled:)Tj
+1 0 0 1 108 301 Tm
+(--)Tj
+1 0 0 1 10 291 Tm
+(CPU\(s\) orderable:)Tj
+1 0 0 1 108 291 Tm
+(--)Tj
+1 0 0 1 10 281 Tm
+(Parallel:)Tj
+1 0 0 1 108 281 Tm
+(--)Tj
+1 0 0 1 10 271 Tm
+(Primary Cache:)Tj
+1 0 0 1 108 271 Tm
+(--)Tj
+1 0 0 1 10 261 Tm
+(Secondary Cache:)Tj
+1 0 0 1 108 261 Tm
+(--)Tj
+1 0 0 1 10 251 Tm
+(L3 Cache:)Tj
+1 0 0 1 108 251 Tm
+(--)Tj
+1 0 0 1 10 241 Tm
+(Other Cache:)Tj
+1 0 0 1 108 241 Tm
+(--)Tj
+1 0 0 1 10 231 Tm
+(Memory:)Tj
+1 0 0 1 108 231 Tm
+(--)Tj
+1 0 0 1 10 221 Tm
+(Disk Subsystem:)Tj
+1 0 0 1 108 221 Tm
+(--)Tj
+1 0 0 1 10 211 Tm
+(Other Hardware:)Tj
+1 0 0 1 108 211 Tm
+(--)Tj
+1 0 0 1 405 343 Tm
+1 0 0 1 382 343 Tm
+/F1 12 Tf
+12 TL
+(Software)Tj
+1 0 0 1 280 331 Tm
+/F0 10 Tf
+10 TL
+(Operating System:)Tj
+1 0 0 1 379.7 331 Tm
+(--)Tj
+1 0 0 1 280 321 Tm
+(Compiler:)Tj
+1 0 0 1 379.7 321 Tm
+(--)Tj
+1 0 0 1 280 311 Tm
+(File System:)Tj
+1 0 0 1 379.7 311 Tm
+(--)Tj
+1 0 0 1 280 301 Tm
+(System State:)Tj
+1 0 0 1 379.7 301 Tm
+(--)Tj
+ET
+0 201 540 154 re
+0 201 270 154 re
+S
+Q
+BT
+1 0 0 1 270 181 Tm
+1 0 0 1 180 181 Tm
+/F1 16 Tf
+16 TL
+(Notes/Tuning Information)Tj
+ET
+Q
+endstream
+endobj
+6 0 obj
+15012
+endobj
+4 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 10 0 R
+/MediaBox [0 0 612 792]
+/D 1
+/Contents [5 0 R ]
+>>
+endobj
+10 0 obj
+<</ProcSet [/PDF /Text]
+/Font <</F0 7 0 R
+/F1 8 0 R
+/F2 9 0 R
+>>
+>>
+endobj
+3 0 obj
+<</Subject (SPEC CFP2000 Result)
+/Title (--: --)
+/Creator (SPEC CPU2000 tools 2.00 \(PSPDF v1\))
+/Author (--)
+/fontpath (/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/fonts)
+/CreationDate (D:20110724192008)
+/Producer (PDFlib 2.00 \(c\) 1997-99 Thomas Merz)
+>>
+endobj
+11 0 obj
+[ 4 0 R /Fit ]
+endobj
+7 0 obj
+<</Type /Font
+/Subtype /Type1
+/Name /F0
+/Encoding /WinAnsiEncoding
+/BaseFont /Times-Roman
+>>
+endobj
+8 0 obj
+<</Type /Font
+/Subtype /Type1
+/Name /F1
+/Encoding /WinAnsiEncoding
+/BaseFont /Times-Bold
+>>
+endobj
+9 0 obj
+<</Type /Font
+/Subtype /Type1
+/Name /F2
+/BaseFont /Symbol
+>>
+endobj
+1 0 obj
+<</Type /Pages
+/Count 1
+/Kids [4 0 R ]
+>>
+endobj
+2 0 obj
+<</Type /Catalog
+/OpenAction 11 0 R
+/Pages 1 0 R
+>>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000015893 00000 n 
+0000015950 00000 n 
+0000015295 00000 n 
+0000015099 00000 n 
+0000000015 00000 n 
+0000015078 00000 n 
+0000015602 00000 n 
+0000015710 00000 n 
+0000015817 00000 n 
+0000015211 00000 n 
+0000015571 00000 n 
+trailer
+<</Size 12
+/Info 3 0 R
+/Root 2 0 R
+>>
+startxref
+16017
+%%EOF
+% The following is an encoded version of the raw file that was used to produce
+% this result.  Use the extract_raw script to retrieve it.
+% BEGIN GZIP CFP2000.401.raw
+% H4sIAAAAAAAAA6WcWW/qvNaA78+vqHQu0Qm2Ew+p9F0wtlDmGW6qEMI8J2H69Z9p6G5LkmK7lV7p
+% 7TbPWoY8XctOSNytY2v21kcAAM3erLbW+vy+tlbO89P//vcf9/vo9PhuHazZMnKE/2/cv7+vppfI
+% sdHMXUQOjGOCrZzVZn+OHtqMnOiZreOmdh3Y7EfOPnJ0Y1v2NPpT2HjTGGhr7a3lMmYi2/iIbvyQ
+% Fz90cNajTcREljPbWbvO+9pfhQdXPNxs7cQc4+3e4e/BGb0PIz5mN1YAPnJ1Z7aM+lz44JiPRA5s
+% 3Mh/dj3LiwA8x/XeR7FDzv7rXf336f9+/jyNNk/rjffkjGbe09BZbo5P3nTmPm03s7V3/+Lrz8/4
+% e+s4tdzp85NJDYOQscGGjACMDQx1SIhhIcDYcEjAT6zgun7EbGvWJOJfO5ulH3VQhpbrrBxr/fzE
+% ANUoM3STYhMjHYZft3Us/jd1Nwt7sx7PJs9P/J06y/flbO2fNHs8+fki5+Q9P50YCcbvjNqsJ9fP
+% fu+Mo416fho5Y8tfendDfNbvvKIcrXNoUivH28/s56dMvnb9/edgcBzH2zs7+ZsLPoj7Oew/pACh
+% Yxa8c/7L89Or4RZSnz9mp9/tJufV1CnRO7C3VG9ld/crVO1ajanZOHWPlW2v3Np6pfJh0i215sss
+% 7paX1TlMJJdFtI/NA5+fOnjjp6dT93W7LWxms7dkljStDTDOzT3s2rQ1rU23r6XyolAorFkFbRbj
+% zXlu5Ry331sUqjvEZr1am61b/nrkxeZBz09dvbZP7IYdK9tawdXc2c1Mo70d5Tfz0nHWXROrUTpb
+% 5UzrtVy3vUa3BlNs3stn2Uu936wfzoP8cVHOL47p5Naqx+bRn5+2reI6c8wtLoWLVUpeJqWx5RaK
+% nWmxWs9kU2WHsfx8D8veS7uRnKePfLyUzp3nZg4lwOsBwd6ETQaFXiF9MllsHoMfbJgoQXvqnke9
+% hF1vvs7fZva5cVpUxtUjrpHmqXoulgqZY6GQSeHMOn9oE3+UsMpFY7cpbLYpPJytxlZ7XjcLbmwe
+% /PyEL/nkflXoZqb9bW7Xb6aMtV6s1s7lfedcXCZmNViegonjNF5auU6T4o2XHfLD/1ICbOq/1HHV
+% ans5/+zRUzMRm4c8Py2rh/pplcN7lkmNVvNL/bw0D4MU29Y709xiNvVeOuXC2cwu0azFBs1U+two
+% eo3KzEyXaku4dQ7LNJ6sdyDnIzM2D31+ShPSJaVF87DNLtK5Shd5BX9iXep+YpLebPKjYtofWHto
+% 75rnWgts9sbgNf9i91+gsxo2SrjW3TeSs+k4Y9F0fB72/FQhk/U8ty1nbdfaFBun+TKxKRRtt2yd
+% qQ9eAR14jSPtkE23MSqUK7lzI+d1516ySvVB16vQ3jkxezt4fmWqV2PzmM9PF5Z8PR69Q718PDZt
+% kGeJRKf/Otft3dRYFue1Qr6WPQwM3GF0XJkUGo0RQlO/1mFVZ9DqWr35wmHN5GhVyxSMuDyQ14ND
+% 7dUF9RUevSS916TVdso052645ufJxe6Oc/Yu4U8vtfXw5dzqohFqNg3XZHbRH/aK55JlL1pgVsZ2
+% eUznse8H8nqQqY1YhZUB3i8GzamVXVldy9aLpcnJSeWH6cyqVjQHpbJXadWts4fa80wmW6ykWm/D
+% 7bI16HutpZEiqXp2NZ6XYvPwerAqL2mjs1uX6hvSTc8Po10lzYxRe5rpVHObzCQzt3rUXCwKzSmr
+% ZJy21T81e/nXWWrQqNedanNAht19btPZFEmsB5DXgzJwbdAo2Zn01HQnVtXbsUy76CCr5GXYBh/f
+% CucGHJDUOe8smo3D4bxtlqZGd7eu1dCQ1i5FAznOeHDydttJbB5eDwad7hH5l93aK3aK+wTZtWun
+% /WLkF3aD+UsZOgs2SCTKnYsz1XfN03DVAmO/DEbzgV68VBJjr7dy5pskW3daFz82D68HI4qNUcks
+% lc/9zriSgxZIJ3x/7Q/9qg2cXn1lHlpkND8NFnM/+9IqL53Cfj7cVPy6s0JmNutdUmjRyjWdEYt/
+% P7we2Fb+3Ou4x0Vi3ax7b/n9bGXMcK6Tw9OF23jLNtKT7LG901tu36KrQ8tbN1r5+ijZZLlJrXJp
+% JN23c+Ww6L91XkexeXg94PCKZK3R/k1/3TuJei2ll5a1qX9Y7nr9HeyypLdtw9e3Yqnuv63aeX3C
+% MuZ0RN+sNzAu+pm8v3gj6f7LsL9rxObh9SBfOBjJRXnDC3R/zNtOp51GufJ8Ae19zluML2XTHvXZ
+% 1vR69dPIJW5n256D1KCcyRzpar53WijpO7XykBrFdmweXg9SR1g+0c7KSK4hLPfYAXv5qTk9FOf6
+% uj8vsreLb/O/XQekd9UTwZ1mY7kpkP54XxgeE6WXgTcaD6bFmd4qzHpxeRCvB8u6OZqMXrbWrDw7
+% M7Nyyl5aL9nRDtJaadcC9nCwJs2pWcpn2GCa3Tt6N1HF68qhsi8ci8txdfhqQO/N8hvUusTm4fUA
+% JyiwDlOE1oW1vjoaqKnbtVX6NWv1SLrkGuw0bORohYHsuc5b9iGTOuAWTDPc6aZbx/KUTdKtZWEO
+% c4WqHZuH14NCpVLelqifbKPFzsDJ6ZkcrVK3OrBXVs/0rHGymUAHNl3SbRH1dyxfyCzGGW/72u1W
+% d8NCszg7Fu3h3lrnL8PYPLwejLLF1GqxW9cvrNMYnFx/X5icRrjvmQv3zOot3V/1BgkKc4nmiJYg
+% Lk5XsMbeXMetTTaV9Rb07dlRN5ya34/tp4jXA2+6reym2BjnM4uGUykwPzNpFQ+71cl+HQw3IO22
+% q7NDnb+IvBZft17mwNo0TaotNB3w1nhoJ2G1UlznLi4rx+bh9cAmJz9RKjqTbr1hldrm2S8YVb1x
+% Phiv296cednJZGrR3NBxW72pbibrb5eR9fZG87Uk4O/6VEsw3dzv5/Zqt4nNw+vBqNoe5bcvq/aw
+% NqYJ97VXaXn9GdufqtZpC/PNgm8xZwIasFpdp+xC2yKXann1srLBsdiv1q3e5HQkeJv09c4iNg+v
+% B5PmZjA97epuo9OqD5OJdGa2fOu7x1Kne7DtNUx1ZslpP50aJV8rw0nSLM4K9TXsvB2qa9RsDM+N
+% 47S8tl/0GbFfY/Nc64FnDsDipZuq9t/GNZhcrmyD7V50yyC08lJP+O4wWUmt/dKrOadNt2QaNJ1L
+% btv5LG41Lt4KXY661ZhdRuts7DoR8XrQ8Ctj/YIS7eKxyVfyd/s0d3bhGwG+T7nbHlrD6w70bsPk
+% za67DL6Bg9jga0N6N+qvneXM9T52D9e91c9hfz3z+O61Wctl7vcpB2s5G4Wy7R2Xb5BcDRL2fvS3
+% x5nrfGzZtI+9m7O2pytrzzdvfFy7jUsEsDfbmePKJf1ty/cr+MuW71eOb9NmGz5HhLFGCWPMwIhC
+% UyaCM3b2/LO6Hjdyv2t8QG43e88Zva9dh287DQhNBoBaiI8IEFEV9iYdotrHFCRCuM7SsXmI8Eb3
+% N0paRvhXGaGCjFBVRqgoI/wnI0SE/24igE2mM0MmgqKM8F5GXguxDtQiBC4aSIW9uWggDXxMQSLG
+% l4wyB1laRvRXGZGCjEhVRqQoI/onI5dQQ1cZDEYpNGQiKMqIQpWRECIlI7qXEUMV9iYjhhr4mIJE
+% DJXKiB7JSOG7e5ytons05X8BfFAUfeRgCBASMESJ2BeCPtXj6zQN82GTmpQAIox/eafDWGsisB/S
+% Id4MdQIU+ACHUBoMfOOkFiQXDfBYthAiZxpUNw3KmgaVTIMqpn11XIMv//gakBiAUWxQYVzFtFCv
+% 5St9pAMF/CaaLg1+iqbzwnZNLhrgcYsNIXKiIXXRkKxoSEk0pCLaVzc1DKiZlP9gwFd2ujCuIlqo
+% j5oMYWACBf5mmiENfppmaEFy0QDSJe1x80Tvq8l+Norpnvy4XkeF4YeyhQgx20KYkG4h6uabbup8
+% W2sCplOKsG6K89/WbixemAjuh3EQAQoQUAkQlEZM5cnAOY5qQXrhCALShRhJ6+BfrIPS1kE166CS
+% df/aqQGwRhlCBDFG+WZWnFeyLtRQMaPEMIFKgMC6+MIcT96sM3QtSC8cQd46KGsd+ot1SNo6pGYd
+% UrIOfbeOUF3HvM5RwpA4r2RdqLtSwLNjoBJA0joUZV2QXjiCwFIuxDyyTn+3ttulH9Nhde1jVBh+
+% aF2IELMuhAlZF6Ju1jHD0AAyCQaUQKKLT/abdeiXJV0E98M6BoiBfrMuPsBtm8vkyduqzmBakF44
+% gkCtCzGS1sG/WAelrYNq1kEl6+CXdURjvM8YiOkIY3FcSbrw2WGKkQGASoCbdFSe/JSOah/phQMI
+% VLoQI+kc+otzSNo5pOYcUnLuX39l2NAYBKZu8vWNicQnqyZdqL8SwnTMgEqAm3RYnvyUji8tPtIL
+% R5CvdI/7K31fOa4V016pdh0URR8qdw+IGXdPCQl3D918o8zUdMgMZOiMIEN4pt+Xc0a8LWHsh206
+% X0HC3/pqLB9sfCmVBm+XG/iRDJKLBhBQ7R6RMw2qmwZlTYNKpkEV0/51U2qaGoDINE3KWyoUnqmS
+% aaFmiiDhtQAo8DfTsDT4aRrWguSiAQRa6T0iZxpSNw3JmoaUTEMqpn31UKBrJjN0SjDDgDFhXMW0
+% UAeFOqI6BQr8zTRDGvw0zdCC5KIBpGva4+7J3ifWcuIsY/on04Jhcfyhb2FEzLgwJ+RcGPusb5ho
+% RMemCSHBEEjM9/vSzYz3Jgr8WeMoNvBvG4ZfIgTtmOkKaGAfZ7WPCYhHENAvDMkKCP8mIJQXECoK
+% CNUE/GqwfP1sIqIbfK9KKJbg1fwL9VhKma7rQCnCzT+mgH76x7RgAuIhFASE0gKivwmI5AVEigIi
+% NQHRl4BMw5jXP4PvXBmhEgHUDAx/h4nvnLGMgShkIFVAPw28frfzOgHxEAJrvTD0yEDz3dp7MQ3Y
+% 1PiYIPhQvLvXi1l3Bwkpd8fcfCP8A8fIJIhvXAmOX2Df099ki//GXJj6ucojGKPfrrnG4YFmlMly
+% N8d4/QhSC/ICJe6OkLILqtoFJe2CKnZBBbv+tVNCkGaagBKATN5QmSitYBcM24V0xIA8HthlIlnu
+% ZpeJtCC1IC9rF5SzC6nahSTtQip2IQW7/vVKwt8NvVYtxjepuqGL0gp2hbukiQ1mAnn81iKRLPfZ
+% H5EWpBbkBZrjHfHALqa/OzvfWsTcgMN3MMGwOP5IswhEyLQITkS2COzfd+KQoekUUYSgAQwJ/ttJ
+% ET1WmUjw5+aUMN6lgVKE4HIYVCAD80yoBenFIzyubBGQrH7wb/pBef2gon5QTb+v7/7qFGgAMwCR
+% TkjsXStRAdT8C7VUxohh6kApwu1mHQXy5p+hBenFIzyufRGQrH/ob/4hef+Qon9Izb+vrwRz6zQD
+% QfBxtQnpEgHU/Is4LWwCjIBShMA/rEDe/MNakF48gkL9e9x+6fvYsvmnacf0X6rdxiUCPFQwghFz
+% MAIUkjCCu1mIEdEYxJAxvhaK/yZaZIRvGsafIYkmf17gx5SyXy5P/BridtFWib0tAgnQgilIxBAo
+% hhGUtI3wrzZCBRuhqo1Q0cZ/PZl7qEGAqM7/gyD2xH1kBEUbw6eMESI6A2ohbjYSFfbTRqIFU5CI
+% IVAaIyhpG9FfbUQKNiJVG5Gijf86NDaQRgBBJjYJwZDKRFC0MdyjCWQAA7UQgY1Yib3ZiIEWTEEi
+% hoqNjzs1e7dWq21Mm2badVAUfSjhPSBm4D0lpN899Hky5vpUBmJQauh8gxzvXgj/djYGxVsTxn52
+% ZEiR+dvKMJZ/pFws+OVbkFw0gIBs94icaVDdNChrGlQyDaqY9nVSWScaoOx6gVbnPZcK4yqmhffA
+% xETIBAp8YFr8GiEWvJlmYC1ILhpA2jQoaRpSNw3JmoaUTEMqpn2dYNYNjehQh+h6vzWjwriKaShi
+% l8HbOFDgb6YRafDTNKIFyUUDCGwu7pFHppnvS9+23Jj2aWofo8LwQ9lChJhtIUxItxD17+FO1OBN
+% lOmIIGTEnywL89+E+0WYCO7n3RKIQWYoBbg9vYTIk5/PLiFakF44gkB5CzGS1sG/WAelrYNq1kEl
+% 677OKyO+g4MAU6DrBoz95kUEr2Rd+B4dYhDTUApws47Kk5/WUS1ILxxBoNSFGEnr0F+sQ9LWITXr
+% kJJ16NuD7BhfzyDT1A1dp+K4knSh5sqoHtwZJh/gJh2TJz+l42/8I71wBPlS97DBmvB9vLL0mKdM
+% mFD7GBWGH0kXJoSkC2Mi0oWpm3Qm0jUMATEpIATGXoSP4IXuDIvift6rY+rQ+OUC2i8BggvAsc9N
+% /IW83RnG9+dBeuEIj60LM5LWwb9YB6Wtg2rWQSXr4Jd1WNP160VbhhhgujivZF3EIxKxwRBQCXCz
+% jsiTn9bxZd1HeuEIjxtsmJG0Dv3FOiRtHVKzDilZh76soxoguolMvoeEsV+WjOCVrAt1WIwgNjFQ
+% CSBpHYqyLkgvHEG+1j3qsPyXd3d28vaWvYhssujjmcvBC2RCPNAvGhIxMJoUkDAa/HzaCTL5weA7
+% O3x9WHTcieGYEN+uSsSqGIfe1UDzl28OPAgR+Bi3uX0A35Tk+1vwMQmZIA+tjMbkxYR/FxOqiAmV
+% xYSqYn49/ElHms7Y9RENmJiQSIVQFTPqmYrX5ahijJuZhhL8aaahBZOQCaJkJlQwE/3dTKRiJlI2
+% E6ma+fWAKB3wQ8K4nAQTnWCpEKpmhhs4hXzTABRj3MzESvCnmVgLJiET5OH6MRr73UwdwHdr684i
+% Gzkf1K6DougDG8OAiIlhSsDCMPS5eMTgeh8W1K+noU1sCuMi362Pwn6axzfnIN68X/jbPby6NHgz
+% jupakFw0wMM6GEbkTIPqpkFZ06CSaVDFtK/NMf8jNwGBhH/2BCFdGFcxLbw1NnX0y0PJfuFvpkFp
+% 8NM0qAXJRQNImwYlTUPqpiFZ05CSaUjFtK8NMUYaQ9drHNw1YJrCuIppUSeckcGAAn8zDUmDn6Yh
+% LUguGuBhBw0j/0z7f44rBogVeQAA
+% END

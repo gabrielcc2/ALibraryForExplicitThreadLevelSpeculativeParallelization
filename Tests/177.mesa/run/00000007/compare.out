@@ -1,0 +1,11 @@
+running commands in compare.cmd 1 times
+runs started at 1313006847, 669644000, Wed Aug 10 15:37:27 2011
+run 1 started at 1313006847, 669728000, Wed Aug 10 15:37:27 2011
+child started: 0, 1313006847, 669742000, 8000, '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specdiff -m -l 10  -a 6  -o  -s 6 /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/data/ref/output/mesa.log mesa.log'
+child finished: 0, 1313006847, 796544000, 0, 126802000, 8000, 0
+child started: 0, 1313006847, 796559000, 8002, '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specdiff -m -l 10  -a 6  -o  -s 6 /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/data/ref/output/mesa.ppm mesa.ppm'
+child finished: 0, 1313006908, 600951000, 60, 804392000, 8002, 0
+run 1 finished at: 1313006908, 600961000, Wed Aug 10 15:38:28 2011
+run 1 elapsed time: 60, 931233000, 60.931233000
+runs finished at 1313006908, 601008000, Wed Aug 10 15:38:28 2011
+runs elapsed time: 60, 931364000, 60.931364000

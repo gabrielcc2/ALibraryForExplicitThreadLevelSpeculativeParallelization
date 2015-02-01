@@ -1,0 +1,26 @@
+SPEC CPU2000 Benchmark Description File
+
+Benchmark Name: 177.mesa
+
+Benchmark Author: Brian E. Paul
+
+Benchmark Program General Category: 3-D graphics library
+
+Benchmark Description: Mesa is a free OpenGL work-alike library.  Since 
+it supports a generic frame buffer it can be configured to have no 
+OS or window system dependencies.  Any number of client programs can be 
+written to stress FP, scalar or memory performance (or a mix).  Output 
+can be written to image files for verification.
+
+Input Description: The input data is a 2D scalar field.  The scalar data
+is mapped to height, creating a 3D object with explicit vertex normals.
+Contour lines are mapped onto the object as a 1D texture.
+
+Output Description: A 2D image file in PNG (pronounced "ping") format.
+
+Programming Language: ANSI C
+
+Known portability issues: None
+
+Reference:
+  http://www.mesa3d.org/ 

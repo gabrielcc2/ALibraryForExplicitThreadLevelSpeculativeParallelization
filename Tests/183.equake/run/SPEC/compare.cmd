@@ -1,0 +1,1 @@
+-c /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/SPEC -o inp.out.cmp /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specdiff -m -l 10  -r 1e-05 /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/data/ref/output/inp.out inp.out

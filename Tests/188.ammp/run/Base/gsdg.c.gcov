@@ -1,0 +1,367 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/gsdg.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* gsdg.c
+        -:    2:*
+        -:    3:*  Gauss-Siedel Distance Geometry
+        -:    4:*  
+        -:    5:*  iteratively solve distance geometry equations
+        -:    6:*  one atom at a time, but update the calculated distance estimates
+        -:    7:*  each time.  (we know from the PMDG experiments that this is not
+        -:    8:*  too expensive)
+        -:    9:*/
+        -:   10:/*
+        -:   11:*  copyright 1993,1994 Robert W. Harrison
+        -:   12:*  
+        -:   13:*  This notice may not be removed
+        -:   14:*  This program may be copied for scientific use
+        -:   15:*  It may not be sold for profit without explicit
+        -:   16:*  permission of the author(s) who retain any
+        -:   17:*  commercial rights including the right to modify 
+        -:   18:*  this notice
+        -:   19:*/
+        -:   20:
+        -:   21:#define ANSI 1
+        -:   22:/* misc includes - ANSI and some are just to be safe */
+        -:   23:#include <stdio.h>
+        -:   24:#include <ctype.h>
+        -:   25:#include <math.h>
+        -:   26:#ifdef ANSI
+        -:   27:#include <stdlib.h>
+        -:   28:#endif
+        -:   29://#include "ammp.h"
+        -:   30:
+function _Z4gsdgPPFiPffEiiii called 0 returned 0% blocks executed 0%
+    #####:   31:void gsdg(int (*vfs[])(float*, float), int nfs, int niter, int low_serial, int high_serial)
+        -:   32:{
+        -:   33:ATOM *ap,*bp,*a_next(int);
+        -:   34:int numatm , a_number();
+        -:   35:int iter, i,j,k;
+        -:   36:float svec[3],rvec[3]; /* storage for search vectors */
+        -:   37:float x,y,z;
+        -:   38:float gsdg_line_search(float[3], float*, ATOM*);
+        -:   39:int v_bond(float*, float),v_angle(float*, float),u_v_nonbon(float*, float),v_noel(float*, float);
+        -:   40:int v_mmbond(float*, float),v_mmangle(float*, float),v_c_angle(float*, float),v_nonbon(float*, float);
+        -:   41:int v_hybrid(float*, float);
+        -:   42:
+    #####:   43:numatm = a_number();
+call    0 never executed
+        -:   44:
+    #####:   45:if( low_serial > high_serial)
+branch  0 never executed
+branch  1 never executed
+    #####:   46:{ i = low_serial; low_serial = high_serial; high_serial = i;}
+        -:   47:
+    #####:   48:if( high_serial <= 0 ) 
+branch  0 never executed
+branch  1 never executed
+    #####:   49:{ for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:   50:	{ ap = a_next(i);
+call    0 never executed
+    #####:   51:	if( high_serial < ap->serial ) high_serial = ap->serial; 
+branch  0 never executed
+branch  1 never executed
+        -:   52:	}
+        -:   53:}
+        -:   54:
+    #####:   55:for( iter = 0; iter< niter; iter++)
+branch  0 never executed
+branch  1 never executed
+        -:   56:{ 
+        -:   57:printf(" iter %d starting ",iter);
+    #####:   58:fflush(stdout);
+call    0 never executed
+    #####:   59:ap = a_next(-1);/* cannot use a_next in this loop */
+call    0 never executed
+    #####:   60:for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:   61:{
+    #####:   62:if( ap == NULL ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:   63:if( ap->serial >= low_serial && ap->serial <= high_serial )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   64:{
+    #####:   65:if( ap->active){
+branch  0 never executed
+branch  1 never executed
+        -:   66:
+    #####:   67:for( j=0;j< numatm; j++)
+branch  0 never executed
+branch  1 never executed
+    #####:   68:{ bp = a_next(j);
+call    0 never executed
+    #####:   69:bp->vx = 16.; /* default to 4A separation */
+    #####:   70:bp->vy = 0.; /* but only as a lower bound */
+        -:   71:}
+        -:   72:
+    #####:   73:for( j=0; j< nfs; j++)
+branch  0 never executed
+branch  1 never executed
+        -:   74:{
+    #####:   75:	if( vfs[j] == v_nonbon || vfs[j] == u_v_nonbon) 
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   76:	{ for( k=0; k< numatm; k++)
+branch  0 never executed
+branch  1 never executed
+    #####:   77:		{bp = a_next(k);
+call    0 never executed
+    #####:   78:		bp->vy = -10; }
+        -:   79:		break;
+        -:   80:	}
+        -:   81:}
+        -:   82:/*for( j=0; j< nfs; j++)
+        -:   83:{
+        -:   84:	if( vfs[j] == v_bond || vfs[j] == v_mmbond ) gsdg_bond(ap);
+        -:   85:	if( vfs[j] == v_angle || vfs[j] == v_mmangle || vfs[j] == v_c_angle) gsdg_angle(ap);
+        -:   86:	if( vfs[j] == v_noel) gsdg_noel(ap);
+        -:   87:	if( vfs[j] == v_hybrid) gsdg_hybrid(ap);*/
+        -:   88:/*
+        -:   89:	if( vfs[j] == v_hard) gsdg_nonbon(ap)
+        -:   90:	if( vfs[j] == v_nonbon || vfs[j] == u_v_nonbon) gsdg_nonbon(ap)
+        -:   91:*/
+        -:   92://}
+        -:   93:
+    #####:   94:rvec[0] = 0;
+    #####:   95:rvec[1] = 0;
+    #####:   96:rvec[2] = 0;
+    #####:   97:rand3( &svec[0],&svec[1],&svec[2]);
+call    0 never executed
+    #####:   98:x = gsdg_line_search( svec, &y,ap);
+call    0 never executed
+    #####:   99:rvec[0] += y*svec[0];
+    #####:  100:rvec[1] += y*svec[1];
+    #####:  101:rvec[2] += y*svec[2];
+    #####:  102:rand3( &svec[0],&svec[1],&svec[2]);
+call    0 never executed
+    #####:  103:x = gsdg_line_search( svec, &y,ap);
+call    0 never executed
+    #####:  104:rvec[0] += y*svec[0];
+    #####:  105:rvec[1] += y*svec[1];
+    #####:  106:rvec[2] += y*svec[2];
+    #####:  107:rand3( &svec[0],&svec[1],&svec[2]);
+call    0 never executed
+    #####:  108:x = gsdg_line_search( svec, &y,ap);
+call    0 never executed
+    #####:  109:rvec[0] += y*svec[0];
+    #####:  110:rvec[1] += y*svec[1];
+    #####:  111:rvec[2] += y*svec[2];
+        -:  112:
+    #####:  113:x = gsdg_line_search( rvec,&y,ap);
+call    0 never executed
+        -:  114:
+    #####:  115:ap->x += y*rvec[0];
+    #####:  116:ap->y += y*rvec[1];
+    #####:  117:ap->z += y*rvec[2];
+        -:  118:}/* end of active if */
+        -:  119:}/* end of serial number bounds if */
+        -:  120:
+    #####:  121:if( ap == (ATOM*) ap->next ) break;
+branch  0 never executed
+branch  1 never executed
+    #####:  122:ap = (ATOM*) ap->next;
+        -:  123:}
+        -:  124:printf(" done \n");
+        -:  125:}/* end of iter loop */
+    #####:  126:}/* end of routine */
+        -:  127:
+function _Z16gsdg_line_searchPfS_P4ATOM called 0 returned 0% blocks executed 0%
+    #####:  128:float gsdg_line_search(float vect[3], float *step, ATOM *who)
+        -:  129:{
+        -:  130:float val;
+        -:  131:float vt,lam;
+        -:  132:int i,j;
+        -:  133:float dstep;
+        -:  134: 
+        -:  135:float gsdg_dgeom(float[3], float, ATOM*);
+        -:  136:
+    #####:  137:val = gsdg_dgeom(vect,0.,who);
+call    0 never executed
+    #####:  138:lam = 0;
+    #####:  139:*step = 0;
+    #####:  140:dstep = -.5;
+    #####:  141:for( i=0; i< 3; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  142:{
+    #####:  143:dstep *= -.5;
+    #####:  144:for( j = 0; j< 200 ; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  145:{
+    #####:  146:	lam += dstep;
+    #####:  147:	vt =  gsdg_dgeom(vect,lam,who);
+call    0 never executed
+    #####:  148:	if( vt < val ){ *step = lam; val = vt;} else {break;}
+branch  0 never executed
+branch  1 never executed
+        -:  149:}
+    #####:  150:if( j == 200) dstep *= -2;
+branch  0 never executed
+branch  1 never executed
+        -:  151:}
+    #####:  152:return val;
+        -:  153:}/*end of routine */
+        -:  154:
+function _Z10gsdg_dgeomPffP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  155:float gsdg_dgeom(float vect[3], float lam, ATOM* who)
+        -:  156:{
+        -:  157:int numatm,a_number();
+        -:  158:int i;
+        -:  159:float x,y,z;
+        -:  160:ATOM *ap,*a_next(int);
+        -:  161:float dt;
+        -:  162:float dsum;
+        -:  163:
+    #####:  164:numatm = a_number();
+call    0 never executed
+    #####:  165:x = who->x + vect[0]*lam;
+    #####:  166:y = who->y + vect[1]*lam;
+    #####:  167:z = who->z + vect[2]*lam;
+        -:  168:
+    #####:  169:dsum = 0.;
+    #####:  170:for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  171:{
+    #####:  172:ap = a_next(i);
+call    0 never executed
+    #####:  173:if( ap != who )
+branch  0 never executed
+branch  1 never executed
+        -:  174:{
+    #####:  175:dt = (x -ap->x)*(x-ap->x);
+    #####:  176:dt += (y -ap->y)*(y-ap->y);
+    #####:  177:dt += (z -ap->z)*(z-ap->z);
+        -:  178:
+    #####:  179:if( ap->vy > 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  180:{
+    #####:  181:dsum += ap->vy*(ap->vx -dt)*(ap->vx -dt);
+        -:  182:} else {  
+    #####:  183:if( ap->vx > dt)
+branch  0 never executed
+branch  1 never executed
+    #####:  184:dsum -= ap->vy*(ap->vx -dt)*(ap->vx -dt);
+        -:  185:}
+        -:  186:
+        -:  187:}
+        -:  188:}
+    #####:  189:return dsum;
+        -:  190:}/* end of routine */
+        -:  191:/* dgeom trace routines */
+function _Z7v_tracePff called 0 returned 0% blocks executed 0%
+    #####:  192:int v_trace(float *V, float lambda)
+        -:  193:{
+        -:  194:	int numatm,i,a_number();
+        -:  195:	ATOM *ap,*a_next(int);
+        -:  196:	float xc,yc,zc;
+        -:  197:	float xt,yt,zt;
+        -:  198:	float l_trace,get_f_variable(char*);
+        -:  199:
+    #####:  200:	numatm = a_number();
+call    0 never executed
+    #####:  201:	if( numatm < 2 ) return 0 ;
+branch  0 never executed
+branch  1 never executed
+    #####:  202:	l_trace = get_f_variable("trace");
+call    0 never executed
+    #####:  203:	if( l_trace == 0.) l_trace = 1./numatm;
+branch  0 never executed
+branch  1 never executed
+        -:  204:	
+    #####:  205:	xc = 0.; yc = 0.; zc = 0.;
+        -:  206:
+    #####:  207:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  208:	{
+    #####:  209:		ap = a_next(i);
+call    0 never executed
+    #####:  210:		xc += ap->x + lambda*ap->dx;
+    #####:  211:		yc += ap->y + lambda*ap->dy;
+    #####:  212:		zc += ap->z + lambda*ap->dz;
+        -:  213:	}
+    #####:  214:	xc /= numatm; yc /= numatm; zc /= numatm;
+    #####:  215:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  216:	{
+    #####:  217:		ap = a_next(i);
+call    0 never executed
+    #####:  218:		xt = ap->x + lambda*ap->dx - xc;
+    #####:  219:		yt = ap->y + lambda*ap->dy - yc;
+    #####:  220:		zt = ap->z + lambda*ap->dz - zc;
+    #####:  221:		*V -= l_trace*( xt*xt + yt*yt + zt*zt);
+        -:  222:	}
+        -:  223:
+    #####:  224:	return 0;
+        -:  225:}
+function _Z7f_tracef called 0 returned 0% blocks executed 0%
+    #####:  226:int f_trace(float lambda)
+        -:  227:{
+        -:  228:	int numatm,i,a_number();
+        -:  229:	ATOM *ap,*a_next(int);
+        -:  230:	float xc,yc,zc;
+        -:  231:	float xt,yt,zt;
+        -:  232:	float l_trace,get_f_variable(char*);
+        -:  233:
+    #####:  234:	numatm = a_number();
+call    0 never executed
+    #####:  235:	if( numatm < 2 ) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  236:	l_trace = get_f_variable("trace");
+call    0 never executed
+    #####:  237:	if( l_trace == 0.) l_trace = 1./numatm;
+branch  0 never executed
+branch  1 never executed
+        -:  238:	
+    #####:  239:	xc = 0.; yc = 0.; zc = 0.;
+        -:  240:
+    #####:  241:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  242:	{
+    #####:  243:		ap = a_next(i);
+call    0 never executed
+    #####:  244:		xc += ap->x + lambda*ap->dx;
+    #####:  245:		yc += ap->y + lambda*ap->dy;
+    #####:  246:		zc += ap->z + lambda*ap->dz;
+        -:  247:	}
+    #####:  248:	xc /= numatm; yc /= numatm; zc /= numatm;
+    #####:  249:	l_trace = 2*l_trace*(1.-1./numatm);
+    #####:  250:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  251:	{
+    #####:  252:		ap = a_next(i);
+call    0 never executed
+    #####:  253:		xt = ap->x + lambda*ap->dx - xc;
+    #####:  254:		yt = ap->y + lambda*ap->dy - yc;
+    #####:  255:		zt = ap->z + lambda*ap->dz - zc;
+        -:  256:/*
+        -:  257:		*V -= l_trace*( xt*xt + yt*yt + zt*zt);
+        -:  258:		ap->fx += 2*l_trace*xt*(1.-1./numatm);
+        -:  259:		ap->fy += 2*l_trace*yt*(1.-1./numatm);
+        -:  260:		ap->fz += 2*l_trace*zt*(1.-1./numatm);
+        -:  261:*/
+    #####:  262:		ap->fx += l_trace*xt;
+    #####:  263:		ap->fy += l_trace*yt;
+    #####:  264:		ap->fz += l_trace*zt;
+        -:  265:	}
+        -:  266:
+    #####:  267:	return 0;
+        -:  268:}

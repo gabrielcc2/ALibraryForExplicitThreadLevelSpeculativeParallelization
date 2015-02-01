@@ -1,0 +1,14 @@
+gabriel@gabriel-Vostro-A840:~/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base$ $sudo time -p /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke speccmds.cmd
+running commands in speccmds.cmd 1 times
+runs started at 1312989939, 648389000, Wed Aug 10 10:55:39 2011
+run 1 started at 1312989939, 648570000, Wed Aug 10 10:55:39 2011
+child started: 0, 1312989939, 648605000, 4703, '>ammp.out 2>ammp.err ../Base/ammp_parallel'
+child finished: 0, 1312990176, 430032000, 236, 781427000, 4703, 0
+run 1 finished at: 1312990176, 430058000, Wed Aug 10 10:59:36 2011
+run 1 elapsed time: 236, 781488000, 236.781488000
+runs finished at 1312990176, 430109000, Wed Aug 10 10:59:36 2011
+runs elapsed time: 236, 781720000, 236.781720000
+real 236.78
+user 360.55
+sys 0.20
+

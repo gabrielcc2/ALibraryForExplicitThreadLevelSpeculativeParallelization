@@ -1,0 +1,919 @@
+desc: (none)
+cmd: ../Base/ammp_base.x86_linux
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=5232009390
+mem_heap_B=13646996
+mem_heap_extra_B=282068
+mem_stacks_B=0
+heap_tree=peak
+n6: 13646996 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 265188 in 9 places, all below massif's threshold (01.00%)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+#-----------
+snapshot=2
+#-----------
+time=8600128342
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=15202658983
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=19027560126
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=25729660803
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=31900664461
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13532012 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 150204 in 10 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=7
+#-----------
+time=38589893775
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=42366920533
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=49106410743
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=52543586189
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=58777980400
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13532012 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 150204 in 10 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=12
+#-----------
+time=62542462514
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=69314880722
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=76105696422
+mem_heap_B=13417076
+mem_heap_extra_B=282044
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=82492954731
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=85914088843
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=89338462772
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=92805007435
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13532012 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 150204 in 10 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=19
+#-----------
+time=96281123587
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=99677004794
+mem_heap_B=13532012
+mem_heap_extra_B=282060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=104572086981
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=111087145979
+mem_heap_B=13532060
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=117868448048
+mem_heap_B=13532060
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=121290889328
+mem_heap_B=13532060
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=124767973773
+mem_heap_B=13532060
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=128209448695
+mem_heap_B=13532060
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=135024908799
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=141862321921
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=145349499574
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=148756083194
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=152257568258
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=159070539603
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=162555471191
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=166044393318
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=169449998797
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=172938644581
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13522484 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 140676 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=37
+#-----------
+time=176424034650
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=179910727925
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=183403354090
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=186897743533
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=190353610933
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13522484 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 140676 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=42
+#-----------
+time=193813550334
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=197269753165
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=200774222188
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=205760085461
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=detailed
+n5: 13110500 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 35316 in 12 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=46
+#-----------
+time=212361780102
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=215763447993
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=219241601567
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=223083480544
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=226462219711
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=detailed
+n5: 13110500 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 35316 in 12 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=51
+#-----------
+time=229845069910
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=233236590996
+mem_heap_B=13110500
+mem_heap_extra_B=282052
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=236635739899
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=240155160897
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=243630029826
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=247103281598
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=250618211226
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=254095803752
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=257577383858
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=261064825391
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13522484 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 140676 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=61
+#-----------
+time=264508938085
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=268031855578
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=271519277937
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=275010093024
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=278503621572
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=282007078639
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=285542144633
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=289074413625
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=292613436502
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=296160031926
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=detailed
+n6: 13522484 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12111648 0x804FAAE: atom (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 12111648 0x804983A: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 12111648 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 12111648 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 12111648 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 359520 0x8051C2A: bond (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 359520 0x80499B2: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 359520 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 359520 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 359520 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 346000 0x805E244: torsion (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 346000 0x8049BA9: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 346000 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 346000 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 346000 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 306624 0x8058602: mm_fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 306624 0x805A972: fv_update_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 306624 0x805A9E8: f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 306624 0x805806C: u_f_nonbon (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 306624 0x804E20F: tpac (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n1: 306624 0x804AC20: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+       n1: 306624 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+        n0: 306624 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n1: 258016 0x8052DA0: angle (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+  n1: 258016 0x8049961: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+   n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+    n1: 258016 0x804A632: eval (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+     n1: 258016 0x804B509: read_eval_do (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+      n0: 258016 0x8048BED: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base/ammp_base.x86_linux)
+ n0: 140676 in 11 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=71
+#-----------
+time=299665958732
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=303176628206
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=306643404974
+mem_heap_B=13522484
+mem_heap_extra_B=282076
+mem_stacks_B=0
+heap_tree=empty

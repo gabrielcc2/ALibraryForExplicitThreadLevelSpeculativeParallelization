@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/globroute.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - globroute.c<span style="font-size: 80%;"> (source / <a href="globroute.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">69</td>
+            <td class="headerCovTableEntry">71</td>
+            <td class="headerCovTableEntryHi">97.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">34</td>
+            <td class="headerCovTableEntryMed">79.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &lt;stdio.h&gt;</a>
+<span class="lineNum">       2 </span>                :            : /* #define TW_OK 1     --------only for VMS */
+<span class="lineNum">       3 </span>                :            : /* #define TW_FAIL 0   --------only for VMS */
+<span class="lineNum">       4 </span>                :            : 
+<span class="lineNum">       5 </span>                :            : #define TW_OK 0     /* -------- for Unix */
+<span class="lineNum">       6 </span>                :            : #define TW_FAIL 1   /* -------- for Unix */
+<span class="lineNum">       7 </span>                :            : #define RAND (Yacm_random() )
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : #define TOP 1
+<span class="lineNum">      10 </span>                :            : #define BOT 0
+<span class="lineNum">      11 </span>                :            : #define YES 1
+<span class="lineNum">      12 </span>                :            : #define NO 0
+<span class="lineNum">      13 </span>                :            : #define ABORT 1
+<span class="lineNum">      14 </span>                :            : #define NOABORT 0
+<span class="lineNum">      15 </span>                :            : #define twopen(a,b,c) (openFile(a,b,c))
+<span class="lineNum">      16 </span>                :            : #define twclose(a)    (fclose(a))
+<span class="lineNum">      17 </span>                :            : extern FILE *openFile() ;
+<span class="lineNum">      18 </span>                :            : 
+<span class="lineNum">      19 </span>                :            : #define DENSENULL ((DENSITYPTR)NULL)
+<span class="lineNum">      20 </span>                :            : #define GRDNULL ( ( CHANGRDPTR )NULL ) 
+<span class="lineNum">      21 </span>                :            : extern int numRows, numnets , maxterm ;
+<span class="lineNum">      22 </span>                :            : extern int randVar ;
+<span class="lineNum">      23 </span>                :            : int attlimit ;
+<span class="lineNum">      24 </span>                :            : extern FILE *fpo ;
+<span class="lineNum">      25 </span>                :            : extern char cktName[] ;
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : typedef struct netbox {
+<span class="lineNum">      29 </span>                :            :     struct netbox *nterm ;
+<span class="lineNum">      30 </span>                :            :     int terminal ;
+<span class="lineNum">      31 </span>                :            :     int extint   ;
+<span class="lineNum">      32 </span>                :            :     int xpos     ;
+<span class="lineNum">      33 </span>                :            :     int ypos     ;
+<span class="lineNum">      34 </span>                :            :     int newx     ;
+<span class="lineNum">      35 </span>                :            :     int newy     ;
+<span class="lineNum">      36 </span>                :            :     short int row  ;
+<span class="lineNum">      37 </span>                :            :     short int cell ;
+<span class="lineNum">      38 </span>                :            :     short int net ;
+<span class="lineNum">      39 </span>                :            : #ifdef HAVE_SIGNED_CHAR
+<span class="lineNum">      40 </span>                :            :     signed char pinloc   ;
+<span class="lineNum">      41 </span>                :            : #else
+<span class="lineNum">      42 </span>                :            :     char pinloc   ;
+<span class="lineNum">      43 </span>                :            : #endif /* HAVE_SIGNED_CHAR */
+<span class="lineNum">      44 </span>                :            :     char unequiv  ;
+<span class="lineNum">      45 </span>                :            :     char flag     ;
+<span class="lineNum">      46 </span>                :            :     char layer    ;
+<span class="lineNum">      47 </span>                :            : }
+<span class="lineNum">      48 </span>                :            : *NBOXPTR ,
+<span class="lineNum">      49 </span>                :            : NBOX ;
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            : typedef struct changrdbox {
+<span class="lineNum">      52 </span>                :            :     NBOXPTR netptr ;
+<span class="lineNum">      53 </span>                :            :     short int tracks ;
+<span class="lineNum">      54 </span>                :            :     short int ntracks ;
+<span class="lineNum">      55 </span>                :            :     short int SegType ;
+<span class="lineNum">      56 </span>                :            :     short int nSegType ;
+<span class="lineNum">      57 </span>                :            :     struct changrdbox *prevgrd ;
+<span class="lineNum">      58 </span>                :            :     struct changrdbox *nprevgrd ;
+<span class="lineNum">      59 </span>                :            :     struct changrdbox *nextgrd ;
+<span class="lineNum">      60 </span>                :            :     struct changrdbox *nnextgrd ;
+<span class="lineNum">      61 </span>                :            :     struct densitybox *dptr ;
+<span class="lineNum">      62 </span>                :            : }
+<span class="lineNum">      63 </span>                :            : *CHANGRDPTR ,
+<span class="lineNum">      64 </span>                :            : CHANGRDBOX ;
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>                :            : typedef struct segbox {
+<span class="lineNum">      67 </span>                :            :     short int channel ;
+<span class="lineNum">      68 </span>                :            :     int pin1    ;
+<span class="lineNum">      69 </span>                :            :     int pin2    ;
+<span class="lineNum">      70 </span>                :            :     CHANGRDPTR pin1ptr    ;
+<span class="lineNum">      71 </span>                :            :     CHANGRDPTR pin2ptr    ;
+<span class="lineNum">      72 </span>                :            : }
+<span class="lineNum">      73 </span>                :            : *SEGBOXPTR ,
+<span class="lineNum">      74 </span>                :            : SEGBOX ;
+<span class="lineNum">      75 </span>                :            : 
+<span class="lineNum">      76 </span>                :            : typedef struct switchbox {
+<span class="lineNum">      77 </span>                :            :     int net ;
+<span class="lineNum">      78 </span>                :            :     char nflag ;
+<span class="lineNum">      79 </span>                :            :     char ncurrent ;
+<span class="lineNum">      80 </span>                :            :     char nswYorN ;
+<span class="lineNum">      81 </span>                :            :     char current ;
+<span class="lineNum">      82 </span>                :            :     char swYorN ;
+<span class="lineNum">      83 </span>                :            :     short int key ;
+<span class="lineNum">      84 </span>                :            :     short int nkey ;
+<span class="lineNum">      85 </span>                :            :     SEGBOXPTR ntop ;
+<span class="lineNum">      86 </span>                :            :     SEGBOXPTR nbot ;
+<span class="lineNum">      87 </span>                :            :     SEGBOXPTR top    ;
+<span class="lineNum">      88 </span>                :            :     SEGBOXPTR bot    ;
+<span class="lineNum">      89 </span>                :            : }
+<span class="lineNum">      90 </span>                :            : *SWITCHBOXPTR ,
+<span class="lineNum">      91 </span>                :            : SWITCHBOX ;
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>                :            : typedef struct tgridbox {
+<span class="lineNum">      95 </span>                :            :     CHANGRDPTR up ;
+<span class="lineNum">      96 </span>                :            :     CHANGRDPTR down ;
+<span class="lineNum">      97 </span>                :            : }
+<span class="lineNum">      98 </span>                :            : *TGRIDPTR ,
+<span class="lineNum">      99 </span>                :            : TGRIDBOX ;
+<span class="lineNum">     100 </span>                :            : 
+<span class="lineNum">     101 </span>                :            : typedef struct densitybox {
+<span class="lineNum">     102 </span>                :            :     CHANGRDPTR grdptr ;
+<span class="lineNum">     103 </span>                :            :     struct densitybox *next ;
+<span class="lineNum">     104 </span>                :            :     struct densitybox *nnext ;
+<span class="lineNum">     105 </span>                :            :     struct densitybox *back ;
+<span class="lineNum">     106 </span>                :            :     struct densitybox *nback ;
+<span class="lineNum">     107 </span>                :            : }
+<span class="lineNum">     108 </span>                :            : *DENSITYPTR ,
+<span class="lineNum">     109 </span>                :            : DENSITYBOX ;
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :            : extern NBOXPTR *tearray  ;
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>                :            : SWITCHBOX  *aNetSeg ;
+<span class="lineNum">     114 </span>                :            : CHANGRDPTR *Begin , *End ;
+<span class="lineNum">     115 </span>                :            : TGRIDPTR *Tgrid ;
+<span class="lineNum">     116 </span>                :            : DENSITYPTR **Densebox , **DboxHead ;
+<span class="lineNum">     117 </span>                :            : int *anet , *netchgs , *fixnetseg ;
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            : int numChans , numSegs , numSwSegs , tracks ;
+<span class="lineNum">     120 </span>                :            : int *maxTrack , *nmaxTrack , max_tdensity ;
+<span class="lineNum">     121 </span>                :            : extern int *fixarray ;
+<span class="lineNum">     122 </span>                :            : extern int stage ;
+<span class="lineNum">     123 </span>                :            : extern unsigned randomSeed2 ;
+<a name="124"><span class="lineNum">     124 </span>                :            : </a>
+<span class="lineNum">     125 </span>                :            : 
+<span class="lineNum">     126 </span>                :<span class="lineCov">          1 : globroute()</span>
+<span class="lineNum">     127 </span>                :            : {
+<span class="lineNum">     128 </span>                :            : 
+<span class="lineNum">     129 </span>                :            : FILE *fp ;
+<span class="lineNum">     130 </span>                :            : char filename[64] ;
+<span class="lineNum">     131 </span>                :            : int attperseg ;
+<span class="lineNum">     132 </span>                :            : int swSeg , flips , attempts , seg ;
+<span class="lineNum">     133 </span>                :            : int breakpoint , stoppoint ;
+<span class="lineNum">     134 </span>                :            : int found ;
+<span class="lineNum">     135 </span>                :            : SEGBOXPTR segptr ;
+<span class="lineNum">     136 </span>                :            : DENSITYPTR denptr ;
+<span class="lineNum">     137 </span>                :            : CHANGRDPTR gdptr , ptr1 , ptr2 ;
+<span class="lineNum">     138 </span>                :            : int x , x1 , x2 , channel , track ;
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :<span class="lineCov">          1 : attperseg = 40 ;</span>
+<span class="lineNum">     142 </span>                :<span class="lineCov">          1 : randVar = randomSeed2 ;</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">          1 : fprintf( fpo, &quot;\nThe rand generator seed was at globroute() : %d\n\n&quot;, </span>
+<span class="lineNum">     144 </span>                :            :                                                             randVar ) ;
+<span class="lineNum">     145 </span>                :            : 
+<span class="lineNum">     146 </span>                :<span class="lineCov">          1 : sprintf( filename , &quot;%s.twf&quot; , cktName ) ;</span>
+<span class="lineNum">     147 </span>                :<span class="lineCov">          1 : fp = twopen ( filename , &quot;r&quot;, ABORT ) ;</span>
+<span class="lineNum">     148 </span>                :<span class="lineCov">          1 : changrid( ) ;</span>
+<span class="lineNum">     149 </span>                :<span class="lineCov">          1 : readseg( fp ) ;</span>
+<span class="lineNum">     150 </span>                :<span class="lineCov">          1 : twclose( fp ) ;</span>
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : if( stage == 3 ) {</span>
+<span class="lineNum">     153 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( seg = 1 ; seg &lt;= numSegs ; seg++ ) {</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :         aNetSeg[seg].current = fixarray[seg] ;</span>
+<span class="lineNum">     155 </span>                :            :     }
+<span class="lineNum">     156 </span>                :            : }
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :<span class="lineCov">          1 : findrcost() ;</span>
+<span class="lineNum">     159 </span>                :            : 
+<span class="lineNum">     160 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot;\n\nTHIS IS THE ORIGINAL NUMBER OF TRACKS: %d\n\n\n&quot; , </span>
+<span class="lineNum">     161 </span>                :            :                                                         tracks ) ;
+<span class="lineNum">     162 </span>                :<span class="lineCov">          1 : fflush(fpo);</span>
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>                :<span class="lineCov">          1 : attlimit = attperseg * numSwSegs ;</span>
+<span class="lineNum">     165 </span>                :<span class="lineCov">          1 : attempts = 0 ;</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">          1 : flips = 0    ;</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">          1 : stoppoint = 10 * numSwSegs ;</span>
+<span class="lineNum">     168 </span>                :<span class="lineCov">          1 : breakpoint = 0 ;</span>
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>        [<span class="branchCov" title="Branch 0 was taken 2298 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       2298 : while( attempts &lt; attlimit ) {</span>
+<span class="lineNum">     171 </span>                :            :     for( ; ; ) {
+<span class="lineNum">     172 </span>                :            :         do {
+<span class="lineNum">     173 </span>                :<span class="lineCov">      50213 :             swSeg = (int) ( (double) numSegs * ( (double) RAND / </span>
+<span class="lineNum">     174 </span>                :            :                                           (double) 0x7fffffff ) ) + 1 ;
+<span class="lineNum">     175 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 50213 times"> + </span>]:<span class="lineCov">      50213 :         } while( swSeg == numSegs + 1 ) ;</span>
+<span class="lineNum">     176 </span>        [<span class="branchCov" title="Branch 0 was taken 47915 times"> + </span><span class="branchCov" title="Branch 1 was taken 2298 times"> + </span>]:<span class="lineCov">      50213 :         if( aNetSeg[swSeg].swYorN == 1 &amp;&amp; aNetSeg[swSeg].key == 0 ) {</span>
+<span class="lineNum">     177 </span>                :            :             break ;
+<span class="lineNum">     178 </span>                :            :         }
+<span class="lineNum">     179 </span>                :            :     }
+<span class="lineNum">     180 </span>        [<span class="branchCov" title="Branch 0 was taken 1774 times"> + </span><span class="branchCov" title="Branch 1 was taken 524 times"> + </span>]:<span class="lineCov">       2298 :     if( aNetSeg[swSeg].current == 0 ) {</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">       1774 :         segptr = aNetSeg[swSeg].top ;</span>
+<span class="lineNum">     182 </span>                :            :     } else {
+<span class="lineNum">     183 </span>                :<span class="lineCov">        524 :         segptr = aNetSeg[swSeg].bot ;</span>
+<span class="lineNum">     184 </span>                :            :     }
+<span class="lineNum">     185 </span>                :<span class="lineCov">       2298 :     channel = segptr-&gt;channel ;</span>
+<span class="lineNum">     186 </span>                :<span class="lineCov">       2298 :     ptr1 = segptr-&gt;pin1ptr ;</span>
+<span class="lineNum">     187 </span>                :<span class="lineCov">       2298 :     ptr2 = segptr-&gt;pin2ptr ;</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">       2298 :     x1 = ptr1-&gt;netptr-&gt;xpos ;</span>
+<span class="lineNum">     189 </span>                :<span class="lineCov">       2298 :     x2 = ptr2-&gt;netptr-&gt;xpos ;</span>
+<span class="lineNum">     190 </span>                :            : 
+<span class="lineNum">     191 </span>                :<span class="lineCov">       2298 :     found = NO ;</span>
+<span class="lineNum">     192 </span>                :            :         
+<span class="lineNum">     193 </span>        [<span class="branchCov" title="Branch 0 was taken 20090 times"> + </span><span class="branchCov" title="Branch 1 was taken 2101 times"> + </span>]:<span class="lineCov">      22191 :     for( denptr = DboxHead[ channel ][ maxTrack[channel] ]-&gt;next</span>
+<span class="lineNum">     194 </span>                :<span class="lineCov">      19893 :                     ; denptr != DENSENULL ; denptr = denptr-&gt;next ) {</span>
+<span class="lineNum">     195 </span>                :<span class="lineCov">      20090 :         x = denptr-&gt;grdptr-&gt;netptr-&gt;xpos ;</span>
+<span class="lineNum">     196 </span>        [<span class="branchCov" title="Branch 0 was taken 197 times"> + </span><span class="branchCov" title="Branch 1 was taken 19893 times"> + </span>]:<span class="lineCov">      20090 :         if( x1 &lt;= x &amp;&amp; x2 &gt;= x ) {</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">        197 :             found = YES ;</span>
+<span class="lineNum">     198 </span>                :<span class="lineCov">        197 :             break ;</span>
+<span class="lineNum">     199 </span>                :            :         }
+<span class="lineNum">     200 </span>                :            :     }
+<span class="lineNum">     201 </span>                :            : 
+<span class="lineNum">     202 </span>        [<span class="branchCov" title="Branch 0 was taken 2101 times"> + </span><span class="branchCov" title="Branch 1 was taken 197 times"> + </span>]:<span class="lineCov">       2298 :     if( !found ) {</span>
+<span class="lineNum">     203 </span>        [<span class="branchCov" title="Branch 0 was taken 2101 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       2101 :         if( ++breakpoint &gt; stoppoint ) {</span>
+<span class="lineNum">     204 </span>                :            :             break ;
+<span class="lineNum">     205 </span>                :            :         }
+<span class="lineNum">     206 </span>                :<span class="lineCov">       2101 :         attempts++ ;</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">       2101 :         continue ;</span>
+<span class="lineNum">     208 </span>                :            :     }
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>        [<span class="branchCov" title="Branch 1 was taken 40 times"> + </span><span class="branchCov" title="Branch 2 was taken 157 times"> + </span>]:<span class="lineCov">        197 :     if( urcost( swSeg ) ) {</span>
+<span class="lineNum">     211 </span>                :<span class="lineCov">         40 :         flips++    ;</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">         40 :         attempts++ ;</span>
+<span class="lineNum">     213 </span>                :<span class="lineCov">         40 :         breakpoint = 0 ;</span>
+<span class="lineNum">     214 </span>                :            :     } else {
+<span class="lineNum">     215 </span>        [<span class="branchCov" title="Branch 0 was taken 156 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">        157 :         if( ++breakpoint &gt; stoppoint ) {</span>
+<span class="lineNum">     216 </span>                :            :             break ;
+<span class="lineNum">     217 </span>                :            :         }
+<span class="lineNum">     218 </span>                :<span class="lineCov">        156 :         attempts++ ;</span>
+<span class="lineNum">     219 </span>                :            :     }
+<span class="lineNum">     220 </span>                :            : }
+<span class="lineNum">     221 </span>        [<span class="branchCov" title="Branch 0 was taken 17 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         18 : for( channel = 1 ; channel &lt;= numChans ; channel++ ) {</span>
+<span class="lineNum">     222 </span>        [<span class="branchCov" title="Branch 0 was taken 10848 times"> + </span><span class="branchCov" title="Branch 1 was taken 17 times"> + </span>]:<span class="lineCov">      10865 :     for( gdptr = Begin[channel] ; gdptr != GRDNULL ;</span>
+<span class="lineNum">     223 </span>                :<span class="lineCov">      10848 :                             gdptr = gdptr-&gt;nextgrd ) {</span>
+<span class="lineNum">     224 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;ntracks  = gdptr-&gt;tracks ;</span>
+<span class="lineNum">     225 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;nSegType = gdptr-&gt;SegType ;</span>
+<span class="lineNum">     226 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;nnextgrd = gdptr-&gt;nextgrd ;</span>
+<span class="lineNum">     227 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;nprevgrd = gdptr-&gt;prevgrd ;</span>
+<span class="lineNum">     228 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;netptr-&gt;newx = gdptr-&gt;netptr-&gt;xpos ;</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">      10848 :         gdptr-&gt;netptr-&gt;newy = gdptr-&gt;netptr-&gt;ypos ;</span>
+<span class="lineNum">     230 </span>                :            :     }
+<span class="lineNum">     231 </span>        [<span class="branchCov" title="Branch 0 was taken 2108 times"> + </span><span class="branchCov" title="Branch 1 was taken 17 times"> + </span>]:<span class="lineCov">       2125 :     for( track = 0 ; track &lt;= max_tdensity+100 ; track++ ) {</span>
+<span class="lineNum">     232 </span>        [<span class="branchCov" title="Branch 0 was taken 12956 times"> + </span><span class="branchCov" title="Branch 1 was taken 2108 times"> + </span>]:<span class="lineCov">      15064 :         for( denptr = DboxHead[channel][track] ;</span>
+<span class="lineNum">     233 </span>                :<span class="lineCov">      12956 :                 denptr != DENSENULL ; denptr = denptr-&gt;next ) {</span>
+<span class="lineNum">     234 </span>                :<span class="lineCov">      12956 :             denptr-&gt;nnext = denptr-&gt;next ;</span>
+<span class="lineNum">     235 </span>                :<span class="lineCov">      12956 :             denptr-&gt;nback = denptr-&gt;back ;</span>
+<span class="lineNum">     236 </span>                :            :         }
+<span class="lineNum">     237 </span>                :            :     }
+<span class="lineNum">     238 </span>                :<span class="lineCov">         17 :     nmaxTrack[channel] = maxTrack[channel] ;</span>
+<span class="lineNum">     239 </span>                :            : }
+<span class="lineNum">     240 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot;no. of accepted flips: %d\n&quot;, flips ) ;</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot;no. of attempted flips: %d\n&quot;, attempts ) ;</span>
+<span class="lineNum">     242 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 : if( numSwSegs != 0 ) {</span>
+<span class="lineNum">     243 </span>                :<span class="lineCov">          1 :     fprintf(fpo,&quot;no. of attempted flips / numSwSegs: %.1f\n&quot;, </span>
+<span class="lineNum">     244 </span>                :<span class="lineCov">          1 :                             (double) attempts / (double) numSwSegs ) ;</span>
+<span class="lineNum">     245 </span>                :            : }
+<span class="lineNum">     246 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot;THIS IS THE NUMBER OF TRACKS: %d\n\n\n&quot; , tracks ) ;</span>
+<span class="lineNum">     247 </span>                :<span class="lineCov">          1 : fflush(fpo);</span>
+<span class="lineNum">     248 </span>                :            : 
+<span class="lineNum">     249 </span>                :            : return ;
+<span class="lineNum">     250 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

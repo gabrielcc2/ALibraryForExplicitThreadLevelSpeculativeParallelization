@@ -1,0 +1,6 @@
+00000002 dir=/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000002 ext=x86_linux lock=0 mach=default size=test tune=base type=run username=gabriel
+00000003 dir=/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000003 ext=x86_linux lock=1 mach=default size=ref tune=base type=run username=gabriel
+00000004 dir=/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000004 ext=x86_linux lock=0 type=build username=gabriel
+00000005 dir=/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000005 ext=x86_linux lock=1 mach=default size=ref tune=base type=run username=gabriel
+00000006 dir=/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 ext=x86_linux lock=0 mach=default size=ref tune=base type=run username=gabriel
+__END__

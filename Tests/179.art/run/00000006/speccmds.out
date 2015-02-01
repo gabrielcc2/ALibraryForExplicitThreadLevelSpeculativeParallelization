@@ -1,0 +1,11 @@
+running commands in speccmds.cmd 1 times
+runs started at 1311598432, 781373000, Mon Jul 25 08:23:52 2011
+run 1 started at 1311598432, 781501000, Mon Jul 25 08:23:52 2011
+child started: 0, 1311598432, 781522000, 32080, '>ref.1.out 2>ref.1.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10'
+child finished: 0, 1311598662, 487727000, 229, 706205000, 32080, 0
+child started: 0, 1311598662, 487743000, 1673, '>ref.2.out 2>ref.2.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10'
+child finished: 0, 1311598891, 302616000, 228, 814873000, 1673, 0
+run 1 finished at: 1311598891, 302626000, Mon Jul 25 08:31:31 2011
+run 1 elapsed time: 458, 521125000, 458.521125000
+runs finished at 1311598891, 302677000, Mon Jul 25 08:31:31 2011
+runs elapsed time: 458, 521304000, 458.521304000

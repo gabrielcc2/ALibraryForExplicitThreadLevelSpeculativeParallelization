@@ -1,0 +1,341 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/monitor.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* monitor.c
+        -:    2:*
+        -:    3:*  routine to monitor energy and force for AMMP.
+        -:    4:*
+        -:    5:*  monitors the potential due to each kind of potential used
+        -:    6:*
+        -:    7:*  reports kinetic energy and total potential and action (T-V)
+        -:    8:*
+        -:    9:*  reports maximum l_infinity force
+        -:   10:*/
+        -:   11:/*
+        -:   12:*  copyright 1992 Robert W. Harrison
+        -:   13:*  
+        -:   14:*  This notice may not be removed
+        -:   15:*  This program may be copied for scientific use
+        -:   16:*  It may not be sold for profit without explicit
+        -:   17:*  permission of the author(s) who retain any
+        -:   18:*  commercial rights including the right to modify 
+        -:   19:*  this notice
+        -:   20:*/
+        -:   21:
+        -:   22:#define ANSI 1
+        -:   23:/* misc includes - ANSI and some are just to be safe */
+        -:   24:#include <stdio.h>
+        -:   25:#include <ctype.h>
+        -:   26:#include <math.h>
+        -:   27:#ifdef ANSI
+        -:   28:#include <stdlib.h>
+        -:   29:#endif
+        -:   30://#include "ammp.h"
+        -:   31:/* ATOM structure contains a serial number for indexing into
+        -:   32:* arrays and the like (a Hessian)
+        -:   33:* but otherwise is self-contained. Note the hooks for Non-bonded potentials
+        -:   34:*/
+function _Z11AMMPmonitorPPFiPffEPPFifEiP8_IO_FILE called 3 returned 100% blocks executed 67%
+        3:   35:void AMMPmonitor(int  (*vfs[])(float*, float),int(*ffs[])(float), int nfs, FILE *op)
+        -:   36:{
+        -:   37:/* block of function used in eval()
+        -:   38:*   only the v_stuff are needed
+        -:   39:*/
+        -:   40:int v_bond(float*, float),f_bond(float),v_angle(float*, float),f_angle(float);
+        -:   41:int v_mmbond(float*, float),f_mmbond(float),v_mmangle(float*, float),f_mmangle(float);
+        -:   42:int v_ho_bond(float*, float),f_ho_bond(float),v_ho_angle(float*, float),f_ho_angle(float);
+        -:   43:int f_c_angle(float),v_c_angle(float*, float);
+        -:   44:int v_nonbon(float*, float),f_nonbon(float),v_torsion(float*, float),f_torsion(float);
+        -:   45:int atom(float, float, float, int, float, float, float, float, char*),bond(int, int, float, float),angle(int, int, int, float, float),torsion(int, int,int,int,float,int,float);
+        -:   46:int v_hybrid(float*, float),f_hybrid(float);
+        -:   47:int restrain(int, int,float, float),v_restrain(float*, float),f_restrain(float);
+        -:   48:int tether(int,float,float,float,float),v_tether(float*, float),f_tether(float);
+        -:   49:int u_v_nonbon(float*, float),u_f_nonbon(float);
+        -:   50:int v_noel(float*, float),f_noel(float);
+        -:   51:int v_ho_noel(float*, float),f_ho_noel(float);
+        -:   52:
+        -:   53:int a_number();
+        -:   54:float mxdq,get_f_variable(char*);
+        -:   55:
+        -:   56:float V,T,vt;
+        -:   57:float a_max_f(),a_l2_f();
+        -:   58:ATOM *ap,*a_next(int);
+        -:   59:int ifs,a_f_zero();
+        -:   60:
+        3:   61:if( a_number() < 1) 
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:   62:{ aaerror(" no atoms defined - nothing to calculate \n"); return;}
+call    0 never executed
+        -:   63:
+        3:   64: V = 0.; T = 0.;
+        3:   65:a_f_zero();
+call    0 returned 100%
+       21:   66:for( ifs = 0; ifs < nfs; ifs++ )
+branch  0 taken 86%
+branch  1 taken 14% (fallthrough)
+        -:   67:{
+       18:   68:	vt = 0.; 
+       18:   69:	(*vfs[ifs])(&vt,0.);
+call    0 returned 100%
+       18:   70:	mxdq = get_f_variable("mxdq");
+call    0 returned 100%
+       18:   71:	set_f_variable("mxdq",100.);
+call    0 returned 100%
+       18:   72:	(*ffs[ifs])(0.);
+call    0 returned 100%
+       18:   73:	set_f_variable("mxdq",mxdq);
+call    0 returned 100%
+        -:   74:
+       18:   75:	V += vt;
+       18:   76:	if( vfs[ifs] == v_bond)
+branch  0 taken 17% (fallthrough)
+branch  1 taken 83%
+        3:   77:	{ fprintf( op," %f bond energy\n",vt); goto DONE;}
+       15:   78:	if( vfs[ifs] == v_ho_bond)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   79:	{ fprintf( op," %f homotopy bond energy\n",vt);
+    #####:   80:		vt = 0; v_bond(&vt,0.);
+call    0 never executed
+    #####:   81:	 fprintf( op," %f bond energy\n",vt); 
+        -:   82:		 goto DONE;}
+       15:   83:	if( vfs[ifs] == v_mmbond)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   84:	{ fprintf( op," %f mm bond energy\n",vt); goto DONE;}
+       15:   85:	if( vfs[ifs] == v_c_angle)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   86:	{ fprintf( op," %f cangle energy\n",vt); goto DONE;}
+       15:   87:	if( vfs[ifs] == v_mmangle)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   88:	{ fprintf( op," %f mm angle energy\n",vt); goto DONE;}
+       15:   89:	if( vfs[ifs] == v_angle)
+branch  0 taken 20% (fallthrough)
+branch  1 taken 80%
+        3:   90:	{ fprintf( op," %f angle energy\n",vt); goto DONE;}
+       12:   91:	if( vfs[ifs] == v_ho_angle)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   92:	{ fprintf( op," %f homotopy angle energy\n",vt); 
+    #####:   93:		vt = 0.; v_angle( &vt,0.);
+call    0 never executed
+    #####:   94:	 	fprintf( op," %f angle energy\n",vt); 
+        -:   95:		goto DONE;}
+       12:   96:	if( vfs[ifs] == v_noel)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   97:	{ fprintf( op," %f noel energy\n",vt); goto DONE;}
+       12:   98:	if( vfs[ifs] == v_ho_noel)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   99:	{ fprintf( op," %f homotopy noel energy\n",vt); 
+call    0 never executed
+    #####:  100:		vt = 0.; v_noel( &vt,0.);
+call    0 never executed
+    #####:  101:	 	fprintf( op," %f noel energy\n",vt); 
+        -:  102:	goto DONE;}
+       12:  103:	if( vfs[ifs] == u_v_nonbon)
+branch  0 taken 25% (fallthrough)
+branch  1 taken 75%
+        3:  104:	{ fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+        9:  105:	if( vfs[ifs] == v_nonbon)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  106:	{ fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+        9:  107:	if( vfs[ifs] == v_torsion)
+branch  0 taken 33% (fallthrough)
+branch  1 taken 67%
+        3:  108:	{ fprintf( op," %f torsion energy\n",vt); goto DONE;}
+        6:  109:	if( vfs[ifs] == v_hybrid)
+branch  0 taken 50% (fallthrough)
+branch  1 taken 50%
+        3:  110:	{ fprintf( op," %f hybrid energy\n",vt); goto DONE;}
+        3:  111:	if( vfs[ifs] == v_tether)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  112:	{ fprintf( op," %f tether restraint energy\n",vt); goto DONE;}
+        3:  113:	if( vfs[ifs] == v_restrain)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  114:	{ fprintf( op," %f restraint bond energy\n",vt); goto DONE;}
+        3:  115:	fprintf( op," %f unknown potential type\n",vt);
+        -:  116:DONE:  
+        -:  117:/* next statement is needed because cannot have a label at an end loop */
+       18:  118:	vt = 0.;
+        -:  119:}
+        3:  120:	fprintf( op," %f total potential energy\n",V);
+        -:  121:/* update variables */
+        3:  122:	set_f_variable( "l2f",a_l2_f());
+call    0 returned 100%
+call    1 returned 100%
+        3:  123:	set_f_variable( "lmaxf",a_max_f());
+call    0 returned 100%
+call    1 returned 100%
+        3:  124:	set_f_variable( "totalp",V);
+call    0 returned 100%
+        -:  125:
+        3:  126:	ifs = -1;
+    28752:  127:	while( (ap = a_next(ifs)) != NULL)
+call    0 returned 100%
+branch  1 taken 99%
+branch  2 taken 1% (fallthrough)
+        -:  128:	{
+    28746:  129:		ifs = 1; 
+    28746:  130:		T += ap->vx*ap->vx*ap->mass;
+    28746:  131:		T += ap->vy*ap->vy*ap->mass;
+    28746:  132:		T += ap->vz*ap->vz*ap->mass;
+        -:  133:	}
+        3:  134:	T = T*.5/4.184/1000/1000;
+        3:  135:	set_f_variable("totalk",T);
+call    0 returned 100%
+        3:  136:	fprintf( op," %f total kinetic energy\n",T);
+        3:  137:	fprintf( op," %f total energy\n",T+V);
+        3:  138:	fprintf( op," %f total action\n",T-V);
+        -:  139:/* end of routine */
+        -:  140:}
+        -:  141:
+function _Z16AMMPmonitor_mutePPFiPffEPPFifEiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  142:void AMMPmonitor_mute( int  (*vfs[])(float*, float), int (*ffs[])(float), int nfs, FILE *op)
+        -:  143:{
+        -:  144:/* block of function used in eval()
+        -:  145:*   only the v_stuff are needed
+        -:  146:*/
+        -:  147:int v_bond(float*, float),f_bond(float),v_angle(float*, float),f_angle(float);
+        -:  148:int v_mmbond(float*, float),f_mmbond(float),v_mmangle(float*, float),f_mmangle(float);
+        -:  149:int v_c_angle(float*, float), f_c_angle(float);
+        -:  150:int v_ho_bond(float*, float),f_ho_bond(float);
+        -:  151:int v_ho_angle(float*, float),f_ho_angle(float);
+        -:  152:int v_nonbon(float*, float),f_nonbon(float),v_torsion(float*, float),f_torsion(float);
+        -:  153:int atom(float, float, float, int, float, float, float, float, char*),bond(int, int, float, float),angle(int, int, int, float, float),torsion(int, int,int,int,float,int,float);
+        -:  154:int v_hybrid(float*, float),f_hybrid(float);
+        -:  155:int restrain(int, int,float, float),v_restrain(float*, float),f_restrain(float);
+        -:  156:int tether(int,float,float,float,float),v_tether(float*, float),f_tether(float);
+        -:  157:int u_v_nonbon(float*, float),u_f_nonbon(float);
+        -:  158:int v_noel(float*, float),f_noel(float);
+        -:  159:int v_ho_noel(float*, float),f_ho_noel(float);
+        -:  160:
+        -:  161:int a_number();
+        -:  162:float mxdq,get_f_variable(char*);
+        -:  163:
+        -:  164:float V,T,vt;
+        -:  165:float a_max_f(),a_l2_f();
+        -:  166:ATOM *ap,*a_next(int);
+        -:  167:int ifs,a_f_zero();
+        -:  168:
+    #####:  169:if( a_number() < 1) 
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  170:{ aaerror(" no atoms defined - nothing to calculate \n"); return;}
+call    0 never executed
+        -:  171:
+    #####:  172: V = 0.; T = 0.;
+    #####:  173:a_f_zero();
+call    0 never executed
+    #####:  174:for( ifs = 0; ifs < nfs; ifs++ )
+branch  0 never executed
+branch  1 never executed
+        -:  175:{
+    #####:  176:	vt = 0.; 
+    #####:  177:	(*vfs[ifs])(&vt,0.);
+call    0 never executed
+    #####:  178:	mxdq = get_f_variable("mxdq");
+call    0 never executed
+    #####:  179:	set_f_variable("mxdq",100.);
+call    0 never executed
+    #####:  180:	(*ffs[ifs])(0.);
+call    0 never executed
+    #####:  181:	set_f_variable("mxdq",mxdq);
+call    0 never executed
+        -:  182:
+    #####:  183:	V += vt;
+        -:  184:#ifdef RWH_UNMUTED
+        -:  185:	if( vfs[ifs] == v_bond)
+        -:  186:	{ fprintf( op," %f bond energy\n",vt); goto DONE;}
+        -:  187:	if( vfs[ifs] == v_ho_bond)
+        -:  188:	{ fprintf( op," %f homotopy bond energy\n",vt);
+        -:  189:		vt = 0; v_bond(&vt,0.);
+        -:  190:	 fprintf( op," %f bond energy\n",vt); 
+        -:  191:		 goto DONE;}
+        -:  192:	if( vfs[ifs] == v_mmbond)
+        -:  193:	{ fprintf( op," %f mm bond energy\n",vt); goto DONE;}
+        -:  194:	if( vfs[ifs] == v_c_angle)
+        -:  195:	{ fprintf( op," %f cangle energy\n",vt); goto DONE;}
+        -:  196:	if( vfs[ifs] == v_mmangle)
+        -:  197:	{ fprintf( op," %f mm angle energy\n",vt); goto DONE;}
+        -:  198:	if( vfs[ifs] == v_angle)
+        -:  199:	{ fprintf( op," %f angle energy\n",vt); goto DONE;}
+        -:  200:	if( vfs[ifs] == v_ho_angle)
+        -:  201:	{ fprintf( op," %f homotopy angle energy\n",vt); 
+        -:  202:		vt = 0.; v_angle( &vt,0.);
+        -:  203:	 	fprintf( op," %f angle energy\n",vt); 
+        -:  204:		goto DONE;}
+        -:  205:	if( vfs[ifs] == v_noel)
+        -:  206:	{ fprintf( op," %f noel energy\n",vt); goto DONE;}
+        -:  207:	if( vfs[ifs] == v_ho_noel)
+        -:  208:	{ fprintf( op," %f homotopy noel energy\n",vt); 
+        -:  209:		vt = 0.; v_noel( &vt,0.);
+        -:  210:	 	fprintf( op," %f noel energy\n",vt); 
+        -:  211:	goto DONE;}
+        -:  212:	if( vfs[ifs] == u_v_nonbon)
+        -:  213:	{ fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+        -:  214:	if( vfs[ifs] == v_nonbon)
+        -:  215:	{ fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+        -:  216:	if( vfs[ifs] == v_torsion)
+        -:  217:	{ fprintf( op," %f torsion energy\n",vt); goto DONE;}
+        -:  218:	if( vfs[ifs] == v_hybrid)
+        -:  219:	{ fprintf( op," %f hybrid energy\n",vt); goto DONE;}
+        -:  220:	if( vfs[ifs] == v_tether)
+        -:  221:	{ fprintf( op," %f tether restraint energy\n",vt); goto DONE;}
+        -:  222:	if( vfs[ifs] == v_restrain)
+        -:  223:	{ fprintf( op," %f restraint bond energy\n",vt); goto DONE;}
+        -:  224:	fprintf( op," %f unknown potential type\n",vt);
+        -:  225:DONE:  
+        -:  226:/* next statement is needed because cannot have a label at an end loop */
+        -:  227:	vt = 0.;
+        -:  228:#endif
+        -:  229:}
+        -:  230:/* rwh
+        -:  231:	fprintf( op," %f total potential energy\n",V);
+        -:  232:*/
+        -:  233:/* update variables */
+    #####:  234:	set_f_variable( "l2f",a_l2_f());
+call    0 never executed
+call    1 never executed
+    #####:  235:	set_f_variable( "lmaxf",a_max_f());
+call    0 never executed
+call    1 never executed
+    #####:  236:	set_f_variable( "totalp",V);
+call    0 never executed
+        -:  237:
+    #####:  238:	ifs = -1;
+    #####:  239:	while( (ap = a_next(ifs)) != NULL)
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+        -:  240:	{
+    #####:  241:		ifs = 1; 
+    #####:  242:		T += ap->vx*ap->vx*ap->mass;
+    #####:  243:		T += ap->vy*ap->vy*ap->mass;
+    #####:  244:		T += ap->vz*ap->vz*ap->mass;
+        -:  245:	}
+    #####:  246:	T = T*.5/4.184/1000/1000;
+    #####:  247:	set_f_variable("totalk",T);
+call    0 never executed
+        -:  248:/* rwh
+        -:  249:	fprintf( op," %f total kinetic energy\n",T);
+        -:  250:*/
+    #####:  251:	fprintf( op," %f total energy\n",T+V);
+        -:  252:/* rwh
+        -:  253:	fprintf( op," %f total action\n",T-V);
+        -:  254:*/
+        -:  255:/* end of routine */
+        -:  256:}
+        -:  257:
+        -:  258:

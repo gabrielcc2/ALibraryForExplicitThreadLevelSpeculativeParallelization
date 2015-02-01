@@ -1,0 +1,18 @@
+TIME PARA ART: RECORDAR QUE HAY QUE CUADRARLO PARA ALREDEDOR DE 410...
+
+gabriel@gabriel-Vostro-A840:~/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC$ sudo time -p /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke speccmds.cmd
+running commands in speccmds.cmd 1 times
+runs started at 1311983648, 431493000, Fri Jul 29 19:24:08 2011
+run 1 started at 1311983648, 431582000, Fri Jul 29 19:24:08 2011
+child started: 0, 1311983648, 431599000, 2943, '>ref.1.out 2>ref.1.err ../SPEC/art_opt -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10'
+child finished: 0, 1311983882, 711234000, 234, 279635000, 2943, 0
+child started: 0, 1311983882, 711267000, 2962, '>ref.2.out 2>ref.2.err ../SPEC/art_opt -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10'
+child finished: 0, 1311984109, 39157000, 226, 327890000, 2962, 0
+run 1 finished at: 1311984109, 39188000, Fri Jul 29 19:31:49 2011
+run 1 elapsed time: 460, 607606000, 460.607606000
+runs finished at 1311984109, 39253000, Fri Jul 29 19:31:49 2011
+runs elapsed time: 460, 607760000, 460.607760000
+real 460.60
+user 775.92
+sys 0.25
+

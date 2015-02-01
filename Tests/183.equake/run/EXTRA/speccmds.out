@@ -1,0 +1,9 @@
+running commands in speccmds.cmd 1 times
+runs started at 1310404247, 210245000, Mon Jul 11 12:40:47 2011
+run 1 started at 1310404247, 210464000, Mon Jul 11 12:40:47 2011
+child started: 0, 1310404247, 210485000, 13488, '>inp.out 2>inp.err ../00000004/equake_base.x86_linux'
+child finished: 0, 1310404337, 185034000, 89, 974549000, 13488, 0
+run 1 finished at: 1310404337, 185046000, Mon Jul 11 12:42:17 2011
+run 1 elapsed time: 89, 974582000, 89.974582000
+runs finished at 1310404337, 185110000, Mon Jul 11 12:42:17 2011
+runs elapsed time: 89, 974865000, 89.974865000

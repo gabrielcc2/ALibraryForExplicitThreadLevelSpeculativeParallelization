@@ -1,0 +1,745 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 188.ammp/src/math.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">188.ammp/src</a> - math.c<span style="font-size: 80%;"> (source / <a href="math.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">73</td>
+            <td class="headerCovTableEntry">274</td>
+            <td class="headerCovTableEntryLo">26.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryLo">60.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">81</td>
+            <td class="headerCovTableEntry">484</td>
+            <td class="headerCovTableEntryLo">16.7 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* math.c </a>
+<span class="lineNum">       2 </span>                :            : *  perform basic mathematical operations on data
+<span class="lineNum">       3 </span>                :            : * return values to memory locations
+<span class="lineNum">       4 </span>                :            : *  uses floating point contagion
+<span class="lineNum">       5 </span>                :            : *  defined ops
+<span class="lineNum">       6 </span>                :            : *   add  a b  a &lt;= a+b
+<span class="lineNum">       7 </span>                :            : *   sub  a b  a &lt;= a - b
+<span class="lineNum">       8 </span>                :            : *   mul  a b  a &lt;= a*b
+<span class="lineNum">       9 </span>                :            : *   div  a b  a &lt;= a/b
+<span class="lineNum">      10 </span>                :            : *   fix  a    a &lt;= (int) a   (drops the fraction for atomdata)
+<span class="lineNum">      11 </span>                :            : *   sqrt a    a &lt;= sqrt a  (becomes a float !!!)
+<span class="lineNum">      12 </span>                :            : *   nop  a    just echo the value
+<span class="lineNum">      13 </span>                :            : *   mov  a b  a &lt;= b
+<span class="lineNum">      14 </span>                :            : *   randf a   put a random variable 0-&lt;1. in a
+<span class="lineNum">      15 </span>                :            : *   max  a b   a &lt;= max( a b )
+<span class="lineNum">      16 </span>                :            : *   min  a b   b &lt;= min( a b )
+<span class="lineNum">      17 </span>                :            : *   serial a res atom   move the serial number of the atom
+<span class="lineNum">      18 </span>                :            : *                       into a  (res, atom are like 100 ca)
+<span class="lineNum">      19 </span>                :            : *   index a i    move the serial number of the i'th atom into a
+<span class="lineNum">      20 </span>                :            : *
+<span class="lineNum">      21 </span>                :            : *   linmin  search the atom.&lt;dx,dy,dz&gt; direction for a minimum
+<span class="lineNum">      22 </span>                :            : *   je a b label:  jump to label if equal
+<span class="lineNum">      23 </span>                :            : *   jne a b label:  jump to label if  not equal
+<span class="lineNum">      24 </span>                :            : *   jl a b label:  jump to label if  a &lt; b
+<span class="lineNum">      25 </span>                :            : *   jg a b label:  jump to label if  a &gt; b
+<span class="lineNum">      26 </span>                :            : *   jes a string label: jump to label: if a-&gt;label == string  
+<span class="lineNum">      27 </span>                :            : *   jnes a string label: jump to label: if a-&gt;label != string  
+<span class="lineNum">      28 </span>                :            : *        label:  is a label within the current script file
+<span class="lineNum">      29 </span>                :            : *                which may be within the current loop
+<span class="lineNum">      30 </span>                :            : *                the j&lt;elg&gt; commands will rewind the input file
+<span class="lineNum">      31 </span>                :            : *                and search for label: 
+<span class="lineNum">      32 </span>                :            : *
+<span class="lineNum">      33 </span>                :            : *
+<span class="lineNum">      34 </span>                :            : *   data types
+<span class="lineNum">      35 </span>                :            : *   imeadiate    e.g. a number like 3.14159
+<span class="lineNum">      36 </span>                :            : *   variable     e.g. a name  like pi
+<span class="lineNum">      37 </span>                :            : *   atomdata    serial.&lt;x,y,z,fx,fy,fz,dx,dy,dz,vx,vy,vz,q,a,b,m,chi,jaa&gt;
+<span class="lineNum">      38 </span>                :            : *               serial may be a variable
+<span class="lineNum">      39 </span>                :            : *               valid format atoms with non-extant serial numbers will be
+<span class="lineNum">      40 </span>                :            : *               ignored and the operation will silently not happen
+<span class="lineNum">      41 </span>                :            : *               this allows sums over discontinous atom ranges
+<span class="lineNum">      42 </span>                :            : *
+<span class="lineNum">      43 </span>                :            : *
+<span class="lineNum">      44 </span>                :            : *  routines defined in this module
+<span class="lineNum">      45 </span>                :            : *
+<span class="lineNum">      46 </span>                :            : *       math()  does the work
+<span class="lineNum">      47 </span>                :            : *       getatomdata() returns a float * or null for an atomdata
+<span class="lineNum">      48 </span>                :            : *       validatom()  returns nonzero when atomdata format is valid 
+<span class="lineNum">      49 </span>                :            : *   
+<span class="lineNum">      50 </span>                :            : */
+<span class="lineNum">      51 </span>                :            : /* header from variable.c
+<span class="lineNum">      52 </span>                :            : *
+<span class="lineNum">      53 </span>                :            : * variable storage and retreival routines for AMMP
+<span class="lineNum">      54 </span>                :            : *
+<span class="lineNum">      55 </span>                :            : * using scope rules for structuring
+<span class="lineNum">      56 </span>                :            : *
+<span class="lineNum">      57 </span>                :            : *
+<span class="lineNum">      58 </span>                :            : *  variables are stored in linked list form
+<span class="lineNum">      59 </span>                :            : *
+<span class="lineNum">      60 </span>                :            : *   get_f_variable( char *name, float *fvalue )
+<span class="lineNum">      61 </span>                :            : *   get_i_variable( char *name,  int *ivalue )
+<span class="lineNum">      62 </span>                :            : *       returns variable who matches name (all lower case )
+<span class="lineNum">      63 </span>                :            : *   set_f_variable( char *name, float fvalue )
+<span class="lineNum">      64 </span>                :            : *   set_i_variable( char *name, int ivalue )
+<span class="lineNum">      65 </span>                :            : *       sets variable who matches name (all lower case )
+<span class="lineNum">      66 </span>                :            : *   match_variable( char *name ) returns pointer to name if there NULL if not
+<span class="lineNum">      67 </span>                :            : *   dump_variable(FILE *output  )
+<span class="lineNum">      68 </span>                :            : *        dumps variables to  file 
+<span class="lineNum">      69 </span>                :            : */
+<span class="lineNum">      70 </span>                :            : /*
+<span class="lineNum">      71 </span>                :            : *  copyright 1992 1993 Robert W. Harrison
+<span class="lineNum">      72 </span>                :            : *  
+<span class="lineNum">      73 </span>                :            : *  This notice may not be removed
+<span class="lineNum">      74 </span>                :            : *  This program may be copied for scientific use
+<span class="lineNum">      75 </span>                :            : *  It may not be sold for profit without explicit
+<span class="lineNum">      76 </span>                :            : *  permission of the author(s) who retain any
+<span class="lineNum">      77 </span>                :            : *  commercial rights including the right to modify 
+<span class="lineNum">      78 </span>                :            : *  this notice
+<span class="lineNum">      79 </span>                :            : */
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>                :            : #define ANSI 1
+<span class="lineNum">      83 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">      84 </span>                :            : #include &lt;ctype.h&gt;
+<span class="lineNum">      85 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      86 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      87 </span>                :            : #ifdef ANSI
+<span class="lineNum">      88 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      89 </span>                :            : #endif
+<span class="lineNum">      90 </span>                :            : #include &quot;ammp.h&quot;
+<span class="lineNum">      91 </span>                :            : #define NUM_SIG 6
+<span class="lineNum">      92 </span>                :            : #define NUM_TOT 7
+<span class="lineNum">      93 </span>                :            : #define INTEGER 0
+<span class="lineNum">      94 </span>                :            : #define FLOAT 1
+<span class="lineNum">      95 </span>                :            : typedef struct{
+<span class="lineNum">      96 </span>                :            :         int type;
+<span class="lineNum">      97 </span>                :            :         char name[NUM_TOT];
+<span class="lineNum">      98 </span>                :            :         union{  float f; int i;} value;
+<span class="lineNum">      99 </span>                :            :         void *next;
+<span class="lineNum">     100 </span>                :            :         }  VARIABLE;
+<span class="lineNum">     101 </span>                :            : /* next define is from ammp.c */
+<span class="lineNum">     102 </span>                :            : #define TOKENLENGTH 80 
+<span class="lineNum">     103 </span>                :            : 
+<span class="lineNum">     104 </span>                :            : #define ATOMDATA 0
+<span class="lineNum">     105 </span>                :            : #define IMEADIATE 1
+<span class="lineNum">     106 </span>                :            : #define VARDATA 2
+<span class="lineNum">     107 </span>                :            : 
+<span class="lineNum">     108 </span>                :            : /* SPEC: add function proto to make some compilers whine less jh/9/21/99 */
+<span class="lineNum">     109 </span>                :            : int math_findlabel (FILE *, char *);
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :            : /* the potentials are defined in eval.c */
+<a name="112"><span class="lineNum">     112 </span>                :            : extern int (*potentials[10])(),(*forces[10])(),nused;</a>
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :<span class="lineCov">         13 : int math( tokens,fvalue,ivalue,ip,op,echo)</span>
+<span class="lineNum">     115 </span>                :            : #ifdef ESV
+<span class="lineNum">     116 </span>                :            : #define tokens (*tokens)
+<span class="lineNum">     117 </span>                :            : #endif
+<span class="lineNum">     118 </span>                :            : char tokens[][TOKENLENGTH];
+<span class="lineNum">     119 </span>                :            : float fvalue[];
+<span class="lineNum">     120 </span>                :            : int ivalue[];
+<span class="lineNum">     121 </span>                :            : FILE *ip,*op;
+<span class="lineNum">     122 </span>                :            : int echo ;
+<span class="lineNum">     123 </span>                :            : {
+<span class="lineNum">     124 </span>                :            : int adata,bdata;
+<span class="lineNum">     125 </span>                :            : int atype, btype;
+<span class="lineNum">     126 </span>                :            : float *foutpointer,*fp,fa,fb,randf();
+<span class="lineNum">     127 </span>                :            : int *ioutpointer,ia,ib;
+<span class="lineNum">     128 </span>                :            : VARIABLE *vp,*vos,*match_variable();
+<span class="lineNum">     129 </span>                :            : float *getatomdata(); /* return the address of the atomdata if valid */
+<span class="lineNum">     130 </span>                :            : int validatom(); /* return 0 iff not a valid atomdata format */
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>                :            : /*SPEC don't declare set_f_variable here, do it in ammp.h jh/9/21/99 */
+<span class="lineNum">     133 </span>                :            : /* int set_f_variable(), set_i_variable(); */
+<span class="lineNum">     134 </span>                :            : int set_i_variable(); 
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :            : int a_number(),tisint();
+<span class="lineNum">     137 </span>                :            : ATOM *ap,*a_next(),*a_m_serial();
+<span class="lineNum">     138 </span>                :            : int i,j;
+<span class="lineNum">     139 </span>                :            : float a_l2_f(),a_max_f(),a_max_d();
+<span class="lineNum">     140 </span>                :            : float linmin(); /* defined in optimist.c */
+<span class="lineNum">     141 </span>                :            : /* set some default variables */
+<span class="lineNum">     142 </span>                :<span class="lineCov">         13 : set_i_variable( &quot;numatm&quot;,a_number());</span>
+<span class="lineNum">     143 </span>                :<span class="lineCov">         13 : set_f_variable( &quot;l2f&quot;,a_l2_f());</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">         13 : set_f_variable( &quot;lmaxf&quot;,a_max_f());</span>
+<span class="lineNum">     145 </span>                :            : /*
+<span class="lineNum">     146 </span>                :            : *   set_f_variable( char *name, float fvalue )
+<span class="lineNum">     147 </span>                :            : *   set_i_variable( char *name, int ivalue )
+<span class="lineNum">     148 </span>                :            : */
+<span class="lineNum">     149 </span>                :            : /* type the variables */
+<span class="lineNum">     150 </span>                :            : NEW_AVAR:
+<span class="lineNum">     151 </span>        [<span class="branchCov" title="Branch 1 was taken 3 times"> + </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">         13 :         if( (vp = match_variable(&amp;tokens[1][0])) != NULL)</span>
+<span class="lineNum">     152 </span>                :            :         {
+<span class="lineNum">     153 </span>                :<span class="lineCov">          3 :         adata = VARDATA;</span>
+<span class="lineNum">     154 </span>                :<span class="lineCov">          3 :         atype = vp-&gt;type;</span>
+<span class="lineNum">     155 </span>                :<span class="lineCov">          3 :         vos = vp;</span>
+<span class="lineNum">     156 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :         if( atype == FLOAT){ fa = vp-&gt;value.f;}</span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">          3 :         foutpointer  = &amp;vp-&gt;value.f;</span>
+<span class="lineNum">     158 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :         if( atype == INTEGER){ia = vp-&gt;value.i; }</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov">          3 :         ioutpointer = &amp;vp-&gt;value.i;</span>
+<span class="lineNum">     160 </span>                :<span class="lineCov">          3 :         goto AFOUND;</span>
+<span class="lineNum">     161 </span>                :            :         }
+<span class="lineNum">     162 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">         10 :         if( (foutpointer = getatomdata(&amp;tokens[1][0])) != NULL)</span>
+<span class="lineNum">     163 </span>                :            :         {
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :         adata = ATOMDATA;</span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :         atype = FLOAT;</span>
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :         fa = *foutpointer;</span>
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :         goto AFOUND;</span>
+<span class="lineNum">     168 </span>                :            :         }
+<span class="lineNum">     169 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">         10 :         if( validatom(&amp;tokens[1][0]) != 0 ) return( 1);</span>
+<span class="lineNum">     170 </span>                :<span class="lineCov">         10 :         foutpointer = NULL; /* shouldn't change it but this is safe */</span>
+<span class="lineNum">     171 </span>                :<span class="lineCov">         10 :         adata = IMEADIATE;</span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">         10 :         fa = fvalue[1];</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">         10 :         ia = ivalue[1];</span>
+<span class="lineNum">     174 </span>                :<span class="lineCov">         10 :         atype = FLOAT;</span>
+<span class="lineNum">     175 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 10 times"> + </span>]:<span class="lineCov">         10 :         if( tisint( &amp;tokens[1][0]) == 1) atype = INTEGER;</span>
+<span class="lineNum">     176 </span>                :            : /*
+<span class="lineNum">     177 </span>                :            :         if( tisint( &amp;tokens[1][0]) == 1)printf(&quot; INTEGER &quot;); 
+<span class="lineNum">     178 </span>                :            :         printf(&quot;&gt;%s&lt;\n&quot;,&amp;tokens[1][0]);
+<span class="lineNum">     179 </span>                :            : */
+<span class="lineNum">     180 </span>                :            : AFOUND:
+<span class="lineNum">     181 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( (vp = match_variable(&amp;tokens[2][0])) != NULL)</span>
+<span class="lineNum">     182 </span>                :            :         {
+<span class="lineNum">     183 </span>                :            : /*      bdata = VARDATA;
+<span class="lineNum">     184 </span>                :            : */
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :         btype = vp-&gt;type;</span>
+<span class="lineNum">     186 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( btype == FLOAT) fb = vp-&gt;value.f;</span>
+<span class="lineNum">     187 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( btype == INTEGER) ib = vp-&gt;value.i; </span>
+<span class="lineNum">     188 </span>                :            :         goto BFOUND;
+<span class="lineNum">     189 </span>                :            :         }
+<span class="lineNum">     190 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( (fp = getatomdata(&amp;tokens[2][0])) != NULL)</span>
+<span class="lineNum">     191 </span>                :            :         {
+<span class="lineNum">     192 </span>                :            : /*      bdata = ATOMDATA;
+<span class="lineNum">     193 </span>                :            : */
+<span class="lineNum">     194 </span>                :<span class="lineNoCov">          0 :         btype = FLOAT;</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :         fb = *fp;</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :         goto BFOUND;</span>
+<span class="lineNum">     197 </span>                :            :         }
+<span class="lineNum">     198 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( validatom(&amp;tokens[2][0]) != 0 ) return( 1);</span>
+<span class="lineNum">     199 </span>                :            :  /*     bdata = IMEADIATE;
+<span class="lineNum">     200 </span>                :            :  */
+<span class="lineNum">     201 </span>                :<span class="lineCov">         13 :         fb = fvalue[2];</span>
+<span class="lineNum">     202 </span>                :<span class="lineCov">         13 :         ib = ivalue[2];</span>
+<span class="lineNum">     203 </span>                :<span class="lineCov">         13 :         btype = FLOAT;</span>
+<span class="lineNum">     204 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( tisint( &amp;tokens[2][0]) == 1) btype = INTEGER;</span>
+<span class="lineNum">     205 </span>                :            : /*
+<span class="lineNum">     206 </span>                :            :         if( tisint( &amp;tokens[2][0]) == 1)printf(&quot; INTEGER &quot;); 
+<span class="lineNum">     207 </span>                :            :         printf(&quot;&gt;%s&lt;\n&quot;,&amp;tokens[2][0]);
+<span class="lineNum">     208 </span>                :            : */
+<span class="lineNum">     209 </span>                :            : BFOUND:
+<span class="lineNum">     210 </span>                :            : /*  make the converted data */
+<span class="lineNum">     211 </span>        [<span class="branchCov" title="Branch 0 was taken 10 times"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">         13 :         if( atype == FLOAT) ia = (int)fa;</span>
+<span class="lineNum">     212 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 10 times"> + </span>]:<span class="lineCov">         13 :         if( atype == INTEGER) fa = (float)ia;</span>
+<span class="lineNum">     213 </span>        [<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         13 :         if( btype == FLOAT) ib = (int)fb;</span>
+<span class="lineNum">     214 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( btype == INTEGER) fb = (float)ib;</span>
+<span class="lineNum">     215 </span>                :            : /* is it a defined command ? */
+<span class="lineNum">     216 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;add&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     217 </span>                :            :         {
+<span class="lineNum">     218 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT) fa = fa + fb;</span>
+<span class="lineNum">     219 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER) ia = ia + ib;</span>
+<span class="lineNum">     220 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     221 </span>                :            :         }
+<span class="lineNum">     222 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;sub&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     223 </span>                :            :         {
+<span class="lineNum">     224 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT) fa = fa - fb;</span>
+<span class="lineNum">     225 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER) ia = ia - ib;</span>
+<span class="lineNum">     226 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     227 </span>                :            :         }
+<span class="lineNum">     228 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;mul&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     229 </span>                :            :         {
+<span class="lineNum">     230 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT) fa = fa * fb;</span>
+<span class="lineNum">     231 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER) ia = ia * ib;</span>
+<span class="lineNum">     232 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     233 </span>                :            :         }
+<span class="lineNum">     234 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;div&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     235 </span>                :            :         {
+<span class="lineNum">     236 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT) fa = fa / fb;</span>
+<span class="lineNum">     237 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER) ia = ia / ib;</span>
+<span class="lineNum">     238 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     239 </span>                :            :         }
+<span class="lineNum">     240 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;fix&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     241 </span>                :            :         {
+<span class="lineNum">     242 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( adata == ATOMDATA ) {</span>
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :                 ia = (int)fa;</span>
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :                 *foutpointer = (float)ia;</span>
+<span class="lineNum">     245 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( echo  ) fprintf(op,&quot;%d \n&quot;,ia);</span>
+<span class="lineNum">     246 </span>                :<span class="lineNoCov">          0 :                 return(1);</span>
+<span class="lineNum">     247 </span>                :            :                         }
+<span class="lineNum">     248 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT) {atype = INTEGER; ia = (int)fa;}</span>
+<span class="lineNum">     249 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     250 </span>                :            :         }
+<span class="lineNum">     251 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;sqrt&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     252 </span>                :            :         {
+<span class="lineNum">     253 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( adata == ATOMDATA ) {</span>
+<span class="lineNum">     254 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( fa &gt; 0.)</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :                 *foutpointer = sqrt(fa);</span>
+<span class="lineNum">     256 </span>                :            :                 else
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :                 *foutpointer = -sqrt(-fa);</span>
+<span class="lineNum">     258 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( echo  ) fprintf(op,&quot;%f \n&quot;,*foutpointer);</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :                 return(1);</span>
+<span class="lineNum">     260 </span>                :            :                         }
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :                 atype = FLOAT;</span>
+<span class="lineNum">     262 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( fa &gt; 0) fa = sqrt(fa);</span>
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :                 else fa = -sqrt(-fa);</span>
+<span class="lineNum">     264 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     265 </span>                :            :         }
+<span class="lineNum">     266 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp(&amp;tokens[0][0],&quot;linmin&quot;) == 0)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     267 </span>                :            :         {
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :         fa = 0.;</span>
+<span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 :         fa = linmin( potentials,nused, sqrt(a_max_d()) );</span>
+<span class="lineNum">     270 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( echo) fprintf(op,&quot;%f step to minimum\n&quot;,fa);</span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :         a_inc_d(fa);</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :         goto GOOD_OP;</span>
+<span class="lineNum">     273 </span>                :            :         }
+<span class="lineNum">     274 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;nop&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">     275 </span>                :            :         {
+<span class="lineNum">     276 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     277 </span>                :            :         }
+<span class="lineNum">     278 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;mov&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     279 </span>                :            :         {
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :         ia = ib;</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :         fa = fb;</span>
+<span class="lineNum">     282 </span>                :<span class="lineNoCov">          0 :         atype = btype;</span>
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 :         goto GOOD_OP;</span>
+<span class="lineNum">     284 </span>                :            :         }
+<span class="lineNum">     285 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;max&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     286 </span>                :            :         {
+<span class="lineNum">     287 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT &amp;&amp; fa &lt; fb) fa = fb;</span>
+<span class="lineNum">     288 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER &amp;&amp; ia &lt; ib) ia = ib;</span>
+<span class="lineNum">     289 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     290 </span>                :            :         }
+<span class="lineNum">     291 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;min&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     292 </span>                :            :         {
+<span class="lineNum">     293 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT &amp;&amp; fa &gt; fb) fa = fb;</span>
+<span class="lineNum">     294 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER &amp;&amp; ia &gt; ib) ia = ib;</span>
+<span class="lineNum">     295 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     296 </span>                :            :         }
+<span class="lineNum">     297 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;randf&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     298 </span>                :            :         {
+<span class="lineNum">     299 </span>                :<span class="lineNoCov">          0 :         atype = FLOAT;</span>
+<span class="lineNum">     300 </span>                :<span class="lineNoCov">          0 :         fa = randf( -1 );</span>
+<span class="lineNum">     301 </span>                :<span class="lineNoCov">          0 :         goto GOOD_OP;</span>
+<span class="lineNum">     302 </span>                :            :         }
+<span class="lineNum">     303 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;serial&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     304 </span>                :            :         {
+<span class="lineNum">     305 </span>                :<span class="lineNoCov">          0 :         ia = 100*ib-1;</span>
+<span class="lineNum">     306 </span>                :<span class="lineNoCov">          0 :         j = ia + 100;</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :         i = -1;</span>
+<span class="lineNum">     308 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( (ap = a_next(i)) != NULL )</span>
+<span class="lineNum">     309 </span>                :            :         {
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :         i = 1;</span>
+<span class="lineNum">     311 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ap-&gt;serial &gt; ia &amp;&amp; ap-&gt;serial &lt; j)</span>
+<span class="lineNum">     312 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( math_match_atom(&amp;tokens[3][0],ap) != 0 ){</span>
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :         atype = INTEGER;</span>
+<span class="lineNum">     314 </span>                :<span class="lineNoCov">          0 :         ia = ap-&gt;serial;</span>
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :         goto GOOD_OP;</span>
+<span class="lineNum">     316 </span>                :            :         }
+<span class="lineNum">     317 </span>                :            :         }
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :         ia = -1; /* never a serial number */</span>
+<span class="lineNum">     319 </span>                :<span class="lineNoCov">          0 :         atype = INTEGER;</span>
+<span class="lineNum">     320 </span>                :<span class="lineNoCov">          0 :         goto GOOD_OP;</span>
+<span class="lineNum">     321 </span>                :            :         }
+<span class="lineNum">     322 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;index&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     323 </span>                :            :         {
+<span class="lineNum">     324 </span>                :<span class="lineNoCov">          0 :         ap = a_next(-1);</span>
+<span class="lineNum">     325 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         for( i=0; i&lt; ib; i++)</span>
+<span class="lineNum">     326 </span>                :<span class="lineNoCov">          0 :          ap = a_next(i); </span>
+<span class="lineNum">     327 </span>                :<span class="lineNoCov">          0 :          ia = ap-&gt;serial;</span>
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :          atype = INTEGER;</span>
+<span class="lineNum">     329 </span>                :<span class="lineNoCov">          0 :          goto GOOD_OP;</span>
+<span class="lineNum">     330 </span>                :            :         }
+<span class="lineNum">     331 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;jes&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     332 </span>                :            :         {
+<span class="lineNum">     333 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     334 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     335 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         ap = a_m_serial( ia ); if( ap == NULL) return 1;</span>
+<span class="lineNum">     336 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( &amp;ap-&gt;name[0], &amp;tokens[2][0]) == 0)</span>
+<span class="lineNum">     337 </span>                :            :                 {
+<span class="lineNum">     338 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     339 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     340 </span>                :            :             }
+<span class="lineNum">     341 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     342 </span>                :            :         }
+<span class="lineNum">     343 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 13 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;jnes&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     344 </span>                :            :         {
+<span class="lineNum">     345 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     347 </span>                :<span class="lineNoCov">          0 :         ap = a_m_serial( ia ); </span>
+<span class="lineNum">     348 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ap == NULL) {</span>
+<span class="lineNum">     349 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :                 goto GOOD_OP;</span>
+<span class="lineNum">     352 </span>                :            :                 }
+<span class="lineNum">     353 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( &amp;ap-&gt;name[0], &amp;tokens[2][0]) != 0)</span>
+<span class="lineNum">     354 </span>                :            :                 {
+<span class="lineNum">     355 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     356 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     357 </span>                :            :             }
+<span class="lineNum">     358 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     359 </span>                :            :         }
+<span class="lineNum">     360 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;jne&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     361 </span>                :            :         {
+<span class="lineNum">     362 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     363 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     364 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (atype == INTEGER &amp;&amp; ia != ib ) ||</span>
+<span class="lineNum">     365 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (atype == FLOAT &amp;&amp; fa != fb ) )</span>
+<span class="lineNum">     366 </span>                :            :             {
+<span class="lineNum">     367 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     368 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     369 </span>                :            :             }
+<span class="lineNum">     370 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     371 </span>                :            :         }
+<span class="lineNum">     372 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;je&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     373 </span>                :            :         {
+<span class="lineNum">     374 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     375 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     376 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (atype == INTEGER &amp;&amp; ia == ib ) ||</span>
+<span class="lineNum">     377 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (atype == FLOAT &amp;&amp; fa == fb ) )</span>
+<span class="lineNum">     378 </span>                :            :             {
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     380 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     381 </span>                :            :             }
+<span class="lineNum">     382 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     383 </span>                :            :         }
+<span class="lineNum">     384 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;jg&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     385 </span>                :            :         {
+<span class="lineNum">     386 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     387 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     388 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (atype == INTEGER &amp;&amp; ia &gt; ib ) ||</span>
+<span class="lineNum">     389 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (atype == FLOAT &amp;&amp; fa &gt; fb ) )</span>
+<span class="lineNum">     390 </span>                :            :             {
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     393 </span>                :            :             }
+<span class="lineNum">     394 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     395 </span>                :            :         }
+<span class="lineNum">     396 </span>[<span class="branchCov" title="Branch 0 was taken 13 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 13 times"> + </span>]:<span class="lineCov">         13 :         if( strcmp( &amp;tokens[0][0], &quot;jl&quot; ) == 0 )</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 13 times"> + </span>]
+<span class="lineNum">     397 </span>                :            :         {
+<span class="lineNum">     398 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tokens[3][0] == '\0')</span>
+<span class="lineNum">     399 </span>                :<span class="lineNoCov">          0 :         { aaerror(&quot;label: required for a jump \n&quot;); goto GOOD_OP;}</span>
+<span class="lineNum">     400 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (atype == INTEGER &amp;&amp; ia &lt; ib ) ||</span>
+<span class="lineNum">     401 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (atype == FLOAT &amp;&amp; fa &lt; fb ) )</span>
+<span class="lineNum">     402 </span>                :            :             {
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :              rewind(ip);</span>
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :             math_findlabel( ip,&amp;tokens[3][0]);</span>
+<span class="lineNum">     405 </span>                :            :             }
+<span class="lineNum">     406 </span>                :            :         goto GOOD_OP;
+<span class="lineNum">     407 </span>                :            :         }
+<span class="lineNum">     408 </span>                :<span class="lineCov">         13 : return(-1);</span>
+<span class="lineNum">     409 </span>                :            : /* if found we jump here */
+<span class="lineNum">     410 </span>                :            : GOOD_OP:
+<span class="lineNum">     411 </span>                :            : 
+<span class="lineNum">     412 </span>[<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( tisvariable(&amp;tokens[1][0] ) &amp;&amp; tokens[1][0] != '\0' &amp;&amp; adata == IMEADIATE )</span>
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :                 {set_i_variable(&amp;tokens[1][0],0); adata = VARDATA;</span>
+<span class="lineNum">     414 </span>                :<span class="lineNoCov">          0 :                 vos = match_variable(&amp;tokens[1][0]); </span>
+<span class="lineNum">     415 </span>                :<span class="lineNoCov">          0 :                 foutpointer = &amp;vos-&gt;value.f;</span>
+<span class="lineNum">     416 </span>                :<span class="lineNoCov">          0 :                 ioutpointer = &amp;vos-&gt;value.i;}</span>
+<span class="lineNum">     417 </span>                :            : 
+<span class="lineNum">     418 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( adata != IMEADIATE )</span>
+<span class="lineNum">     419 </span>                :            :         {
+<span class="lineNum">     420 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( adata == VARDATA) vos-&gt;type = atype;     </span>
+<span class="lineNum">     421 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( adata == ATOMDATA ){</span>
+<span class="lineNum">     422 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         if( atype == INTEGER){atype = FLOAT;}</span>
+<span class="lineNum">     423 </span>                :            :                                 }
+<span class="lineNum">     424 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == FLOAT &amp;&amp; foutpointer != NULL) *foutpointer = fa;</span>
+<span class="lineNum">     425 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( atype == INTEGER &amp;&amp; ioutpointer != NULL) *ioutpointer = ia;</span>
+<span class="lineNum">     426 </span>                :            :         }
+<span class="lineNum">     427 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( echo &amp;&amp; atype == INTEGER ) fprintf(op,&quot;%d \n&quot;,ia);</span>
+<span class="lineNum">     428 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( echo &amp;&amp; atype == FLOAT ) fprintf(op,&quot;%f \n&quot;,fa);</span>
+<span class="lineNum">     429 </span>                :<span class="lineCov">         13 :         return( 1);</span>
+<span class="lineNum">     430 </span>                :            : #ifdef ESV
+<span class="lineNum">     431 </span>                :            : #undef tokens
+<span class="lineNum">     432 </span>                :            : #endif
+<span class="lineNum">     433 </span>                :            : }
+<span class="lineNum">     434 </span>                :            : /* int validatom()
+<span class="lineNum">     435 </span>                :            : *  given a string return 0 if it is not of the form
+<span class="lineNum">     436 </span>                :            : *  stuff.&lt;x y z fx fy fz dx dy dz vx vy vz q a b m chi jaa na&gt;
+<span class="lineNum">     437 </span>                :            : *  these being the valid atomdata parameters 
+<span class="lineNum">     438 </span>                :            : *  returns 1 to 19 for x y z fx fy fz dx dy dz vx vy vz q a b m chi jaa na
+<a name="439"><span class="lineNum">     439 </span>                :            : *  so we don't have to lex again</a>
+<span class="lineNum">     440 </span>                :            : */
+<span class="lineNum">     441 </span>                :<span class="lineCov">         46 : int validatom( who )</span>
+<span class="lineNum">     442 </span>                :            : char *who;
+<span class="lineNum">     443 </span>                :            : {
+<span class="lineNum">     444 </span>                :            : char *cp,*pp,*cp1,*cp2,*cp3;
+<span class="lineNum">     445 </span>                :            : int i;
+<span class="lineNum">     446 </span>                :<span class="lineCov">         46 :         cp = who;</span>
+<span class="lineNum">     447 </span>                :<span class="lineCov">         46 :         i = 0;</span>
+<span class="lineNum">     448 </span>        [<span class="branchCov" title="Branch 0 was taken 60 times"> + </span><span class="branchCov" title="Branch 1 was taken 46 times"> + </span>]:<span class="lineCov">        106 :         while ( *cp != '\0')</span>
+<span class="lineNum">     449 </span>                :            :         {
+<span class="lineNum">     450 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 54 times"> + </span>]:<span class="lineCov">         60 :         if( *cp == '.') {i++;  pp = cp;}</span>
+<span class="lineNum">     451 </span>                :<span class="lineCov">         60 :         cp++;</span>
+<span class="lineNum">     452 </span>                :            :         }
+<span class="lineNum">     453 </span>        [<span class="branchCov" title="Branch 0 was taken 40 times"> + </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>]:<span class="lineCov">         46 :         if( i != 1) return (0 ); /* there can only be one '.' */</span>
+<span class="lineNum">     454 </span>                :<span class="lineCov">          6 :         cp = pp ; cp++;</span>
+<span class="lineNum">     455 </span>                :            : /* now we check the tailing characters */
+<span class="lineNum">     456 </span>                :<span class="lineCov">          6 :         cp1 = cp; cp1++;</span>
+<span class="lineNum">     457 </span>                :<span class="lineCov">          6 :         cp2 = cp1; cp2++;  </span>
+<span class="lineNum">     458 </span>                :<span class="lineCov">          6 :         cp3 = cp2; cp3++;  </span>
+<span class="lineNum">     459 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>]:<span class="lineCov">          6 :         if( *cp1 == '\0')</span>
+<span class="lineNum">     460 </span>                :            :         {
+<span class="lineNum">     461 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'x') return (1);</span>
+<span class="lineNum">     462 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'y') return (2);</span>
+<span class="lineNum">     463 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'z') return (3);</span>
+<span class="lineNum">     464 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'q') return (13);</span>
+<span class="lineNum">     465 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'a') return (14);</span>
+<span class="lineNum">     466 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'b') return (15);</span>
+<span class="lineNum">     467 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'm') return (16);</span>
+<span class="lineNum">     468 </span>                :<span class="lineNoCov">          0 :         return (0);</span>
+<span class="lineNum">     469 </span>                :            :         }
+<span class="lineNum">     470 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>]:<span class="lineCov">          6 :         if( *cp2 == '\0')</span>
+<span class="lineNum">     471 </span>                :            :         {
+<span class="lineNum">     472 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'f') {</span>
+<span class="lineNum">     473 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'x') return (4);</span>
+<span class="lineNum">     474 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'y') return (5);</span>
+<span class="lineNum">     475 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'z') return (6);</span>
+<span class="lineNum">     476 </span>                :            :                         }
+<span class="lineNum">     477 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'd' ){</span>
+<span class="lineNum">     478 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'x') return (7);</span>
+<span class="lineNum">     479 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'y') return (8);</span>
+<span class="lineNum">     480 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'z') return (9);</span>
+<span class="lineNum">     481 </span>                :            :                         }
+<span class="lineNum">     482 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'v' ){</span>
+<span class="lineNum">     483 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'x') return (10);</span>
+<span class="lineNum">     484 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'y') return (11);</span>
+<span class="lineNum">     485 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp1 == 'z') return (12);</span>
+<span class="lineNum">     486 </span>                :            :                         }
+<span class="lineNum">     487 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'n' ) {</span>
+<span class="lineNum">     488 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( *cp1 =='a') return 19;</span>
+<span class="lineNum">     489 </span>                :            :                         }
+<span class="lineNum">     490 </span>                :            :         }
+<span class="lineNum">     491 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>]:<span class="lineCov">          6 :         if( *cp3 == '\0')</span>
+<span class="lineNum">     492 </span>                :            :         {
+<span class="lineNum">     493 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'c' &amp;&amp; *cp1 == 'h' &amp;&amp; *cp2 == 'i') return 17;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     494 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == 'j' &amp;&amp; *cp1 == 'a' &amp;&amp; *cp2 == 'a') return 18;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     495 </span>                :            :         }
+<span class="lineNum">     496 </span>                :<span class="lineCov">         46 :         return (0);     </span>
+<span class="lineNum">     497 </span>                :            : }
+<a name="498"><span class="lineNum">     498 </span>                :            : /* float *getatomdata() returns a float * or null for an atomdata</a>
+<span class="lineNum">     499 </span>                :            : */
+<span class="lineNum">     500 </span>                :<span class="lineCov">         23 : float *getatomdata( who )</span>
+<span class="lineNum">     501 </span>                :            : char *who ;
+<span class="lineNum">     502 </span>                :            : {
+<span class="lineNum">     503 </span>                :            : int validatom();
+<span class="lineNum">     504 </span>                :            : int i,j;
+<span class="lineNum">     505 </span>                :            : char aser[TOKENLENGTH],*cp;
+<span class="lineNum">     506 </span>                :            : ATOM *ap,*a_m_serial();
+<span class="lineNum">     507 </span>                :            : VARIABLE *vp,*match_variable();
+<span class="lineNum">     508 </span>                :            : static float fx,fy,fz;
+<span class="lineNum">     509 </span>                :<span class="lineCov">         23 :         i = validatom( who );</span>
+<span class="lineNum">     510 </span>        [<span class="branchCov" title="Branch 0 was taken 23 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         23 :         if( i == 0 ) return ( NULL ); /* if not the right format it aint one */</span>
+<span class="lineNum">     511 </span>                :            :         
+<span class="lineNum">     512 </span>                :<span class="lineNoCov">          0 :         cp = who; j = 0;</span>
+<span class="lineNum">     513 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( *cp != '.') </span>
+<span class="lineNum">     514 </span>                :<span class="lineNoCov">          0 :         { aser[j++] = *cp; cp++; }</span>
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :         aser[j] = '\0';</span>
+<span class="lineNum">     516 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (vp = match_variable(aser)) == NULL)</span>
+<span class="lineNum">     517 </span>                :            :         { j = atoi(aser); } else { 
+<span class="lineNum">     518 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( vp -&gt;type == INTEGER) j = vp-&gt;value.i;</span>
+<span class="lineNum">     519 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( vp -&gt;type == FLOAT) j = (int)vp-&gt;value.f;</span>
+<span class="lineNum">     520 </span>                :            :                                 }
+<span class="lineNum">     521 </span>                :<span class="lineNoCov">          0 :         ap = a_m_serial(j);</span>
+<span class="lineNum">     522 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ap == NULL) return( NULL );</span>
+<span class="lineNum">     523 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 1 ) return ( &amp;ap-&gt;x );</span>
+<span class="lineNum">     524 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 2 ) return ( &amp;ap-&gt;y );</span>
+<span class="lineNum">     525 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 3 ) return ( &amp;ap-&gt;z );</span>
+<span class="lineNum">     526 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 4 ) { fx = ap-&gt;fx ; return( &amp;fx);}</span>
+<span class="lineNum">     527 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 5 ) { fy = ap-&gt;fy ; return(&amp;fy);}</span>
+<span class="lineNum">     528 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 6 ) { fz = ap-&gt;fz ; return(&amp;fz);}</span>
+<span class="lineNum">     529 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 7 ) return ( &amp;ap-&gt;dx );</span>
+<span class="lineNum">     530 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 8 ) return ( &amp;ap-&gt;dy );</span>
+<span class="lineNum">     531 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 9 ) return ( &amp;ap-&gt;dz );</span>
+<span class="lineNum">     532 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 10 ) return ( &amp;ap-&gt;vx );</span>
+<span class="lineNum">     533 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 11 ) return ( &amp;ap-&gt;vy );</span>
+<span class="lineNum">     534 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 12 ) return ( &amp;ap-&gt;vz );</span>
+<span class="lineNum">     535 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 13 ) return ( &amp;ap-&gt;q );</span>
+<span class="lineNum">     536 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 14 ) return ( &amp;ap-&gt;a );</span>
+<span class="lineNum">     537 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 15 ) return ( &amp;ap-&gt;b );</span>
+<span class="lineNum">     538 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 16 ) return ( &amp;ap-&gt;mass );</span>
+<span class="lineNum">     539 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 17 ) return ( &amp;ap-&gt;chi );</span>
+<span class="lineNum">     540 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( i == 18 ) return ( &amp;ap-&gt;jaa );</span>
+<span class="lineNum">     541 </span>                :            : /*
+<span class="lineNum">     542 </span>                :            :         if( i == 19 ) return ( &amp;ap-&gt;na );
+<span class="lineNum">     543 </span>                :            : */
+<span class="lineNum">     544 </span>                :<span class="lineCov">         23 :         return (NULL );</span>
+<span class="lineNum">     545 </span>                :            : }
+<span class="lineNum">     546 </span>                :            : /*      math_match_atom(char* atomname, ATOM * ap)
+<span class="lineNum">     547 </span>                :            : *
+<span class="lineNum">     548 </span>                :            : *  find if the atomname is part of the atom .name field
+<span class="lineNum">     549 </span>                :            : *  as in atomname = &quot;ca&quot; and ap-&gt;name = arg.ca
+<a name="550"><span class="lineNum">     550 </span>                :            : *</a>
+<span class="lineNum">     551 </span>                :            : */
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 : int math_match_atom( who,ap)</span>
+<span class="lineNum">     553 </span>                :            : char *who;
+<span class="lineNum">     554 </span>                :            : ATOM *ap;
+<span class="lineNum">     555 </span>                :            : {
+<span class="lineNum">     556 </span>                :            :         char *cp;
+<span class="lineNum">     557 </span>                :<span class="lineNoCov">          0 :         cp = &amp; ap-&gt;name[0];</span>
+<span class="lineNum">     558 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( *cp != '.' )</span>
+<span class="lineNum">     559 </span>                :            :         {
+<span class="lineNum">     560 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp == '\0') return 0;</span>
+<span class="lineNum">     561 </span>                :<span class="lineNoCov">          0 :         cp++;</span>
+<span class="lineNum">     562 </span>                :            :         }
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 :         cp++;</span>
+<span class="lineNum">     564 </span>                :            : /*      printf(&quot; &gt;%s&lt; &gt;%s&lt;\n&quot;,cp,who);
+<span class="lineNum">     565 </span>                :            : */
+<span class="lineNum">     566 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( who,cp ) == 0 )</span>
+<span class="lineNum">     567 </span>                :<span class="lineNoCov">          0 :         { return 1; }</span>
+<span class="lineNum">     568 </span>                :<span class="lineNoCov">          0 :         return 0; </span>
+<span class="lineNum">     569 </span>                :            : }
+<span class="lineNum">     570 </span>                :            : /*         
+<span class="lineNum">     571 </span>                :            : *           math_findlabel(FILE * ip, char *label);
+<span class="lineNum">     572 </span>                :            : * search a file for label:
+<span class="lineNum">     573 </span>                :            : *  if label doesn't end in : add it
+<span class="lineNum">     574 </span>                :            : *
+<a name="575"><span class="lineNum">     575 </span>                :            : */</a>
+<span class="lineNum">     576 </span>                :            : /* SPEC use modern-style arg declaration, to match proto jh/9/22/99 */
+<span class="lineNum">     577 </span>                :<span class="lineNoCov">          0 : math_findlabel( FILE *fp, char *label)</span>
+<span class="lineNum">     578 </span>                :            : {
+<span class="lineNum">     579 </span>                :            : char *cp,*lp;
+<span class="lineNum">     580 </span>                :            : char llabel[TOKENLENGTH];
+<span class="lineNum">     581 </span>                :            : char myline[TOKENLENGTH]; /* since label is no longer than TOKENLENGTH we can skip such lines */
+<span class="lineNum">     582 </span>                :            : int  inmyline;
+<span class="lineNum">     583 </span>                :            : int i;
+<span class="lineNum">     584 </span>                :            : char ac;
+<span class="lineNum">     585 </span>                :            : 
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 : cp = label;</span>
+<span class="lineNum">     587 </span>                :<span class="lineNoCov">          0 : lp  = &amp;llabel[0];</span>
+<span class="lineNum">     588 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( *cp != '\0')</span>
+<span class="lineNum">     589 </span>                :            :         {
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 :                 *lp = *cp ; lp++; cp ++;</span>
+<span class="lineNum">     591 </span>                :            :         }
+<span class="lineNum">     592 </span>                :<span class="lineNoCov">          0 :         cp = lp; cp--;</span>
+<span class="lineNum">     593 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *cp != ':'){ *lp = ':'; lp++;}</span>
+<span class="lineNum">     594 </span>                :<span class="lineNoCov">          0 :         *lp = '\0';</span>
+<span class="lineNum">     595 </span>                :            : /* now one char at a time scan ip for a blank */
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :         inmyline = 0;</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :         lp  = &amp;llabel[0];</span>
+<span class="lineNum">     598 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( (i= fgetc( fp )) != EOF )</span>
+<span class="lineNum">     599 </span>                :            :         {
+<span class="lineNum">     600 </span>                :<span class="lineNoCov">          0 :         ac = (char)i;</span>
+<span class="lineNum">     601 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( !isspace((int) ac) )</span>
+<span class="lineNum">     602 </span>                :            :         {
+<span class="lineNum">     603 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ac == ';')</span>
+<span class="lineNum">     604 </span>                :            :         {
+<span class="lineNum">     605 </span>                :<span class="lineNoCov">          0 :         myline[inmyline] = '\0';</span>
+<span class="lineNum">     606 </span>                :            : /*      printf(&quot;&gt;%s&lt;\n&quot;,&amp;myline[0]);
+<span class="lineNum">     607 </span>                :            : */
+<span class="lineNum">     608 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( lp,&amp;myline[0]) == 0 ) return 0;</span>
+<span class="lineNum">     609 </span>                :<span class="lineNoCov">          0 :         inmyline = 0;</span>
+<span class="lineNum">     610 </span>                :            :         }else{
+<span class="lineNum">     611 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( inmyline &gt; TOKENLENGTH) inmyline = 0;</span>
+<span class="lineNum">     612 </span>                :<span class="lineNoCov">          0 :         myline[inmyline++] = ac;</span>
+<span class="lineNum">     613 </span>                :            :         }
+<span class="lineNum">     614 </span>                :            :         }
+<span class="lineNum">     615 </span>                :            :         }
+<span class="lineNum">     616 </span>                :            : 
+<span class="lineNum">     617 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">     618 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

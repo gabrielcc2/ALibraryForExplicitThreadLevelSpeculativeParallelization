@@ -1,0 +1,173 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/tailor.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* tailor.c
+        -:    2:*
+        -:    3:* collection of routines to service atom memory storage
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of atoms, with the associated forces, and misc consts
+        -:    9:*
+        -:   10:* routines for tailoring nonbonded parameters during a run
+        -:   11:*  tailor_qab
+        -:   12:*  tailor_include
+        -:   13:*  tailor_exclude
+        -:   14:*
+        -:   15:*/
+        -:   16:/*
+        -:   17:*  copyright 1992 1993 Robert W. Harrison
+        -:   18:*  
+        -:   19:*  This notice may not be removed
+        -:   20:*  This program may be copied for scientific use
+        -:   21:*  It may not be sold for profit without explicit
+        -:   22:*  permission of the author(s) who retain any
+        -:   23:*  commercial rights including the right to modify 
+        -:   24:*  this notice
+        -:   25:*/
+        -:   26:
+        -:   27:#define ANSI 1
+        -:   28:/* misc includes - ANSI and some are just to be safe */
+        -:   29:#include <stdio.h>
+        -:   30:#include <ctype.h>
+        -:   31:#include <math.h>
+        -:   32:#ifdef ANSI
+        -:   33:#include <stdlib.h>
+        -:   34:#endif
+        -:   35://#include "ammp.h"
+        -:   36:/* ATOM structure contains a serial number for indexing into
+        -:   37:* arrays and the like (a Hessian)
+        -:   38:* but otherwise is self-contained. Note the hooks for Non-bonded potentials
+        -:   39:*/
+function _Z10tailor_qabifff called 0 returned 0% blocks executed 0%
+    #####:   40:void tailor_qab(int who, float q, float a, float b)
+        -:   41:{
+        -:   42:ATOM *ap,*a_m_serial(int);
+        -:   43:
+    #####:   44:ap = a_m_serial( who );
+call    0 never executed
+    #####:   45:if( ap == NULL ) {aaerror(" undefined atom in tailor_qab"); return;}
+branch  0 never executed
+branch  1 never executed
+call    2 never executed
+    #####:   46:ap->q = q; ap->a = a; ap->b = b;
+    #####:   47:return;
+        -:   48:}
+function _Z14tailor_includeii called 0 returned 0% blocks executed 0%
+    #####:   49:void tailor_include(int from, int to )
+        -:   50:{
+        -:   51:ATOM *ap1,*ap2,*a_m_serial(int);
+        -:   52:int i;
+    #####:   53:ap1 = a_m_serial( from );
+call    0 never executed
+    #####:   54:if( ap1 == NULL ) {aaerror(" undefined atom in tailor_include"); return;}
+branch  0 never executed
+branch  1 never executed
+call    2 never executed
+    #####:   55:ap2 = a_m_serial( to );
+call    0 never executed
+    #####:   56:if( ap2 == NULL ) {aaerror(" undefined atom in tailor_include"); return;}
+branch  0 never executed
+branch  1 never executed
+call    2 never executed
+        -:   57:
+    #####:   58:for( i=0; i< ap1->dontuse; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:   59:{ if( ap1->excluded[i] == ap2) break; }
+branch  0 never executed
+branch  1 never executed
+    #####:   60:if( i < ap1->dontuse-1 ) 
+branch  0 never executed
+branch  1 never executed
+        -:   61:{
+    #####:   62:	for(; i< ap1->dontuse-1; i++)
+branch  0 never executed
+branch  1 never executed
+        -:   63:		{
+    #####:   64:		ap1->excluded[i] = ap1->excluded[i+1];
+    #####:   65:		ap1->exkind[i] = ap1->exkind[i+1];
+        -:   66:		}
+        -:   67:}
+    #####:   68:ap1->exkind[(ap1->dontuse)] = 0;
+    #####:   69:ap1->dontuse -= 1;
+    #####:   70:for( i=0; i< ap2->dontuse; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:   71:{ if( ap2->excluded[i] == ap1) break; }
+branch  0 never executed
+branch  1 never executed
+    #####:   72:if( i < ap2->dontuse-1 ) 
+branch  0 never executed
+branch  1 never executed
+        -:   73:{
+    #####:   74:	for(; i< ap2->dontuse-1; i++)
+branch  0 never executed
+branch  1 never executed
+        -:   75:		{
+    #####:   76:		ap2->excluded[i] = ap2->excluded[i+1];
+    #####:   77:		ap2->exkind[i] = ap2->exkind[i+1];
+        -:   78:		}
+        -:   79:}
+    #####:   80:ap2->exkind[(ap2->dontuse)] = 0;
+    #####:   81:ap2->dontuse -= 1;
+        -:   82:
+        -:   83:}
+function _Z14tailor_excludeii called 0 returned 0% blocks executed 0%
+    #####:   84:void tailor_exclude(int from , int to)
+        -:   85:{
+        -:   86:ATOM *ap1,*ap2,*a_m_serial(int);
+        -:   87:int set_i_variable(char*, int),get_i_variable(char*);
+        -:   88:int i;
+    #####:   89:ap1 = a_m_serial( from );
+call    0 never executed
+    #####:   90:if( ap1 == NULL ) {aaerror(" undefined atom in tailor_exclude"); return;}
+branch  0 never executed
+branch  1 never executed
+call    2 never executed
+    #####:   91:ap2 = a_m_serial( to );
+call    0 never executed
+    #####:   92:if( ap2 == NULL ) {aaerror(" undefined atom in tailor_exclude"); return;}
+branch  0 never executed
+branch  1 never executed
+call    2 never executed
+        -:   93:
+    #####:   94:if( ap1->dontuse == NEXCLUDE) 
+branch  0 never executed
+branch  1 never executed
+    #####:   95:	{aaerror(" cannot add an atom to the exclude list "); return; }
+call    0 never executed
+    #####:   96:for( i=0; i< ap1->dontuse; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:   97:{  if(ap1->excluded[i] == ap2) goto FOUND; }
+branch  0 never executed
+branch  1 never executed
+    #####:   98:ap1->exkind[(ap1->dontuse)] = 1;
+    #####:   99:ap1->excluded[(ap1->dontuse)++] = ap2;
+        -:  100:FOUND:
+    #####:  101:if( ap2->dontuse == NEXCLUDE) 
+branch  0 never executed
+branch  1 never executed
+    #####:  102:	{aaerror(" cannot add an atom to the exclude list "); return; }
+call    0 never executed
+    #####:  103:for( i=0; i< ap2->dontuse; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  104:{  if(ap2->excluded[i] == ap1) return; }
+branch  0 never executed
+branch  1 never executed
+    #####:  105:ap2->exkind[(ap2->dontuse)] = 1;
+    #####:  106:ap2->excluded[(ap2->dontuse)++] = ap1;
+        -:  107:
+    #####:  108:i = 0;
+    #####:  109:i = get_i_variable("numtail");
+call    0 never executed
+    #####:  110:i = i + 1;
+    #####:  111:set_i_variable("numtail", i );
+call    0 never executed
+        -:  112:}
+        -:  113:

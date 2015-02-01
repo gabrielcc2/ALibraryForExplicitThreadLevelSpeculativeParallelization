@@ -1,0 +1,750 @@
+
+
+
+runspec started at Sun Jul 24 16:10:57 2011
+/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/runspec --config=intel_linux.cfg --size=ref --tune=base --reportable fp
+Identifying output formats...asc...config...html...pdf...ps...raw...
+Verbosity = 5
+Action    = validate
+Tune      = base
+Ext       = x86_linux
+Size      = ref
+Machine   = default
+benchmarks= 168.wupwise,171.swim,172.mgrid,173.applu,177.mesa,178.galgel,179.art,183.equake,187.facerec,188.ammp,189.lucas,191.fma3d,200.sixtrack,301.apsi
+outputs   = raw,pdf,PostScript,HTML,config,ASCII
+We will use: 168.wupwise, 171.swim, 172.mgrid, 173.applu, 177.mesa, 178.galgel, 179.art, 183.equake, 187.facerec, 188.ammp, 189.lucas, 191.fma3d, 200.sixtrack, 301.apsi
+Compiling Binaries
+  Up to date 168.wupwise ref base x86_linux default
+  Up to date 171.swim ref base x86_linux default
+  Up to date 172.mgrid ref base x86_linux default
+  Up to date 173.applu ref base x86_linux default
+  Up to date 177.mesa ref base x86_linux default
+  Up to date 178.galgel ref base x86_linux default
+  Up to date 179.art ref base x86_linux default
+  Up to date 183.equake ref base x86_linux default
+  Up to date 187.facerec ref base x86_linux default
+  Up to date 188.ammp ref base x86_linux default
+  Up to date 189.lucas ref base x86_linux default
+  Up to date 191.fma3d ref base x86_linux default
+  Up to date 200.sixtrack ref base x86_linux default
+  Up to date 301.apsi ref base x86_linux default
+Setting Up Run Directories
+  Setting up 168.wupwise ref base x86_linux default: existing
+  Setting up 171.swim ref base x86_linux default: existing
+  Setting up 172.mgrid ref base x86_linux default: existing
+  Setting up 173.applu ref base x86_linux default: existing
+  Setting up 177.mesa ref base x86_linux default: existing
+  Setting up 178.galgel ref base x86_linux default: existing
+  Setting up 179.art ref base x86_linux default: existing
+  Setting up 183.equake ref base x86_linux default: existing
+  Setting up 187.facerec ref base x86_linux default: existing
+  Setting up 188.ammp ref base x86_linux default: existing
+  Setting up 189.lucas ref base x86_linux default: existing
+  Setting up 191.fma3d ref base x86_linux default: existing
+  Setting up 200.sixtrack ref base x86_linux default: existing
+  Setting up 301.apsi ref base x86_linux default: existing
+
+-----------------------------------
+Running Benchmarks
+
+-----------------------------------
+  Running 168.wupwise ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008
+    >wupwise.out 2>wupwise.err ../00000008/wupwise_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:13:06 2011.  Total elapsed time: 127.411816
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008'
+comparing 'te.out' with cw='', abstol='', reltol='0.005',obiwan='',skiptol=''
+comparing 'wupwise.out' with cw='', abstol='', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:10:58 2011 (1311540058)
+  Stop:     Sun Jul 24 16:13:06 2011 (1311540186)
+  Elapsed:  00:02:08 (128)
+  Reported: 127 411980000 127.41198
+ Success 168.wupwise ratio=1255.77, runtime=127.411980
+  Running 168.wupwise ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008
+    >wupwise.out 2>wupwise.err ../00000008/wupwise_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:15:28 2011.  Total elapsed time: 142.094579
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008'
+comparing 'te.out' with cw='', abstol='', reltol='0.005',obiwan='',skiptol=''
+comparing 'wupwise.out' with cw='', abstol='', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:13:06 2011 (1311540186)
+  Stop:     Sun Jul 24 16:15:28 2011 (1311540328)
+  Elapsed:  00:02:22 (142)
+  Reported: 142 94753000 142.094753
+ Success 168.wupwise ratio=1126.01, runtime=142.094753
+  Running 168.wupwise ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008
+    >wupwise.out 2>wupwise.err ../00000008/wupwise_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:17:59 2011.  Total elapsed time: 151.046488
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008'
+comparing 'te.out' with cw='', abstol='', reltol='0.005',obiwan='',skiptol=''
+comparing 'wupwise.out' with cw='', abstol='', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/168.wupwise/run/00000008 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:15:28 2011 (1311540328)
+  Stop:     Sun Jul 24 16:17:59 2011 (1311540479)
+  Elapsed:  00:02:31 (151)
+  Reported: 151 46663000 151.046663
+ Success 168.wupwise ratio=1059.28, runtime=151.046663
+
+-----------------------------------
+  Running 171.swim ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007
+    -i swim.in >swim.out 2>swim.err ../00000007/swim_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:21:30 2011.  Total elapsed time: 211.240914
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007'
+comparing 'SWIM7' with cw='', abstol='1e-06', reltol='0.2',obiwan='',skiptol=''
+comparing 'swim.out' with cw='', abstol='1e-06', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:17:59 2011 (1311540479)
+  Stop:     Sun Jul 24 16:21:30 2011 (1311540690)
+  Elapsed:  00:03:31 (211)
+  Reported: 211 241136000 211.241136
+ Success 171.swim ratio=1467.52, runtime=211.241136
+  Running 171.swim ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007
+    -i swim.in >swim.out 2>swim.err ../00000007/swim_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:25:07 2011.  Total elapsed time: 213.039806
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007'
+comparing 'SWIM7' with cw='', abstol='1e-06', reltol='0.2',obiwan='',skiptol=''
+comparing 'swim.out' with cw='', abstol='1e-06', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:21:34 2011 (1311540694)
+  Stop:     Sun Jul 24 16:25:07 2011 (1311540907)
+  Elapsed:  00:03:33 (213)
+  Reported: 213 40023000 213.040023
+ Success 171.swim ratio=1455.13, runtime=213.040023
+  Running 171.swim ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007
+    -i swim.in >swim.out 2>swim.err ../00000007/swim_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:28:45 2011.  Total elapsed time: 214.982319
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007'
+comparing 'SWIM7' with cw='', abstol='1e-06', reltol='0.2',obiwan='',skiptol=''
+comparing 'swim.out' with cw='', abstol='1e-06', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/171.swim/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:25:10 2011 (1311540910)
+  Stop:     Sun Jul 24 16:28:45 2011 (1311541125)
+  Elapsed:  00:03:35 (215)
+  Reported: 214 982509000 214.982509
+ Success 171.swim ratio=1441.98, runtime=214.982509
+
+-----------------------------------
+  Running 172.mgrid ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007
+    -i mgrid.in >mgrid.out 2>mgrid.err ../00000007/mgrid_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:36:26 2011.  Total elapsed time: 457.120489
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007'
+comparing 'mgrid.out' with cw='', abstol='1e-12', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:28:49 2011 (1311541129)
+  Stop:     Sun Jul 24 16:36:26 2011 (1311541586)
+  Elapsed:  00:07:37 (457)
+  Reported: 457 120702000 457.120702
+ Success 172.mgrid ratio=393.77, runtime=457.120702
+  Running 172.mgrid ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007
+    -i mgrid.in >mgrid.out 2>mgrid.err ../00000007/mgrid_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:43:51 2011.  Total elapsed time: 443.587478
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007'
+comparing 'mgrid.out' with cw='', abstol='1e-12', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:36:27 2011 (1311541587)
+  Stop:     Sun Jul 24 16:43:51 2011 (1311542031)
+  Elapsed:  00:07:24 (444)
+  Reported: 443 587649000 443.587649
+ Success 172.mgrid ratio=405.78, runtime=443.587649
+  Running 172.mgrid ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007
+    -i mgrid.in >mgrid.out 2>mgrid.err ../00000007/mgrid_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:51:16 2011.  Total elapsed time: 443.706512
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007'
+comparing 'mgrid.out' with cw='', abstol='1e-12', reltol='0.001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/172.mgrid/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:43:52 2011 (1311542032)
+  Stop:     Sun Jul 24 16:51:16 2011 (1311542476)
+  Elapsed:  00:07:24 (444)
+  Reported: 443 706735000 443.706735
+ Success 172.mgrid ratio=405.67, runtime=443.706735
+
+-----------------------------------
+  Running 173.applu ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007
+    -i applu.in >applu.out 2>applu.err ../00000007/applu_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:55:26 2011.  Total elapsed time: 248.806246
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007'
+comparing 'applu.out' with cw='', abstol='', reltol='0.0001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:51:17 2011 (1311542477)
+  Stop:     Sun Jul 24 16:55:26 2011 (1311542726)
+  Elapsed:  00:04:09 (249)
+  Reported: 248 806425000 248.806425
+ Success 173.applu ratio=844.03, runtime=248.806425
+  Running 173.applu ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007
+    -i applu.in >applu.out 2>applu.err ../00000007/applu_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 16:59:34 2011.  Total elapsed time: 247.974767
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007'
+comparing 'applu.out' with cw='', abstol='', reltol='0.0001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:55:26 2011 (1311542726)
+  Stop:     Sun Jul 24 16:59:34 2011 (1311542974)
+  Elapsed:  00:04:08 (248)
+  Reported: 247 975240000 247.97524
+ Success 173.applu ratio=846.86, runtime=247.975240
+  Running 173.applu ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007
+    -i applu.in >applu.out 2>applu.err ../00000007/applu_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:03:41 2011.  Total elapsed time: 245.667941
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007'
+comparing 'applu.out' with cw='', abstol='', reltol='0.0001',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/173.applu/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 16:59:35 2011 (1311542975)
+  Stop:     Sun Jul 24 17:03:41 2011 (1311543221)
+  Elapsed:  00:04:06 (246)
+  Reported: 245 668358000 245.668358
+ Success 173.applu ratio=854.81, runtime=245.668358
+
+-----------------------------------
+  Running 177.mesa ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006
+    ../00000006/mesa_base.x86_linux -frames 1000 -meshfile mesa.in -ppmfile mesa.ppm
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:06:38 2011.  Total elapsed time: 177.368038
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006'
+comparing 'mesa.log' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+comparing 'mesa.ppm' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:03:41 2011 (1311543221)
+  Stop:     Sun Jul 24 17:06:38 2011 (1311543398)
+  Elapsed:  00:02:57 (177)
+  Reported: 177 368215000 177.368215
+ Success 177.mesa ratio=789.32, runtime=177.368215
+  Running 177.mesa ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006
+    ../00000006/mesa_base.x86_linux -frames 1000 -meshfile mesa.in -ppmfile mesa.ppm
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:10:39 2011.  Total elapsed time: 175.215957
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006'
+comparing 'mesa.log' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+comparing 'mesa.ppm' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:07:44 2011 (1311543464)
+  Stop:     Sun Jul 24 17:10:39 2011 (1311543639)
+  Elapsed:  00:02:55 (175)
+  Reported: 175 216173000 175.216173
+ Success 177.mesa ratio=799.01, runtime=175.216173
+  Running 177.mesa ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006
+    ../00000006/mesa_base.x86_linux -frames 1000 -meshfile mesa.in -ppmfile mesa.ppm
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:14:36 2011.  Total elapsed time: 174.132511
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006'
+comparing 'mesa.log' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+comparing 'mesa.ppm' with cw='', abstol='6', reltol='',obiwan='1',skiptol='6'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:11:42 2011 (1311543702)
+  Stop:     Sun Jul 24 17:14:36 2011 (1311543876)
+  Elapsed:  00:02:54 (174)
+  Reported: 174 132737000 174.132737
+ Success 177.mesa ratio=803.98, runtime=174.132737
+
+-----------------------------------
+  Running 178.galgel ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013
+    -i galgel.in >galgel.out 2>galgel.err ../00000013/galgel_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:22:00 2011.  Total elapsed time: 383.27524
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013'
+comparing 'galgel.out' with cw='', abstol='2e-08', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:15:37 2011 (1311543937)
+  Stop:     Sun Jul 24 17:22:00 2011 (1311544320)
+  Elapsed:  00:06:23 (383)
+  Reported: 383 275450000 383.27545
+ Success 178.galgel ratio=756.64, runtime=383.275450
+  Running 178.galgel ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013
+    -i galgel.in >galgel.out 2>galgel.err ../00000013/galgel_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:28:29 2011.  Total elapsed time: 388.778156
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013'
+comparing 'galgel.out' with cw='', abstol='2e-08', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:22:00 2011 (1311544320)
+  Stop:     Sun Jul 24 17:28:29 2011 (1311544709)
+  Elapsed:  00:06:29 (389)
+  Reported: 388 778333000 388.778333
+ Success 178.galgel ratio=745.93, runtime=388.778333
+  Running 178.galgel ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013
+    -i galgel.in >galgel.out 2>galgel.err ../00000013/galgel_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:34:56 2011.  Total elapsed time: 387.410772
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013'
+comparing 'galgel.out' with cw='', abstol='2e-08', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/178.galgel/run/00000013 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:28:29 2011 (1311544709)
+  Stop:     Sun Jul 24 17:34:56 2011 (1311545096)
+  Elapsed:  00:06:27 (387)
+  Reported: 387 410953000 387.410953
+ Success 178.galgel ratio=748.56, runtime=387.410953
+
+-----------------------------------
+  Running 179.art ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006
+    >ref.1.out 2>ref.1.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10
+    >ref.2.out 2>ref.2.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:41:15 2011.  Total elapsed time: 378.165352
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006'
+comparing 'ref.1.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+comparing 'ref.2.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:34:56 2011 (1311545096)
+  Stop:     Sun Jul 24 17:41:15 2011 (1311545475)
+  Elapsed:  00:06:19 (379)
+  Reported: 378 165522000 378.165522
+ Success 179.art ratio=687.53, runtime=378.165522
+  Running 179.art ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006
+    >ref.1.out 2>ref.1.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10
+    >ref.2.out 2>ref.2.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:47:47 2011.  Total elapsed time: 392.162158
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006'
+comparing 'ref.1.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+comparing 'ref.2.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:41:15 2011 (1311545475)
+  Stop:     Sun Jul 24 17:47:47 2011 (1311545867)
+  Elapsed:  00:06:32 (392)
+  Reported: 392 162328000 392.162328
+ Success 179.art ratio=662.99, runtime=392.162328
+  Running 179.art ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006
+    >ref.1.out 2>ref.1.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10
+    >ref.2.out 2>ref.2.err ../00000006/art_base.x86_linux -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 470 -starty 140 -endx 520 -endy 180 -objects 10
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:54:10 2011.  Total elapsed time: 382.495316
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006'
+comparing 'ref.1.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+comparing 'ref.2.out' with cw='', abstol='', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:47:47 2011 (1311545867)
+  Stop:     Sun Jul 24 17:54:10 2011 (1311546250)
+  Elapsed:  00:06:23 (383)
+  Reported: 382 495489000 382.495489
+ Success 179.art ratio=679.75, runtime=382.495489
+
+-----------------------------------
+  Running 183.equake ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006
+    -i inp.in >inp.out 2>inp.err ../00000006/equake_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:55:41 2011.  Total elapsed time: 91.268041
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006'
+comparing 'inp.out' with cw='', abstol='', reltol='1e-05',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:54:10 2011 (1311546250)
+  Stop:     Sun Jul 24 17:55:41 2011 (1311546341)
+  Elapsed:  00:01:31 (91)
+  Reported: 91 268246000 91.268246
+ Success 183.equake ratio=1424.37, runtime=91.268246
+  Running 183.equake ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006
+    -i inp.in >inp.out 2>inp.err ../00000006/equake_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:57:16 2011.  Total elapsed time: 94.886312
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006'
+comparing 'inp.out' with cw='', abstol='', reltol='1e-05',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:55:41 2011 (1311546341)
+  Stop:     Sun Jul 24 17:57:16 2011 (1311546436)
+  Elapsed:  00:01:35 (95)
+  Reported: 94 886493000 94.886493
+ Success 183.equake ratio=1370.06, runtime=94.886493
+  Running 183.equake ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006
+    -i inp.in >inp.out 2>inp.err ../00000006/equake_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 17:58:51 2011.  Total elapsed time: 95.138877
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006'
+comparing 'inp.out' with cw='', abstol='', reltol='1e-05',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/183.equake/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:57:16 2011 (1311546436)
+  Stop:     Sun Jul 24 17:58:51 2011 (1311546531)
+  Elapsed:  00:01:35 (95)
+  Reported: 95 139052000 95.139052
+ Success 183.equake ratio=1366.42, runtime=95.139052
+
+-----------------------------------
+  Running 187.facerec ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006
+    -i ref.in >ref.out 2>ref.err ../00000006/facerec_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:04:52 2011.  Total elapsed time: 360.657595
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006'
+comparing 'hops.out' with cw='', abstol='5', reltol='0.2',obiwan='',skiptol='4'
+comparing 'ref.out' with cw='', abstol='2e-07', reltol='0.001',obiwan='',skiptol='0'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 17:58:51 2011 (1311546531)
+  Stop:     Sun Jul 24 18:04:52 2011 (1311546892)
+  Elapsed:  00:06:01 (361)
+  Reported: 360 657787000 360.657787
+ Success 187.facerec ratio=526.82, runtime=360.657787
+  Running 187.facerec ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006
+    -i ref.in >ref.out 2>ref.err ../00000006/facerec_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:10:59 2011.  Total elapsed time: 366.722465
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006'
+comparing 'hops.out' with cw='', abstol='5', reltol='0.2',obiwan='',skiptol='4'
+comparing 'ref.out' with cw='', abstol='2e-07', reltol='0.001',obiwan='',skiptol='0'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:04:52 2011 (1311546892)
+  Stop:     Sun Jul 24 18:10:59 2011 (1311547259)
+  Elapsed:  00:06:07 (367)
+  Reported: 366 722638000 366.722638
+ Success 187.facerec ratio=518.10, runtime=366.722638
+  Running 187.facerec ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006
+    -i ref.in >ref.out 2>ref.err ../00000006/facerec_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:16:49 2011.  Total elapsed time: 350.161403
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006'
+comparing 'hops.out' with cw='', abstol='5', reltol='0.2',obiwan='',skiptol='4'
+comparing 'ref.out' with cw='', abstol='2e-07', reltol='0.001',obiwan='',skiptol='0'
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/187.facerec/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:10:59 2011 (1311547259)
+  Stop:     Sun Jul 24 18:16:49 2011 (1311547609)
+  Elapsed:  00:05:50 (350)
+  Reported: 350 161805000 350.161805
+ Success 187.facerec ratio=542.61, runtime=350.161805
+
+-----------------------------------
+  Running 188.ammp ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006
+    -i ammp.in >ammp.out 2>ammp.err ../00000006/ammp_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:22:40 2011.  Total elapsed time: 350.617142
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006'
+comparing 'ammp.out' with cw='', abstol='0.0001', reltol='0.003',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:16:49 2011 (1311547609)
+  Stop:     Sun Jul 24 18:22:40 2011 (1311547960)
+  Elapsed:  00:05:51 (351)
+  Reported: 350 617292000 350.617292
+ Success 188.ammp ratio=627.46, runtime=350.617292
+  Running 188.ammp ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006
+    -i ammp.in >ammp.out 2>ammp.err ../00000006/ammp_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:28:26 2011.  Total elapsed time: 345.86907
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006'
+comparing 'ammp.out' with cw='', abstol='0.0001', reltol='0.003',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:22:40 2011 (1311547960)
+  Stop:     Sun Jul 24 18:28:26 2011 (1311548306)
+  Elapsed:  00:05:46 (346)
+  Reported: 345 869229000 345.869229
+ Success 188.ammp ratio=636.08, runtime=345.869229
+  Running 188.ammp ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006
+    -i ammp.in >ammp.out 2>ammp.err ../00000006/ammp_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:34:13 2011.  Total elapsed time: 346.657817
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006'
+comparing 'ammp.out' with cw='', abstol='0.0001', reltol='0.003',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000006 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:28:26 2011 (1311548306)
+  Stop:     Sun Jul 24 18:34:13 2011 (1311548653)
+  Elapsed:  00:05:47 (347)
+  Reported: 346 657966000 346.657966
+ Success 188.ammp ratio=634.63, runtime=346.657966
+
+-----------------------------------
+  Running 189.lucas ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007
+    -i lucas2.in >lucas2.out 2>lucas2.err ../00000007/lucas_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:36:50 2011.  Total elapsed time: 156.92801
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007'
+comparing 'lucas2.out' with cw='', abstol='', reltol='',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:34:13 2011 (1311548653)
+  Stop:     Sun Jul 24 18:36:50 2011 (1311548810)
+  Elapsed:  00:02:37 (157)
+  Reported: 156 928184000 156.928184
+ Success 189.lucas ratio=1274.47, runtime=156.928184
+  Running 189.lucas ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007
+    -i lucas2.in >lucas2.out 2>lucas2.err ../00000007/lucas_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:39:28 2011.  Total elapsed time: 157.964522
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007'
+comparing 'lucas2.out' with cw='', abstol='', reltol='',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:36:50 2011 (1311548810)
+  Stop:     Sun Jul 24 18:39:28 2011 (1311548968)
+  Elapsed:  00:02:38 (158)
+  Reported: 157 964694000 157.964694
+ Success 189.lucas ratio=1266.11, runtime=157.964694
+  Running 189.lucas ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007
+    -i lucas2.in >lucas2.out 2>lucas2.err ../00000007/lucas_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:42:07 2011.  Total elapsed time: 158.873333
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007'
+comparing 'lucas2.out' with cw='', abstol='', reltol='',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/189.lucas/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:39:28 2011 (1311548968)
+  Stop:     Sun Jul 24 18:42:07 2011 (1311549127)
+  Elapsed:  00:02:39 (159)
+  Reported: 158 873524000 158.873524
+ Success 189.lucas ratio=1258.86, runtime=158.873524
+
+-----------------------------------
+  Running 191.fma3d ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007
+    >fma3d.out 2>fma3d.err ../00000007/fma3d_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:45:54 2011.  Total elapsed time: 227.392953
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007'
+comparing 'fma3d.out' with cw='', abstol='1e-07', reltol='0.04',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:42:07 2011 (1311549127)
+  Stop:     Sun Jul 24 18:45:54 2011 (1311549354)
+  Elapsed:  00:03:47 (227)
+  Reported: 227 393143000 227.393143
+ Success 191.fma3d ratio=923.51, runtime=227.393143
+  Running 191.fma3d ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007
+    >fma3d.out 2>fma3d.err ../00000007/fma3d_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:49:41 2011.  Total elapsed time: 226.945298
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007'
+comparing 'fma3d.out' with cw='', abstol='1e-07', reltol='0.04',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:45:54 2011 (1311549354)
+  Stop:     Sun Jul 24 18:49:41 2011 (1311549581)
+  Elapsed:  00:03:47 (227)
+  Reported: 226 945482000 226.945482
+ Success 191.fma3d ratio=925.33, runtime=226.945482
+  Running 191.fma3d ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007
+    >fma3d.out 2>fma3d.err ../00000007/fma3d_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:53:28 2011.  Total elapsed time: 226.52142
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007'
+comparing 'fma3d.out' with cw='', abstol='1e-07', reltol='0.04',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/191.fma3d/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:49:41 2011 (1311549581)
+  Stop:     Sun Jul 24 18:53:28 2011 (1311549808)
+  Elapsed:  00:03:47 (227)
+  Reported: 226 521595000 226.521595
+ Success 191.fma3d ratio=927.06, runtime=226.521595
+
+-----------------------------------
+  Running 200.sixtrack ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007
+    -i inp.in >inp.out 2>inp.err ../00000007/sixtrack_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 18:57:44 2011.  Total elapsed time: 256.094751
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007'
+comparing 'inp.out' with cw='', abstol='0.0005', reltol='0.0005',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:53:28 2011 (1311549808)
+  Stop:     Sun Jul 24 18:57:44 2011 (1311550064)
+  Elapsed:  00:04:16 (256)
+  Reported: 256 94952000 256.094952
+ Success 200.sixtrack ratio=429.53, runtime=256.094952
+  Running 200.sixtrack ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007
+    -i inp.in >inp.out 2>inp.err ../00000007/sixtrack_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 19:01:59 2011.  Total elapsed time: 254.400536
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007'
+comparing 'inp.out' with cw='', abstol='0.0005', reltol='0.0005',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 18:57:45 2011 (1311550065)
+  Stop:     Sun Jul 24 19:01:59 2011 (1311550319)
+  Elapsed:  00:04:14 (254)
+  Reported: 254 400697000 254.400697
+ Success 200.sixtrack ratio=432.39, runtime=254.400697
+  Running 200.sixtrack ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007
+    -i inp.in >inp.out 2>inp.err ../00000007/sixtrack_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 19:06:16 2011.  Total elapsed time: 255.57102
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007'
+comparing 'inp.out' with cw='', abstol='0.0005', reltol='0.0005',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/200.sixtrack/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 19:02:00 2011 (1311550320)
+  Stop:     Sun Jul 24 19:06:16 2011 (1311550576)
+  Elapsed:  00:04:16 (256)
+  Reported: 255 571227000 255.571227
+ Success 200.sixtrack ratio=430.41, runtime=255.571227
+
+-----------------------------------
+  Running 301.apsi ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007
+    >apsi.out 2>apsi.err ../00000007/apsi_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 19:10:50 2011.  Total elapsed time: 273.565943
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007'
+comparing 'APO10' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO11' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO6' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO8' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APV' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 19:06:16 2011 (1311550576)
+  Stop:     Sun Jul 24 19:10:50 2011 (1311550850)
+  Elapsed:  00:04:34 (274)
+  Reported: 273 566107000 273.566107
+ Success 301.apsi ratio=950.41, runtime=273.566107
+  Running 301.apsi ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007
+    >apsi.out 2>apsi.err ../00000007/apsi_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 19:15:26 2011.  Total elapsed time: 271.993055
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007'
+comparing 'APO10' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO11' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO6' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO8' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APV' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 19:10:54 2011 (1311550854)
+  Stop:     Sun Jul 24 19:15:26 2011 (1311551126)
+  Elapsed:  00:04:32 (272)
+  Reported: 271 993225000 271.993225
+ Success 301.apsi ratio=955.91, runtime=271.993225
+  Running 301.apsi ref base x86_linux default
+Commands to run: 
+    -u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007
+    >apsi.out 2>apsi.err ../00000007/apsi_base.x86_linux
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -e speccmds.err -o speccmds.out -f speccmds.cmd
+user 0 finished @ Sun Jul 24 19:20:04 2011.  Total elapsed time: 272.873076
+comparing files in '/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007'
+comparing 'APO10' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO11' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO6' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APO8' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+comparing 'APV' with cw='', abstol='1e-07', reltol='0.01',obiwan='',skiptol=''
+Specinvoke: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke -E -d /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/301.apsi/run/00000007 -c 1 -e compare.err -o compare.out -f compare.cmd
+Benchmark Times:
+  Start:    Sun Jul 24 19:15:31 2011 (1311551131)
+  Stop:     Sun Jul 24 19:20:04 2011 (1311551404)
+  Elapsed:  00:04:33 (273)
+  Reported: 272 873248000 272.873248
+ Success 301.apsi ratio=952.82, runtime=272.873248
+Success: 3x168.wupwise 3x171.swim 3x172.mgrid 3x173.applu 3x177.mesa 3x178.galgel 3x179.art 3x183.equake 3x187.facerec 3x188.ammp 3x189.lucas 3x191.fma3d 3x200.sixtrack 3x301.apsi
+Producing Reports
+mach: default
+  ext: x86_linux
+    size: ref
+      set: int
+      set: fp
+        format: raw -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.raw
+        format: pdf -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.pdf
+        format: PostScript -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.ps
+        format: HTML -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.html
+        format: config -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.cfg
+        format: ASCII -> /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/result/CFP2000.401.asc
+runspec finished

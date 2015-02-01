@@ -1,0 +1,9 @@
+running commands in speccmds.cmd 1 times
+runs started at 1312082671, 290974000, Sat Jul 30 22:54:31 2011
+run 1 started at 1312082671, 291101000, Sat Jul 30 22:54:31 2011
+child started: 0, 1312082671, 291120000, 2561, '>ammp.out 2>ammp.err ../00000002/ammp_base.x86_linux'
+child finished: 0, 1312082681, 232258000, 9, 941138000, 2561, 0
+run 1 finished at: 1312082681, 232269000, Sat Jul 30 22:54:41 2011
+run 1 elapsed time: 9, 941168000, 9.941168000
+runs finished at 1312082681, 232324000, Sat Jul 30 22:54:41 2011
+runs elapsed time: 9, 941350000, 9.941350000

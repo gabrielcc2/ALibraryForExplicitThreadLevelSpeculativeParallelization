@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 188.ammp/src/restrain.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">188.ammp/src</a> - restrain.c<span style="font-size: 80%;"> (source / <a href="restrain.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">118</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-31</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">74</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* restrain.c</a>
+<span class="lineNum">       2 </span>                :            : *
+<span class="lineNum">       3 </span>                :            : * collection of routines to service restrain potentials
+<span class="lineNum">       4 </span>                :            : *
+<span class="lineNum">       5 </span>                :            : * POOP (Poor-mans Object Oriented Programming) using scope rules
+<span class="lineNum">       6 </span>                :            : *
+<span class="lineNum">       7 </span>                :            : * these routines hold a data base (in terms of array indeces)
+<span class="lineNum">       8 </span>                :            : * of restraints, with the associated length and force constant
+<span class="lineNum">       9 </span>                :            : * These are updateable - unlike bonds which are &quot;permanent&quot;
+<span class="lineNum">      10 </span>                :            : *
+<span class="lineNum">      11 </span>                :            : * (this could be table driven but what the hell memories cheap)
+<span class="lineNum">      12 </span>                :            : *
+<span class="lineNum">      13 </span>                :            : * the routines for potential value, force and (eventually) second
+<span class="lineNum">      14 </span>                :            : * derivatives are here also
+<span class="lineNum">      15 </span>                :            : *
+<span class="lineNum">      16 </span>                :            : * force and 2nd derivative routines assume zero'd arrays for output
+<span class="lineNum">      17 </span>                :            : * this allows for parralellization if needed (on a PC?)
+<span class="lineNum">      18 </span>                :            : *
+<span class="lineNum">      19 </span>                :            : * forces are symmetric 
+<span class="lineNum">      20 </span>                :            : */
+<span class="lineNum">      21 </span>                :            : /*
+<span class="lineNum">      22 </span>                :            : *  copyright 1992 Robert W. Harrison
+<span class="lineNum">      23 </span>                :            : *  
+<span class="lineNum">      24 </span>                :            : *  This notice may not be removed
+<span class="lineNum">      25 </span>                :            : *  This program may be copied for scientific use
+<span class="lineNum">      26 </span>                :            : *  It may not be sold for profit without explicit
+<span class="lineNum">      27 </span>                :            : *  permission of the author(s) who retain any
+<span class="lineNum">      28 </span>                :            : *  commercial rights including the right to modify 
+<span class="lineNum">      29 </span>                :            : *  this notice
+<span class="lineNum">      30 </span>                :            : */
+<span class="lineNum">      31 </span>                :            : 
+<span class="lineNum">      32 </span>                :            : #define ANSI 1
+<span class="lineNum">      33 </span>                :            : /* misc includes - ANSI and some are just to be safe */
+<span class="lineNum">      34 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">      35 </span>                :            : #include &lt;ctype.h&gt;
+<span class="lineNum">      36 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      37 </span>                :            : #ifdef ANSI
+<span class="lineNum">      38 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      39 </span>                :            : #endif
+<span class="lineNum">      40 </span>                :            : #include &quot;ammp.h&quot;
+<span class="lineNum">      41 </span>                :            : /* ATOM structure contains a serial number for indexing into
+<span class="lineNum">      42 </span>                :            : * arrays and the like (a Hessian)
+<span class="lineNum">      43 </span>                :            : * but otherwise is self-contained. Note the hooks for Non-restrained potentials
+<span class="lineNum">      44 </span>                :            : */
+<span class="lineNum">      45 </span>                :            : typedef struct{
+<span class="lineNum">      46 </span>                :            :         ATOM *atom1,*atom2;
+<span class="lineNum">      47 </span>                :            :         float length,k;
+<span class="lineNum">      48 </span>                :            :         void *next;
+<span class="lineNum">      49 </span>                :            :         }  RESTRAIN;
+<span class="lineNum">      50 </span>                :            : #define RLONG sizeof(RESTRAIN)
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :            : RESTRAIN *restrain_first = NULL;
+<span class="lineNum">      53 </span>                :            : RESTRAIN *restrain_last = NULL;
+<span class="lineNum">      54 </span>                :            : /* function restrain adds a restrain to the restrain list
+<span class="lineNum">      55 </span>                :            : * returns 1 if ok
+<span class="lineNum">      56 </span>                :            : * returns 0 if not
+<span class="lineNum">      57 </span>                :            : *  is passed the atom serial numbers, length and constant
+<span class="lineNum">      58 </span>                :            : * allocates the new memory, initializes it and
+<a name="59"><span class="lineNum">      59 </span>                :            : * returns</a>
+<span class="lineNum">      60 </span>                :            : */
+<span class="lineNum">      61 </span>                :<span class="lineNoCov">          0 : int restrain( p1,p2,bl,fk)</span>
+<span class="lineNum">      62 </span>                :            :         int p1,p2;
+<span class="lineNum">      63 </span>                :            :         float bl,fk ;
+<span class="lineNum">      64 </span>                :            :         {
+<span class="lineNum">      65 </span>                :            :         ATOM *ap1,*ap2,*a_m_serial();
+<span class="lineNum">      66 </span>                :            :         RESTRAIN *new;
+<span class="lineNum">      67 </span>                :            :         char line[80];
+<span class="lineNum">      68 </span>                :            : /* get the atom pointers for the two serial numbers */
+<span class="lineNum">      69 </span>                :<span class="lineNoCov">          0 :         ap1 = a_m_serial( p1 );</span>
+<span class="lineNum">      70 </span>                :<span class="lineNoCov">          0 :         ap2 = a_m_serial( p2 );</span>
+<span class="lineNum">      71 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (ap1 == NULL) || (ap2 == NULL) ) </span>
+<span class="lineNum">      72 </span>                :            :         {
+<span class="lineNum">      73 </span>                :<span class="lineNoCov">          0 :         sprintf( line,&quot;undefined atom in restrain %d %d \0&quot;,p1,p2);</span>
+<span class="lineNum">      74 </span>                :<span class="lineNoCov">          0 :         aaerror( line );</span>
+<span class="lineNum">      75 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">      76 </span>                :            :         }
+<span class="lineNum">      77 </span>                :            : /* check to see if a restraint is already defined */
+<span class="lineNum">      78 </span>                :<span class="lineNoCov">          0 :         new = restrain_first;</span>
+<span class="lineNum">      79 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( new != NULL)</span>
+<span class="lineNum">      80 </span>                :            :         {
+<span class="lineNum">      81 </span>                :            :         while(1)
+<span class="lineNum">      82 </span>                :            :         {
+<span class="lineNum">      83 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( new == NULL) break;</span>
+<span class="lineNum">      84 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( (new-&gt;atom1 == ap1 &amp;&amp; new-&gt;atom2 == ap2) ||</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">      85 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     (new-&gt;atom1 == ap2 &amp;&amp; new-&gt;atom2 == ap1) )</span>
+<span class="lineNum">      86 </span>                :            :                 {
+<span class="lineNum">      87 </span>                :<span class="lineNoCov">          0 :                 new-&gt;length = bl; new-&gt;k = fk; return 1;</span>
+<span class="lineNum">      88 </span>                :            :                 }
+<span class="lineNum">      89 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( new == new-&gt;next) break;</span>
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :                 new = new-&gt;next;</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :         }</span>
+<span class="lineNum">      92 </span>                :            :         }
+<span class="lineNum">      93 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ( new = malloc( RLONG ) ) == NULL)</span>
+<span class="lineNum">      94 </span>                :            :         {
+<span class="lineNum">      95 </span>                :<span class="lineNoCov">          0 :         return 0;</span>
+<span class="lineNum">      96 </span>                :            :         }
+<span class="lineNum">      97 </span>                :            :         /* initialize the pointers */
+<span class="lineNum">      98 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( restrain_first == NULL) restrain_first = new;</span>
+<span class="lineNum">      99 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( restrain_last == NULL) restrain_last = new;</span>
+<span class="lineNum">     100 </span>                :<span class="lineNoCov">          0 :         new -&gt; atom1 = ap1;</span>
+<span class="lineNum">     101 </span>                :<span class="lineNoCov">          0 :         new -&gt; atom2 = ap2;</span>
+<span class="lineNum">     102 </span>                :<span class="lineNoCov">          0 :         new -&gt; length = bl;</span>
+<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :         new -&gt; k = fk;</span>
+<span class="lineNum">     104 </span>                :<span class="lineNoCov">          0 :         new -&gt; next = new;</span>
+<span class="lineNum">     105 </span>                :<span class="lineNoCov">          0 :         restrain_last -&gt; next = new;</span>
+<span class="lineNum">     106 </span>                :<span class="lineNoCov">          0 :         restrain_last = new;</span>
+<span class="lineNum">     107 </span>                :<span class="lineNoCov">          0 :         return 1;</span>
+<span class="lineNum">     108 </span>                :            :         }
+<span class="lineNum">     109 </span>                :            : 
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :            : /* v_restrain()
+<span class="lineNum">     112 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     113 </span>                :            : * for the atoms defined in the RESTRAIN data structure.
+<span class="lineNum">     114 </span>                :            : */
+<a name="115"><span class="lineNum">     115 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     116 </span>                :            : * V is the potential */
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 : int v_restrain( V, lambda )</span>
+<span class="lineNum">     118 </span>                :            :         float *V,lambda;
+<span class="lineNum">     119 </span>                :            : {
+<span class="lineNum">     120 </span>                :            :         RESTRAIN *bp;
+<span class="lineNum">     121 </span>                :            :         float r,xt,yt,zt;
+<span class="lineNum">     122 </span>                :            :         ATOM *a1,*a2;
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>                :            : 
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :         bp = restrain_first;</span>
+<span class="lineNum">     126 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     127 </span>                :            :        while(1)
+<span class="lineNum">     128 </span>                :            :        {
+<span class="lineNum">     129 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2;</span>
+<span class="lineNum">     131 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( lambda == 0.)</span>
+<span class="lineNum">     132 </span>                :            :         {
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :         r = (a1-&gt;x - a2-&gt;x)*(a1-&gt;x - a2-&gt;x);</span>
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :         r = r + (a1-&gt;y - a2-&gt;y)*(a1-&gt;y - a2-&gt;y);</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :         r = r + (a1-&gt;z - a2-&gt;z)*(a1-&gt;z - a2-&gt;z);</span>
+<span class="lineNum">     136 </span>                :            :         } else
+<span class="lineNum">     137 </span>                :            :         {
+<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :         xt = (a1-&gt;x -a2-&gt;x +lambda*(a1-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     139 </span>                :<span class="lineNoCov">          0 :         yt = (a1-&gt;y -a2-&gt;y +lambda*(a1-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :         zt = (a1-&gt;z -a2-&gt;z +lambda*(a1-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :         r = xt*xt+yt*yt+zt*zt;</span>
+<span class="lineNum">     142 </span>                :            :         }
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :         r = sqrt(r); *V += bp-&gt;k*( r - bp-&gt;length)*(r - bp-&gt;length);</span>
+<span class="lineNum">     144 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :         bp = bp-&gt;next;</span>
+<span class="lineNum">     146 </span>                :<span class="lineNoCov">          0 :        }</span>
+<span class="lineNum">     147 </span>                :            : }
+<span class="lineNum">     148 </span>                :            : /* f_restrain()
+<span class="lineNum">     149 </span>                :            : *
+<span class="lineNum">     150 </span>                :            : * f_restrain increments the forces in the atom structures by the force
+<span class="lineNum">     151 </span>                :            : * due to the restrain components.  NOTE THE WORD increment.
+<span class="lineNum">     152 </span>                :            : * the forces should first be zero'd.
+<span class="lineNum">     153 </span>                :            : * if not then this code will be invalid.  THIS IS DELIBERATE.
+<span class="lineNum">     154 </span>                :            : * on bigger (and better?) machines the different potential terms
+<span class="lineNum">     155 </span>                :            : * may be updated at random or in parrellel, if we assume that this routine
+<a name="156"><span class="lineNum">     156 </span>                :            : * will initialize the forces then we can't do this.</a>
+<span class="lineNum">     157 </span>                :            : */
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 : int f_restrain(lambda)</span>
+<span class="lineNum">     159 </span>                :            : float lambda;
+<span class="lineNum">     160 </span>                :            : /*  returns 0 if error, 1 if OK */
+<span class="lineNum">     161 </span>                :            : {
+<span class="lineNum">     162 </span>                :            :         RESTRAIN *bp;
+<span class="lineNum">     163 </span>                :            :         float r,k,ux,uy,uz;
+<span class="lineNum">     164 </span>                :            :         ATOM *a1,*a2;
+<span class="lineNum">     165 </span>                :            : 
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :         bp = restrain_first;</span>
+<span class="lineNum">     168 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     169 </span>                :            :        while(1)
+<span class="lineNum">     170 </span>                :            :        {
+<span class="lineNum">     171 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :         k = bp-&gt;k;</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2;</span>
+<span class="lineNum">     174 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( lambda == 0.)</span>
+<span class="lineNum">     175 </span>                :            :         {
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 :         ux = (a2-&gt;x - a1-&gt;x);</span>
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :         uy = (a2-&gt;y - a1-&gt;y);</span>
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :         uz = (a2-&gt;z - a1-&gt;z);</span>
+<span class="lineNum">     179 </span>                :            :         }else{
+<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :         ux = (a2-&gt;x -a1-&gt;x +lambda*(a2-&gt;dx-a1-&gt;dx));</span>
+<span class="lineNum">     181 </span>                :<span class="lineNoCov">          0 :         uy = (a2-&gt;y -a1-&gt;y +lambda*(a2-&gt;dy-a1-&gt;dy));</span>
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :         uz = (a2-&gt;z -a1-&gt;z +lambda*(a2-&gt;dz-a1-&gt;dz));</span>
+<span class="lineNum">     183 </span>                :            :         }
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :         r = ux*ux + uy*uy + uz*uz;</span>
+<span class="lineNum">     185 </span>                :            :          /* watch for FP errors*/
+<span class="lineNum">     186 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if( r &lt;= 1.e-5)</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :          { r = 0; ux = 1.; uy = 0.; uz = 0.; }else{</span>
+<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :         r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;</span>
+<span class="lineNum">     189 </span>                :            :         }
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :         ux = 2*k*(r-bp-&gt;length)*ux; </span>
+<span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 :         uy = 2*k*(r-bp-&gt;length)*uy; </span>
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :         uz = 2*k*(r-bp-&gt;length)*uz;</span>
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :         a1-&gt;fx += ux; </span>
+<span class="lineNum">     194 </span>                :<span class="lineNoCov">          0 :         a1-&gt;fy += uy; </span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :         a1-&gt;fz += uz; </span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :         a2-&gt;fx -= ux; </span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :         a2-&gt;fy -= uy; </span>
+<span class="lineNum">     198 </span>                :<span class="lineNoCov">          0 :         a2-&gt;fz -= uz; </span>
+<span class="lineNum">     199 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :         bp = bp-&gt;next;</span>
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :        }</span>
+<span class="lineNum">     202 </span>                :            : }
+<span class="lineNum">     203 </span>                :            : /* function get_restrain( a1,restrained,10,inrestrain);
+<a name="204"><span class="lineNum">     204 </span>                :            : * check the RESTRAINS list for atoms restrained to a1</a>
+<span class="lineNum">     205 </span>                :            : */
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 : void get_restrain( a1,restrained,mrestrain,inrestrain)</span>
+<span class="lineNum">     207 </span>                :            : ATOM *a1, *restrained[];
+<span class="lineNum">     208 </span>                :            : int mrestrain,*inrestrain ;
+<span class="lineNum">     209 </span>                :            : {
+<span class="lineNum">     210 </span>                :            :         RESTRAIN *mine;
+<span class="lineNum">     211 </span>                :<span class="lineNoCov">          0 :         mine = restrain_first;</span>
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :         *inrestrain = 0;</span>
+<span class="lineNum">     213 </span>                :            :         while(1)
+<span class="lineNum">     214 </span>                :            :         {
+<span class="lineNum">     215 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (mine == NULL) )</span>
+<span class="lineNum">     216 </span>                :            :         {
+<span class="lineNum">     217 </span>                :            :                 return;
+<span class="lineNum">     218 </span>                :            :         }
+<span class="lineNum">     219 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine-&gt;atom1 == a1)</span>
+<span class="lineNum">     220 </span>                :            :         {
+<span class="lineNum">     221 </span>                :<span class="lineNoCov">          0 :                 restrained[(*inrestrain)++] = mine-&gt;atom2;</span>
+<span class="lineNum">     222 </span>                :            :         }
+<span class="lineNum">     223 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine-&gt;atom2 == a1)</span>
+<span class="lineNum">     224 </span>                :            :         {
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :                 restrained[(*inrestrain)++] = mine-&gt;atom1;</span>
+<span class="lineNum">     226 </span>                :            :         }
+<span class="lineNum">     227 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( mine == mine-&gt;next) return;</span>
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :         mine = mine-&gt;next;</span>
+<span class="lineNum">     229 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( *inrestrain == mrestrain ) return;</span>
+<span class="lineNum">     230 </span>                :            :         }               
+<span class="lineNum">     231 </span>                :            : }
+<span class="lineNum">     232 </span>                :            : /* routine dump_restrains
+<span class="lineNum">     233 </span>                :            : * this function outputs the restrain parameters
+<span class="lineNum">     234 </span>                :            : * and does it in a simple form
+<span class="lineNum">     235 </span>                :            : * restrain ser1,ser2,k,req
+<span class="lineNum">     236 </span>                :            : * the rest is just free format
+<a name="237"><span class="lineNum">     237 </span>                :            : */</a>
+<span class="lineNum">     238 </span>                :            : /* SPEC use modern style declaration, to match proto jh/9/22/99 */
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 : void dump_restrains( FILE *where )</span>
+<span class="lineNum">     240 </span>                :            : {
+<span class="lineNum">     241 </span>                :            :         RESTRAIN *b;
+<span class="lineNum">     242 </span>                :            :         ATOM *a1,*a2;
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :         b = restrain_first;</span>
+<span class="lineNum">     244 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b == NULL ) return;</span>
+<span class="lineNum">     245 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         while( (b-&gt;next != b) )</span>
+<span class="lineNum">     246 </span>                :            :         {
+<span class="lineNum">     247 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b-&gt;next == NULL) return;</span>
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :         a1 = b-&gt;atom1; a2 = b-&gt;atom2;</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :         fprintf( where,&quot;restrain %d %d %f %f ;\n&quot;,a1-&gt;serial,a2-&gt;serial,</span>
+<span class="lineNum">     250 </span>                :            :                 b-&gt;length,b-&gt;k);
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :         b = b-&gt;next;</span>
+<span class="lineNum">     252 </span>                :            :         }
+<span class="lineNum">     253 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( b-&gt;next == NULL) return;</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :         a1 = b-&gt;atom1; a2 = b-&gt;atom2;</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :         fprintf( where,&quot;restrain %d %d %f %f ;\n&quot;,a1-&gt;serial,a2-&gt;serial,</span>
+<span class="lineNum">     256 </span>                :            :                 b-&gt;length,b-&gt;k);
+<span class="lineNum">     257 </span>                :            : }       
+<span class="lineNum">     258 </span>                :            : 
+<span class="lineNum">     259 </span>                :            : /* a_restrain()
+<span class="lineNum">     260 </span>                :            : * this function sums up the potentials
+<span class="lineNum">     261 </span>                :            : * for the atoms defined in the RESTRAIN data structure.
+<span class="lineNum">     262 </span>                :            : */
+<a name="263"><span class="lineNum">     263 </span>                :            : /* standard returns 0 if error (any) 1 if ok</a>
+<span class="lineNum">     264 </span>                :            : * V is the potential */
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 : int a_restrain( V, lambda,ilow,ihigh,op )</span>
+<span class="lineNum">     266 </span>                :            :         float *V,lambda;
+<span class="lineNum">     267 </span>                :            :         int ilow,ihigh;
+<span class="lineNum">     268 </span>                :            :         FILE *op;
+<span class="lineNum">     269 </span>                :            : {
+<span class="lineNum">     270 </span>                :            :         RESTRAIN *bp;
+<span class="lineNum">     271 </span>                :            :         float r,xt,yt,zt;
+<span class="lineNum">     272 </span>                :            :         ATOM *a1,*a2;
+<span class="lineNum">     273 </span>                :            : 
+<span class="lineNum">     274 </span>                :            : 
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :         bp = restrain_first;</span>
+<span class="lineNum">     276 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        if( bp == NULL ) return 1;</span>
+<span class="lineNum">     277 </span>                :            :        while(1)
+<span class="lineNum">     278 </span>                :            :        {
+<span class="lineNum">     279 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == NULL) return 0;</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :         a1 = bp-&gt;atom1; a2 = bp-&gt;atom2;</span>
+<span class="lineNum">     281 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if(( a1-&gt;serial &gt;= ilow &amp;&amp; a1-&gt;serial &lt;=ihigh)</span>
+<span class="lineNum">     282 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :          ||( a2-&gt;serial &gt;= ilow &amp;&amp; a2-&gt;serial &lt;=ihigh))</span>
+<span class="lineNum">     283 </span>                :            :         {
+<span class="lineNum">     284 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( lambda == 0.)</span>
+<span class="lineNum">     285 </span>                :            :         {
+<span class="lineNum">     286 </span>                :<span class="lineNoCov">          0 :         r = (a1-&gt;x - a2-&gt;x)*(a1-&gt;x - a2-&gt;x);</span>
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :         r = r + (a1-&gt;y - a2-&gt;y)*(a1-&gt;y - a2-&gt;y);</span>
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 :         r = r + (a1-&gt;z - a2-&gt;z)*(a1-&gt;z - a2-&gt;z);</span>
+<span class="lineNum">     289 </span>                :            :         } else
+<span class="lineNum">     290 </span>                :            :         {
+<span class="lineNum">     291 </span>                :<span class="lineNoCov">          0 :         xt = (a1-&gt;x -a2-&gt;x +lambda*(a1-&gt;dx-a2-&gt;dx));</span>
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :         yt = (a1-&gt;y -a2-&gt;y +lambda*(a1-&gt;dy-a2-&gt;dy));</span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :         zt = (a1-&gt;z -a2-&gt;z +lambda*(a1-&gt;dz-a2-&gt;dz));</span>
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :         r = xt*xt+yt*yt+zt*zt;</span>
+<span class="lineNum">     295 </span>                :            :         }
+<span class="lineNum">     296 </span>                :<span class="lineNoCov">          0 :         r = sqrt(r); zt= bp-&gt;k*( r - bp-&gt;length)*(r - bp-&gt;length);</span>
+<span class="lineNum">     297 </span>                :<span class="lineNoCov">          0 :         *V += zt;</span>
+<span class="lineNum">     298 </span>                :<span class="lineNoCov">          0 :         fprintf(op,&quot;Restrain %d %d E %f value %f error %f\n&quot;</span>
+<span class="lineNum">     299 </span>                :<span class="lineNoCov">          0 :                 ,a1-&gt;serial,a2-&gt;serial,zt,r,r-bp-&gt;length);</span>
+<span class="lineNum">     300 </span>                :            :         }
+<span class="lineNum">     301 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( bp == bp-&gt;next ) return 1;</span>
+<span class="lineNum">     302 </span>                :<span class="lineNoCov">          0 :         bp = bp-&gt;next;</span>
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :        }</span>
+<span class="lineNum">     304 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

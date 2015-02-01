@@ -1,0 +1,551 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/tset.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* tset.c
+        -:    2:*
+        -:    3:* collection of routines to service  torsion searching
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:*
+        -:    8:*  tset forces a given torsion to be a given value
+        -:    9:*  unlike tgroup tset is one deep and does not check energy.
+        -:   10:*
+        -:   11:*  tmin  searches one and only one torsion angle for an energy minimum
+        -:   12:*
+        -:   13:*
+        -:   14:*  tmap i j k l ii jj kk ll nstep1 nstep2 ;
+        -:   15:*   step through the two torsions and produce a map of the energies
+        -:   16:*   the atoms are stored in the vx registers
+        -:   17:*
+        -:   18:*  tgroup/tsearch define a structure and use it
+        -:   19:*  tset/tmin   do it on the fly.
+        -:   20:*
+        -:   21:*  tmin can be quite expensive
+        -:   22:*
+        -:   23:*/
+        -:   24:/*
+        -:   25:*  copyright 1993,1995 Robert W. Harrison
+        -:   26:*  
+        -:   27:*  This notice may not be removed
+        -:   28:*  This program may be copied for scientific use
+        -:   29:*  It may not be sold for profit without explicit
+        -:   30:*  permission of the author(s) who retain any
+        -:   31:*  commercial rights including the right to modify 
+        -:   32:*  this notice
+        -:   33:*/
+        -:   34:
+        -:   35:
+        -:   36:#define ANSI 1
+        -:   37:/* misc includes - ANSI and some are just to be safe */
+        -:   38:#include <stdio.h>
+        -:   39:#include <ctype.h>
+        -:   40:#include <math.h>
+        -:   41:#ifdef ANSI
+        -:   42:#include <stdlib.h>
+        -:   43://#include "ammp.h"
+        -:   44:#endif
+        -:   45://#include "ammp.h"
+        -:   46:/* ATOM structure contains a serial number for indexing into
+        -:   47:* arrays and the like (a Hessian)
+        -:   48:* but otherwise is self-contained. Note the hooks for Non-torsioned potentials
+        -:   49:*/
+        -:   50:
+        -:   51:/* SPEC add function protos to reduce compiler whinings jh/9/21/99 */
+        -:   52:int set_torsion ( ATOM *, ATOM *, ATOM *, ATOM *, float );
+        -:   53:int tset_bond_build( ATOM *, ATOM *, ATOM *, ATOM *);
+        -:   54:
+function _Z4tsetP8_IO_FILEiiiiif called 0 returned 0% blocks executed 0%
+    #####:   55:int tset(FILE *op, int echo, int i1, int i2, int i3, int i4, float alpha)
+        -:   56:{
+        -:   57:	 ATOM *ap,*ap1,*ap2,*ap3,*ap4, *a_m_serial(int),*a_next(int);
+        -:   58:	float get_torsion_value(ATOM*, ATOM*, ATOM*, ATOM*);
+        -:   59:	float original,delta;
+        -:   60:	int numatom,a_number();
+        -:   61:
+        -:   62:/* there must be atoms and they must be specified */
+    #####:   63:	numatom = a_number();
+call    0 never executed
+        -:   64:        /* SPEC - add a "1" here (and in the next 5 instances) to      */
+        -:   65:        /*        remove warnings, but I don't think                   */
+        -:   66:        /*        any callers actually look at this return value       */
+        -:   67:        /*        - j.henning 21-sep-99                                */
+    #####:   68:	if( numatom <= 0) return 1;
+branch  0 never executed
+branch  1 never executed
+        -:   69:
+    #####:   70:	ap1 = a_m_serial(i1);
+call    0 never executed
+    #####:   71:	if( ap1 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:   72:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:   73:		 return 1;}
+    #####:   74:	ap2 = a_m_serial(i2);
+call    0 never executed
+    #####:   75:	if( ap2 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:   76:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:   77:		 return 1;}
+    #####:   78:	ap3 = a_m_serial(i3);
+call    0 never executed
+    #####:   79:	if( ap3 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:   80:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:   81:		 return 1;}
+    #####:   82:	ap4 = a_m_serial(i4);
+call    0 never executed
+    #####:   83:	if( ap4 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:   84:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:   85:		 return 1;}
+        -:   86:/* get the torsion value and check if we have to do the work */
+        -:   87:
+    #####:   88:	original = get_torsion_value( ap1,ap2,ap3,ap4);
+call    0 never executed
+    #####:   89:	if( fabs(original  -alpha) < 1.e-3 ) return 1;
+branch  0 never executed
+branch  1 never executed
+        -:   90:
+        -:   91:/* set up the bond structure flags in ap->gx */
+    #####:   92:	tset_bond_build( ap1,ap2,ap3,ap4);
+call    0 never executed
+        -:   93:
+    #####:   94:	delta = alpha -original;
+    #####:   95:	set_torsion( ap1,ap2,ap3,ap4,delta ); 
+call    0 never executed
+    #####:   96:	if( echo )
+branch  0 never executed
+branch  1 never executed
+        -:   97:	fprintf(op,"tset> original  %f delta %f final %f\n", original*180/3.14159,delta*180/3.14159,
+    #####:   98:			get_torsion_value( ap1,ap2,ap3,ap4)*180/3.14159);
+call    0 never executed
+        -:   99:
+    #####:  100:	return 0;
+        -:  101:}/* end of tset */
+function _Z4tminP8_IO_FILEiiiiiiPPFiPffEi called 0 returned 0% blocks executed 0%
+    #####:  102:int tmin( FILE *op, int echo ,int i1,int i2,int i3,int i4, int nstep, int (*vfs[])(float*, float),int nfs )
+        -:  103:{
+        -:  104:	 ATOM *ap,*ap1,*ap2,*ap3,*ap4, *a_m_serial(int),*a_next(int);
+        -:  105:	float get_torsion_value(ATOM*, ATOM*, ATOM*, ATOM*);
+        -:  106:	float original,delta;
+        -:  107:	float vtemp,vmax;
+        -:  108:	int numatom,a_number();
+        -:  109:	int i,imax,ifs;
+        -:  110:
+        -:  111:/* there must be atoms and they must be specified */
+    #####:  112:	numatom = a_number();
+call    0 never executed
+        -:  113:        /* SPEC - add a "1" here (and in the next 4 instances) to      */
+        -:  114:        /*        remove warnings, but I don't think                   */
+        -:  115:        /*        any callers actually look at this return value       */
+        -:  116:        /*        - j.henning 21-sep-99                                */
+    #####:  117:	if( numatom <= 0) return 1;
+branch  0 never executed
+branch  1 never executed
+        -:  118:
+    #####:  119:	ap1 = a_m_serial(i1);
+call    0 never executed
+    #####:  120:	if( ap1 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:  121:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:  122:		 return 1;}
+    #####:  123:	ap2 = a_m_serial(i2);
+call    0 never executed
+    #####:  124:	if( ap2 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:  125:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:  126:		 return 1;}
+    #####:  127:	ap3 = a_m_serial(i3);
+call    0 never executed
+    #####:  128:	if( ap3 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:  129:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:  130:		 return 1;}
+    #####:  131:	ap4 = a_m_serial(i4);
+call    0 never executed
+    #####:  132:	if( ap4 == NULL){
+branch  0 never executed
+branch  1 never executed
+    #####:  133:		aaerror("An atom in tset is not defined");
+call    0 never executed
+    #####:  134:		 return 1;}
+        -:  135:
+    #####:  136:	if( nstep <= 0 ) nstep = 12;
+branch  0 never executed
+branch  1 never executed
+        -:  137:/* get the torsion value and check if we have to do the work */
+        -:  138:
+    #####:  139:	original = get_torsion_value( ap1,ap2,ap3,ap4);
+call    0 never executed
+        -:  140:
+        -:  141:/* set up the bond structure flags in ap->gx */
+    #####:  142:	tset_bond_build( ap1,ap2,ap3,ap4);
+call    0 never executed
+        -:  143:
+    #####:  144:	delta =  -original;
+    #####:  145:	set_torsion( ap1,ap2,ap3,ap4,delta ); 
+call    0 never executed
+        -:  146:
+    #####:  147:	imax = -1;
+    #####:  148:	vmax = 10e20;
+    #####:  149:        delta = 2*3.141592653589793 /(float)nstep;
+        -:  150:
+    #####:  151:	for( i=0; i< nstep; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  152:	{
+    #####:  153:		vtemp = 0.;
+    #####:  154:		for( ifs = 0; ifs < nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:  155:			 (*vfs[ifs])(&vtemp,0.);
+call    0 never executed
+    #####:  156:		if( vtemp < vmax)
+branch  0 never executed
+branch  1 never executed
+    #####:  157:			{vmax = vtemp; imax = i;}	
+    #####:  158:	set_torsion( ap1,ap2,ap3,ap4,delta ); 
+call    0 never executed
+        -:  159:	}
+    #####:  160:	set_torsion( ap1,ap2,ap3,ap4,imax*delta ); 
+call    0 never executed
+        -:  161:
+        -:  162:
+    #####:  163:	if( echo )
+branch  0 never executed
+branch  1 never executed
+        -:  164:	fprintf(op,"tset> original  %f  final %f\n", original*180/3.14159,
+    #####:  165:			get_torsion_value( ap1,ap2,ap3,ap4)*180/3.14159);
+call    0 never executed
+    #####:  166:	return 0;
+        -:  167:
+        -:  168:}/* end of tset */
+        -:  169:
+        -:  170:
+        -:  171:
+        -:  172:/* SPEC use modern-style arg declaration, to match proto jh/9/22/99 */
+function _Z15tset_bond_buildP4ATOMS0_S0_S0_ called 0 returned 0% blocks executed 0%
+    #####:  173:int tset_bond_build( ATOM *ap1, ATOM *ap2, ATOM *ap3, ATOM *ap4)
+        -:  174:{
+        -:  175:	ATOM *ap,*a_next(int),*bonded[20];
+        -:  176:	int i , numatom, a_number(),inbond;
+        -:  177:	int j,tobonded;
+        -:  178:	void get_bond(ATOM*, ATOM*[], int, int*);
+        -:  179:/* initialize the data */
+        -:  180:/* ap->gx < 0  not in bond structure
+        -:  181:*   == 0 in bond structure but check for neighbors 
+        -:  182:*  in bond structure, but neighbors are checked */
+    #####:  183:	numatom = a_number();
+call    0 never executed
+    #####:  184:	for( i=0; i< numatom; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  185:	{  ap = a_next(i);
+call    0 never executed
+    #####:  186:	ap->gx = -1.;
+        -:  187:	}	
+    #####:  188:	tobonded = 0;
+    #####:  189:	get_bond( ap3,bonded,20,&inbond);
+call    0 never executed
+    #####:  190:	for( i=0; i< inbond; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  191:	{
+    #####:  192:		if( bonded[i] != ap1 && bonded[i]!= ap2)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  193:		{ bonded[i]->gx = 0.; tobonded++ ;}
+        -:  194:	}
+    #####:  195:	get_bond( ap4,bonded,20,&inbond);
+call    0 never executed
+    #####:  196:	for( i=0; i< inbond; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  197:	{
+    #####:  198:		if( bonded[i] != ap1 && bonded[i]!= ap2)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  199:		{ bonded[i]->gx = 0.; tobonded++ ;}
+        -:  200:	}
+    #####:  201:	ap3->gx = 1.;
+    #####:  202:	ap4->gx = 1.;	
+        -:  203:/* now for the meat */
+    #####:  204:	while( tobonded > 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  205:	{
+    #####:  206:		tobonded = 0;
+    #####:  207:		for( i=0; i< numatom;i++)
+branch  0 never executed
+branch  1 never executed
+        -:  208:		{
+    #####:  209:		ap = a_next(i);
+call    0 never executed
+    #####:  210:		if( ap != ap1 && ap != ap2) {
+branch  0 never executed
+branch  1 never executed
+    #####:  211:		if( ap->gx == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  212:		{
+    #####:  213:		ap->gx = 1.;
+    #####:  214:		get_bond( ap,bonded,20,&inbond);
+call    0 never executed
+    #####:  215:			for( j=0; j< inbond; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  216:			{
+    #####:  217:				if( bonded[j]->gx < 1.)
+branch  0 never executed
+branch  1 never executed
+    #####:  218:				{ bonded[j]->gx = 0.; tobonded++ ;}
+        -:  219:			}
+        -:  220:		} /*end of if ap->gx == 0 */
+        -:  221:			}/* end of not ap1 not ap2 */
+        -:  222:		} /* end for( i */
+        -:  223:	}/*end while*/
+        -:  224:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  225:        /*        any callers actually look at this return value       */
+        -:  226:        /*        - j.henning 21-sep-99                                */
+    #####:  227:        return 1;
+        -:  228:
+        -:  229:}/* end of routine tset_bond_build */
+        -:  230:
+        -:  231:
+function _Z17get_torsion_valueP4ATOMS0_S0_S0_ called 0 returned 0% blocks executed 0%
+    #####:  232:float get_torsion_value(ATOM *a1, ATOM *a2, ATOM *a3, ATOM *a4)
+        -:  233:{
+        -:  234:float x1,x2,x3,y1,y2,y3,z1,z2,z3;
+        -:  235:float cx1,cy1,cz1,cx2,cy2,cz2;
+        -:  236:float dp,r;
+        -:  237:	
+    #####:  238:        x1 = (a1->x -a2->x );
+    #####:  239:        y1 = (a1->y -a2->y );
+    #####:  240:        z1 = (a1->z -a2->z );
+    #####:  241:        x2 = (a3->x -a2->x );
+    #####:  242:        y2 = (a3->y -a2->y );
+    #####:  243:        z2 = (a3->z -a2->z );
+    #####:  244:        x3 = (a4->x -a3->x );
+    #####:  245:        y3 = (a4->y -a3->y );
+    #####:  246:        z3 = (a4->z -a3->z );
+        -:  247:/* 1 cross 2 */
+    #####:  248:        cx1 = y1*z2 - y2*z1;
+    #####:  249:        cy1 = -x1*z2 + x2*z1;
+    #####:  250:        cz1 = x1*y2 - x2*y1;
+    #####:  251:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  252:        if( r < 1.e-4) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  253:        r = 1./sqrt(r);
+    #####:  254:        cx1 = cx1*r;
+    #####:  255:        cy1 = cy1*r;
+    #####:  256:        cz1 = cz1*r;
+        -:  257:/* 3 cross 2 */
+    #####:  258:        cx2 = y3*z2 - y2*z3;
+    #####:  259:        cy2 = -x3*z2 + x2*z3;
+    #####:  260:        cz2 = x3*y2 - x2*y3;
+    #####:  261:        r = cx2*cx2 + cy2*cy2 + cz2*cz2;
+    #####:  262:        if( r < 1.e-4) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  263:        r = 1./sqrt(r);
+    #####:  264:        cx2 = cx2*r;
+    #####:  265:        cy2 = cy2*r;
+    #####:  266:        cz2 = cz2*r;
+        -:  267:/* if here everything is well determined */
+    #####:  268:        dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */
+    #####:  269:        if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  270:
+    #####:  271:        dp = acos(dp);
+        -:  272:/* determine the sign by triple product */
+    #####:  273:        r = cx1*x3 + cy1*y3 + cz1*z3;
+    #####:  274:        if( r > 0 ) dp =  -dp ;
+branch  0 never executed
+branch  1 never executed
+    #####:  275:	return dp;
+        -:  276:SKIP:
+    #####:  277:	return 0;
+        -:  278:} /*end of get_torsion_value() */
+        -:  279:
+        -:  280:/* SPEC use modern-style arg declaration, to match proto jh/9/22/99 */
+function _Z11set_torsionP4ATOMS0_S0_S0_f called 0 returned 0% blocks executed 0%
+    #####:  281:int set_torsion( ATOM *ap1, ATOM *ap2, ATOM *ap3, ATOM *ap4, float howmuch)
+        -:  282:{
+        -:  283:
+        -:  284:float nx,ny,nz;
+        -:  285:float phi,cphi,sphi,xphi;
+        -:  286:float rx,ry,rz, nnrx,nnry,nnrz, rnx,rny,rnz;
+        -:  287:ATOM *ap,*b1,*b2,*a_next(int);
+        -:  288:int numatom,a_number();
+        -:  289:int i;
+        -:  290:
+    #####:  291:	numatom = a_number();
+call    0 never executed
+    #####:  292:	b1 = ap2; b2 = ap3;
+    #####:  293:        nx = b2->x - b1->x;
+    #####:  294:        ny = b2->y - b1->y;
+    #####:  295:        nz = b2->z - b1->z;
+    #####:  296:        rx = sqrt(nx*nx + ny*ny + nz*nz);
+    #####:  297:        if( rx < 1.e-6)
+branch  0 never executed
+branch  1 never executed
+        -:  298:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  299:        /*        any callers actually look at this return value       */
+        -:  300:        /*        - j.henning 21-sep-99                                */
+    #####:  301:        {aaerror(" bad torsion radius in set_torsion \n"); return 1;}
+call    0 never executed
+    #####:  302:        nx = nx/rx;
+    #####:  303:        ny = ny/rx;
+    #####:  304:        nz = nz/rx;
+        -:  305:/*
+        -:  306:        phi = 2.*3.141592653589793 /(float)tgp->ntry * (float)num;
+        -:  307:*/
+    #####:  308:        cphi = cos(howmuch); sphi = sin(howmuch);
+    #####:  309:       	phi = (1.-cphi);
+    #####:  310:        for( i=0; i< numatom; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  311:        {
+    #####:  312:		ap = a_next(i);
+call    0 never executed
+    #####:  313:		if( ap->gx > 0. && ap != b2 )
+branch  0 never executed
+branch  1 never executed
+        -:  314:		{
+    #####:  315:                rx = ap->x - b1->x;
+    #####:  316:                ry = ap->y - b1->y;
+    #####:  317:                rz = ap->z - b1->z;
+    #####:  318:                xphi = nx*rx + ny*ry + nz*rz;
+    #####:  319:                nnrx = xphi*nx;
+    #####:  320:                nnry = xphi*ny;
+    #####:  321:                nnrz = xphi*nz;
+    #####:  322:                rnx = ny*rz - nz*ry;
+    #####:  323:                rny = -nx*rz + nz*rx;
+    #####:  324:                rnz = nx*ry - ny*rx;
+    #####:  325:                rx = cphi*rx + phi*nnrx + sphi*rnx;
+    #####:  326:                ry = cphi*ry + phi*nnry + sphi*rny;
+    #####:  327:                rz = cphi*rz + phi*nnrz + sphi*rnz;
+    #####:  328:                ap->x = rx + b1->x;
+    #####:  329:                ap->y = ry + b1->y;
+    #####:  330:                ap->z = rz + b1->z;
+        -:  331:		}
+        -:  332:	}
+        -:  333:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  334:        /*        any callers actually look at this return value       */
+        -:  335:        /*        - j.henning 21-sep-99                                */
+    #####:  336:        return 1;
+        -:  337:}/* end of set_torsion */
+function _Z4tmapP8_IO_FILEiPPFiPffEiiiiiiiiiii called 0 returned 0% blocks executed 0%
+    #####:  338:int tmap( FILE *op, int echo, int (*vfs[])(float*, float),int nfs,int i1,int i2,int i3,int i4, 
+        -:  339:int j1 , int j2 ,int j3, int j4 , int nistep, int njstep)
+        -:  340:{
+        -:  341:	ATOM *ap, *a_next(int);
+        -:  342:	int numatm,a_number();
+        -:  343:	int i,j,ifs;
+        -:  344:	float V;
+        -:  345:	float x,dx,y,dy;
+        -:  346:
+    #####:  347:	numatm = a_number();
+call    0 never executed
+        -:  348:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  349:        /*        any callers actually look at this return value       */
+        -:  350:        /*        - j.henning 21-sep-99                                */
+    #####:  351:	if( numatm <5 ) return 1; /* cant work if there aint enough atoms */
+branch  0 never executed
+branch  1 never executed
+        -:  352:
+        -:  353:/* save the atoms */
+    #####:  354:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  355:	{
+    #####:  356:	ap = a_next(i);
+call    0 never executed
+    #####:  357:	ap->vx = ap->x;
+    #####:  358:	ap->vy = ap->y;
+    #####:  359:	ap->vz = ap->z;
+        -:  360:	}
+        -:  361:
+    #####:  362:	x = 0.;
+    #####:  363:	y = 0.;
+        -:  364:/* -180 to 180 convention is more popular */
+    #####:  365:	x = -3.141592653589793;
+    #####:  366:	dx = 0.;
+    #####:  367:	dy = 0.;
+    #####:  368:	if( nistep > 1)
+branch  0 never executed
+branch  1 never executed
+    #####:  369:	dx = 3.141592653589793*2./(nistep);
+    #####:  370:	if( njstep > 1)
+branch  0 never executed
+branch  1 never executed
+    #####:  371:	dy = 3.141592653589793*2./(njstep);
+        -:  372:	fprintf(op,"%d %d Torsion map  %f %f steps\n",nistep,njstep,
+    #####:  373:		dx*180./3.141592653589793,dy*180./3.141592653589793);
+    #####:  374:	for( i=0; i< nistep; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  375:	{
+    #####:  376:	tset( op,0, i1,i2,i3,i4,x);
+call    0 never executed
+    #####:  377:	y = 0.;
+    #####:  378:	y = -3.141592653589793;
+    #####:  379:	for( j=0; j< njstep; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  380:	{
+    #####:  381:		tset( op,0, j1,j2,j3,j4,y);
+call    0 never executed
+    #####:  382:		V = 0.;
+    #####:  383:		for( ifs= 0; ifs< nfs; ifs++)
+branch  0 never executed
+branch  1 never executed
+    #####:  384:			(*vfs[ifs])(&V,0.);		
+call    0 never executed
+    #####:  385:		fprintf(op,"%f ",V);	
+    #####:  386:		y = y + dy;
+        -:  387:	}
+        -:  388:	fprintf(op,"\n");
+    #####:  389:	x = x + dx;
+        -:  390:	}
+        -:  391:/* restore the atoms */
+    #####:  392:	for( i=0; i< numatm; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  393:	{
+    #####:  394:	ap = a_next(i);
+call    0 never executed
+    #####:  395:	ap->x = ap->vx;
+    #####:  396:	ap->y = ap->vy;
+    #####:  397:	ap->z = ap->vz;
+        -:  398:	}
+        -:  399:        /* SPEC - add a "1" here to remove warnings, but I don't think */
+        -:  400:        /*        any callers actually look at this return value       */
+        -:  401:        /*        - j.henning 21-sep-99                                */
+    #####:  402:        return 1;
+        -:  403:
+        -:  404:}/* end of tmap */

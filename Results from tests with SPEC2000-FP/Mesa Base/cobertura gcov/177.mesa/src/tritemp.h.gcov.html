@@ -1,0 +1,1069 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/tritemp.h</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - tritemp.h<span style="font-size: 80%;"> (source / <a href="tritemp.h.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">233</td>
+            <td class="headerCovTableEntry">276</td>
+            <td class="headerCovTableEntryMed">84.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">67</td>
+            <td class="headerCovTableEntry">506</td>
+            <td class="headerCovTableEntryLo">13.2 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: tritemp.h,v 1.16 1997/09/18 01:08:10 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.4
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: tritemp.h,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.16  1997/09/18 01:08:10  brianp
+<span class="lineNum">      27 </span>                :            :  * fixed S_SCALE / T_SCALE mix-up
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.15  1997/08/22 01:53:03  brianp
+<span class="lineNum">      30 </span>                :            :  * another attempt at fixing under/overflow errors
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.14  1997/08/13 02:10:13  brianp
+<span class="lineNum">      33 </span>                :            :  * added code to prevent over/underflow (Guido Jansen, Magnus Lundin)
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.13  1997/06/20 02:52:49  brianp
+<span class="lineNum">      36 </span>                :            :  * changed color components from GLfixed to GLubyte
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.12  1997/03/14 00:25:02  brianp
+<span class="lineNum">      39 </span>                :            :  * fixed unitialized memory read, contributed by Tom Schmidt
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.11  1997/02/09 18:51:10  brianp
+<span class="lineNum">      42 </span>                :            :  * fixed typo in texture R interpolation code
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.10  1996/12/20 23:12:23  brianp
+<span class="lineNum">      45 </span>                :            :  * another attempt at preventing color interpolation over/underflow
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.9  1996/12/18 20:38:25  brianp
+<span class="lineNum">      48 </span>                :            :  * commented out unused zp declaration
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.8  1996/12/12 22:37:49  brianp
+<span class="lineNum">      51 </span>                :            :  * projective textures didn't work right
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.7  1996/11/02 06:17:37  brianp
+<span class="lineNum">      54 </span>                :            :  * fixed some float/int roundoff and over/underflow errors (hopefully)
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.6  1996/10/01 04:13:09  brianp
+<span class="lineNum">      57 </span>                :            :  * fixed Z interpolation for &gt;16-bit depth buffer
+<span class="lineNum">      58 </span>                :            :  * added color underflow error check
+<span class="lineNum">      59 </span>                :            :  *
+<span class="lineNum">      60 </span>                :            :  * Revision 1.5  1996/09/27 01:32:59  brianp
+<span class="lineNum">      61 </span>                :            :  * removed unused variables
+<span class="lineNum">      62 </span>                :            :  *
+<span class="lineNum">      63 </span>                :            :  * Revision 1.4  1996/09/18 01:03:43  brianp
+<span class="lineNum">      64 </span>                :            :  * tightened threshold for culling by area
+<span class="lineNum">      65 </span>                :            :  *
+<span class="lineNum">      66 </span>                :            :  * Revision 1.3  1996/09/15 14:19:16  brianp
+<span class="lineNum">      67 </span>                :            :  * now use GLframebuffer and GLvisual
+<span class="lineNum">      68 </span>                :            :  *
+<span class="lineNum">      69 </span>                :            :  * Revision 1.2  1996/09/14 06:41:38  brianp
+<span class="lineNum">      70 </span>                :            :  * perspective correct texture code wasn't sub-pixel accurate (Doug Rabson)
+<span class="lineNum">      71 </span>                :            :  *
+<span class="lineNum">      72 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      73 </span>                :            :  * Initial revision
+<span class="lineNum">      74 </span>                :            :  *
+<span class="lineNum">      75 </span>                :            :  */
+<span class="lineNum">      76 </span>                :            : 
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>                :            : /*
+<span class="lineNum">      79 </span>                :            :  * Triangle Rasterizer Template
+<span class="lineNum">      80 </span>                :            :  *
+<span class="lineNum">      81 </span>                :            :  * This file is #include'd to generate custom triangle rasterizers.
+<span class="lineNum">      82 </span>                :            :  *
+<span class="lineNum">      83 </span>                :            :  * The following macros may be defined to indicate what auxillary information
+<span class="lineNum">      84 </span>                :            :  * must be interplated across the triangle:
+<span class="lineNum">      85 </span>                :            :  *    INTERP_Z      - if defined, interpolate Z values
+<span class="lineNum">      86 </span>                :            :  *    INTERP_RGB    - if defined, interpolate RGB values
+<span class="lineNum">      87 </span>                :            :  *    INTERP_ALPHA  - if defined, interpolate Alpha values
+<span class="lineNum">      88 </span>                :            :  *    INTERP_INDEX  - if defined, interpolate color index values
+<span class="lineNum">      89 </span>                :            :  *    INTERP_ST     - if defined, interpolate integer ST texcoords
+<span class="lineNum">      90 </span>                :            :  *                         (fast, simple 2-D texture mapping)
+<span class="lineNum">      91 </span>                :            :  *    INTERP_STW    - if defined, interpolate float ST texcoords and W
+<span class="lineNum">      92 </span>                :            :  *                         (2-D texture maps with perspective correction)
+<span class="lineNum">      93 </span>                :            :  *    INTERP_UV     - if defined, interpolate float UV texcoords too
+<span class="lineNum">      94 </span>                :            :  *                         (for 3-D, 4-D? texture maps)
+<span class="lineNum">      95 </span>                :            :  *
+<span class="lineNum">      96 </span>                :            :  * When one can directly address pixels in the color buffer the following
+<span class="lineNum">      97 </span>                :            :  * macros can be defined and used to compute pixel addresses during
+<span class="lineNum">      98 </span>                :            :  * rasterization (see pRow):
+<span class="lineNum">      99 </span>                :            :  *    PIXEL_TYPE          - the datatype of a pixel (GLubyte, GLushort, GLuint)
+<span class="lineNum">     100 </span>                :            :  *    BYTES_PER_ROW       - number of bytes per row in the color buffer
+<span class="lineNum">     101 </span>                :            :  *    PIXEL_ADDRESS(X,Y)  - returns the address of pixel at (X,Y) where
+<span class="lineNum">     102 </span>                :            :  *                          Y==0 at bottom of screen and increases upward.
+<span class="lineNum">     103 </span>                :            :  *
+<span class="lineNum">     104 </span>                :            :  * Optionally, one may provide one-time setup code per triangle:
+<span class="lineNum">     105 </span>                :            :  *    SETUP_CODE    - code which is to be executed once per triangle
+<span class="lineNum">     106 </span>                :            :  * 
+<span class="lineNum">     107 </span>                :            :  * The following macro MUST be defined:
+<span class="lineNum">     108 </span>                :            :  *    INNER_LOOP(LEFT,RIGHT,Y) - code to write a span of pixels.
+<span class="lineNum">     109 </span>                :            :  *        Something like:
+<span class="lineNum">     110 </span>                :            :  *
+<span class="lineNum">     111 </span>                :            :  *                    for (x=LEFT; x&lt;RIGHT;x++) {
+<span class="lineNum">     112 </span>                :            :  *                       put_pixel(x,Y);
+<span class="lineNum">     113 </span>                :            :  *                       // increment fixed point interpolants
+<span class="lineNum">     114 </span>                :            :  *                    }
+<span class="lineNum">     115 </span>                :            :  *
+<span class="lineNum">     116 </span>                :            :  * This code was designed for the origin to be in the lower-left corner.
+<span class="lineNum">     117 </span>                :            :  *
+<span class="lineNum">     118 </span>                :            :  * Inspired by triangle rasterizer code written by Allen Akin.  Thanks Allen!
+<span class="lineNum">     119 </span>                :            :  */
+<span class="lineNum">     120 </span>                :            : 
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>                :            : /*void triangle( GLcontext *ctx, GLuint v0, GLuint v1, GLuint v2, GLuint pv )*/
+<span class="lineNum">     123 </span>                :            : {
+<span class="lineNum">     124 </span>                :            :    typedef struct {
+<span class="lineNum">     125 </span>                :            :         GLint v0, v1;     /* Y(v0) &lt; Y(v1) */
+<span class="lineNum">     126 </span>                :            :         GLfloat dx;     /* X(v1) - X(v0) */
+<span class="lineNum">     127 </span>                :            :         GLfloat dy;     /* Y(v1) - Y(v0) */
+<span class="lineNum">     128 </span>                :            :         GLfixed fdxdy;  /* dx/dy in fixed-point */
+<span class="lineNum">     129 </span>                :            :         GLfixed fsx;    /* first sample point x coord */
+<span class="lineNum">     130 </span>                :            :         GLfixed fsy;
+<span class="lineNum">     131 </span>                :            :         GLfloat adjy;   /* adjust from v[0]-&gt;fy to fsy, scaled */
+<span class="lineNum">     132 </span>                :            :         GLint lines;    /* number of lines to be sampled on this edge */
+<span class="lineNum">     133 </span>                :            :         GLfixed fx0;    /* fixed pt X of lower endpoint */
+<span class="lineNum">     134 </span>                :            :    } EdgeT;
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :<span class="lineCov">   44402000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     137 </span>                :            :    EdgeT eMaj, eTop, eBot;
+<span class="lineNum">     138 </span>                :            :    GLfloat oneOverArea;
+<span class="lineNum">     139 </span>                :            :    int vMin, vMid, vMax;       /* vertex indexes:  Y(vMin)&lt;=Y(vMid)&lt;=Y(vMax) */
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :            :    /* find the order of the 3 vertices along the Y axis */
+<span class="lineNum">     142 </span>                :            :    {
+<span class="lineNum">     143 </span>                :<span class="lineCov">   44402000 :       GLfloat y0 = VB-&gt;Win[v0][1];</span>
+<span class="lineNum">     144 </span>                :<span class="lineCov">   44402000 :       GLfloat y1 = VB-&gt;Win[v1][1];</span>
+<span class="lineNum">     145 </span>                :<span class="lineCov">   44402000 :       GLfloat y2 = VB-&gt;Win[v2][1];</span>
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44402000 :       if (y0&lt;=y1) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 22177887 times"> + </span><span class="branchCov" title="Branch 13 was taken 22224113 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     148 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   22177887 :          if (y1&lt;=y2) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 5539916 times"> + </span><span class="branchCov" title="Branch 13 was taken 16637971 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     149 </span>                :<span class="lineCov">    5539916 :             vMin = v0;   vMid = v1;   vMax = v2;   /* y0&lt;=y1&lt;=y2 */</span>
+<span class="lineNum">     150 </span>                :            :          }
+<span class="lineNum">     151 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   16637971 :          else if (y2&lt;=y0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 8363594 times"> + </span><span class="branchCov" title="Branch 13 was taken 8274377 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     152 </span>                :<span class="lineCov">    8363594 :             vMin = v2;   vMid = v0;   vMax = v1;   /* y2&lt;=y0&lt;=y1 */</span>
+<span class="lineNum">     153 </span>                :            :          }
+<span class="lineNum">     154 </span>                :            :          else {
+<span class="lineNum">     155 </span>                :<span class="lineCov">    8274377 :             vMin = v0;   vMid = v2;   vMax = v1;   /* y0&lt;=y2&lt;=y1 */</span>
+<span class="lineNum">     156 </span>                :            :          }
+<span class="lineNum">     157 </span>                :            :       }
+<span class="lineNum">     158 </span>                :            :       else {
+<span class="lineNum">     159 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   22224113 :          if (y0&lt;=y2) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 8282682 times"> + </span><span class="branchCov" title="Branch 13 was taken 13941431 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     160 </span>                :<span class="lineCov">    8282682 :             vMin = v1;   vMid = v0;   vMax = v2;   /* y1&lt;=y0&lt;=y2 */</span>
+<span class="lineNum">     161 </span>                :            :          }
+<span class="lineNum">     162 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   13941431 :          else if (y2&lt;=y1) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 5592512 times"> + </span><span class="branchCov" title="Branch 13 was taken 8348919 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     163 </span>                :<span class="lineCov">    5592512 :             vMin = v2;   vMid = v1;   vMax = v0;   /* y2&lt;=y1&lt;=y0 */</span>
+<span class="lineNum">     164 </span>                :            :          }
+<span class="lineNum">     165 </span>                :            :          else {
+<span class="lineNum">     166 </span>                :<span class="lineCov">    8348919 :             vMin = v1;   vMid = v2;   vMax = v0;   /* y1&lt;=y2&lt;=y0 */</span>
+<span class="lineNum">     167 </span>                :            :          }
+<span class="lineNum">     168 </span>                :            :       }
+<span class="lineNum">     169 </span>                :            :    }
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>                :            :    /* vertex/edge relationship */
+<span class="lineNum">     172 </span>                :<span class="lineCov">   44402000 :    eMaj.v0 = vMin;   eMaj.v1 = vMax;   /*TODO: .v1's not needed */</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">   44402000 :    eTop.v0 = vMid;   eTop.v1 = vMax;</span>
+<span class="lineNum">     174 </span>                :<span class="lineCov">   44402000 :    eBot.v0 = vMin;   eBot.v1 = vMid;</span>
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            :    /* compute deltas for each edge:  vertex[v1] - vertex[v0] */
+<span class="lineNum">     177 </span>                :<span class="lineCov">   44402000 :    eMaj.dx = VB-&gt;Win[vMax][0] - VB-&gt;Win[vMin][0];</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">   44402000 :    eMaj.dy = VB-&gt;Win[vMax][1] - VB-&gt;Win[vMin][1];</span>
+<span class="lineNum">     179 </span>                :<span class="lineCov">   44402000 :    eTop.dx = VB-&gt;Win[vMax][0] - VB-&gt;Win[vMid][0];</span>
+<span class="lineNum">     180 </span>                :<span class="lineCov">   44402000 :    eTop.dy = VB-&gt;Win[vMax][1] - VB-&gt;Win[vMid][1];</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">   44402000 :    eBot.dx = VB-&gt;Win[vMid][0] - VB-&gt;Win[vMin][0];</span>
+<span class="lineNum">     182 </span>                :<span class="lineCov">   44402000 :    eBot.dy = VB-&gt;Win[vMid][1] - VB-&gt;Win[vMin][1];</span>
+<span class="lineNum">     183 </span>                :            : 
+<span class="lineNum">     184 </span>                :            :    /* compute oneOverArea */
+<span class="lineNum">     185 </span>                :            :    {
+<span class="lineNum">     186 </span>                :<span class="lineCov">   44402000 :       GLfloat area = eMaj.dx * eBot.dy - eBot.dx * eMaj.dy;</span>
+<span class="lineNum">     187 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44402000 :       if (area&gt;-0.05f &amp;&amp; area&lt;0.05f) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 19 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 24 was taken 22218845 times"> + </span><span class="branchCov" title="Branch 25 was taken 22183155 times"> + </span>][<span class="branchCov" title="Branch 26 was taken 22186080 times"> + </span><span class="branchCov" title="Branch 27 was taken 32765 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>][<span class="branchNoExec" title="Branch 30 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span>]
+<span class="lineNum">     188 </span>                :            :          return;  /* very small; CULLED */
+<span class="lineNum">     189 </span>                :            :       }
+<span class="lineNum">     190 </span>                :<span class="lineCov">   44369235 :       oneOverArea = 1.0F / area;</span>
+<span class="lineNum">     191 </span>                :            :    }
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :            :    /* Edge setup.  For a triangle strip these could be reused... */
+<span class="lineNum">     194 </span>                :            :    {
+<span class="lineNum">     195 </span>                :            :       /* fixed point Y coordinates */
+<span class="lineNum">     196 </span>                :<span class="lineCov">   44369235 :       GLfixed vMin_fx = FloatToFixed(VB-&gt;Win[vMin][0] + 0.5F);</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">   44369235 :       GLfixed vMin_fy = FloatToFixed(VB-&gt;Win[vMin][1] - 0.5F);</span>
+<span class="lineNum">     198 </span>                :<span class="lineCov">   44369235 :       GLfixed vMid_fx = FloatToFixed(VB-&gt;Win[vMid][0] + 0.5F);</span>
+<span class="lineNum">     199 </span>                :<span class="lineCov">   44369235 :       GLfixed vMid_fy = FloatToFixed(VB-&gt;Win[vMid][1] - 0.5F);</span>
+<span class="lineNum">     200 </span>                :<span class="lineCov">   44369235 :       GLfixed vMax_fy = FloatToFixed(VB-&gt;Win[vMax][1] - 0.5F);</span>
+<span class="lineNum">     201 </span>                :            : 
+<span class="lineNum">     202 </span>                :<span class="lineCov">   44369235 :       eMaj.fsy = FixedCeil(vMin_fy);</span>
+<span class="lineNum">     203 </span>                :<span class="lineCov">   44369235 :       eMaj.lines = FixedToInt(vMax_fy + FIXED_ONE - FIXED_EPSILON - eMaj.fsy);</span>
+<span class="lineNum">     204 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44369235 :       if (eMaj.lines &gt; 0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 44042776 times"> + </span><span class="branchCov" title="Branch 13 was taken 326459 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     205 </span>                :<span class="lineCov">   44042776 :          GLfloat dxdy = eMaj.dx / eMaj.dy;</span>
+<span class="lineNum">     206 </span>                :<span class="lineCov">   44042776 :          eMaj.fdxdy = SignedFloatToFixed(dxdy);</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">   44042776 :          eMaj.adjy = (GLfloat) (eMaj.fsy - vMin_fy);  /* SCALED! */</span>
+<span class="lineNum">     208 </span>                :<span class="lineCov">   44042776 :          eMaj.fx0 = vMin_fx;</span>
+<span class="lineNum">     209 </span>                :<span class="lineCov">   44042776 :          eMaj.fsx = eMaj.fx0 + (GLfixed) (eMaj.adjy * dxdy);</span>
+<span class="lineNum">     210 </span>                :            :       }
+<span class="lineNum">     211 </span>                :            :       else {
+<span class="lineNum">     212 </span>                :            :          return;  /*CULLED*/
+<span class="lineNum">     213 </span>                :            :       }
+<span class="lineNum">     214 </span>                :            : 
+<span class="lineNum">     215 </span>                :<span class="lineCov">   44042776 :       eTop.fsy = FixedCeil(vMid_fy);</span>
+<span class="lineNum">     216 </span>                :<span class="lineCov">   44042776 :       eTop.lines = FixedToInt(vMax_fy + FIXED_ONE - FIXED_EPSILON - eTop.fsy);</span>
+<span class="lineNum">     217 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :       if (eTop.lines &gt; 0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 37745465 times"> + </span><span class="branchCov" title="Branch 13 was taken 6297311 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     218 </span>                :<span class="lineCov">   37745465 :          GLfloat dxdy = eTop.dx / eTop.dy;</span>
+<span class="lineNum">     219 </span>                :<span class="lineCov">   37745465 :          eTop.fdxdy = SignedFloatToFixed(dxdy);</span>
+<span class="lineNum">     220 </span>                :<span class="lineCov">   37745465 :          eTop.adjy = (GLfloat) (eTop.fsy - vMid_fy); /* SCALED! */</span>
+<span class="lineNum">     221 </span>                :<span class="lineCov">   37745465 :          eTop.fx0 = vMid_fx;</span>
+<span class="lineNum">     222 </span>                :<span class="lineCov">   37745465 :          eTop.fsx = eTop.fx0 + (GLfixed) (eTop.adjy * dxdy);</span>
+<span class="lineNum">     223 </span>                :            :       }
+<span class="lineNum">     224 </span>                :            : 
+<span class="lineNum">     225 </span>                :<span class="lineCov">   44042776 :       eBot.fsy = FixedCeil(vMin_fy);</span>
+<span class="lineNum">     226 </span>                :<span class="lineCov">   44042776 :       eBot.lines = FixedToInt(vMid_fy + FIXED_ONE - FIXED_EPSILON - eBot.fsy);</span>
+<span class="lineNum">     227 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :       if (eBot.lines &gt; 0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 37705777 times"> + </span><span class="branchCov" title="Branch 13 was taken 6336999 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     228 </span>                :<span class="lineCov">   37705777 :          GLfloat dxdy = eBot.dx / eBot.dy;</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">   37705777 :          eBot.fdxdy = SignedFloatToFixed(dxdy);</span>
+<span class="lineNum">     230 </span>                :<span class="lineCov">   37705777 :          eBot.adjy = (GLfloat) (eBot.fsy - vMin_fy);  /* SCALED! */</span>
+<span class="lineNum">     231 </span>                :<span class="lineCov">   37705777 :          eBot.fx0 = vMin_fx;</span>
+<span class="lineNum">     232 </span>                :<span class="lineCov">   37705777 :          eBot.fsx = eBot.fx0 + (GLfixed) (eBot.adjy * dxdy);</span>
+<span class="lineNum">     233 </span>                :            :       }
+<span class="lineNum">     234 </span>                :            :    }
+<span class="lineNum">     235 </span>                :            : 
+<span class="lineNum">     236 </span>                :            :    /*
+<span class="lineNum">     237 </span>                :            :     * Conceptually, we view a triangle as two subtriangles
+<span class="lineNum">     238 </span>                :            :     * separated by a perfectly horizontal line.  The edge that is
+<span class="lineNum">     239 </span>                :            :     * intersected by this line is one with maximal absolute dy; we
+<span class="lineNum">     240 </span>                :            :     * call it a ``major'' edge.  The other two edges are the
+<span class="lineNum">     241 </span>                :            :     * ``top'' edge (for the upper subtriangle) and the ``bottom''
+<span class="lineNum">     242 </span>                :            :     * edge (for the lower subtriangle).  If either of these two
+<span class="lineNum">     243 </span>                :            :     * edges is horizontal or very close to horizontal, the
+<span class="lineNum">     244 </span>                :            :     * corresponding subtriangle might cover zero sample points;
+<span class="lineNum">     245 </span>                :            :     * we take care to handle such cases, for performance as well
+<span class="lineNum">     246 </span>                :            :     * as correctness.
+<span class="lineNum">     247 </span>                :            :     *
+<span class="lineNum">     248 </span>                :            :     * By stepping rasterization parameters along the major edge,
+<span class="lineNum">     249 </span>                :            :     * we can avoid recomputing them at the discontinuity where
+<span class="lineNum">     250 </span>                :            :     * the top and bottom edges meet.  However, this forces us to
+<span class="lineNum">     251 </span>                :            :     * be able to scan both left-to-right and right-to-left. 
+<span class="lineNum">     252 </span>                :            :     * Also, we must determine whether the major edge is at the
+<span class="lineNum">     253 </span>                :            :     * left or right side of the triangle.  We do this by
+<span class="lineNum">     254 </span>                :            :     * computing the magnitude of the cross-product of the major
+<span class="lineNum">     255 </span>                :            :     * and top edges.  Since this magnitude depends on the sine of
+<span class="lineNum">     256 </span>                :            :     * the angle between the two edges, its sign tells us whether
+<span class="lineNum">     257 </span>                :            :     * we turn to the left or to the right when travelling along
+<span class="lineNum">     258 </span>                :            :     * the major edge to the top edge, and from this we infer
+<span class="lineNum">     259 </span>                :            :     * whether the major edge is on the left or the right.
+<span class="lineNum">     260 </span>                :            :     *
+<span class="lineNum">     261 </span>                :            :     * Serendipitously, this cross-product magnitude is also a
+<span class="lineNum">     262 </span>                :            :     * value we need to compute the iteration parameter
+<span class="lineNum">     263 </span>                :            :     * derivatives for the triangle, and it can be used to perform
+<span class="lineNum">     264 </span>                :            :     * backface culling because its sign tells us whether the
+<span class="lineNum">     265 </span>                :            :     * triangle is clockwise or counterclockwise.  In this code we
+<span class="lineNum">     266 </span>                :            :     * refer to it as ``area'' because it's also proportional to
+<span class="lineNum">     267 </span>                :            :     * the pixel area of the triangle.
+<span class="lineNum">     268 </span>                :            :     */
+<span class="lineNum">     269 </span>                :            : 
+<span class="lineNum">     270 </span>                :            :    {
+<span class="lineNum">     271 </span>                :            :       GLint ltor;               /* true if scanning left-to-right */
+<span class="lineNum">     272 </span>                :            : #if INTERP_Z
+<span class="lineNum">     273 </span>                :            :       GLfloat dzdx, dzdy;      GLfixed fdzdx;
+<span class="lineNum">     274 </span>                :            : #endif
+<span class="lineNum">     275 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     276 </span>                :            :       GLfloat drdx, drdy;      GLfixed fdrdx;
+<span class="lineNum">     277 </span>                :            :       GLfloat dgdx, dgdy;      GLfixed fdgdx;
+<span class="lineNum">     278 </span>                :            :       GLfloat dbdx, dbdy;      GLfixed fdbdx;
+<span class="lineNum">     279 </span>                :            : #endif
+<span class="lineNum">     280 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     281 </span>                :            :       GLfloat dadx, dady;      GLfixed fdadx;
+<span class="lineNum">     282 </span>                :            : #endif
+<span class="lineNum">     283 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     284 </span>                :            :       GLfloat didx, didy;      GLfixed fdidx;
+<span class="lineNum">     285 </span>                :            : #endif
+<span class="lineNum">     286 </span>                :            : #if INTERP_ST
+<span class="lineNum">     287 </span>                :            :       GLfloat dsdx, dsdy;      GLfixed fdsdx;
+<span class="lineNum">     288 </span>                :            :       GLfloat dtdx, dtdy;      GLfixed fdtdx;
+<span class="lineNum">     289 </span>                :            : #endif
+<span class="lineNum">     290 </span>                :            : #if INTERP_STW
+<span class="lineNum">     291 </span>                :            :       GLfloat dsdx, dsdy;
+<span class="lineNum">     292 </span>                :            :       GLfloat dtdx, dtdy;
+<span class="lineNum">     293 </span>                :            :       GLfloat dwdx, dwdy;
+<span class="lineNum">     294 </span>                :            : #endif
+<span class="lineNum">     295 </span>                :            : #if INTERP_UV
+<span class="lineNum">     296 </span>                :            :       GLfloat dudx, dudy;
+<span class="lineNum">     297 </span>                :            :       GLfloat dvdx, dvdy;
+<span class="lineNum">     298 </span>                :            : #endif
+<span class="lineNum">     299 </span>                :            : 
+<span class="lineNum">     300 </span>                :            :       /*
+<span class="lineNum">     301 </span>                :            :        * Execute user-supplied setup code
+<span class="lineNum">     302 </span>                :            :        */
+<span class="lineNum">     303 </span>                :            : #ifdef SETUP_CODE
+<span class="lineNum">     304 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">   44042776 :       SETUP_CODE</span>
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 6 was not taken"> - </span><span class="branchCov" title="Branch 7 was taken 44042776 times"> + </span>][<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>][<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">     305 </span>                :            : #endif
+<span class="lineNum">     306 </span>                :            : 
+<span class="lineNum">     307 </span>                :<span class="lineCov">   44042776 :       ltor = (oneOverArea &lt; 0.0F);</span>
+<span class="lineNum">     308 </span>                :            : 
+<span class="lineNum">     309 </span>                :            :       /* compute d?/dx and d?/dy derivatives */
+<span class="lineNum">     310 </span>                :            : #if INTERP_Z
+<span class="lineNum">     311 </span>                :            :       {
+<span class="lineNum">     312 </span>                :            :          GLfloat eMaj_dz, eBot_dz;
+<span class="lineNum">     313 </span>                :<span class="lineCov">   44042776 :          eMaj_dz = VB-&gt;Win[vMax][2] - VB-&gt;Win[vMin][2];</span>
+<span class="lineNum">     314 </span>                :<span class="lineCov">   44042776 :          eBot_dz = VB-&gt;Win[vMid][2] - VB-&gt;Win[vMin][2];</span>
+<span class="lineNum">     315 </span>                :<span class="lineCov">   44042776 :          dzdx = oneOverArea * (eMaj_dz * eBot.dy - eMaj.dy * eBot_dz);</span>
+<span class="lineNum">     316 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :          if (dzdx&gt;DEPTH_SCALE || dzdx&lt;-DEPTH_SCALE) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 19 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 20 was taken 44042776 times"> + </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span>][<span class="branchNoCov" title="Branch 22 was not taken"> - </span><span class="branchCov" title="Branch 23 was taken 44042776 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>][<span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span>]
+<span class="lineNum">     317 </span>                :            :             /* probably a sliver triangle */
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :             dzdx = 0.0;</span>
+<span class="lineNum">     319 </span>                :<span class="lineNoCov">          0 :             dzdy = 0.0;</span>
+<span class="lineNum">     320 </span>                :            :          }
+<span class="lineNum">     321 </span>                :            :          else {
+<span class="lineNum">     322 </span>                :<span class="lineCov">   44042776 :             dzdy = oneOverArea * (eMaj.dx * eBot_dz - eMaj_dz * eBot.dx);</span>
+<span class="lineNum">     323 </span>                :            :          }
+<span class="lineNum">     324 </span>                :            : #if DEPTH_BITS==16
+<span class="lineNum">     325 </span>                :<span class="lineCov">   44042776 :          fdzdx = SignedFloatToFixed(dzdx);</span>
+<span class="lineNum">     326 </span>                :            : #else
+<span class="lineNum">     327 </span>                :            :          fdzdx = (GLint) dzdx;
+<span class="lineNum">     328 </span>                :            : #endif
+<span class="lineNum">     329 </span>                :            :       }
+<span class="lineNum">     330 </span>                :            : #endif
+<span class="lineNum">     331 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     332 </span>                :            :       {
+<span class="lineNum">     333 </span>                :            :          GLfloat eMaj_dr, eBot_dr;
+<span class="lineNum">     334 </span>                :<span class="lineCov">   44042776 :          eMaj_dr = (GLint) VB-&gt;Color[vMax][0] - (GLint) VB-&gt;Color[vMin][0];</span>
+<span class="lineNum">     335 </span>                :<span class="lineCov">   44042776 :          eBot_dr = (GLint) VB-&gt;Color[vMid][0] - (GLint) VB-&gt;Color[vMin][0];</span>
+<span class="lineNum">     336 </span>                :<span class="lineCov">   44042776 :          drdx = oneOverArea * (eMaj_dr * eBot.dy - eMaj.dy * eBot_dr);</span>
+<span class="lineNum">     337 </span>                :<span class="lineCov">   44042776 :          fdrdx = SignedFloatToFixed(drdx);</span>
+<span class="lineNum">     338 </span>                :<span class="lineCov">   44042776 :          drdy = oneOverArea * (eMaj.dx * eBot_dr - eMaj_dr * eBot.dx);</span>
+<span class="lineNum">     339 </span>                :            :       }
+<span class="lineNum">     340 </span>                :            :       {
+<span class="lineNum">     341 </span>                :            :          GLfloat eMaj_dg, eBot_dg;
+<span class="lineNum">     342 </span>                :<span class="lineCov">   44042776 :          eMaj_dg = (GLint) VB-&gt;Color[vMax][1] - (GLint) VB-&gt;Color[vMin][1];</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">   44042776 :          eBot_dg = (GLint) VB-&gt;Color[vMid][1] - (GLint) VB-&gt;Color[vMin][1];</span>
+<span class="lineNum">     344 </span>                :<span class="lineCov">   44042776 :          dgdx = oneOverArea * (eMaj_dg * eBot.dy - eMaj.dy * eBot_dg);</span>
+<span class="lineNum">     345 </span>                :<span class="lineCov">   44042776 :          fdgdx = SignedFloatToFixed(dgdx);</span>
+<span class="lineNum">     346 </span>                :<span class="lineCov">   44042776 :          dgdy = oneOverArea * (eMaj.dx * eBot_dg - eMaj_dg * eBot.dx);</span>
+<span class="lineNum">     347 </span>                :            :       }
+<span class="lineNum">     348 </span>                :            :       {
+<span class="lineNum">     349 </span>                :            :          GLfloat eMaj_db, eBot_db;
+<span class="lineNum">     350 </span>                :<span class="lineCov">   44042776 :          eMaj_db = (GLint) VB-&gt;Color[vMax][2] - (GLint) VB-&gt;Color[vMin][2];</span>
+<span class="lineNum">     351 </span>                :<span class="lineCov">   44042776 :          eBot_db = (GLint) VB-&gt;Color[vMid][2] - (GLint) VB-&gt;Color[vMin][2];</span>
+<span class="lineNum">     352 </span>                :<span class="lineCov">   44042776 :          dbdx = oneOverArea * (eMaj_db * eBot.dy - eMaj.dy * eBot_db);</span>
+<span class="lineNum">     353 </span>                :<span class="lineCov">   44042776 :          fdbdx = SignedFloatToFixed(dbdx);</span>
+<span class="lineNum">     354 </span>                :<span class="lineCov">   44042776 :          dbdy = oneOverArea * (eMaj.dx * eBot_db - eMaj_db * eBot.dx);</span>
+<span class="lineNum">     355 </span>                :            :       }
+<span class="lineNum">     356 </span>                :            : #endif
+<span class="lineNum">     357 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     358 </span>                :            :       {
+<span class="lineNum">     359 </span>                :            :          GLfloat eMaj_da, eBot_da;
+<span class="lineNum">     360 </span>                :<span class="lineCov">   44042776 :          eMaj_da = (GLint) VB-&gt;Color[vMax][3] - (GLint) VB-&gt;Color[vMin][3];</span>
+<span class="lineNum">     361 </span>                :<span class="lineCov">   44042776 :          eBot_da = (GLint) VB-&gt;Color[vMid][3] - (GLint) VB-&gt;Color[vMin][3];</span>
+<span class="lineNum">     362 </span>                :<span class="lineCov">   44042776 :          dadx = oneOverArea * (eMaj_da * eBot.dy - eMaj.dy * eBot_da);</span>
+<span class="lineNum">     363 </span>                :<span class="lineCov">   44042776 :          fdadx = SignedFloatToFixed(dadx);</span>
+<span class="lineNum">     364 </span>                :<span class="lineCov">   44042776 :          dady = oneOverArea * (eMaj.dx * eBot_da - eMaj_da * eBot.dx);</span>
+<span class="lineNum">     365 </span>                :            :       }
+<span class="lineNum">     366 </span>                :            : #endif
+<span class="lineNum">     367 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     368 </span>                :            :       {
+<span class="lineNum">     369 </span>                :            :          GLfloat eMaj_di, eBot_di;
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :          eMaj_di = (GLint) VB-&gt;Index[vMax] - (GLint) VB-&gt;Index[vMin];</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :          eBot_di = (GLint) VB-&gt;Index[vMid] - (GLint) VB-&gt;Index[vMin];</span>
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :          didx = oneOverArea * (eMaj_di * eBot.dy - eMaj.dy * eBot_di);</span>
+<span class="lineNum">     373 </span>                :<span class="lineNoCov">          0 :          fdidx = SignedFloatToFixed(didx);</span>
+<span class="lineNum">     374 </span>                :<span class="lineNoCov">          0 :          didy = oneOverArea * (eMaj.dx * eBot_di - eMaj_di * eBot.dx);</span>
+<span class="lineNum">     375 </span>                :            :       }
+<span class="lineNum">     376 </span>                :            : #endif
+<span class="lineNum">     377 </span>                :            : #if INTERP_ST
+<span class="lineNum">     378 </span>                :            :       {
+<span class="lineNum">     379 </span>                :            :          GLfloat eMaj_ds, eBot_ds;
+<span class="lineNum">     380 </span>                :<span class="lineNoCov">          0 :          eMaj_ds = (VB-&gt;TexCoord[vMax][0] - VB-&gt;TexCoord[vMin][0]) * S_SCALE;</span>
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 :          eBot_ds = (VB-&gt;TexCoord[vMid][0] - VB-&gt;TexCoord[vMin][0]) * S_SCALE;</span>
+<span class="lineNum">     382 </span>                :<span class="lineNoCov">          0 :          dsdx = oneOverArea * (eMaj_ds * eBot.dy - eMaj.dy * eBot_ds);</span>
+<span class="lineNum">     383 </span>                :<span class="lineNoCov">          0 :          fdsdx = SignedFloatToFixed(dsdx);</span>
+<span class="lineNum">     384 </span>                :<span class="lineNoCov">          0 :          dsdy = oneOverArea * (eMaj.dx * eBot_ds - eMaj_ds * eBot.dx);</span>
+<span class="lineNum">     385 </span>                :            :       }
+<span class="lineNum">     386 </span>                :            :       {
+<span class="lineNum">     387 </span>                :            :          GLfloat eMaj_dt, eBot_dt;
+<span class="lineNum">     388 </span>                :<span class="lineNoCov">          0 :          eMaj_dt = (VB-&gt;TexCoord[vMax][1] - VB-&gt;TexCoord[vMin][1]) * T_SCALE;</span>
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :          eBot_dt = (VB-&gt;TexCoord[vMid][1] - VB-&gt;TexCoord[vMin][1]) * T_SCALE;</span>
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :          dtdx = oneOverArea * (eMaj_dt * eBot.dy - eMaj.dy * eBot_dt);</span>
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :          fdtdx = SignedFloatToFixed(dtdx);</span>
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :          dtdy = oneOverArea * (eMaj.dx * eBot_dt - eMaj_dt * eBot.dx);</span>
+<span class="lineNum">     393 </span>                :            :       }
+<span class="lineNum">     394 </span>                :            : #endif
+<span class="lineNum">     395 </span>                :            : #if INTERP_STW
+<span class="lineNum">     396 </span>                :            :       {
+<span class="lineNum">     397 </span>                :<span class="lineCov">   44042776 :          GLfloat wMax = 1.0F / VB-&gt;Clip[vMax][3];</span>
+<span class="lineNum">     398 </span>                :<span class="lineCov">   44042776 :          GLfloat wMin = 1.0F / VB-&gt;Clip[vMin][3];</span>
+<span class="lineNum">     399 </span>                :<span class="lineCov">   44042776 :          GLfloat wMid = 1.0F / VB-&gt;Clip[vMid][3];</span>
+<span class="lineNum">     400 </span>                :            :          GLfloat eMaj_dw, eBot_dw;
+<span class="lineNum">     401 </span>                :            :          GLfloat eMaj_ds, eBot_ds;
+<span class="lineNum">     402 </span>                :            :          GLfloat eMaj_dt, eBot_dt;
+<span class="lineNum">     403 </span>                :            : #if INTERP_UV
+<span class="lineNum">     404 </span>                :            :          GLfloat eMaj_du, eBot_du;
+<span class="lineNum">     405 </span>                :            :          GLfloat eMaj_dv, eBot_dv;
+<span class="lineNum">     406 </span>                :            : #endif
+<span class="lineNum">     407 </span>                :<span class="lineCov">   44042776 :          eMaj_dw = wMax - wMin;</span>
+<span class="lineNum">     408 </span>                :<span class="lineCov">   44042776 :          eBot_dw = wMid - wMin;</span>
+<span class="lineNum">     409 </span>                :<span class="lineCov">   44042776 :          dwdx = oneOverArea * (eMaj_dw * eBot.dy - eMaj.dy * eBot_dw);</span>
+<span class="lineNum">     410 </span>                :<span class="lineCov">   44042776 :          dwdy = oneOverArea * (eMaj.dx * eBot_dw - eMaj_dw * eBot.dx);</span>
+<span class="lineNum">     411 </span>                :            : 
+<span class="lineNum">     412 </span>                :<span class="lineCov">   44042776 :          eMaj_ds = VB-&gt;TexCoord[vMax][0]*wMax - VB-&gt;TexCoord[vMin][0]*wMin;</span>
+<span class="lineNum">     413 </span>                :<span class="lineCov">   44042776 :          eBot_ds = VB-&gt;TexCoord[vMid][0]*wMid - VB-&gt;TexCoord[vMin][0]*wMin;</span>
+<span class="lineNum">     414 </span>                :<span class="lineCov">   44042776 :          dsdx = oneOverArea * (eMaj_ds * eBot.dy - eMaj.dy * eBot_ds);</span>
+<span class="lineNum">     415 </span>                :<span class="lineCov">   44042776 :          dsdy = oneOverArea * (eMaj.dx * eBot_ds - eMaj_ds * eBot.dx);</span>
+<span class="lineNum">     416 </span>                :            : 
+<span class="lineNum">     417 </span>                :<span class="lineCov">   44042776 :          eMaj_dt = VB-&gt;TexCoord[vMax][1]*wMax - VB-&gt;TexCoord[vMin][1]*wMin;</span>
+<span class="lineNum">     418 </span>                :<span class="lineCov">   44042776 :          eBot_dt = VB-&gt;TexCoord[vMid][1]*wMid - VB-&gt;TexCoord[vMin][1]*wMin;</span>
+<span class="lineNum">     419 </span>                :<span class="lineCov">   44042776 :          dtdx = oneOverArea * (eMaj_dt * eBot.dy - eMaj.dy * eBot_dt);</span>
+<span class="lineNum">     420 </span>                :<span class="lineCov">   44042776 :          dtdy = oneOverArea * (eMaj.dx * eBot_dt - eMaj_dt * eBot.dx);</span>
+<span class="lineNum">     421 </span>                :            : #if INTERP_UV
+<span class="lineNum">     422 </span>                :<span class="lineCov">   44042776 :          eMaj_du = VB-&gt;TexCoord[vMax][2]*wMax - VB-&gt;TexCoord[vMin][2]*wMin;</span>
+<span class="lineNum">     423 </span>                :<span class="lineCov">   44042776 :          eBot_du = VB-&gt;TexCoord[vMid][2]*wMid - VB-&gt;TexCoord[vMin][2]*wMin;</span>
+<span class="lineNum">     424 </span>                :<span class="lineCov">   44042776 :          dudx = oneOverArea * (eMaj_du * eBot.dy - eMaj.dy * eBot_du);</span>
+<span class="lineNum">     425 </span>                :<span class="lineCov">   44042776 :          dudy = oneOverArea * (eMaj.dx * eBot_du - eMaj_du * eBot.dx);</span>
+<span class="lineNum">     426 </span>                :            : 
+<span class="lineNum">     427 </span>                :            :          /* Note: don't divide V component by W */
+<span class="lineNum">     428 </span>                :<span class="lineCov">   44042776 :          eMaj_dv = VB-&gt;TexCoord[vMax][3] - VB-&gt;TexCoord[vMin][3];</span>
+<span class="lineNum">     429 </span>                :<span class="lineCov">   44042776 :          eBot_dv = VB-&gt;TexCoord[vMid][3] - VB-&gt;TexCoord[vMin][3];</span>
+<span class="lineNum">     430 </span>                :<span class="lineCov">   44042776 :          dvdx = oneOverArea * (eMaj_dv * eBot.dy - eMaj.dy * eBot_dv);</span>
+<span class="lineNum">     431 </span>                :<span class="lineCov">   44042776 :          dvdy = oneOverArea * (eMaj.dx * eBot_dv - eMaj_dv * eBot.dx);</span>
+<span class="lineNum">     432 </span>                :            : #endif
+<span class="lineNum">     433 </span>                :            :       }
+<span class="lineNum">     434 </span>                :            : #endif
+<span class="lineNum">     435 </span>                :            : 
+<span class="lineNum">     436 </span>                :            :       /*
+<span class="lineNum">     437 </span>                :            :        * We always sample at pixel centers.  However, we avoid
+<span class="lineNum">     438 </span>                :            :        * explicit half-pixel offsets in this code by incorporating
+<span class="lineNum">     439 </span>                :            :        * the proper offset in each of x and y during the
+<span class="lineNum">     440 </span>                :            :        * transformation to window coordinates.
+<span class="lineNum">     441 </span>                :            :        *
+<span class="lineNum">     442 </span>                :            :        * We also apply the usual rasterization rules to prevent
+<span class="lineNum">     443 </span>                :            :        * cracks and overlaps.  A pixel is considered inside a
+<span class="lineNum">     444 </span>                :            :        * subtriangle if it meets all of four conditions: it is on or
+<span class="lineNum">     445 </span>                :            :        * to the right of the left edge, strictly to the left of the
+<span class="lineNum">     446 </span>                :            :        * right edge, on or below the top edge, and strictly above
+<span class="lineNum">     447 </span>                :            :        * the bottom edge.  (Some edges may be degenerate.)
+<span class="lineNum">     448 </span>                :            :        *
+<span class="lineNum">     449 </span>                :            :        * The following discussion assumes left-to-right scanning
+<span class="lineNum">     450 </span>                :            :        * (that is, the major edge is on the left); the right-to-left
+<span class="lineNum">     451 </span>                :            :        * case is a straightforward variation.
+<span class="lineNum">     452 </span>                :            :        *
+<span class="lineNum">     453 </span>                :            :        * We start by finding the half-integral y coordinate that is
+<span class="lineNum">     454 </span>                :            :        * at or below the top of the triangle.  This gives us the
+<span class="lineNum">     455 </span>                :            :        * first scan line that could possibly contain pixels that are
+<span class="lineNum">     456 </span>                :            :        * inside the triangle.
+<span class="lineNum">     457 </span>                :            :        *
+<span class="lineNum">     458 </span>                :            :        * Next we creep down the major edge until we reach that y,
+<span class="lineNum">     459 </span>                :            :        * and compute the corresponding x coordinate on the edge. 
+<span class="lineNum">     460 </span>                :            :        * Then we find the half-integral x that lies on or just
+<span class="lineNum">     461 </span>                :            :        * inside the edge.  This is the first pixel that might lie in
+<span class="lineNum">     462 </span>                :            :        * the interior of the triangle.  (We won't know for sure
+<span class="lineNum">     463 </span>                :            :        * until we check the other edges.)
+<span class="lineNum">     464 </span>                :            :        *
+<span class="lineNum">     465 </span>                :            :        * As we rasterize the triangle, we'll step down the major
+<span class="lineNum">     466 </span>                :            :        * edge.  For each step in y, we'll move an integer number
+<span class="lineNum">     467 </span>                :            :        * of steps in x.  There are two possible x step sizes, which
+<span class="lineNum">     468 </span>                :            :        * we'll call the ``inner'' step (guaranteed to land on the
+<span class="lineNum">     469 </span>                :            :        * edge or inside it) and the ``outer'' step (guaranteed to
+<span class="lineNum">     470 </span>                :            :        * land on the edge or outside it).  The inner and outer steps
+<span class="lineNum">     471 </span>                :            :        * differ by one.  During rasterization we maintain an error
+<span class="lineNum">     472 </span>                :            :        * term that indicates our distance from the true edge, and
+<span class="lineNum">     473 </span>                :            :        * select either the inner step or the outer step, whichever
+<span class="lineNum">     474 </span>                :            :        * gets us to the first pixel that falls inside the triangle.
+<span class="lineNum">     475 </span>                :            :        *
+<span class="lineNum">     476 </span>                :            :        * All parameters (z, red, etc.) as well as the buffer
+<span class="lineNum">     477 </span>                :            :        * addresses for color and z have inner and outer step values,
+<span class="lineNum">     478 </span>                :            :        * so that we can increment them appropriately.  This method
+<span class="lineNum">     479 </span>                :            :        * eliminates the need to adjust parameters by creeping a
+<span class="lineNum">     480 </span>                :            :        * sub-pixel amount into the triangle at each scanline.
+<span class="lineNum">     481 </span>                :            :        */
+<span class="lineNum">     482 </span>                :            : 
+<span class="lineNum">     483 </span>                :            :       {
+<span class="lineNum">     484 </span>                :            :          int subTriangle;
+<span class="lineNum">     485 </span>                :            :          GLfixed fx, fxLeftEdge, fxRightEdge, fdxLeftEdge, fdxRightEdge;
+<span class="lineNum">     486 </span>                :            :          GLfixed fdxOuter;
+<span class="lineNum">     487 </span>                :            :          int idxOuter;
+<span class="lineNum">     488 </span>                :            :          float dxOuter;
+<span class="lineNum">     489 </span>                :            :          GLfixed fError, fdError;
+<span class="lineNum">     490 </span>                :            :          float adjx, adjy;
+<span class="lineNum">     491 </span>                :            :          GLfixed fy;
+<span class="lineNum">     492 </span>                :            :          int iy;
+<span class="lineNum">     493 </span>                :            : #ifdef PIXEL_ADDRESS
+<span class="lineNum">     494 </span>                :            :          PIXEL_TYPE *pRow;
+<span class="lineNum">     495 </span>                :            :          int dPRowOuter, dPRowInner;  /* offset in bytes */
+<span class="lineNum">     496 </span>                :            : #endif
+<span class="lineNum">     497 </span>                :            : #if INTERP_Z
+<span class="lineNum">     498 </span>                :            :          GLdepth *zRow;
+<span class="lineNum">     499 </span>                :            :          int dZRowOuter, dZRowInner;  /* offset in bytes */
+<span class="lineNum">     500 </span>                :            :          GLfixed fz, fdzOuter, fdzInner;
+<span class="lineNum">     501 </span>                :            : #endif
+<span class="lineNum">     502 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     503 </span>                :            :          GLfixed fr, fdrOuter, fdrInner;
+<span class="lineNum">     504 </span>                :            :          GLfixed fg, fdgOuter, fdgInner;
+<span class="lineNum">     505 </span>                :            :          GLfixed fb, fdbOuter, fdbInner;
+<span class="lineNum">     506 </span>                :            : #endif
+<span class="lineNum">     507 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     508 </span>                :            :          GLfixed fa, fdaOuter, fdaInner;
+<span class="lineNum">     509 </span>                :            : #endif
+<span class="lineNum">     510 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     511 </span>                :            :          GLfixed fi, fdiOuter, fdiInner;
+<span class="lineNum">     512 </span>                :            : #endif
+<span class="lineNum">     513 </span>                :            : #if INTERP_ST
+<span class="lineNum">     514 </span>                :            :          GLfixed fs, fdsOuter, fdsInner;
+<span class="lineNum">     515 </span>                :            :          GLfixed ft, fdtOuter, fdtInner;
+<span class="lineNum">     516 </span>                :            : #endif
+<span class="lineNum">     517 </span>                :            : #if INTERP_STW
+<span class="lineNum">     518 </span>                :            :          GLfloat sLeft, dsOuter, dsInner;
+<span class="lineNum">     519 </span>                :            :          GLfloat tLeft, dtOuter, dtInner;
+<span class="lineNum">     520 </span>                :            :          GLfloat wLeft, dwOuter, dwInner;
+<span class="lineNum">     521 </span>                :            : #endif
+<span class="lineNum">     522 </span>                :            : #if INTERP_UV
+<span class="lineNum">     523 </span>                :            :          GLfloat uLeft, duOuter, duInner;
+<span class="lineNum">     524 </span>                :            :          GLfloat vLeft, dvOuter, dvInner;
+<span class="lineNum">     525 </span>                :            : #endif
+<span class="lineNum">     526 </span>                :            : 
+<span class="lineNum">     527 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">  132487552 :          for (subTriangle=0; subTriangle&lt;=1; subTriangle++) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 88085552 times"> + </span><span class="branchCov" title="Branch 13 was taken 37745465 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     528 </span>                :            :             EdgeT *eLeft, *eRight;
+<span class="lineNum">     529 </span>                :            :             int setupLeft, setupRight;
+<span class="lineNum">     530 </span>                :            :             int lines;
+<span class="lineNum">     531 </span>                :            : 
+<span class="lineNum">     532 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   88085552 :             if (subTriangle==0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 44042776 times"> + </span><span class="branchCov" title="Branch 13 was taken 44042776 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     533 </span>                :            :                /* bottom half */
+<span class="lineNum">     534 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :                if (ltor) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 22020037 times"> + </span><span class="branchCov" title="Branch 13 was taken 22022739 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     535 </span>                :<span class="lineCov">   22020037 :                   eLeft = &amp;eMaj;</span>
+<span class="lineNum">     536 </span>                :<span class="lineCov">   22020037 :                   eRight = &amp;eBot;</span>
+<span class="lineNum">     537 </span>                :<span class="lineCov">   22020037 :                   lines = eRight-&gt;lines;</span>
+<span class="lineNum">     538 </span>                :<span class="lineCov">   22020037 :                   setupLeft = 1;</span>
+<span class="lineNum">     539 </span>                :<span class="lineCov">   22020037 :                   setupRight = 1;</span>
+<span class="lineNum">     540 </span>                :            :                }
+<span class="lineNum">     541 </span>                :            :                else {
+<span class="lineNum">     542 </span>                :<span class="lineCov">   22022739 :                   eLeft = &amp;eBot;</span>
+<span class="lineNum">     543 </span>                :<span class="lineCov">   22022739 :                   eRight = &amp;eMaj;</span>
+<span class="lineNum">     544 </span>                :<span class="lineCov">   22022739 :                   lines = eLeft-&gt;lines;</span>
+<span class="lineNum">     545 </span>                :<span class="lineCov">   22022739 :                   setupLeft = 1;</span>
+<span class="lineNum">     546 </span>                :<span class="lineCov">   22022739 :                   setupRight = 1;</span>
+<span class="lineNum">     547 </span>                :            :                }
+<span class="lineNum">     548 </span>                :            :             }
+<span class="lineNum">     549 </span>                :            :             else {
+<span class="lineNum">     550 </span>                :            :                /* top half */
+<span class="lineNum">     551 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :                if (ltor) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 22020037 times"> + </span><span class="branchCov" title="Branch 13 was taken 22022739 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     552 </span>                :<span class="lineCov">   22020037 :                   eLeft = &amp;eMaj;</span>
+<span class="lineNum">     553 </span>                :<span class="lineCov">   22020037 :                   eRight = &amp;eTop;</span>
+<span class="lineNum">     554 </span>                :<span class="lineCov">   22020037 :                   lines = eRight-&gt;lines;</span>
+<span class="lineNum">     555 </span>                :<span class="lineCov">   22020037 :                   setupLeft = 0;</span>
+<span class="lineNum">     556 </span>                :<span class="lineCov">   22020037 :                   setupRight = 1;</span>
+<span class="lineNum">     557 </span>                :            :                }
+<span class="lineNum">     558 </span>                :            :                else {
+<span class="lineNum">     559 </span>                :<span class="lineCov">   22022739 :                   eLeft = &amp;eTop;</span>
+<span class="lineNum">     560 </span>                :<span class="lineCov">   22022739 :                   eRight = &amp;eMaj;</span>
+<span class="lineNum">     561 </span>                :<span class="lineCov">   22022739 :                   lines = eLeft-&gt;lines;</span>
+<span class="lineNum">     562 </span>                :<span class="lineCov">   22022739 :                   setupLeft = 1;</span>
+<span class="lineNum">     563 </span>                :<span class="lineCov">   22022739 :                   setupRight = 0;</span>
+<span class="lineNum">     564 </span>                :            :                }
+<span class="lineNum">     565 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   44042776 :                if (lines==0) return;</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 37745465 times"> + </span><span class="branchCov" title="Branch 13 was taken 6297311 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     566 </span>                :            :             }
+<span class="lineNum">     567 </span>                :            : 
+<span class="lineNum">     568 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   81788241 :             if (setupLeft &amp;&amp; eLeft-&gt;lines&gt;0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 19 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 24 was taken 62919102 times"> + </span><span class="branchCov" title="Branch 25 was taken 18869139 times"> + </span>][<span class="branchCov" title="Branch 26 was taken 59746976 times"> + </span><span class="branchCov" title="Branch 27 was taken 3172126 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>][<span class="branchNoExec" title="Branch 30 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span>]
+<span class="lineNum">     569 </span>                :            :                GLint vLower;
+<span class="lineNum">     570 </span>                :<span class="lineCov">   59746976 :                GLfixed fsx = eLeft-&gt;fsx;</span>
+<span class="lineNum">     571 </span>                :<span class="lineCov">   59746976 :                fx = FixedCeil(fsx);</span>
+<span class="lineNum">     572 </span>                :<span class="lineCov">   59746976 :                fError = fx - fsx - FIXED_ONE;</span>
+<span class="lineNum">     573 </span>                :<span class="lineCov">   59746976 :                fxLeftEdge = fsx - FIXED_EPSILON;</span>
+<span class="lineNum">     574 </span>                :<span class="lineCov">   59746976 :                fdxLeftEdge = eLeft-&gt;fdxdy;</span>
+<span class="lineNum">     575 </span>                :<span class="lineCov">   59746976 :                fdxOuter = FixedFloor(fdxLeftEdge - FIXED_EPSILON);</span>
+<span class="lineNum">     576 </span>                :<span class="lineCov">   59746976 :                fdError = fdxOuter - fdxLeftEdge + FIXED_ONE;</span>
+<span class="lineNum">     577 </span>                :<span class="lineCov">   59746976 :                idxOuter = FixedToInt(fdxOuter);</span>
+<span class="lineNum">     578 </span>                :<span class="lineCov">   59746976 :                dxOuter = (float) idxOuter;</span>
+<span class="lineNum">     579 </span>                :            : 
+<span class="lineNum">     580 </span>                :<span class="lineCov">   59746976 :                fy = eLeft-&gt;fsy;</span>
+<span class="lineNum">     581 </span>                :<span class="lineCov">   59746976 :                iy = FixedToInt(fy);</span>
+<span class="lineNum">     582 </span>                :            : 
+<span class="lineNum">     583 </span>                :<span class="lineCov">   59746976 :                adjx = (float)(fx - eLeft-&gt;fx0);  /* SCALED! */</span>
+<span class="lineNum">     584 </span>                :<span class="lineCov">   59746976 :                adjy = eLeft-&gt;adjy;            /* SCALED! */</span>
+<span class="lineNum">     585 </span>                :            : 
+<span class="lineNum">     586 </span>                :<span class="lineCov">   59746976 :                vLower = eLeft-&gt;v0;</span>
+<span class="lineNum">     587 </span>                :            : 
+<span class="lineNum">     588 </span>                :            : #ifdef PIXEL_ADDRESS
+<span class="lineNum">     589 </span>                :            :                {
+<span class="lineNum">     590 </span>                :            :                   pRow = PIXEL_ADDRESS( FixedToInt(fxLeftEdge), iy );
+<span class="lineNum">     591 </span>                :            :                   dPRowOuter = -BYTES_PER_ROW + idxOuter * sizeof(PIXEL_TYPE);
+<span class="lineNum">     592 </span>                :            :                   /* negative because Y=0 at bottom and increases upward */
+<span class="lineNum">     593 </span>                :            :                }
+<span class="lineNum">     594 </span>                :            : #endif
+<span class="lineNum">     595 </span>                :            :                /*
+<span class="lineNum">     596 </span>                :            :                 * Now we need the set of parameter (z, color, etc.) values at
+<span class="lineNum">     597 </span>                :            :                 * the point (fx, fy).  This gives us properly-sampled parameter
+<span class="lineNum">     598 </span>                :            :                 * values that we can step from pixel to pixel.  Furthermore,
+<span class="lineNum">     599 </span>                :            :                 * although we might have intermediate results that overflow
+<span class="lineNum">     600 </span>                :            :                 * the normal parameter range when we step temporarily outside
+<span class="lineNum">     601 </span>                :            :                 * the triangle, we shouldn't overflow or underflow for any
+<span class="lineNum">     602 </span>                :            :                 * pixel that's actually inside the triangle.
+<span class="lineNum">     603 </span>                :            :                 */
+<span class="lineNum">     604 </span>                :            : 
+<span class="lineNum">     605 </span>                :            : #if INTERP_Z
+<span class="lineNum">     606 </span>                :            :                {
+<span class="lineNum">     607 </span>                :            :                   GLfloat z0, tmp;
+<span class="lineNum">     608 </span>                :<span class="lineCov">   59746976 :                   z0 = VB-&gt;Win[vLower][2] + ctx-&gt;PolygonZoffset;</span>
+<span class="lineNum">     609 </span>                :            : #if DEPTH_BITS==16
+<span class="lineNum">     610 </span>                :            :                   /* interpolate fixed-pt values */
+<span class="lineNum">     611 </span>                :<span class="lineCov">   59746976 :                   tmp = (z0 * FIXED_SCALE + dzdx * adjx + dzdy * adjy) + FIXED_HALF;</span>
+<span class="lineNum">     612 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   59746976 :                   if (tmp &lt; MAX_GLUINT/2)</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchCov" title="Branch 10 was taken 59746976 times"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">     613 </span>                :<span class="lineCov">   59746976 :                      fz = (GLfixed) tmp;</span>
+<span class="lineNum">     614 </span>                :            :                   else
+<span class="lineNum">     615 </span>                :<span class="lineNoCov">          0 :                      fz = MAX_GLUINT/2;</span>
+<span class="lineNum">     616 </span>                :<span class="lineCov">   59746976 :                   fdzOuter = SignedFloatToFixed(dzdy + dxOuter * dzdx);</span>
+<span class="lineNum">     617 </span>                :            : #else
+<span class="lineNum">     618 </span>                :            :                   /* interpolate depth values exactly */
+<span class="lineNum">     619 </span>                :            :                   fz = (GLint) (z0 + dzdx*FixedToFloat(adjx) + dzdy*FixedToFloat(adjy));
+<span class="lineNum">     620 </span>                :            :                   fdzOuter = (GLint) (dzdy + dxOuter * dzdx);
+<span class="lineNum">     621 </span>                :            : #endif
+<span class="lineNum">     622 </span>                :<span class="lineCov">   59746976 :                   zRow = Z_ADDRESS( ctx, FixedToInt(fxLeftEdge), iy );</span>
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :                   dZRowOuter = (ctx-&gt;Buffer-&gt;Width + idxOuter) * sizeof(GLdepth);</span>
+<span class="lineNum">     624 </span>                :            :                }
+<span class="lineNum">     625 </span>                :            : #endif
+<span class="lineNum">     626 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     627 </span>                :<span class="lineCov">   59746976 :                fr = (GLfixed)(IntToFixed(VB-&gt;Color[vLower][0]) + drdx * adjx + drdy * adjy)</span>
+<span class="lineNum">     628 </span>                :            :                     + FIXED_HALF;
+<span class="lineNum">     629 </span>                :<span class="lineCov">   59746976 :                fdrOuter = SignedFloatToFixed(drdy + dxOuter * drdx);</span>
+<span class="lineNum">     630 </span>                :            : 
+<span class="lineNum">     631 </span>                :<span class="lineCov">   59746976 :                fg = (GLfixed)(IntToFixed(VB-&gt;Color[vLower][1]) + dgdx * adjx + dgdy * adjy)</span>
+<span class="lineNum">     632 </span>                :            :                     + FIXED_HALF;
+<span class="lineNum">     633 </span>                :<span class="lineCov">   59746976 :                fdgOuter = SignedFloatToFixed(dgdy + dxOuter * dgdx);</span>
+<span class="lineNum">     634 </span>                :            : 
+<span class="lineNum">     635 </span>                :<span class="lineCov">   59746976 :                fb = (GLfixed)(IntToFixed(VB-&gt;Color[vLower][2]) + dbdx * adjx + dbdy * adjy)</span>
+<span class="lineNum">     636 </span>                :            :                     + FIXED_HALF;
+<span class="lineNum">     637 </span>                :<span class="lineCov">   59746976 :                fdbOuter = SignedFloatToFixed(dbdy + dxOuter * dbdx);</span>
+<span class="lineNum">     638 </span>                :            : #endif
+<span class="lineNum">     639 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     640 </span>                :<span class="lineCov">   59746976 :                fa = (GLfixed)(IntToFixed(VB-&gt;Color[vLower][3]) + dadx * adjx + dady * adjy)</span>
+<span class="lineNum">     641 </span>                :            :                     + FIXED_HALF;
+<span class="lineNum">     642 </span>                :<span class="lineNoCov">          0 :                fdaOuter = SignedFloatToFixed(dady + dxOuter * dadx);</span>
+<span class="lineNum">     643 </span>                :            : #endif
+<span class="lineNum">     644 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :                fi = (GLfixed)(VB-&gt;Index[vLower] * FIXED_SCALE + didx * adjx</span>
+<span class="lineNum">     646 </span>                :<span class="lineNoCov">          0 :                               + didy * adjy) + FIXED_HALF;</span>
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 :                fdiOuter = SignedFloatToFixed(didy + dxOuter * didx);</span>
+<span class="lineNum">     648 </span>                :            : #endif
+<span class="lineNum">     649 </span>                :            : #if INTERP_ST
+<span class="lineNum">     650 </span>                :            :                {
+<span class="lineNum">     651 </span>                :            :                   GLfloat s0, t0;
+<span class="lineNum">     652 </span>                :<span class="lineNoCov">          0 :                   s0 = VB-&gt;TexCoord[vLower][0] * S_SCALE;</span>
+<span class="lineNum">     653 </span>                :<span class="lineNoCov">          0 :                   fs = (GLfixed)(s0 * FIXED_SCALE + dsdx * adjx + dsdy * adjy) + FIXED_HALF;</span>
+<span class="lineNum">     654 </span>                :<span class="lineNoCov">          0 :                   fdsOuter = SignedFloatToFixed(dsdy + dxOuter * dsdx);</span>
+<span class="lineNum">     655 </span>                :<span class="lineNoCov">          0 :                   t0 = VB-&gt;TexCoord[vLower][1] * T_SCALE;</span>
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :                   ft = (GLfixed)(t0 * FIXED_SCALE + dtdx * adjx + dtdy * adjy) + FIXED_HALF;</span>
+<span class="lineNum">     657 </span>                :<span class="lineNoCov">          0 :                   fdtOuter = SignedFloatToFixed(dtdy + dxOuter * dtdx);</span>
+<span class="lineNum">     658 </span>                :            :                }
+<span class="lineNum">     659 </span>                :            : #endif
+<span class="lineNum">     660 </span>                :            : #if INTERP_STW
+<span class="lineNum">     661 </span>                :            :                {
+<span class="lineNum">     662 </span>                :<span class="lineCov">   59746976 :                   GLfloat w0 = 1.0F / VB-&gt;Clip[vLower][3];</span>
+<span class="lineNum">     663 </span>                :            :                   GLfloat s0, t0, u0, v0;
+<span class="lineNum">     664 </span>                :<span class="lineCov">   59746976 :                   wLeft = w0 + (dwdx * adjx + dwdy * adjy) * (1.0F/FIXED_SCALE);</span>
+<span class="lineNum">     665 </span>                :<span class="lineCov">   59746976 :                   dwOuter = dwdy + dxOuter * dwdx;</span>
+<span class="lineNum">     666 </span>                :<span class="lineCov">   59746976 :                   s0 = VB-&gt;TexCoord[vLower][0] * w0;</span>
+<span class="lineNum">     667 </span>                :<span class="lineCov">   59746976 :                   sLeft = s0 + (dsdx * adjx + dsdy * adjy) * (1.0F/FIXED_SCALE);</span>
+<span class="lineNum">     668 </span>                :<span class="lineCov">   59746976 :                   dsOuter = dsdy + dxOuter * dsdx;</span>
+<span class="lineNum">     669 </span>                :<span class="lineCov">   59746976 :                   t0 = VB-&gt;TexCoord[vLower][1] * w0;</span>
+<span class="lineNum">     670 </span>                :<span class="lineCov">   59746976 :                   tLeft = t0 + (dtdx * adjx + dtdy * adjy) * (1.0F/FIXED_SCALE);</span>
+<span class="lineNum">     671 </span>                :<span class="lineCov">   59746976 :                   dtOuter = dtdy + dxOuter * dtdx;</span>
+<span class="lineNum">     672 </span>                :            : #if INTERP_UV
+<span class="lineNum">     673 </span>                :<span class="lineCov">   59746976 :                   u0 = VB-&gt;TexCoord[vLower][2] * w0;</span>
+<span class="lineNum">     674 </span>                :<span class="lineCov">   59746976 :                   uLeft = u0 + (dudx * adjx + dudy * adjy) * (1.0F/FIXED_SCALE);</span>
+<span class="lineNum">     675 </span>                :<span class="lineCov">   59746976 :                   duOuter = dudy + dxOuter * dudx;</span>
+<span class="lineNum">     676 </span>                :            :                   /* Note: don't divide V component by W */
+<span class="lineNum">     677 </span>                :<span class="lineCov">   59746976 :                   v0 = VB-&gt;TexCoord[vLower][3];</span>
+<span class="lineNum">     678 </span>                :<span class="lineCov">   59746976 :                   vLeft = v0 + (dvdx * adjx + dvdy * adjy) * (1.0F/FIXED_SCALE);</span>
+<span class="lineNum">     679 </span>                :<span class="lineCov">   59746976 :                   dvOuter = dvdy + dxOuter * dvdx;</span>
+<span class="lineNum">     680 </span>                :            : #endif
+<span class="lineNum">     681 </span>                :            :                }
+<span class="lineNum">     682 </span>                :            : #endif
+<span class="lineNum">     683 </span>                :            : 
+<span class="lineNum">     684 </span>                :            :             } /*if setupLeft*/
+<span class="lineNum">     685 </span>                :            : 
+<span class="lineNum">     686 </span>                :            : 
+<span class="lineNum">     687 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   81788241 :             if (setupRight &amp;&amp; eRight-&gt;lines&gt;0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span>][<span class="branchNoExec" title="Branch 18 was not executed"> # </span><span class="branchNoExec" title="Branch 19 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 24 was taken 62911915 times"> + </span><span class="branchCov" title="Branch 25 was taken 18876326 times"> + </span>][<span class="branchCov" title="Branch 26 was taken 59747042 times"> + </span><span class="branchCov" title="Branch 27 was taken 3164873 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 28 was not executed"> # </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span>][<span class="branchNoExec" title="Branch 30 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span>]
+<span class="lineNum">     688 </span>                :<span class="lineCov">   59747042 :                fxRightEdge = eRight-&gt;fsx - FIXED_EPSILON;</span>
+<span class="lineNum">     689 </span>                :<span class="lineCov">   59747042 :                fdxRightEdge = eRight-&gt;fdxdy;</span>
+<span class="lineNum">     690 </span>                :            :             }
+<span class="lineNum">     691 </span>                :            : 
+<span class="lineNum">     692 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">   81788241 :             if (lines==0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 6336999 times"> + </span><span class="branchCov" title="Branch 13 was taken 75451242 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     693 </span>                :<span class="lineCov">    6336999 :                continue;</span>
+<span class="lineNum">     694 </span>                :            :             }
+<span class="lineNum">     695 </span>                :            : 
+<span class="lineNum">     696 </span>                :            : 
+<span class="lineNum">     697 </span>                :            :             /* Rasterize setup */
+<span class="lineNum">     698 </span>                :            : #ifdef PIXEL_ADDRESS
+<span class="lineNum">     699 </span>                :            :             dPRowInner = dPRowOuter + sizeof(PIXEL_TYPE);
+<span class="lineNum">     700 </span>                :            : #endif
+<span class="lineNum">     701 </span>                :            : #if INTERP_Z
+<span class="lineNum">     702 </span>                :<span class="lineCov">   75451242 :             dZRowInner = dZRowOuter + sizeof(GLdepth);</span>
+<span class="lineNum">     703 </span>                :<span class="lineCov">   75451242 :             fdzInner = fdzOuter + fdzdx;</span>
+<span class="lineNum">     704 </span>                :            : #endif
+<span class="lineNum">     705 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     706 </span>                :<span class="lineCov">   75451242 :             fdrInner = fdrOuter + fdrdx;</span>
+<span class="lineNum">     707 </span>                :<span class="lineCov">   75451242 :             fdgInner = fdgOuter + fdgdx;</span>
+<span class="lineNum">     708 </span>                :<span class="lineCov">   75451242 :             fdbInner = fdbOuter + fdbdx;</span>
+<span class="lineNum">     709 </span>                :            : #endif
+<span class="lineNum">     710 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     711 </span>                :<span class="lineCov">   75451242 :             fdaInner = fdaOuter + fdadx;</span>
+<span class="lineNum">     712 </span>                :            : #endif
+<span class="lineNum">     713 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     714 </span>                :<span class="lineNoCov">          0 :             fdiInner = fdiOuter + fdidx;</span>
+<span class="lineNum">     715 </span>                :            : #endif
+<span class="lineNum">     716 </span>                :            : #if INTERP_ST
+<span class="lineNum">     717 </span>                :<span class="lineNoCov">          0 :             fdsInner = fdsOuter + fdsdx;</span>
+<span class="lineNum">     718 </span>                :<span class="lineNoCov">          0 :             fdtInner = fdtOuter + fdtdx;</span>
+<span class="lineNum">     719 </span>                :            : #endif
+<span class="lineNum">     720 </span>                :            : #if INTERP_STW
+<span class="lineNum">     721 </span>                :<span class="lineCov">   75451242 :             dwInner = dwOuter + dwdx;</span>
+<span class="lineNum">     722 </span>                :<span class="lineCov">   75451242 :             dsInner = dsOuter + dsdx;</span>
+<span class="lineNum">     723 </span>                :<span class="lineCov">   75451242 :             dtInner = dtOuter + dtdx;</span>
+<span class="lineNum">     724 </span>                :            : #if INTERP_UV
+<span class="lineNum">     725 </span>                :<span class="lineCov">   75451242 :             duInner = duOuter + dudx;</span>
+<span class="lineNum">     726 </span>                :<span class="lineCov">   75451242 :             dvInner = dvOuter + dvdx;</span>
+<span class="lineNum">     727 </span>                :            : #endif
+<span class="lineNum">     728 </span>                :            : #endif
+<span class="lineNum">     729 </span>                :            : 
+<span class="lineNum">     730 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">  257142069 :             while (lines&gt;0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 181690827 times"> + </span><span class="branchCov" title="Branch 13 was taken 75451242 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     731 </span>                :            :                /* initialize the span interpolants to the leftmost value */
+<span class="lineNum">     732 </span>                :            :                /* ff = fixed-pt fragment */
+<span class="lineNum">     733 </span>                :            : #if INTERP_Z
+<span class="lineNum">     734 </span>                :<span class="lineCov">  181690827 :                GLfixed ffz = fz;</span>
+<span class="lineNum">     735 </span>                :            :                /*GLdepth *zp = zRow;*/
+<span class="lineNum">     736 </span>                :            : #endif
+<span class="lineNum">     737 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     738 </span>                :<span class="lineCov">  181690827 :                GLfixed ffr = fr,  ffg = fg,  ffb = fb;</span>
+<span class="lineNum">     739 </span>                :            : #endif
+<span class="lineNum">     740 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     741 </span>                :<span class="lineCov">  181690827 :                GLfixed ffa = fa;</span>
+<span class="lineNum">     742 </span>                :            : #endif
+<span class="lineNum">     743 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     744 </span>                :<span class="lineNoCov">          0 :                GLfixed ffi = fi;</span>
+<span class="lineNum">     745 </span>                :            : #endif
+<span class="lineNum">     746 </span>                :            : #if INTERP_ST
+<span class="lineNum">     747 </span>                :<span class="lineNoCov">          0 :                GLfixed ffs = fs,  fft = ft;</span>
+<span class="lineNum">     748 </span>                :            : #endif
+<span class="lineNum">     749 </span>                :            : #if INTERP_STW
+<span class="lineNum">     750 </span>                :<span class="lineCov">  181690827 :                GLfloat ss = sLeft,  tt = tLeft,  ww = wLeft;</span>
+<span class="lineNum">     751 </span>                :            : #endif
+<span class="lineNum">     752 </span>                :            : #if INTERP_UV
+<span class="lineNum">     753 </span>                :<span class="lineCov">  181690827 :                GLfloat uu = uLeft,  vv = vLeft;</span>
+<span class="lineNum">     754 </span>                :            : #endif
+<span class="lineNum">     755 </span>                :<span class="lineCov">  181690827 :                GLint left = FixedToInt(fxLeftEdge);</span>
+<span class="lineNum">     756 </span>                :<span class="lineCov">  181690827 :                GLint right = FixedToInt(fxRightEdge);</span>
+<span class="lineNum">     757 </span>                :            : 
+<span class="lineNum">     758 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     759 </span>                :            :                {
+<span class="lineNum">     760 </span>                :            :                   /* need this to accomodate round-off errors */
+<span class="lineNum">     761 </span>                :<span class="lineCov">  181690827 :                   GLfixed ffrend = ffr+(right-left-1)*fdrdx;</span>
+<span class="lineNum">     762 </span>                :<span class="lineCov">  181690827 :                   GLfixed ffgend = ffg+(right-left-1)*fdgdx;</span>
+<span class="lineNum">     763 </span>                :<span class="lineCov">  181690827 :                   GLfixed ffbend = ffb+(right-left-1)*fdbdx;</span>
+<span class="lineNum">     764 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 36482 times"> + </span><span class="branchCov" title="Branch 3 was taken 181654345 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffrend&lt;0) ffr -= ffrend;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     765 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 32141 times"> + </span><span class="branchCov" title="Branch 3 was taken 181658686 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffgend&lt;0) ffg -= ffgend;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     766 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 38118 times"> + </span><span class="branchCov" title="Branch 3 was taken 181652709 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffbend&lt;0) ffb -= ffbend;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     767 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 36614 times"> + </span><span class="branchCov" title="Branch 3 was taken 181654213 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffr&lt;0) ffr = 0;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     768 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 32292 times"> + </span><span class="branchCov" title="Branch 3 was taken 181658535 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffg&lt;0) ffg = 0;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     769 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchCov" title="Branch 2 was taken 38242 times"> + </span><span class="branchCov" title="Branch 3 was taken 181652585 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffb&lt;0) ffb = 0;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     770 </span>                :            :                }
+<span class="lineNum">     771 </span>                :            : #endif
+<span class="lineNum">     772 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     773 </span>                :            :                {
+<span class="lineNum">     774 </span>                :<span class="lineCov">  181690827 :                   GLfixed ffaend = ffa+(right-left-1)*fdadx;</span>
+<span class="lineNum">     775 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 181690827 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffaend&lt;0) ffa -= ffaend;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     776 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 181690827 times"> + </span>]:<span class="lineCov">  181690827 :                   if (ffa&lt;0) ffa = 0;</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     777 </span>                :            :                }
+<span class="lineNum">     778 </span>                :            : #endif
+<span class="lineNum">     779 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     780 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ffi&lt;0) ffi = 0;</span>
+<span class="lineNum">     781 </span>                :            : #endif
+<span class="lineNum">     782 </span>                :            : 
+<span class="lineNum">     783 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">  563934967 :                INNER_LOOP( left, right, iy );</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>][<span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>][<span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>][<span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span>][<span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span>][<span class="branchNoExec" title="Branch 27 was not executed"> # </span><span class="branchNoExec" title="Branch 28 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span>][<span class="branchCov" title="Branch 32 was taken 154837604 times"> + </span><span class="branchCov" title="Branch 33 was taken 26853223 times"> + </span>]
+<span class="lineNum">         </span>[<span class="branchNoCov" title="Branch 34 was not taken"> - </span><span class="branchCov" title="Branch 35 was taken 154837604 times"> + </span>][<span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 38 was taken 382244140 times"> + </span><span class="branchCov" title="Branch 39 was taken 154837604 times"> + </span>][<span class="branchNoExec" title="Branch 41 was not executed"> # </span><span class="branchNoExec" title="Branch 42 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 43 was not executed"> # </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span>][<span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>][<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     784 </span>                :            : 
+<span class="lineNum">     785 </span>                :            :                /*
+<span class="lineNum">     786 </span>                :            :                 * Advance to the next scan line.  Compute the
+<span class="lineNum">     787 </span>                :            :                 * new edge coordinates, and adjust the
+<span class="lineNum">     788 </span>                :            :                 * pixel-center x coordinate so that it stays
+<span class="lineNum">     789 </span>                :            :                 * on or inside the major edge.
+<span class="lineNum">     790 </span>                :            :                 */
+<span class="lineNum">     791 </span>                :<span class="lineCov">  181690827 :                iy++;</span>
+<span class="lineNum">     792 </span>                :<span class="lineCov">  181690827 :                lines--;</span>
+<span class="lineNum">     793 </span>                :            : 
+<span class="lineNum">     794 </span>                :<span class="lineCov">  181690827 :                fxLeftEdge += fdxLeftEdge;</span>
+<span class="lineNum">     795 </span>                :<span class="lineCov">  181690827 :                fxRightEdge += fdxRightEdge;</span>
+<span class="lineNum">     796 </span>                :            : 
+<span class="lineNum">     797 </span>                :            : 
+<span class="lineNum">     798 </span>                :<span class="lineCov">  181690827 :                fError += fdError;</span>
+<span class="lineNum">     799 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">  181690827 :                if (fError &gt;= 0) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>][<span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span>]
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 12 was taken 90669458 times"> + </span><span class="branchCov" title="Branch 13 was taken 91021369 times"> + </span>][<span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span>]
+<span class="lineNum">     800 </span>                :<span class="lineCov">   90669458 :                   fError -= FIXED_ONE;</span>
+<span class="lineNum">     801 </span>                :            : #ifdef PIXEL_ADDRESS
+<span class="lineNum">     802 </span>                :            :                   pRow = (PIXEL_TYPE*) ((GLubyte*)pRow + dPRowOuter);
+<span class="lineNum">     803 </span>                :            : #endif
+<span class="lineNum">     804 </span>                :            : #if INTERP_Z
+<span class="lineNum">     805 </span>                :<span class="lineCov">   90669458 :                   zRow = (GLdepth*) ((GLubyte*)zRow + dZRowOuter);</span>
+<span class="lineNum">     806 </span>                :<span class="lineNoCov">          0 :                   fz += fdzOuter;</span>
+<span class="lineNum">     807 </span>                :            : #endif
+<span class="lineNum">     808 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     809 </span>                :<span class="lineCov">   90669458 :                   fr += fdrOuter;   fg += fdgOuter;   fb += fdbOuter;</span>
+<span class="lineNum">     810 </span>                :            : #endif
+<span class="lineNum">     811 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     812 </span>                :<span class="lineNoCov">          0 :                   fa += fdaOuter;</span>
+<span class="lineNum">     813 </span>                :            : #endif
+<span class="lineNum">     814 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     815 </span>                :<span class="lineNoCov">          0 :                   fi += fdiOuter;</span>
+<span class="lineNum">     816 </span>                :            : #endif
+<span class="lineNum">     817 </span>                :            : #if INTERP_ST
+<span class="lineNum">     818 </span>                :<span class="lineNoCov">          0 :                   fs += fdsOuter;   ft += fdtOuter;</span>
+<span class="lineNum">     819 </span>                :            : #endif
+<span class="lineNum">     820 </span>                :            : #if INTERP_STW
+<span class="lineNum">     821 </span>                :<span class="lineCov">   90669458 :                   sLeft += dsOuter;</span>
+<span class="lineNum">     822 </span>                :<span class="lineCov">   90669458 :                   tLeft += dtOuter;</span>
+<span class="lineNum">     823 </span>                :<span class="lineCov">   90669458 :                   wLeft += dwOuter;</span>
+<span class="lineNum">     824 </span>                :            : #endif
+<span class="lineNum">     825 </span>                :            : #if INTERP_UV
+<span class="lineNum">     826 </span>                :<span class="lineCov">   90669458 :                   uLeft += duOuter;</span>
+<span class="lineNum">     827 </span>                :<span class="lineCov">   90669458 :                   vLeft += dvOuter;</span>
+<span class="lineNum">     828 </span>                :            : #endif
+<span class="lineNum">     829 </span>                :            :                }
+<span class="lineNum">     830 </span>                :            :                else {
+<span class="lineNum">     831 </span>                :            : #ifdef PIXEL_ADDRESS
+<span class="lineNum">     832 </span>                :            :                   pRow = (PIXEL_TYPE*) ((GLubyte*)pRow + dPRowInner);
+<span class="lineNum">     833 </span>                :            : #endif
+<span class="lineNum">     834 </span>                :            : #if INTERP_Z
+<span class="lineNum">     835 </span>                :<span class="lineCov">   91021369 :                   zRow = (GLdepth*) ((GLubyte*)zRow + dZRowInner);</span>
+<span class="lineNum">     836 </span>                :<span class="lineNoCov">          0 :                   fz += fdzInner;</span>
+<span class="lineNum">     837 </span>                :            : #endif
+<span class="lineNum">     838 </span>                :            : #if INTERP_RGB
+<span class="lineNum">     839 </span>                :<span class="lineCov">   91021369 :                   fr += fdrInner;   fg += fdgInner;   fb += fdbInner;</span>
+<span class="lineNum">     840 </span>                :            : #endif
+<span class="lineNum">     841 </span>                :            : #if INTERP_ALPHA
+<span class="lineNum">     842 </span>                :<span class="lineNoCov">          0 :                   fa += fdaInner;</span>
+<span class="lineNum">     843 </span>                :            : #endif
+<span class="lineNum">     844 </span>                :            : #if INTERP_INDEX
+<span class="lineNum">     845 </span>                :<span class="lineNoCov">          0 :                   fi += fdiInner;</span>
+<span class="lineNum">     846 </span>                :            : #endif
+<span class="lineNum">     847 </span>                :            : #if INTERP_ST
+<span class="lineNum">     848 </span>                :<span class="lineNoCov">          0 :                   fs += fdsInner;   ft += fdtInner;</span>
+<span class="lineNum">     849 </span>                :            : #endif
+<span class="lineNum">     850 </span>                :            : #if INTERP_STW
+<span class="lineNum">     851 </span>                :<span class="lineCov">   91021369 :                   sLeft += dsInner;</span>
+<span class="lineNum">     852 </span>                :<span class="lineCov">   91021369 :                   tLeft += dtInner;</span>
+<span class="lineNum">     853 </span>                :<span class="lineCov">   91021369 :                   wLeft += dwInner;</span>
+<span class="lineNum">     854 </span>                :            : #endif
+<span class="lineNum">     855 </span>                :            : #if INTERP_UV
+<span class="lineNum">     856 </span>                :<span class="lineCov">   91021369 :                   uLeft += duInner;</span>
+<span class="lineNum">     857 </span>                :<span class="lineCov">   91021369 :                   vLeft += dvInner;</span>
+<span class="lineNum">     858 </span>                :            : #endif
+<span class="lineNum">     859 </span>                :            :                }
+<span class="lineNum">     860 </span>                :            :             } /*while lines&gt;0*/
+<span class="lineNum">     861 </span>                :            : 
+<span class="lineNum">     862 </span>                :            :          } /* for subTriangle */
+<span class="lineNum">     863 </span>                :            : 
+<span class="lineNum">     864 </span>                :            :       }
+<span class="lineNum">     865 </span>                :            :    }
+<span class="lineNum">     866 </span>                :            : }
+<span class="lineNum">     867 </span>                :            : 
+<span class="lineNum">     868 </span>                :            : #undef SETUP_CODE
+<span class="lineNum">     869 </span>                :            : #undef INNER_LOOP
+<span class="lineNum">     870 </span>                :            : 
+<span class="lineNum">     871 </span>                :            : #undef PIXEL_TYPE
+<span class="lineNum">     872 </span>                :            : #undef BYTES_PER_ROW
+<span class="lineNum">     873 </span>                :            : #undef PIXEL_ADDRESS
+<span class="lineNum">     874 </span>                :            : 
+<span class="lineNum">     875 </span>                :            : #undef INTERP_Z
+<span class="lineNum">     876 </span>                :            : #undef INTERP_RGB
+<span class="lineNum">     877 </span>                :            : #undef INTERP_ALPHA
+<span class="lineNum">     878 </span>                :            : #undef INTERP_INDEX
+<span class="lineNum">     879 </span>                :            : #undef INTERP_ST
+<span class="lineNum">     880 </span>                :            : #undef INTERP_STW
+<span class="lineNum">     881 </span>                :            : #undef INTERP_UV
+<span class="lineNum">     882 </span>                :            : 
+<span class="lineNum">     883 </span>                :            : #undef S_SCALE
+<span class="lineNum">     884 </span>                :            : #undef T_SCALE
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

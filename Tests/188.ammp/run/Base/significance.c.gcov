@@ -1,0 +1,91 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/significance.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* benchmark specific
+        -:    2:*  since the trajectory can deviate because of
+        -:    3:*  floating point errors we need to be able
+        -:    4:* to check for the significance of the deviation
+        -:    5:*
+        -:    6:* i.e. would we be upset with this variation
+        -:    7:*      in a real world run
+        -:    8:*
+        -:    9:* this is not hard to quantify, but is hard to set up an
+        -:   10:* automatic pearl level test
+        -:   11:*
+        -:   12:* so we add it to AMMP
+        -:   13:*/
+        -:   14:/* check the values for numstp, delta and rmsdev
+        -:   15:* these are set first in the script
+        -:   16:*  (if they arent then every run is significant)
+        -:   17:*/
+        -:   18:
+        -:   19:#include <stdio.h>
+        -:   20:#include <stdlib.h>
+        -:   21://#include "ammp.h"
+        -:   22:
+function _Z12significanceP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:   23:int significance(FILE *op)
+        -:   24:{
+        -:   25:	int get_i_variable(char*);
+        -:   26:	float get_f_variable(char*);
+        -:   27:	int ns,na,a_number();
+        -:   28:	float delta,rmsd;
+        -:   29:
+    #####:   30:	ns = get_i_variable("numstp");
+call    0 never executed
+    #####:   31:	na = a_number();
+call    0 never executed
+    #####:   32:	delta = get_f_variable("delta");
+call    0 never executed
+    #####:   33:	rmsd = get_f_variable("rmsdev");
+call    0 never executed
+        -:   34:
+    #####:   35:	if( ns <= 0 )
+branch  0 never executed
+branch  1 never executed
+        -:   36:	{ fprintf(op," you are cheating, seti numstp <number of MD steps>\n");
+        -:   37:	}
+        -:   38:	
+    #####:   39:	if( delta > 20. || delta < -20.)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   40:	{
+        -:   41:	fprintf( op," The drift in the total energy is too high\n");	
+    #####:   42:	return 0;
+        -:   43:	}
+    #####:   44:	if( ns < 100 && rmsd > 0.01 )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   45:	{
+        -:   46:	fprintf( op," The RMSD is too high \n");
+    #####:   47:	return 0;
+        -:   48:	}
+    #####:   49:	if( ns < 1000 && ns > 99 && rmsd > 0.1 )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   50:	{
+        -:   51:	fprintf( op," The RMSD is too high \n");
+    #####:   52:	return 0;
+        -:   53:	}
+    #####:   54:	if( ns < 10000 && ns > 999 && rmsd > 1.0 )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   55:	{
+        -:   56:	fprintf( op," The RMSD is too high \n");
+    #####:   57:	return 0;
+        -:   58:	}
+        -:   59:
+        -:   60:	fprintf(op," The run is ok\n");
+        -:   61:
+    #####:   62:	return 0;
+        -:   63:}/* end of routine */

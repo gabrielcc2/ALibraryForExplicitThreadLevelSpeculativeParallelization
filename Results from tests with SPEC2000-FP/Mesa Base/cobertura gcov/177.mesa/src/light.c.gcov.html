@@ -1,0 +1,985 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/light.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - light.c<span style="font-size: 80%;"> (source / <a href="light.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">153</td>
+            <td class="headerCovTableEntry">400</td>
+            <td class="headerCovTableEntryLo">38.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">96</td>
+            <td class="headerCovTableEntry">257</td>
+            <td class="headerCovTableEntryLo">37.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: light.c,v 1.14 1997/07/24 01:24:11 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.4
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: light.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.14  1997/07/24 01:24:11  brianp
+<span class="lineNum">      27 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.13  1997/06/20 04:15:43  brianp
+<span class="lineNum">      30 </span>                :            :  * optimized changing of SHININESS (Henk Kok)
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.12  1997/05/28 03:25:26  brianp
+<span class="lineNum">      33 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.11  1997/05/01 01:38:57  brianp
+<span class="lineNum">      36 </span>                :            :  * now use NORMALIZE_3FV() macro from mmath.h
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.10  1997/04/20 20:28:49  brianp
+<span class="lineNum">      39 </span>                :            :  * replaced abort() with gl_problem()
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.9  1997/04/07 02:59:17  brianp
+<span class="lineNum">      42 </span>                :            :  * small optimization to setting of shininess and spot exponent
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.8  1997/04/01 04:09:31  brianp
+<span class="lineNum">      45 </span>                :            :  * misc code clean-ups.  moved shading code to shade.c
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.7  1997/03/11 00:37:39  brianp
+<span class="lineNum">      48 </span>                :            :  * spotlight factor now effects ambient lighting
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.6  1996/12/18 20:02:07  brianp
+<span class="lineNum">      51 </span>                :            :  * glColorMaterial() and glMaterial() should finally work right!
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.5  1996/12/07 10:22:41  brianp
+<span class="lineNum">      54 </span>                :            :  * gl_Materialfv() now calls gl_set_material() if GL_COLOR_MATERIAL disabled
+<span class="lineNum">      55 </span>                :            :  * implemented gl_GetLightiv()
+<span class="lineNum">      56 </span>                :            :  *
+<span class="lineNum">      57 </span>                :            :  * Revision 1.4  1996/11/08 04:39:23  brianp
+<span class="lineNum">      58 </span>                :            :  * new gl_compute_spot_exp_table() contributed by Randy Frank
+<span class="lineNum">      59 </span>                :            :  *
+<span class="lineNum">      60 </span>                :            :  * Revision 1.3  1996/09/27 01:27:55  brianp
+<span class="lineNum">      61 </span>                :            :  * removed unused variables
+<span class="lineNum">      62 </span>                :            :  *
+<span class="lineNum">      63 </span>                :            :  * Revision 1.2  1996/09/15 14:18:10  brianp
+<span class="lineNum">      64 </span>                :            :  * now use GLframebuffer and GLvisual
+<span class="lineNum">      65 </span>                :            :  *
+<span class="lineNum">      66 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      67 </span>                :            :  * Initial revision
+<span class="lineNum">      68 </span>                :            :  *
+<span class="lineNum">      69 </span>                :            :  */
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      73 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      74 </span>                :            : #else
+<span class="lineNum">      75 </span>                :            : #include &lt;assert.h&gt;
+<span class="lineNum">      76 </span>                :            : #include &lt;float.h&gt;
+<span class="lineNum">      77 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      78 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      79 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">      80 </span>                :            : #include &quot;light.h&quot;
+<span class="lineNum">      81 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">      82 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      83 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">      84 </span>                :            : #include &quot;mmath.h&quot;
+<span class="lineNum">      85 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      86 </span>                :            : #include &quot;vb.h&quot;
+<span class="lineNum">      87 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">      88 </span>                :            : #endif
+<span class="lineNum">      89 </span>                :            : 
+<a name="90"><span class="lineNum">      90 </span>                :            : </a>
+<span class="lineNum">      91 </span>                :            : 
+<span class="lineNum">      92 </span>                :<span class="lineNoCov">          0 : void gl_ShadeModel( GLcontext *ctx, GLenum mode )</span>
+<span class="lineNum">      93 </span>                :            : {
+<span class="lineNum">      94 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">      95 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glShadeModel&quot; );</span>
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">      97 </span>                :            :    }
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (mode) {</span>
+<span class="lineNum">     100 </span>                :            :       case GL_FLAT:
+<span class="lineNum">     101 </span>                :            :       case GL_SMOOTH:
+<span class="lineNum">     102 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Light.ShadeModel!=mode) {</span>
+<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.ShadeModel = mode;</span>
+<span class="lineNum">     104 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     105 </span>                :            :          }
+<span class="lineNum">     106 </span>                :            :          break;
+<span class="lineNum">     107 </span>                :            :       default:
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glShadeModel&quot; );</span>
+<span class="lineNum">     109 </span>                :            :    }
+<span class="lineNum">     110 </span>                :            : }
+<span class="lineNum">     111 </span>                :            : 
+<a name="112"><span class="lineNum">     112 </span>                :            : </a>
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :<span class="lineCov">          9 : void gl_Lightfv( GLcontext *ctx,</span>
+<span class="lineNum">     115 </span>                :            :                  GLenum light, GLenum pname, const GLfloat *params,
+<span class="lineNum">     116 </span>                :            :                  GLint nparams )
+<span class="lineNum">     117 </span>                :            : {
+<span class="lineNum">     118 </span>                :            :    GLint l;
+<span class="lineNum">     119 </span>                :            : 
+<span class="lineNum">     120 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">          9 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     121 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glShadeModel&quot; );</span>
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     123 </span>                :            :    }
+<span class="lineNum">     124 </span>                :            : 
+<span class="lineNum">     125 </span>                :<span class="lineCov">          9 :    l = (GLint) (light - GL_LIGHT0);</span>
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 9 times"> + </span>]:<span class="lineCov">          9 :    if (l&lt;0 || l&gt;=MAX_LIGHTS) {</span>
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glLight&quot; );</span>
+<span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     130 </span>                :            :    }
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span><span class="branchCov" title="Branch 2 was taken 3 times"> + </span><span class="branchCov" title="Branch 3 was taken 3 times"> + </span> :<span class="lineCov">          9 :    switch (pname) {</span>
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span> 
+<span class="lineNum">         </span>         <span class="branchNoCov" title="Branch 9 was not taken"> - </span><span class="branchNoCov" title="Branch 10 was not taken"> - </span>]
+<span class="lineNum">     133 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Light[l].Ambient, params );</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     136 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     137 </span>                :<span class="lineCov">          3 :          COPY_4V( ctx-&gt;Light.Light[l].Diffuse, params );</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">          3 :          break;</span>
+<span class="lineNum">     139 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     140 </span>                :<span class="lineCov">          3 :          COPY_4V( ctx-&gt;Light.Light[l].Specular, params );</span>
+<span class="lineNum">     141 </span>                :<span class="lineCov">          3 :          break;</span>
+<span class="lineNum">     142 </span>                :            :       case GL_POSITION:
+<span class="lineNum">     143 </span>                :            :          /* transform position by ModelView matrix */
+<span class="lineNum">     144 </span>                :<span class="lineCov">          3 :          TRANSFORM_POINT( ctx-&gt;Light.Light[l].Position, ctx-&gt;ModelViewMatrix,</span>
+<span class="lineNum">     145 </span>                :            :                           params );
+<span class="lineNum">     146 </span>                :<span class="lineCov">          3 :          break;</span>
+<span class="lineNum">     147 </span>                :            :       case GL_SPOT_DIRECTION:
+<span class="lineNum">     148 </span>                :            :          /* transform direction by inverse modelview */
+<span class="lineNum">     149 </span>                :            :          {
+<span class="lineNum">     150 </span>                :            :             GLfloat direction[4];
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :             direction[0] = params[0];</span>
+<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :             direction[1] = params[1];</span>
+<span class="lineNum">     153 </span>                :<span class="lineNoCov">          0 :             direction[2] = params[2];</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :             direction[3] = 0.0;</span>
+<span class="lineNum">     155 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :                gl_analyze_modelview_matrix( ctx );</span>
+<span class="lineNum">     157 </span>                :            :             }
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :             gl_transform_vector( ctx-&gt;Light.Light[l].Direction,</span>
+<span class="lineNum">     159 </span>                :            :                                  direction, ctx-&gt;ModelViewInv);
+<span class="lineNum">     160 </span>                :            :          }
+<span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     162 </span>                :            :       case GL_SPOT_EXPONENT:
+<span class="lineNum">     163 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]&lt;0.0 || params[0]&gt;128.0) {</span>
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glLight&quot; );</span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     166 </span>                :            :          }
+<span class="lineNum">     167 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Light.Light[l].SpotExponent != params[0]) {</span>
+<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Light[l].SpotExponent = params[0];</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :             gl_compute_spot_exp_table( &amp;ctx-&gt;Light.Light[l] );</span>
+<span class="lineNum">     170 </span>                :            :          }
+<span class="lineNum">     171 </span>                :            :          break;
+<span class="lineNum">     172 </span>                :            :       case GL_SPOT_CUTOFF:
+<span class="lineNum">     173 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if ((params[0]&lt;0.0 || params[0]&gt;90.0) &amp;&amp; params[0]!=180.0) {</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glLight&quot; );</span>
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     176 </span>                :            :          }
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Light[l].SpotCutoff = params[0];</span>
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Light[l].CosCutoff = cos(params[0]*DEG2RAD);</span>
+<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     180 </span>                :            :       case GL_CONSTANT_ATTENUATION:
+<span class="lineNum">     181 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]&lt;0.0) {</span>
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glLight&quot; );</span>
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     184 </span>                :            :          }
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Light[l].ConstantAttenuation = params[0];</span>
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     187 </span>                :            :       case GL_LINEAR_ATTENUATION:
+<span class="lineNum">     188 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]&lt;0.0) {</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glLight&quot; );</span>
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     191 </span>                :            :          }
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Light[l].LinearAttenuation = params[0];</span>
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     194 </span>                :            :       case GL_QUADRATIC_ATTENUATION:
+<span class="lineNum">     195 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]&lt;0.0) {</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glLight&quot; );</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     198 </span>                :            :          }
+<span class="lineNum">     199 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Light[l].QuadraticAttenuation = params[0];</span>
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     201 </span>                :            :       default:
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glLight&quot; );</span>
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     204 </span>                :            :    }
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :<span class="lineCov">          9 :    ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     207 </span>                :            : }
+<span class="lineNum">     208 </span>                :            : 
+<a name="209"><span class="lineNum">     209 </span>                :            : </a>
+<span class="lineNum">     210 </span>                :            : 
+<span class="lineNum">     211 </span>                :<span class="lineNoCov">          0 : void gl_GetLightfv( GLcontext *ctx,</span>
+<span class="lineNum">     212 </span>                :            :                     GLenum light, GLenum pname, GLfloat *params )
+<span class="lineNum">     213 </span>                :            : {
+<span class="lineNum">     214 </span>                :<span class="lineNoCov">          0 :    GLint l = (GLint) (light - GL_LIGHT0);</span>
+<span class="lineNum">     215 </span>                :            : 
+<span class="lineNum">     216 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (l&lt;0 || l&gt;=MAX_LIGHTS) {</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetLightfv&quot; );</span>
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     219 </span>                :            :    }
+<span class="lineNum">     220 </span>                :            : 
+<span class="lineNum">     221 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">     222 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     223 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Light[l].Ambient );</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     225 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Light[l].Diffuse );</span>
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     228 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Light[l].Specular );</span>
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     231 </span>                :            :       case GL_POSITION:
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Light[l].Position );</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     234 </span>                :            :       case GL_SPOT_DIRECTION:
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :          COPY_3V( params, ctx-&gt;Light.Light[l].Direction );</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     237 </span>                :            :       case GL_SPOT_EXPONENT:
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].SpotExponent;</span>
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     240 </span>                :            :       case GL_SPOT_CUTOFF:
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].SpotCutoff;</span>
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     243 </span>                :            :       case GL_CONSTANT_ATTENUATION:
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].ConstantAttenuation;</span>
+<span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     246 </span>                :            :       case GL_LINEAR_ATTENUATION:
+<span class="lineNum">     247 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].LinearAttenuation;</span>
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     249 </span>                :            :       case GL_QUADRATIC_ATTENUATION:
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].QuadraticAttenuation;</span>
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     252 </span>                :            :       default:
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetLightfv&quot; );</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     255 </span>                :            :    }
+<span class="lineNum">     256 </span>                :            : }
+<span class="lineNum">     257 </span>                :            : 
+<a name="258"><span class="lineNum">     258 </span>                :            : </a>
+<span class="lineNum">     259 </span>                :            : 
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 : void gl_GetLightiv( GLcontext *ctx, GLenum light, GLenum pname, GLint *params )</span>
+<span class="lineNum">     261 </span>                :            : {
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :    GLint l = (GLint) (light - GL_LIGHT0);</span>
+<span class="lineNum">     263 </span>                :            : 
+<span class="lineNum">     264 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (l&lt;0 || l&gt;=MAX_LIGHTS) {</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetLightiv&quot; );</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     267 </span>                :            :    }
+<span class="lineNum">     268 </span>                :            : 
+<span class="lineNum">     269 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span> 
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span>]
+<span class="lineNum">     270 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Ambient[0]);</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Ambient[1]);</span>
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Ambient[2]);</span>
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Ambient[3]);</span>
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     276 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Diffuse[0]);</span>
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Diffuse[1]);</span>
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Diffuse[2]);</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Diffuse[3]);</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     282 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Specular[0]);</span>
+<span class="lineNum">     284 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Specular[1]);</span>
+<span class="lineNum">     285 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Specular[2]);</span>
+<span class="lineNum">     286 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT(ctx-&gt;Light.Light[l].Specular[3]);</span>
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     288 </span>                :            :       case GL_POSITION:
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].Position[0];</span>
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :          params[1] = ctx-&gt;Light.Light[l].Position[1];</span>
+<span class="lineNum">     291 </span>                :<span class="lineNoCov">          0 :          params[2] = ctx-&gt;Light.Light[l].Position[2];</span>
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :          params[3] = ctx-&gt;Light.Light[l].Position[3];</span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     294 </span>                :            :       case GL_SPOT_DIRECTION:
+<span class="lineNum">     295 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].Direction[0];</span>
+<span class="lineNum">     296 </span>                :<span class="lineNoCov">          0 :          params[1] = ctx-&gt;Light.Light[l].Direction[1];</span>
+<span class="lineNum">     297 </span>                :<span class="lineNoCov">          0 :          params[2] = ctx-&gt;Light.Light[l].Direction[2];</span>
+<span class="lineNum">     298 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     299 </span>                :            :       case GL_SPOT_EXPONENT:
+<span class="lineNum">     300 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].SpotExponent;</span>
+<span class="lineNum">     301 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     302 </span>                :            :       case GL_SPOT_CUTOFF:
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].SpotCutoff;</span>
+<span class="lineNum">     304 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     305 </span>                :            :       case GL_CONSTANT_ATTENUATION:
+<span class="lineNum">     306 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].ConstantAttenuation;</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     308 </span>                :            :       case GL_LINEAR_ATTENUATION:
+<span class="lineNum">     309 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].LinearAttenuation;</span>
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     311 </span>                :            :       case GL_QUADRATIC_ATTENUATION:
+<span class="lineNum">     312 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Light[l].QuadraticAttenuation;</span>
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     314 </span>                :            :       default:
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetLightiv&quot; );</span>
+<span class="lineNum">     316 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     317 </span>                :            :    }
+<span class="lineNum">     318 </span>                :            : }
+<span class="lineNum">     319 </span>                :            : 
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :            : 
+<span class="lineNum">     322 </span>                :            : /**********************************************************************/
+<span class="lineNum">     323 </span>                :            : /***                        Light Model                             ***/
+<span class="lineNum">     324 </span>                :            : /**********************************************************************/
+<a name="325"><span class="lineNum">     325 </span>                :            : </a>
+<span class="lineNum">     326 </span>                :            : 
+<span class="lineNum">     327 </span>                :<span class="lineNoCov">          0 : void gl_LightModelfv( GLcontext *ctx, GLenum pname, const GLfloat *params )</span>
+<span class="lineNum">     328 </span>                :            : {
+<span class="lineNum">     329 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">     330 </span>                :            :       case GL_LIGHT_MODEL_AMBIENT:
+<span class="lineNum">     331 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Model.Ambient, params );</span>
+<span class="lineNum">     332 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     333 </span>                :            :       case GL_LIGHT_MODEL_LOCAL_VIEWER:
+<span class="lineNum">     334 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]==0.0)</span>
+<span class="lineNum">     335 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Model.LocalViewer = GL_FALSE;</span>
+<span class="lineNum">     336 </span>                :            :          else
+<span class="lineNum">     337 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Model.LocalViewer = GL_TRUE;</span>
+<span class="lineNum">     338 </span>                :            :          break;
+<span class="lineNum">     339 </span>                :            :       case GL_LIGHT_MODEL_TWO_SIDE:
+<span class="lineNum">     340 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (params[0]==0.0)</span>
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Model.TwoSide = GL_FALSE;</span>
+<span class="lineNum">     342 </span>                :            :          else
+<span class="lineNum">     343 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Model.TwoSide = GL_TRUE;</span>
+<span class="lineNum">     344 </span>                :            :          break;
+<span class="lineNum">     345 </span>                :            :       default:
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glLightModel&quot; );</span>
+<span class="lineNum">     347 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     348 </span>                :            :    }
+<span class="lineNum">     349 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     351 </span>                :            : 
+<span class="lineNum">     352 </span>                :            : 
+<span class="lineNum">     353 </span>                :            : 
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>                :            : /********** MATERIAL **********/
+<span class="lineNum">     356 </span>                :            : 
+<span class="lineNum">     357 </span>                :            : 
+<span class="lineNum">     358 </span>                :            : /*
+<span class="lineNum">     359 </span>                :            :  * Given a face and pname value (ala glColorMaterial), compute a bitmask
+<a name="360"><span class="lineNum">     360 </span>                :            :  * of the targeted material values.</a>
+<span class="lineNum">     361 </span>                :            :  */
+<span class="lineNum">     362 </span>                :<span class="lineCov">          4 : GLuint gl_material_bitmask( GLenum face, GLenum pname )</span>
+<span class="lineNum">     363 </span>                :            : {
+<span class="lineNum">     364 </span>                :<span class="lineCov">          4 :    GLuint bitmask = 0;</span>
+<span class="lineNum">     365 </span>                :            : 
+<span class="lineNum">     366 </span>                :            :    /* Make a bitmask indicating what material attribute(s) we're updating */
+<span class="lineNum">     367 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span> :<span class="lineCov">          4 :    switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchCov" title="Branch 4 was taken 1 time"> + </span><span class="branchCov" title="Branch 5 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">     368 </span>                :            :       case GL_EMISSION:
+<span class="lineNum">     369 </span>                :<span class="lineNoCov">          0 :          bitmask |= FRONT_EMISSION_BIT | BACK_EMISSION_BIT;</span>
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     371 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :          bitmask |= FRONT_AMBIENT_BIT | BACK_AMBIENT_BIT;</span>
+<span class="lineNum">     373 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     374 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     375 </span>                :<span class="lineNoCov">          0 :          bitmask |= FRONT_DIFFUSE_BIT | BACK_DIFFUSE_BIT;</span>
+<span class="lineNum">     376 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     377 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     378 </span>                :<span class="lineCov">          1 :          bitmask |= FRONT_SPECULAR_BIT | BACK_SPECULAR_BIT;</span>
+<span class="lineNum">     379 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     380 </span>                :            :       case GL_SHININESS:
+<span class="lineNum">     381 </span>                :<span class="lineCov">          1 :          bitmask |= FRONT_SHININESS_BIT | BACK_SHININESS_BIT;</span>
+<span class="lineNum">     382 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     383 </span>                :            :       case GL_AMBIENT_AND_DIFFUSE:
+<span class="lineNum">     384 </span>                :<span class="lineCov">          2 :          bitmask |= FRONT_AMBIENT_BIT | BACK_AMBIENT_BIT;</span>
+<span class="lineNum">     385 </span>                :<span class="lineCov">          2 :          bitmask |= FRONT_DIFFUSE_BIT | BACK_DIFFUSE_BIT;</span>
+<span class="lineNum">     386 </span>                :<span class="lineCov">          2 :          break;</span>
+<span class="lineNum">     387 </span>                :            :       case GL_COLOR_INDEXES:
+<span class="lineNum">     388 </span>                :<span class="lineNoCov">          0 :          bitmask |= FRONT_INDEXES_BIT  | BACK_INDEXES_BIT;</span>
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     390 </span>                :            :       default:
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :          gl_problem(NULL, &quot;Bad param in gl_material_bitmask&quot;);</span>
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :          return 0;</span>
+<span class="lineNum">     393 </span>                :            :    }
+<span class="lineNum">     394 </span>                :            : 
+<span class="lineNum">     395 </span>                :            :    ASSERT( face==GL_FRONT || face==GL_BACK || face==GL_FRONT_AND_BACK );
+<span class="lineNum">     396 </span>                :            : 
+<span class="lineNum">     397 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :    if (face==GL_FRONT) {</span>
+<span class="lineNum">     398 </span>                :<span class="lineNoCov">          0 :       bitmask &amp;= FRONT_MATERIAL_BITS;</span>
+<span class="lineNum">     399 </span>                :            :    }
+<span class="lineNum">     400 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4 times"> + </span>]:<span class="lineCov">          4 :    else if (face==GL_BACK) {</span>
+<span class="lineNum">     401 </span>                :<span class="lineNoCov">          0 :       bitmask &amp;= BACK_MATERIAL_BITS;</span>
+<span class="lineNum">     402 </span>                :            :    }
+<span class="lineNum">     403 </span>                :            : 
+<span class="lineNum">     404 </span>                :<span class="lineCov">          4 :    return bitmask;</span>
+<span class="lineNum">     405 </span>                :            : }
+<span class="lineNum">     406 </span>                :            : 
+<span class="lineNum">     407 </span>                :            : 
+<span class="lineNum">     408 </span>                :            : 
+<span class="lineNum">     409 </span>                :            : /*
+<span class="lineNum">     410 </span>                :            :  * This is called by glColor() when GL_COLOR_MATERIAL is enabled and
+<a name="411"><span class="lineNum">     411 </span>                :            :  * called by glMaterial() when GL_COLOR_MATERIAL is disabled.</a>
+<span class="lineNum">     412 </span>                :            :  */
+<span class="lineNum">     413 </span>                :<span class="lineCov">          3 : void gl_set_material( GLcontext *ctx, GLuint bitmask, const GLfloat *params )</span>
+<span class="lineNum">     414 </span>                :            : {
+<span class="lineNum">     415 </span>                :            :    struct gl_material *mat;
+<span class="lineNum">     416 </span>                :            : 
+<span class="lineNum">     417 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     418 </span>                :<span class="lineNoCov">          0 :       struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     419 </span>                :            :       /* Save per-vertex material changes in the Vertex Buffer.
+<span class="lineNum">     420 </span>                :            :        * The update_material function will eventually update the global
+<span class="lineNum">     421 </span>                :            :        * ctx-&gt;Light.Material values.
+<span class="lineNum">     422 </span>                :            :        */
+<span class="lineNum">     423 </span>                :<span class="lineNoCov">          0 :       mat = VB-&gt;Material[VB-&gt;Count];</span>
+<span class="lineNum">     424 </span>                :<span class="lineNoCov">          0 :       VB-&gt;MaterialMask[VB-&gt;Count] |= bitmask;</span>
+<span class="lineNum">     425 </span>                :<span class="lineNoCov">          0 :       VB-&gt;MonoMaterial = GL_FALSE;</span>
+<span class="lineNum">     426 </span>                :            :    }
+<span class="lineNum">     427 </span>                :            :    else {
+<span class="lineNum">     428 </span>                :            :       /* just update the global material property */
+<span class="lineNum">     429 </span>                :<span class="lineCov">          3 :       mat = ctx-&gt;Light.Material;</span>
+<span class="lineNum">     430 </span>                :<span class="lineCov">          3 :       ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     431 </span>                :            :    }
+<span class="lineNum">     432 </span>                :            : 
+<span class="lineNum">     433 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_AMBIENT_BIT) {</span>
+<span class="lineNum">     434 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[0].Ambient, params );</span>
+<span class="lineNum">     435 </span>                :            :    }
+<span class="lineNum">     436 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_AMBIENT_BIT) {</span>
+<span class="lineNum">     437 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[1].Ambient, params );</span>
+<span class="lineNum">     438 </span>                :            :    }
+<span class="lineNum">     439 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_DIFFUSE_BIT) {</span>
+<span class="lineNum">     440 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[0].Diffuse, params );</span>
+<span class="lineNum">     441 </span>                :            :    }
+<span class="lineNum">     442 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_DIFFUSE_BIT) {</span>
+<span class="lineNum">     443 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[1].Diffuse, params );</span>
+<span class="lineNum">     444 </span>                :            :    }
+<span class="lineNum">     445 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_SPECULAR_BIT) {</span>
+<span class="lineNum">     446 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[0].Specular, params );</span>
+<span class="lineNum">     447 </span>                :            :    }
+<span class="lineNum">     448 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_SPECULAR_BIT) {</span>
+<span class="lineNum">     449 </span>                :<span class="lineCov">          1 :       COPY_4V( mat[1].Specular, params );</span>
+<span class="lineNum">     450 </span>                :            :    }
+<span class="lineNum">     451 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_EMISSION_BIT) {</span>
+<span class="lineNum">     452 </span>                :<span class="lineNoCov">          0 :       COPY_4V( mat[0].Emission, params );</span>
+<span class="lineNum">     453 </span>                :            :    }
+<span class="lineNum">     454 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_EMISSION_BIT) {</span>
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 :       COPY_4V( mat[1].Emission, params );</span>
+<span class="lineNum">     456 </span>                :            :    }
+<span class="lineNum">     457 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_SHININESS_BIT) {</span>
+<span class="lineNum">     458 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          1 :       GLfloat shininess = CLAMP( params[0], 0.0F, 128.0F );</span>
+<span class="lineNum">     459 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :       if (mat[0].Shininess != shininess) {</span>
+<span class="lineNum">     460 </span>                :<span class="lineCov">          1 :          mat[0].Shininess = shininess;</span>
+<span class="lineNum">     461 </span>                :            :          gl_compute_material_shine_table( &amp;mat[0] );
+<span class="lineNum">     462 </span>                :            :       }
+<span class="lineNum">     463 </span>                :            :    }
+<span class="lineNum">     464 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_SHININESS_BIT) {</span>
+<span class="lineNum">     465 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          1 :       GLfloat shininess = CLAMP( params[0], 0.0F, 128.0F );</span>
+<span class="lineNum">     466 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :       if (mat[1].Shininess != shininess) {</span>
+<span class="lineNum">     467 </span>                :<span class="lineCov">          1 :          mat[1].Shininess = shininess;</span>
+<span class="lineNum">     468 </span>                :<span class="lineCov">          1 :          gl_compute_material_shine_table( &amp;mat[1] );</span>
+<span class="lineNum">     469 </span>                :            :       }
+<span class="lineNum">     470 </span>                :            :    }
+<span class="lineNum">     471 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; FRONT_INDEXES_BIT) {</span>
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 :       mat[0].AmbientIndex = params[0];</span>
+<span class="lineNum">     473 </span>                :<span class="lineNoCov">          0 :       mat[0].DiffuseIndex = params[1];</span>
+<span class="lineNum">     474 </span>                :<span class="lineNoCov">          0 :       mat[0].SpecularIndex = params[2];</span>
+<span class="lineNum">     475 </span>                :            :    }
+<span class="lineNum">     476 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (bitmask &amp; BACK_INDEXES_BIT) {</span>
+<span class="lineNum">     477 </span>                :<span class="lineNoCov">          0 :       mat[1].AmbientIndex = params[0];</span>
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :       mat[1].DiffuseIndex = params[1];</span>
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :       mat[1].SpecularIndex = params[2];</span>
+<span class="lineNum">     480 </span>                :            :    }
+<span class="lineNum">     481 </span>                :<span class="lineCov">          3 : }</span>
+<span class="lineNum">     482 </span>                :            : 
+<a name="483"><span class="lineNum">     483 </span>                :            : </a>
+<span class="lineNum">     484 </span>                :            : 
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 : void gl_ColorMaterial( GLcontext *ctx, GLenum face, GLenum mode )</span>
+<span class="lineNum">     486 </span>                :            : {
+<span class="lineNum">     487 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glColorMaterial&quot; );</span>
+<span class="lineNum">     489 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     490 </span>                :            :    }
+<span class="lineNum">     491 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (face) {</span>
+<span class="lineNum">     492 </span>                :            :       case GL_FRONT:
+<span class="lineNum">     493 </span>                :            :       case GL_BACK:
+<span class="lineNum">     494 </span>                :            :       case GL_FRONT_AND_BACK:
+<span class="lineNum">     495 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.ColorMaterialFace = face;</span>
+<span class="lineNum">     496 </span>                :            :          break;
+<span class="lineNum">     497 </span>                :            :       default:
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glColorMaterial(face)&quot; );</span>
+<span class="lineNum">     499 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     500 </span>                :            :    }
+<span class="lineNum">     501 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (mode) {</span>
+<span class="lineNum">     502 </span>                :            :       case GL_EMISSION:
+<span class="lineNum">     503 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     504 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     505 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     506 </span>                :            :       case GL_AMBIENT_AND_DIFFUSE:
+<span class="lineNum">     507 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.ColorMaterialMode = mode;</span>
+<span class="lineNum">     508 </span>                :            :          break;
+<span class="lineNum">     509 </span>                :            :       default:
+<span class="lineNum">     510 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glColorMaterial(mode)&quot; );</span>
+<span class="lineNum">     511 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     512 </span>                :            :    }
+<span class="lineNum">     513 </span>                :            : 
+<span class="lineNum">     514 </span>                :<span class="lineNoCov">          0 :    ctx-&gt;Light.ColorMaterialBitmask = gl_material_bitmask( face, mode );</span>
+<span class="lineNum">     515 </span>                :            : }
+<span class="lineNum">     516 </span>                :            : 
+<span class="lineNum">     517 </span>                :            : 
+<span class="lineNum">     518 </span>                :            : 
+<span class="lineNum">     519 </span>                :            : /*
+<span class="lineNum">     520 </span>                :            :  * This is only called via the api_function_table struct or by the
+<a name="521"><span class="lineNum">     521 </span>                :            :  * display list executor.</a>
+<span class="lineNum">     522 </span>                :            :  */
+<span class="lineNum">     523 </span>                :<span class="lineCov">          3 : void gl_Materialfv( GLcontext *ctx,</span>
+<span class="lineNum">     524 </span>                :            :                     GLenum face, GLenum pname, const GLfloat *params )
+<span class="lineNum">     525 </span>                :            : {
+<span class="lineNum">     526 </span>                :            :    GLuint bitmask;
+<span class="lineNum">     527 </span>                :            : 
+<span class="lineNum">     528 </span>                :            :    /* error checking */
+<span class="lineNum">     529 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (face!=GL_FRONT &amp;&amp; face!=GL_BACK &amp;&amp; face!=GL_FRONT_AND_BACK) {</span>
+<span class="lineNum">     530 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glMaterial(face)&quot; );</span>
+<span class="lineNum">     531 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     532 </span>                :            :    }
+<span class="lineNum">     533 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    switch (pname) {</span>
+<span class="lineNum">     534 </span>                :            :       case GL_EMISSION:
+<span class="lineNum">     535 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     536 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     537 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     538 </span>                :            :       case GL_SHININESS:
+<span class="lineNum">     539 </span>                :            :       case GL_AMBIENT_AND_DIFFUSE:
+<span class="lineNum">     540 </span>                :            :       case GL_COLOR_INDEXES:
+<span class="lineNum">     541 </span>                :            :          /* OK */
+<span class="lineNum">     542 </span>                :            :          break;
+<span class="lineNum">     543 </span>                :            :       default:
+<span class="lineNum">     544 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glMaterial(pname)&quot; );</span>
+<span class="lineNum">     545 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     546 </span>                :            :    }
+<span class="lineNum">     547 </span>                :            : 
+<span class="lineNum">     548 </span>                :            :    /* convert face and pname to a bitmask */
+<span class="lineNum">     549 </span>                :<span class="lineCov">          3 :    bitmask = gl_material_bitmask( face, pname );</span>
+<span class="lineNum">     550 </span>                :            : 
+<span class="lineNum">     551 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :    if (ctx-&gt;Light.ColorMaterialEnabled) {</span>
+<span class="lineNum">     552 </span>                :            :       /* The material values specified by glColorMaterial() can't be */
+<span class="lineNum">     553 </span>                :            :       /* updated by glMaterial() while GL_COLOR_MATERIAL is enabled! */
+<span class="lineNum">     554 </span>                :<span class="lineNoCov">          0 :       bitmask &amp;= ~ctx-&gt;Light.ColorMaterialBitmask;</span>
+<span class="lineNum">     555 </span>                :            :    }
+<span class="lineNum">     556 </span>                :            : 
+<span class="lineNum">     557 </span>                :<span class="lineCov">          3 :    gl_set_material( ctx, bitmask, params );</span>
+<span class="lineNum">     558 </span>                :            : }
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>                :            : 
+<a name="561"><span class="lineNum">     561 </span>                :            : </a>
+<span class="lineNum">     562 </span>                :            : 
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 : void gl_GetMaterialfv( GLcontext *ctx,</span>
+<span class="lineNum">     564 </span>                :            :                        GLenum face, GLenum pname, GLfloat *params )
+<span class="lineNum">     565 </span>                :            : {
+<span class="lineNum">     566 </span>                :            :    GLuint f;
+<span class="lineNum">     567 </span>                :            : 
+<span class="lineNum">     568 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     569 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetMaterialfv&quot; );</span>
+<span class="lineNum">     570 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     571 </span>                :            :    }
+<span class="lineNum">     572 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (face==GL_FRONT) {</span>
+<span class="lineNum">     573 </span>                :<span class="lineNoCov">          0 :       f = 0;</span>
+<span class="lineNum">     574 </span>                :            :    }
+<span class="lineNum">     575 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (face==GL_BACK) {</span>
+<span class="lineNum">     576 </span>                :<span class="lineNoCov">          0 :       f = 1;</span>
+<span class="lineNum">     577 </span>                :            :    }
+<span class="lineNum">     578 </span>                :            :    else {
+<span class="lineNum">     579 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetMaterialfv(face)&quot; );</span>
+<span class="lineNum">     580 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     581 </span>                :            :    }
+<span class="lineNum">     582 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     583 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     584 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Material[f].Ambient );</span>
+<span class="lineNum">     585 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     586 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     587 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Material[f].Diffuse );</span>
+<span class="lineNum">     588 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     589 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Material[f].Specular );</span>
+<span class="lineNum">     591 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     592 </span>                :            :       case GL_EMISSION:
+<span class="lineNum">     593 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Light.Material[f].Emission );</span>
+<span class="lineNum">     594 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     595 </span>                :            :       case GL_SHININESS:
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :          *params = ctx-&gt;Light.Material[f].Shininess;</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     598 </span>                :            :       case GL_COLOR_INDEXES:
+<span class="lineNum">     599 </span>                :<span class="lineNoCov">          0 :          params[0] = ctx-&gt;Light.Material[f].AmbientIndex;</span>
+<span class="lineNum">     600 </span>                :<span class="lineNoCov">          0 :          params[1] = ctx-&gt;Light.Material[f].DiffuseIndex;</span>
+<span class="lineNum">     601 </span>                :<span class="lineNoCov">          0 :          params[2] = ctx-&gt;Light.Material[f].SpecularIndex;</span>
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     603 </span>                :            :       default:
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetMaterialfv(pname)&quot; );</span>
+<span class="lineNum">     605 </span>                :            :    }
+<span class="lineNum">     606 </span>                :            : }
+<span class="lineNum">     607 </span>                :            : 
+<a name="608"><span class="lineNum">     608 </span>                :            : </a>
+<span class="lineNum">     609 </span>                :            : 
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 : void gl_GetMaterialiv( GLcontext *ctx,</span>
+<span class="lineNum">     611 </span>                :            :                        GLenum face, GLenum pname, GLint *params )
+<span class="lineNum">     612 </span>                :            : {
+<span class="lineNum">     613 </span>                :            :    GLuint f;
+<span class="lineNum">     614 </span>                :            : 
+<span class="lineNum">     615 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     616 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetMaterialiv&quot; );</span>
+<span class="lineNum">     617 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     618 </span>                :            :    }
+<span class="lineNum">     619 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (face==GL_FRONT) {</span>
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :       f = 0;</span>
+<span class="lineNum">     621 </span>                :            :    }
+<span class="lineNum">     622 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (face==GL_BACK) {</span>
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :       f = 1;</span>
+<span class="lineNum">     624 </span>                :            :    }
+<span class="lineNum">     625 </span>                :            :    else {
+<span class="lineNum">     626 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetMaterialiv(face)&quot; );</span>
+<span class="lineNum">     627 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     628 </span>                :            :    }
+<span class="lineNum">     629 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     630 </span>                :            :       case GL_AMBIENT:
+<span class="lineNum">     631 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Ambient[0] );</span>
+<span class="lineNum">     632 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Ambient[1] );</span>
+<span class="lineNum">     633 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Ambient[2] );</span>
+<span class="lineNum">     634 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Ambient[3] );</span>
+<span class="lineNum">     635 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     636 </span>                :            :       case GL_DIFFUSE:
+<span class="lineNum">     637 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Diffuse[0] );</span>
+<span class="lineNum">     638 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Diffuse[1] );</span>
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Diffuse[2] );</span>
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Diffuse[3] );</span>
+<span class="lineNum">     641 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     642 </span>                :            :       case GL_SPECULAR:
+<span class="lineNum">     643 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Specular[0] );</span>
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Specular[1] );</span>
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Specular[2] );</span>
+<span class="lineNum">     646 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Specular[3] );</span>
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     648 </span>                :            :       case GL_EMISSION:
+<span class="lineNum">     649 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Emission[0] );</span>
+<span class="lineNum">     650 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Emission[1] );</span>
+<span class="lineNum">     651 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Emission[2] );</span>
+<span class="lineNum">     652 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT( ctx-&gt;Light.Material[f].Emission[3] );</span>
+<span class="lineNum">     653 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     654 </span>                :            :       case GL_SHININESS:
+<span class="lineNum">     655 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          *params = ROUNDF( ctx-&gt;Light.Material[f].Shininess );</span>
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     657 </span>                :            :       case GL_COLOR_INDEXES:
+<span class="lineNum">     658 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          params[0] = ROUNDF( ctx-&gt;Light.Material[f].AmbientIndex );</span>
+<span class="lineNum">     659 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          params[1] = ROUNDF( ctx-&gt;Light.Material[f].DiffuseIndex );</span>
+<span class="lineNum">     660 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          params[2] = ROUNDF( ctx-&gt;Light.Material[f].SpecularIndex );</span>
+<span class="lineNum">     661 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     662 </span>                :            :       default:
+<span class="lineNum">     663 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetMaterialfv(pname)&quot; );</span>
+<span class="lineNum">     664 </span>                :            :    }
+<span class="lineNum">     665 </span>                :            : }
+<span class="lineNum">     666 </span>                :            : 
+<span class="lineNum">     667 </span>                :            : 
+<span class="lineNum">     668 </span>                :            : 
+<span class="lineNum">     669 </span>                :            : 
+<span class="lineNum">     670 </span>                :            : /**********************************************************************/
+<span class="lineNum">     671 </span>                :            : /*****                  Lighting computation                      *****/
+<span class="lineNum">     672 </span>                :            : /**********************************************************************/
+<span class="lineNum">     673 </span>                :            : 
+<span class="lineNum">     674 </span>                :            : 
+<span class="lineNum">     675 </span>                :            : /*
+<span class="lineNum">     676 </span>                :            :  * Notes:
+<span class="lineNum">     677 </span>                :            :  *   When two-sided lighting is enabled we compute the color (or index)
+<span class="lineNum">     678 </span>                :            :  *   for both the front and back side of the primitive.  Then, when the
+<span class="lineNum">     679 </span>                :            :  *   orientation of the facet is later learned, we can determine which
+<span class="lineNum">     680 </span>                :            :  *   color (or index) to use for rendering.
+<span class="lineNum">     681 </span>                :            :  *
+<span class="lineNum">     682 </span>                :            :  * Variables:
+<span class="lineNum">     683 </span>                :            :  *   n = normal vector
+<span class="lineNum">     684 </span>                :            :  *   V = vertex position
+<span class="lineNum">     685 </span>                :            :  *   P = light source position
+<span class="lineNum">     686 </span>                :            :  *   Pe = (0,0,0,1)
+<span class="lineNum">     687 </span>                :            :  *
+<span class="lineNum">     688 </span>                :            :  * Precomputed:
+<span class="lineNum">     689 </span>                :            :  *   IF P[3]==0 THEN
+<span class="lineNum">     690 </span>                :            :  *       // light at infinity
+<span class="lineNum">     691 </span>                :            :  *       IF local_viewer THEN
+<span class="lineNum">     692 </span>                :            :  *           VP_inf_norm = unit vector from V to P      // Precompute
+<span class="lineNum">     693 </span>                :            :  *       ELSE 
+<span class="lineNum">     694 </span>                :            :  *           // eye at infinity
+<span class="lineNum">     695 </span>                :            :  *           h_inf_norm = Normalize( VP + &lt;0,0,1&gt; )     // Precompute
+<span class="lineNum">     696 </span>                :            :  *       ENDIF
+<span class="lineNum">     697 </span>                :            :  *   ENDIF
+<span class="lineNum">     698 </span>                :            :  *
+<span class="lineNum">     699 </span>                :            :  * Functions:
+<span class="lineNum">     700 </span>                :            :  *   Normalize( v ) = normalized vector v
+<span class="lineNum">     701 </span>                :            :  *   Magnitude( v ) = length of vector v
+<span class="lineNum">     702 </span>                :            :  */
+<span class="lineNum">     703 </span>                :            : 
+<span class="lineNum">     704 </span>                :            : 
+<span class="lineNum">     705 </span>                :            : 
+<span class="lineNum">     706 </span>                :            : /*
+<span class="lineNum">     707 </span>                :            :  * Whenever the spotlight exponent for a light changes we must call
+<a name="708"><span class="lineNum">     708 </span>                :            :  * this function to recompute the exponent lookup table.</a>
+<span class="lineNum">     709 </span>                :            :  */
+<span class="lineNum">     710 </span>                :<span class="lineCov">          8 : void gl_compute_spot_exp_table( struct gl_light *l )</span>
+<span class="lineNum">     711 </span>                :            : {
+<span class="lineNum">     712 </span>                :            :    int i;
+<span class="lineNum">     713 </span>                :<span class="lineCov">          8 :    double exponent = l-&gt;SpotExponent;</span>
+<span class="lineNum">     714 </span>                :            :    double tmp;
+<span class="lineNum">     715 </span>                :<span class="lineCov">          8 :    int clamp = 0;</span>
+<span class="lineNum">     716 </span>                :            : 
+<span class="lineNum">     717 </span>                :<span class="lineCov">          8 :    l-&gt;SpotExpTable[0][0] = 0.0;</span>
+<span class="lineNum">     718 </span>                :            : 
+<span class="lineNum">     719 </span>        [<span class="branchCov" title="Branch 0 was taken 4088 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">       4096 :    for (i=EXP_TABLE_SIZE-1;i&gt;0;i--) {</span>
+<span class="lineNum">     720 </span>        [<span class="branchCov" title="Branch 0 was taken 4088 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       4088 :       if (clamp == 0) {</span>
+<span class="lineNum">     721 </span>                :<span class="lineCov">       4088 :          tmp = pow(i/(double)(EXP_TABLE_SIZE-1), exponent);</span>
+<span class="lineNum">     722 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 4088 times"> + </span>]:<span class="lineCov">       4088 :          if (tmp &lt; FLT_MIN*100.0) {</span>
+<span class="lineNum">     723 </span>                :<span class="lineNoCov">          0 :             tmp = 0.0;</span>
+<span class="lineNum">     724 </span>                :<span class="lineNoCov">          0 :             clamp = 1;</span>
+<span class="lineNum">     725 </span>                :            :          }
+<span class="lineNum">     726 </span>                :            :       }
+<span class="lineNum">     727 </span>                :<span class="lineCov">       4088 :       l-&gt;SpotExpTable[i][0] = tmp;</span>
+<span class="lineNum">     728 </span>                :            :    }
+<span class="lineNum">     729 </span>        [<span class="branchCov" title="Branch 0 was taken 4088 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">       4096 :    for (i=0;i&lt;EXP_TABLE_SIZE-1;i++) {</span>
+<span class="lineNum">     730 </span>                :<span class="lineCov">       4088 :       l-&gt;SpotExpTable[i][1] = l-&gt;SpotExpTable[i+1][0] - l-&gt;SpotExpTable[i][0];</span>
+<span class="lineNum">     731 </span>                :            :    }
+<span class="lineNum">     732 </span>                :<span class="lineCov">          8 :    l-&gt;SpotExpTable[EXP_TABLE_SIZE-1][1] = 0.0;</span>
+<span class="lineNum">     733 </span>                :<span class="lineCov">          8 : }</span>
+<span class="lineNum">     734 </span>                :            : 
+<span class="lineNum">     735 </span>                :            : 
+<span class="lineNum">     736 </span>                :            : 
+<span class="lineNum">     737 </span>                :            : /*
+<span class="lineNum">     738 </span>                :            :  * Whenever the shininess of a material changes we must call this
+<a name="739"><span class="lineNum">     739 </span>                :            :  * function to recompute the exponential lookup table.</a>
+<span class="lineNum">     740 </span>                :            :  */
+<span class="lineNum">     741 </span>                :<span class="lineCov">          2 : void gl_compute_material_shine_table( struct gl_material *m )</span>
+<span class="lineNum">     742 </span>                :            : {
+<span class="lineNum">     743 </span>                :            :    int i;
+<span class="lineNum">     744 </span>                :<span class="lineCov">          4 :    double exponent = m-&gt;Shininess;</span>
+<span class="lineNum">     745 </span>                :            : 
+<span class="lineNum">     746 </span>                :<span class="lineCov">          4 :    m-&gt;ShineTable[0] = 0.0F;</span>
+<span class="lineNum">     747 </span>[<span class="branchCov" title="Branch 0 was taken 199 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>][<span class="branchCov" title="Branch 2 was taken 199 times"> + </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">        800 :    for (i=1;i&lt;SHINE_TABLE_SIZE;i++) {</span>
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 4 was taken 398 times"> + </span><span class="branchCov" title="Branch 5 was taken 2 times"> + </span>]
+<span class="lineNum">     748 </span>                :            : #if 0
+<span class="lineNum">     749 </span>                :            :       double x = pow( i/(double)(SHINE_TABLE_SIZE-1), exponent );
+<span class="lineNum">     750 </span>                :            :       if (x&lt;1.0e-10) {
+<span class="lineNum">     751 </span>                :            :          m-&gt;ShineTable[i] = 0.0F;
+<span class="lineNum">     752 </span>                :            :       }
+<span class="lineNum">     753 </span>                :            :       else {
+<span class="lineNum">     754 </span>                :            :          m-&gt;ShineTable[i] = x;
+<span class="lineNum">     755 </span>                :            :       }
+<span class="lineNum">     756 </span>                :            : #else
+<span class="lineNum">     757 </span>                :            :       /* just invalidate the table */
+<span class="lineNum">     758 </span>                :<span class="lineCov">        796 :       m-&gt;ShineTable[i] = -1.0;</span>
+<span class="lineNum">     759 </span>                :            : #endif
+<span class="lineNum">     760 </span>                :            :    }
+<span class="lineNum">     761 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">     762 </span>                :            : 
+<span class="lineNum">     763 </span>                :            : 
+<span class="lineNum">     764 </span>                :            : 
+<span class="lineNum">     765 </span>                :            : /*
+<span class="lineNum">     766 </span>                :            :  * Examine current lighting parameters to determine if the optimized lighting
+<span class="lineNum">     767 </span>                :            :  * function can be used.
+<span class="lineNum">     768 </span>                :            :  * Also, precompute some lighting values such as the products of light
+<a name="769"><span class="lineNum">     769 </span>                :            :  * source and material ambient, diffuse and specular coefficients.</a>
+<span class="lineNum">     770 </span>                :            :  */
+<span class="lineNum">     771 </span>                :<span class="lineCov">          2 : void gl_update_lighting( GLcontext *ctx )</span>
+<span class="lineNum">     772 </span>                :            : {
+<span class="lineNum">     773 </span>                :            :    GLint i, side;
+<span class="lineNum">     774 </span>                :            :    struct gl_light *prev_enabled, *light;
+<span class="lineNum">     775 </span>                :            : 
+<span class="lineNum">     776 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :    if (!ctx-&gt;Light.Enabled) {</span>
+<span class="lineNum">     777 </span>                :            :       /* If lighting is not enabled, we can skip all this. */
+<span class="lineNum">     778 </span>                :            :       return;
+<span class="lineNum">     779 </span>                :            :    }
+<span class="lineNum">     780 </span>                :            : 
+<span class="lineNum">     781 </span>                :            :    /* Setup linked list of enabled light sources */
+<span class="lineNum">     782 </span>                :<span class="lineCov">          1 :    prev_enabled = NULL;</span>
+<span class="lineNum">     783 </span>                :<span class="lineCov">          1 :    ctx-&gt;Light.FirstEnabled = NULL;</span>
+<span class="lineNum">     784 </span>        [<span class="branchCov" title="Branch 0 was taken 8 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          9 :    for (i=0;i&lt;MAX_LIGHTS;i++) {</span>
+<span class="lineNum">     785 </span>                :<span class="lineCov">          8 :       ctx-&gt;Light.Light[i].NextEnabled = NULL;</span>
+<span class="lineNum">     786 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">          8 :       if (ctx-&gt;Light.Light[i].Enabled) {</span>
+<span class="lineNum">     787 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          3 :          if (prev_enabled) {</span>
+<span class="lineNum">     788 </span>                :<span class="lineCov">          2 :             prev_enabled-&gt;NextEnabled = &amp;ctx-&gt;Light.Light[i];</span>
+<span class="lineNum">     789 </span>                :            :          }
+<span class="lineNum">     790 </span>                :            :          else {
+<span class="lineNum">     791 </span>                :<span class="lineCov">          1 :             ctx-&gt;Light.FirstEnabled = &amp;ctx-&gt;Light.Light[i];</span>
+<span class="lineNum">     792 </span>                :            :          }
+<span class="lineNum">     793 </span>                :<span class="lineCov">          3 :          prev_enabled = &amp;ctx-&gt;Light.Light[i];</span>
+<span class="lineNum">     794 </span>                :            :       }
+<span class="lineNum">     795 </span>                :            :    }
+<span class="lineNum">     796 </span>                :            : 
+<span class="lineNum">     797 </span>                :            :    /* base color = material_emission + global_ambient * material_ambient */
+<span class="lineNum">     798 </span>        [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          3 :    for (side=0; side&lt;2; side++) {</span>
+<span class="lineNum">     799 </span>                :<span class="lineCov">          4 :       ctx-&gt;Light.BaseColor[side][0] = ctx-&gt;Light.Material[side].Emission[0]</span>
+<span class="lineNum">     800 </span>                :<span class="lineCov">          2 :          + ctx-&gt;Light.Model.Ambient[0] * ctx-&gt;Light.Material[side].Ambient[0];</span>
+<span class="lineNum">     801 </span>                :<span class="lineCov">          4 :       ctx-&gt;Light.BaseColor[side][1] = ctx-&gt;Light.Material[side].Emission[1]</span>
+<span class="lineNum">     802 </span>                :<span class="lineCov">          2 :          + ctx-&gt;Light.Model.Ambient[1] * ctx-&gt;Light.Material[side].Ambient[1];</span>
+<span class="lineNum">     803 </span>                :<span class="lineCov">          4 :       ctx-&gt;Light.BaseColor[side][2] = ctx-&gt;Light.Material[side].Emission[2]</span>
+<span class="lineNum">     804 </span>                :<span class="lineCov">          2 :          + ctx-&gt;Light.Model.Ambient[2] * ctx-&gt;Light.Material[side].Ambient[2];</span>
+<span class="lineNum">     805 </span>                :            :       ctx-&gt;Light.BaseColor[side][3]
+<span class="lineNum">     806 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :          = MIN2( ctx-&gt;Light.Material[side].Diffuse[3], 1.0F );</span>
+<span class="lineNum">     807 </span>                :            :    }
+<span class="lineNum">     808 </span>                :            : 
+<span class="lineNum">     809 </span>                :            : 
+<span class="lineNum">     810 </span>                :            :    /* Precompute some lighting stuff */
+<span class="lineNum">     811 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          4 :    for (light = ctx-&gt;Light.FirstEnabled; light; light = light-&gt;NextEnabled) {</span>
+<span class="lineNum">     812 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          9 :       for (side=0; side&lt;2; side++) {</span>
+<span class="lineNum">     813 </span>                :<span class="lineCov">          6 :          struct gl_material *mat = &amp;ctx-&gt;Light.Material[side];</span>
+<span class="lineNum">     814 </span>                :            :          /* Add each light's ambient component to base color */
+<span class="lineNum">     815 </span>                :<span class="lineCov">          6 :          ctx-&gt;Light.BaseColor[side][0] += light-&gt;Ambient[0] * mat-&gt;Ambient[0];</span>
+<span class="lineNum">     816 </span>                :<span class="lineCov">          6 :          ctx-&gt;Light.BaseColor[side][1] += light-&gt;Ambient[1] * mat-&gt;Ambient[1];</span>
+<span class="lineNum">     817 </span>                :<span class="lineCov">          6 :          ctx-&gt;Light.BaseColor[side][2] += light-&gt;Ambient[2] * mat-&gt;Ambient[2];</span>
+<span class="lineNum">     818 </span>                :            :          /* compute product of light's ambient with front material ambient */
+<span class="lineNum">     819 </span>                :<span class="lineCov">          6 :          light-&gt;MatAmbient[side][0] = light-&gt;Ambient[0] * mat-&gt;Ambient[0];</span>
+<span class="lineNum">     820 </span>                :<span class="lineCov">          6 :          light-&gt;MatAmbient[side][1] = light-&gt;Ambient[1] * mat-&gt;Ambient[1];</span>
+<span class="lineNum">     821 </span>                :<span class="lineCov">          6 :          light-&gt;MatAmbient[side][2] = light-&gt;Ambient[2] * mat-&gt;Ambient[2];</span>
+<span class="lineNum">     822 </span>                :            :          /* compute product of light's diffuse with front material diffuse */
+<span class="lineNum">     823 </span>                :<span class="lineCov">          6 :          light-&gt;MatDiffuse[side][0] = light-&gt;Diffuse[0] * mat-&gt;Diffuse[0];</span>
+<span class="lineNum">     824 </span>                :<span class="lineCov">          6 :          light-&gt;MatDiffuse[side][1] = light-&gt;Diffuse[1] * mat-&gt;Diffuse[1];</span>
+<span class="lineNum">     825 </span>                :<span class="lineCov">          6 :          light-&gt;MatDiffuse[side][2] = light-&gt;Diffuse[2] * mat-&gt;Diffuse[2];</span>
+<span class="lineNum">     826 </span>                :            :          /* compute product of light's specular with front material specular */
+<span class="lineNum">     827 </span>                :<span class="lineCov">          6 :          light-&gt;MatSpecular[side][0] = light-&gt;Specular[0] * mat-&gt;Specular[0];</span>
+<span class="lineNum">     828 </span>                :<span class="lineCov">          6 :          light-&gt;MatSpecular[side][1] = light-&gt;Specular[1] * mat-&gt;Specular[1];</span>
+<span class="lineNum">     829 </span>                :<span class="lineCov">          6 :          light-&gt;MatSpecular[side][2] = light-&gt;Specular[2] * mat-&gt;Specular[2];</span>
+<span class="lineNum">     830 </span>                :            : 
+<span class="lineNum">     831 </span>                :            :          /* VP (VP) = Normalize( Position ) */
+<span class="lineNum">     832 </span>                :<span class="lineCov">          6 :          COPY_3V( light-&gt;VP_inf_norm, light-&gt;Position );</span>
+<span class="lineNum">     833 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          6 :          NORMALIZE_3FV( light-&gt;VP_inf_norm );</span>
+<span class="lineNum">     834 </span>                :            : 
+<span class="lineNum">     835 </span>                :            :          /* h_inf_norm = Normalize( V_to_P + &lt;0,0,1&gt; ) */
+<span class="lineNum">     836 </span>                :<span class="lineCov">          6 :          COPY_3V( light-&gt;h_inf_norm, light-&gt;VP_inf_norm );</span>
+<span class="lineNum">     837 </span>                :<span class="lineCov">          6 :          light-&gt;h_inf_norm[2] += 1.0F;</span>
+<span class="lineNum">     838 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          6 :          NORMALIZE_3FV( light-&gt;h_inf_norm );</span>
+<span class="lineNum">     839 </span>                :            : 
+<span class="lineNum">     840 </span>                :<span class="lineCov">          6 :          COPY_3V( light-&gt;NormDirection, light-&gt;Direction );</span>
+<span class="lineNum">     841 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          6 :          NORMALIZE_3FV( light-&gt;NormDirection );</span>
+<span class="lineNum">     842 </span>                :            : 
+<span class="lineNum">     843 </span>                :            :          /* Compute color index diffuse and specular light intensities */
+<span class="lineNum">     844 </span>                :<span class="lineCov">         12 :          light-&gt;dli = 0.30F * light-&gt;Diffuse[0]</span>
+<span class="lineNum">     845 </span>                :<span class="lineCov">          6 :                     + 0.59F * light-&gt;Diffuse[1]</span>
+<span class="lineNum">     846 </span>                :<span class="lineCov">          6 :                     + 0.11F * light-&gt;Diffuse[2];</span>
+<span class="lineNum">     847 </span>                :<span class="lineCov">         12 :          light-&gt;sli = 0.30F * light-&gt;Specular[0]</span>
+<span class="lineNum">     848 </span>                :<span class="lineCov">          6 :                     + 0.59F * light-&gt;Specular[1]</span>
+<span class="lineNum">     849 </span>                :<span class="lineCov">          6 :                     + 0.11F * light-&gt;Specular[2];</span>
+<span class="lineNum">     850 </span>                :            : 
+<span class="lineNum">     851 </span>                :            :       } /* loop over materials */
+<span class="lineNum">     852 </span>                :            :    } /* loop over lights */
+<span class="lineNum">     853 </span>                :            : 
+<span class="lineNum">     854 </span>                :            :    /* Determine if the fast lighting function can be used */
+<span class="lineNum">     855 </span>                :<span class="lineCov">          1 :    ctx-&gt;Light.Fast = GL_TRUE;</span>
+<span class="lineNum">     856 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :    if (    ctx-&gt;Light.BaseColor[0][0]&lt;0.0F</span>
+<span class="lineNum">     857 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[0][1]&lt;0.0F</span>
+<span class="lineNum">     858 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[0][2]&lt;0.0F</span>
+<span class="lineNum">     859 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[0][3]&lt;0.0F</span>
+<span class="lineNum">     860 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[1][0]&lt;0.0F</span>
+<span class="lineNum">     861 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[1][1]&lt;0.0F</span>
+<span class="lineNum">     862 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[1][2]&lt;0.0F</span>
+<span class="lineNum">     863 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.BaseColor[1][3]&lt;0.0F</span>
+<span class="lineNum">     864 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.Model.LocalViewer</span>
+<span class="lineNum">     865 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :         || ctx-&gt;Light.ColorMaterialEnabled) {</span>
+<span class="lineNum">     866 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Light.Fast = GL_FALSE;</span>
+<span class="lineNum">     867 </span>                :            :    }
+<span class="lineNum">     868 </span>                :            :    else {
+<span class="lineNum">     869 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          5 :       for (light=ctx-&gt;Light.FirstEnabled; light; light=light-&gt;NextEnabled) {</span>
+<span class="lineNum">     870 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :          if (   light-&gt;Position[3]!=0.0F</span>
+<span class="lineNum">     871 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;SpotCutoff!=180.0F</span>
+<span class="lineNum">     872 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[0][0]&lt;0.0F</span>
+<span class="lineNum">     873 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[0][1]&lt;0.0F</span>
+<span class="lineNum">     874 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[0][2]&lt;0.0F</span>
+<span class="lineNum">     875 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[0][0]&lt;0.0F</span>
+<span class="lineNum">     876 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[0][1]&lt;0.0F</span>
+<span class="lineNum">     877 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[0][2]&lt;0.0F</span>
+<span class="lineNum">     878 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[1][0]&lt;0.0F</span>
+<span class="lineNum">     879 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[1][1]&lt;0.0F</span>
+<span class="lineNum">     880 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatDiffuse[1][2]&lt;0.0F</span>
+<span class="lineNum">     881 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[1][0]&lt;0.0F</span>
+<span class="lineNum">     882 </span>        [<span class="branchCov" title="Branch 0 was taken 3 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[1][1]&lt;0.0F</span>
+<span class="lineNum">     883 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3 times"> + </span>]:<span class="lineCov">          3 :              || light-&gt;MatSpecular[1][2]&lt;0.0F) {</span>
+<span class="lineNum">     884 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.Fast = GL_FALSE;</span>
+<span class="lineNum">     885 </span>                :<span class="lineNoCov">          0 :             break;</span>
+<span class="lineNum">     886 </span>                :            :          }
+<span class="lineNum">     887 </span>                :            :       }
+<span class="lineNum">     888 </span>                :            :    }
+<span class="lineNum">     889 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

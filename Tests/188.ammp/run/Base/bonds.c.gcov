@@ -1,0 +1,877 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/bonds.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* bonds.c
+        -:    2:*
+        -:    3:* collection of routines to service bond length potentials
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of bonds, with the associated length and force constant
+        -:    9:*
+        -:   10:* (this could be table driven but what the hell memories cheap)
+        -:   11:*
+        -:   12:* the routines for potential value, force and (eventually) second
+        -:   13:* derivatives are here also
+        -:   14:*
+        -:   15:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   16:* this allows for parralellization if needed (on a PC?)
+        -:   17:*
+        -:   18:* forces are bond wise symmetric - so we don't have to mess around with
+        -:   19:* s matrices and the like.
+        -:   20:*/
+        -:   21:/*
+        -:   22:*  copyright 1992 Robert W. Harrison
+        -:   23:*  
+        -:   24:*  This notice may not be removed
+        -:   25:*  This program may be copied for scientific use
+        -:   26:*  It may not be sold for profit without explicit
+        -:   27:*  permission of the author(s) who retain any
+        -:   28:*  commercial rights including the right to modify 
+        -:   29:*  this notice
+        -:   30:*/
+        -:   31:
+        -:   32:#define ANSI 1
+        -:   33:/* misc includes - ANSI and some are just to be safe */
+        -:   34:#include <stdio.h>
+        -:   35:#include <ctype.h>
+        -:   36:#include <math.h>
+        -:   37:#ifdef ANSI
+        -:   38:#include <stdlib.h>
+        -:   39:#endif
+        -:   40://#include "ammp.h"
+        -:   41:/* ATOM structure contains a serial number for indexing into
+        -:   42:* arrays and the like (a Hessian)
+        -:   43:* but otherwise is self-contained. Note the hooks for Non-bonded potentials
+        -:   44:*/
+        -:   45:typedef struct{
+        -:   46:	ATOM *atom1,*atom2;
+        -:   47:	float length,k;
+        -:   48:	float dlength,dk; /* for abc terms */
+        -:   49:	int ndiff;
+        -:   50:	void *next;
+        -:   51:	}  BOND;
+        -:   52:#define BLONG sizeof(BOND)
+        -:   53:
+        -:   54:BOND *bond_first = NULL;
+        -:   55:BOND *bond_last = NULL;
+        -:   56:/* function bond adds a bond to the bond list
+        -:   57:* returns 1 if ok
+        -:   58:* returns 0 if not
+        -:   59:*  is passed the atom serial numbers, length and constant
+        -:   60:* allocates the new memory, initializes it and
+        -:   61:* returns
+        -:   62:*/
+function _Z4bondiiff called 7490 returned 100% blocks executed 76%
+     7490:   63:int bond(int p1, int p2, float bl,float fk)
+        -:   64:	{
+        -:   65:	ATOM *ap1,*ap2,*a_m_serial(int);
+        -:   66:	BOND *new_p;
+        -:   67:	int i;
+        -:   68:	char line[80];
+        -:   69:/* get the atom pointers for the two serial numbers */
+     7490:   70:	ap1 = a_m_serial( p1 );
+call    0 returned 100%
+     7490:   71:	ap2 = a_m_serial( p2 );
+call    0 returned 100%
+     7490:   72:	if( (ap1 == NULL) || (ap2 == NULL) ) 
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   73:	{
+        -:   74:	sprintf( line,"undefined atom in bond %d %d \0",p1,p2);
+    #####:   75:	aaerror( line );
+call    0 never executed
+    #####:   76:	return 0;
+        -:   77:	}
+        -:   78:
+     7490:   79:	if( ( new_p = (BOND*) malloc( BLONG ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   80:	{
+    #####:   81:	return 0;
+        -:   82:	}
+        -:   83:	/* initialize the pointers */
+     7490:   84:	if( bond_first == NULL) bond_first = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     7490:   85:	if( bond_last == NULL) bond_last = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     7490:   86:	new_p -> atom1 = ap1;
+     7490:   87:	new_p -> atom2 = ap2;
+     7490:   88:	new_p -> length = bl;
+     7490:   89:	new_p -> k = fk;
+     7490:   90:	new_p -> next = new_p;
+        -:   91:/* update the exclude list in the atoms structure */
+     7490:   92:	if( ap1->dontuse < NEXCLUDE)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   93:	{
+    22611:   94:		for( i=0; i< ap1->dontuse; i++)
+branch  0 taken 67%
+branch  1 taken 33% (fallthrough)
+    15121:   95:		if( ap1->excluded[i] == ap2) goto excluded1;	
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     7490:   96:		ap1->excluded[ap1->dontuse] = ap2; (ap1->dontuse)++;
+        -:   97:	}else{
+    #####:   98:	aaerror(" too many bonds to an atom increase NEXCLUDE in ammp.h");
+call    0 never executed
+    #####:   99:	exit(0);
+call    0 never executed
+        -:  100:	}
+        -:  101:excluded1:
+     7490:  102:	if( ap2->dontuse < NEXCLUDE)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  103:	{
+    15412:  104:		for( i=0; i< ap2->dontuse; i++)
+branch  0 taken 51%
+branch  1 taken 49% (fallthrough)
+     7922:  105:		if( ap2->excluded[i] == ap1) goto excluded2;	
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+     7490:  106:		ap2->excluded[ap2->dontuse] = ap1; (ap2->dontuse)++;
+        -:  107:	}else{
+    #####:  108:	aaerror(" too many bonds to an atom increase NEXCLUDE in ammp.h");
+call    0 never executed
+    #####:  109:	exit(0);
+call    0 never executed
+        -:  110:	}
+        -:  111:excluded2:
+     7490:  112:	bond_last -> next = new_p;
+     7490:  113:	bond_last = new_p;
+     7490:  114:	return 1;
+        -:  115:	}
+        -:  116:
+        -:  117:
+        -:  118:/* v_bond()
+        -:  119:* this function sums up the potentials
+        -:  120:* for the atoms defined in the BOND data structure.
+        -:  121:*/
+        -:  122:/* standard returns 0 if error (any) 1 if ok
+        -:  123:* V is the potential */
+function _Z6v_bondPff called 3 returned 100% blocks executed 71%
+        3:  124:int v_bond(float *V, float lambda)
+        -:  125:{
+        -:  126:	BOND *bp;
+        -:  127:	float r,xt,yt,zt;
+        -:  128:	ATOM *a1,*a2;
+        -:  129:
+        -:  130:
+        3:  131:	bp = bond_first;
+        3:  132:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    22467:  133:       while(1)
+        -:  134:       {
+    22470:  135:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    22470:  136:	a1 = bp->atom1; a2 = bp->atom2;
+    22470:  137:	if( a1->active || a2->active )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  138:	{
+    22470:  139:	if( lambda == 0.)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  140:	{
+    22470:  141:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    22470:  142:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    22470:  143:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  144:	} else
+        -:  145:	{
+    #####:  146:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  147:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  148:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  149:	r = xt*xt+yt*yt+zt*zt;
+        -:  150:	}
+    22470:  151:	r = sqrt(r); *V += bp->k*( r - bp->length)*(r - bp->length);
+        -:  152:	}
+    22470:  153:	if( bp == bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+    22467:  154:	bp = (BOND*) bp->next;
+        -:  155:       }
+        -:  156:}
+        -:  157:/* f_bond()
+        -:  158:*
+        -:  159:* f_bond increments the forces in the atom structures by the force
+        -:  160:* due to the bond components.  NOTE THE WORD increment.
+        -:  161:* the forces should first be zero'd.
+        -:  162:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  163:* on bigger (and better?) machines the different potential terms
+        -:  164:* may be updated at random or in parrellel, if we assume that this routine
+        -:  165:* will initialize the forces then we can't do this.
+        -:  166:*/
+function _Z6f_bondf called 1002 returned 100% blocks executed 80%
+     1002:  167:int f_bond(float lambda)
+        -:  168:/*  returns 0 if error, 1 if OK */
+        -:  169:{
+        -:  170:	BOND *bp;
+        -:  171:	float r,k,ux,uy,uz;
+        -:  172:	ATOM *a1,*a2;
+        -:  173:
+        -:  174:
+     1002:  175:	bp = bond_first;
+     1002:  176:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  7503978:  177:       while(1)
+        -:  178:       {
+  7504980:  179:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  7504980:  180:	k = bp->k;
+  7504980:  181:	a1 = bp->atom1; a2 = bp->atom2;
+  7504980:  182:	if( a1->active || a2->active )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+        -:  183:	{
+  7504980:  184:	if( lambda == 0.)
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+        -:  185:	{
+    22470:  186:	ux = (a2->x - a1->x);
+    22470:  187:	uy = (a2->y - a1->y);
+    22470:  188:	uz = (a2->z - a1->z);
+        -:  189:	}else{
+  7482510:  190:	ux = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+  7482510:  191:	uy = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+  7482510:  192:	uz = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+        -:  193:	}
+  7504980:  194:	r = ux*ux + uy*uy + uz*uz;
+        -:  195:	 /* watch for FP errors*/
+  7504980:  196:	 if( r <= 1.e-15)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  197:	 { r = 0; ux = 1.; uy = 0.; uz = 0.; }else{
+  7504980:  198:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  199:	}
+  7504980:  200:	ux = 2*k*(r-bp->length)*ux; 
+  7504980:  201:	uy = 2*k*(r-bp->length)*uy; 
+  7504980:  202:	uz = 2*k*(r-bp->length)*uz;
+  7504980:  203:	if( a1->active ){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  7504980:  204:	a1->fx += ux; 
+  7504980:  205:	a1->fy += uy; 
+  7504980:  206:	a1->fz += uz; 
+        -:  207:	}
+  7504980:  208:	if( a2->active ){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+  7504980:  209:	a2->fx -= ux; 
+  7504980:  210:	a2->fy -= uy; 
+  7504980:  211:	a2->fz -= uz; 
+        -:  212:	}
+        -:  213:	}
+  7504980:  214:	if( bp == bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  7503978:  215:	bp = (BOND*) bp->next;
+        -:  216:       }
+        -:  217:}
+        -:  218:/* function get_bond( a1,bonded,10,inbond);
+        -:  219:* check the BONDS list for atoms bonded to a1
+        -:  220:*/
+        -:  221:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z8get_bondP4ATOMPS0_iPi called 0 returned 0% blocks executed 0%
+    #####:  222:void get_bond( ATOM *a1, ATOM *bonded[], int mbond, int *inbond  )
+        -:  223:{
+        -:  224:	BOND *mine;
+    #####:  225:	mine = bond_first;
+    #####:  226:	*inbond = 0;
+        -:  227:	while(1)
+        -:  228:	{
+    #####:  229:	if( (mine == NULL) )
+branch  0 never executed
+branch  1 never executed
+        -:  230:	{
+        -:  231:		return;
+        -:  232:	}
+    #####:  233:	if( mine->atom1 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  234:	{
+    #####:  235:		bonded[(*inbond)++] = mine->atom2;
+        -:  236:	}
+    #####:  237:	if( mine->atom2 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  238:	{
+    #####:  239:		bonded[(*inbond)++] = mine->atom1;
+        -:  240:	}
+    #####:  241:	if( mine == mine->next) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  242:	mine = (BOND*) mine->next;
+    #####:  243:	if( *inbond == mbond ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  244:	}		
+        -:  245:}
+        -:  246:/* routine dump_bonds
+        -:  247:* this function outputs the bond parameters
+        -:  248:* and does it in a simple form
+        -:  249:* bond ser1,ser2,k,req
+        -:  250:* the rest is just free format
+        -:  251:*/
+        -:  252:/* SPEC use modern style declaration to match proto jh/9/22/99 */
+function _Z10dump_bondsP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  253:void dump_bonds( FILE *where )
+        -:  254:{
+        -:  255:	BOND *b;
+        -:  256:	ATOM *a1,*a2;
+    #####:  257:	b = bond_first;
+    #####:  258:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  259:	while( (b->next != b) )
+branch  0 never executed
+branch  1 never executed
+        -:  260:	{
+    #####:  261:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  262:	a1 = b->atom1; a2 = b->atom2;
+        -:  263:	fprintf( where,"bond %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  264:		b->length,b->k);
+    #####:  265:	b = (BOND*) b->next;
+        -:  266:	}
+    #####:  267:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  268:	a1 = b->atom1; a2 = b->atom2;
+        -:  269:	fprintf( where,"bond %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  270:		b->length,b->k);
+        -:  271:}	
+        -:  272:
+        -:  273:/* v_mmbond()
+        -:  274:* this function sums up the potentials
+        -:  275:* for the atoms defined in the BOND data structure.
+        -:  276:*/
+        -:  277:/* mm3 bond formula */
+        -:  278:/* standard returns 0 if error (any) 1 if ok
+        -:  279:* V is the potential */
+function _Z8v_mmbondPff called 0 returned 0% blocks executed 0%
+    #####:  280:int v_mmbond(float *V, float lambda)
+        -:  281:{
+        -:  282:	BOND *bp;
+        -:  283:	float r,xt,yt,zt;
+        -:  284:	ATOM *a1,*a2;
+        -:  285:
+        -:  286:
+    #####:  287:	bp = bond_first;
+    #####:  288:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  289:       while(1)
+        -:  290:       {
+    #####:  291:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  292:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  293:	if( a1->active || a2->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  294:	{
+    #####:  295:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  296:	{
+    #####:  297:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  298:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  299:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  300:	} else
+        -:  301:	{
+    #####:  302:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  303:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  304:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  305:	r = xt*xt+yt*yt+zt*zt;
+        -:  306:	}
+    #####:  307:	r = sqrt(r);
+        -:  308:/*	*V += bp->k*( r - bp->length)*(r - bp->length); */
+    #####:  309:	r = r - bp->length;
+    #####:  310:	*V += bp->k*r*r*(1.-2.55*r+7.*2.55/12*r*r);
+        -:  311:	}
+    #####:  312:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  313:	bp = (BOND*) bp->next;
+        -:  314:       }
+        -:  315:}
+        -:  316:/* f_mmbond()
+        -:  317:*
+        -:  318:* mm3 bond formula
+        -:  319:* f_mmbond increments the forces in the atom structures by the force
+        -:  320:* due to the bond components.  NOTE THE WORD increment.
+        -:  321:* the forces should first be zero'd.
+        -:  322:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  323:* on bigger (and better?) machines the different potential terms
+        -:  324:* may be updated at random or in parrellel, if we assume that this routine
+        -:  325:* will initialize the forces then we can't do this.
+        -:  326:*/
+function _Z8f_mmbondf called 0 returned 0% blocks executed 0%
+    #####:  327:int f_mmbond(float lambda)
+        -:  328:/*  returns 0 if error, 1 if OK */
+        -:  329:{
+        -:  330:	BOND *bp;
+        -:  331:	float r,k,ux,uy,uz;
+        -:  332:	ATOM *a1,*a2;
+        -:  333:
+        -:  334:
+    #####:  335:	bp = bond_first;
+    #####:  336:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  337:       while(1)
+        -:  338:       {
+    #####:  339:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  340:	k = bp->k;
+    #####:  341:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  342:	if( a1->active || a2->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  343:	{
+    #####:  344:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  345:	{
+    #####:  346:	ux = (a2->x - a1->x);
+    #####:  347:	uy = (a2->y - a1->y);
+    #####:  348:	uz = (a2->z - a1->z);
+        -:  349:	}else{
+    #####:  350:	ux = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  351:	uy = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  352:	uz = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+        -:  353:	}
+    #####:  354:	r = ux*ux + uy*uy + uz*uz;
+        -:  355:	 /* watch for FP errors*/
+    #####:  356:	 if( r <= 1.e-5)
+branch  0 never executed
+branch  1 never executed
+    #####:  357:	 { r = 0; ux = 1.; uy = 0.; uz = 0.; }else{
+    #####:  358:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  359:	}
+        -:  360:/*	ux = 2*k*(r-bp->length)*ux; 
+        -:  361:	uy = 2*k*(r-bp->length)*uy; 
+        -:  362:	uz = 2*k*(r-bp->length)*uz;
+        -:  363:	*V += bp->k*r*r*(1.-2.55*r+7.*2.55/12*r*r);
+        -:  364:*/
+    #####:  365:	r = r - bp->length;
+    #####:  366:	ux = k*r*(2.-3*2.55*r+4*7*2.55*r*r/12)*ux; 
+    #####:  367:	uy = k*r*(2.-3*2.55*r+4*7*2.55*r*r/12)*uy; 
+    #####:  368:	uz = k*r*(2.-3*2.55*r+4*7*2.55*r*r/12)*uz;
+    #####:  369:	if( a1->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  370:	a1->fx += ux; 
+    #####:  371:	a1->fy += uy; 
+    #####:  372:	a1->fz += uz; 
+        -:  373:	}
+    #####:  374:	if( a2->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  375:	a2->fx -= ux; 
+    #####:  376:	a2->fy -= uy; 
+    #####:  377:	a2->fz -= uz; 
+        -:  378:	}
+        -:  379:	}
+    #####:  380:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  381:	bp = (BOND*) bp->next;
+        -:  382:       }
+        -:  383:}
+        -:  384:/* a_bond()
+        -:  385:* this function sums up the potentials
+        -:  386:* for the atoms defined in the BOND data structure.
+        -:  387:* only does bonds in the given range
+        -:  388:*/
+        -:  389:/* standard returns 0 if error (any) 1 if ok
+        -:  390:* V is the potential */
+function _Z6a_bondPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  391:int a_bond(float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  392:{
+        -:  393:	BOND *bp;
+        -:  394:	float r,xt,yt,zt;
+        -:  395:	ATOM *a1,*a2;
+        -:  396:
+        -:  397:
+    #####:  398:	bp = bond_first;
+    #####:  399:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  400:       while(1)
+        -:  401:       {
+    #####:  402:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  403:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  404:	if( a1->active || a2->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  405:	if(( a1->serial >= ilow && a1->serial <=ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+        -:  406:	 ||( a2->serial >= ilow && a2->serial <=ihigh))
+        -:  407:	{
+    #####:  408:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  409:	{
+    #####:  410:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  411:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  412:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  413:	} else
+        -:  414:	{
+    #####:  415:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  416:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  417:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  418:	r = xt*xt+yt*yt+zt*zt;
+        -:  419:	}
+    #####:  420:	r = sqrt(r);  zt = bp->k*( r - bp->length)*(r - bp->length);
+    #####:  421:	*V += zt;
+        -:  422:	fprintf(op,"Bond %s %d %s %d E %f value %f error %f\n"
+    #####:  423:		,a1->name,a1->serial,a2->name,a2->serial,zt,r,r-bp->length);
+        -:  424:	}
+    #####:  425:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  426:	bp = (BOND*) bp->next;
+        -:  427:       }
+        -:  428:}
+        -:  429:/* a_mmbond()
+        -:  430:* this function sums up the potentials
+        -:  431:* for the atoms defined in the BOND data structure.
+        -:  432:*/
+        -:  433:/* mm3 bond formula */
+        -:  434:/* standard returns 0 if error (any) 1 if ok
+        -:  435:* V is the potential */
+function _Z8a_mmbondPffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  436:int a_mmbond(float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  437:{
+        -:  438:	BOND *bp;
+        -:  439:	float r,xt,yt,zt;
+        -:  440:	ATOM *a1,*a2;
+        -:  441:
+        -:  442:
+    #####:  443:	bp = bond_first;
+    #####:  444:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  445:       while(1)
+        -:  446:       {
+    #####:  447:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  448:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  449:	if(( a1->serial >= ilow && a1->serial <=ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+        -:  450:	 ||( a2->serial >= ilow && a2->serial <=ihigh))
+        -:  451:	{
+    #####:  452:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  453:	{
+    #####:  454:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  455:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  456:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  457:	} else
+        -:  458:	{
+    #####:  459:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  460:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  461:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  462:	r = xt*xt+yt*yt+zt*zt;
+        -:  463:	}
+    #####:  464:	r = sqrt(r);
+        -:  465:/*	*V += bp->k*( r - bp->length)*(r - bp->length); */
+    #####:  466:	r = r - bp->length;
+    #####:  467:	zt = bp->k*r*r*(1.-2.55*r+7.*2.55/12*r*r);
+    #####:  468:	*V += zt;
+        -:  469:	fprintf(op,"mmBond %s %d %s %d E %f value %f error %f\n"
+    #####:  470:		,a1->name,a1->serial,a2->name,a2->serial,zt,r+bp->length,r);
+        -:  471:/*
+        -:  472:	fprintf(op,"mmBond %d %d  E %f error %f\n",a1->serial,a2->serial,zt,r);
+        -:  473:*/
+        -:  474:	}
+    #####:  475:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  476:	bp = (BOND*) bp->next;
+        -:  477:       }
+        -:  478:}
+        -:  479:/* bond_length()
+        -:  480:* given two ATOMS find the bond length between them
+        -:  481:* return -1. if not bonded
+        -:  482:*/
+function _Z11bond_lengthP4ATOMS0_ called 0 returned 0% blocks executed 0%
+    #####:  483:float bond_length(ATOM *a1, ATOM *a2)
+        -:  484:{
+        -:  485:BOND *bp;
+    #####:  486:bp = bond_first;
+    #####:  487:while(1)
+        -:  488:{
+    #####:  489:if( bp == NULL ) return -1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  490:if( a1 == bp->atom1 && a2 == bp->atom2) return bp->length;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  491:if( a2 == bp->atom1 && a1 == bp->atom2) return bp->length;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  492:if( bp == bp->next) return -1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  493:bp = (BOND*) bp->next;
+        -:  494:}
+        -:  495:}
+function _Z9gsdg_bondP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  496:int gsdg_bond(ATOM *who)
+        -:  497:{
+        -:  498: BOND *bp;
+        -:  499:ATOM *ap;
+        -:  500:
+    #####:  501:bp = bond_first;
+    #####:  502:	while(1)
+        -:  503:        /* SPEC return 1 to reduce compiler warnings, but I 
+        -:  504:        * think nothing actually looks at the return value jh/9/22/99 */
+    #####:  505:	{ if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  506:	if( bp->atom1 == who )
+branch  0 never executed
+branch  1 never executed
+    #####:  507:	{ ap = bp->atom2; ap->vx = bp->length*bp->length; ap->vy = bp->k;}
+    #####:  508:	if( bp->atom2 == who )
+branch  0 never executed
+branch  1 never executed
+    #####:  509:	{ ap = bp->atom1; ap->vx = bp->length*bp->length; ap->vy = bp->k;}
+        -:  510:        /* SPEC return 1 to reduce compiler warnings, but I 
+        -:  511:        * think nothing actually looks at the return value jh/9/22/99 */
+    #####:  512:	if( bp == bp->next) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  513:	bp = (BOND*) bp->next;
+        -:  514:
+        -:  515:	}
+        -:  516:	return 0;
+        -:  517:}
+        -:  518:
+        -:  519:
+function _Z16get_bond_pointerP4ATOMS0_ called 0 returned 0% blocks executed 0%
+    #####:  520:BOND *get_bond_pointer(ATOM *a1, ATOM *a2)
+        -:  521:{
+        -:  522:BOND *bp;
+        -:  523:
+    #####:  524:	bp = bond_first;
+    #####:  525:	while(1)
+        -:  526:	{
+    #####:  527:	if( bp == NULL ) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  528:	if( a1 == bp->atom1 && a2 == bp->atom2) return bp;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  529:	if( a1 == bp->atom2 && a2 == bp->atom1) return bp;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  530:	if( bp == bp->next) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  531:	bp = (BOND*) bp->next;
+        -:  532:	}
+        -:  533:	return NULL;
+        -:  534:}
+        -:  535:/* v_ho_bond()
+        -:  536:* this function sums up the potentials
+        -:  537:* for the atoms defined in the BOND data structure.
+        -:  538:*/
+        -:  539:/* standard returns 0 if error (any) 1 if ok
+        -:  540:* V is the potential */
+function _Z9v_ho_bondPff called 0 returned 0% blocks executed 0%
+    #####:  541:int v_ho_bond(float *V, float lambda)
+        -:  542:{
+        -:  543:	BOND *bp;
+        -:  544:	float r,xt,yt,zt;
+        -:  545:	ATOM *a1,*a2;
+        -:  546:	float hol, get_f_variable(char*);
+        -:  547:	float target;
+        -:  548:
+    #####:  549:	hol = get_f_variable( "lambda");
+call    0 never executed
+    #####:  550:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  551:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  552:	bp = bond_first;
+    #####:  553:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  554:       while(1)
+        -:  555:       {
+    #####:  556:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  557:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  558:	if( a1->active || a2->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  559:	{
+    #####:  560:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  561:	{
+    #####:  562:	r = (a1->x - a2->x)*(a1->x - a2->x);
+    #####:  563:	r = r + (a1->y - a2->y)*(a1->y - a2->y);
+    #####:  564:	r = r + (a1->z - a2->z)*(a1->z - a2->z);
+        -:  565:	} else
+        -:  566:	{
+    #####:  567:	xt = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  568:	yt = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  569:	zt = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  570:	r = xt*xt+yt*yt+zt*zt;
+        -:  571:	}
+    #####:  572:	r = sqrt(r);
+    #####:  573:	target = hol*r + (1.-hol)*bp->length;
+    #####:  574:	 *V += bp->k*( r - target)*(r - target);
+        -:  575:	}
+    #####:  576:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  577:	bp = (BOND*) bp->next;
+        -:  578:       }
+        -:  579:}
+        -:  580:/* f_ho_bond()
+        -:  581:*
+        -:  582:* f_bond increments the forces in the atom structures by the force
+        -:  583:* due to the bond components.  NOTE THE WORD increment.
+        -:  584:* the forces should first be zero'd.
+        -:  585:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  586:* on bigger (and better?) machines the different potential terms
+        -:  587:* may be updated at random or in parrellel, if we assume that this routine
+        -:  588:* will initialize the forces then we can't do this.
+        -:  589:*/
+function _Z9f_ho_bondf called 0 returned 0% blocks executed 0%
+    #####:  590:int f_ho_bond(float lambda)
+        -:  591:/*  returns 0 if error, 1 if OK */
+        -:  592:{
+        -:  593:	BOND *bp;
+        -:  594:	float r,k,ux,uy,uz;
+        -:  595:	ATOM *a1,*a2;
+        -:  596:	float hol, get_f_variable(char*);
+        -:  597:	float target;
+        -:  598:
+    #####:  599:	hol = get_f_variable( "lambda");
+call    0 never executed
+    #####:  600:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  601:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  602:	bp = bond_first;
+    #####:  603:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  604:       while(1)
+        -:  605:       {
+    #####:  606:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  607:	k = bp->k;
+    #####:  608:	a1 = bp->atom1; a2 = bp->atom2;
+    #####:  609:	if( a1->active || a2->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  610:	{
+    #####:  611:	if( lambda == 0.)
+branch  0 never executed
+branch  1 never executed
+        -:  612:	{
+    #####:  613:	ux = (a2->x - a1->x);
+    #####:  614:	uy = (a2->y - a1->y);
+    #####:  615:	uz = (a2->z - a1->z);
+        -:  616:	}else{
+    #####:  617:	ux = (a2->x -a1->x +lambda*(a2->dx-a1->dx));
+    #####:  618:	uy = (a2->y -a1->y +lambda*(a2->dy-a1->dy));
+    #####:  619:	uz = (a2->z -a1->z +lambda*(a2->dz-a1->dz));
+        -:  620:	}
+    #####:  621:	r = ux*ux + uy*uy + uz*uz;
+        -:  622:	 /* watch for FP errors*/
+    #####:  623:	 if( r <= 1.e-15)
+branch  0 never executed
+branch  1 never executed
+    #####:  624:	 { r = 0; ux = 1.; uy = 0.; uz = 0.; }else{
+    #####:  625:	r = sqrt(r); ux = ux/r; uy = uy/r; uz = uz/r;
+        -:  626:	}
+    #####:  627:	target = hol*r + (1.-hol)*bp->length;
+    #####:  628:	ux = 2*k*(r-target)*(1.- hol)*ux; 
+    #####:  629:	uy = 2*k*(r-target)*(1.- hol)*uy; 
+    #####:  630:	uz = 2*k*(r-target)*(1.- hol)*uz;
+    #####:  631:	if( a1->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  632:	a1->fx += ux; 
+    #####:  633:	a1->fy += uy; 
+    #####:  634:	a1->fz += uz; 
+        -:  635:	}
+    #####:  636:	if( a2->active ){
+branch  0 never executed
+branch  1 never executed
+    #####:  637:	a2->fx -= ux; 
+    #####:  638:	a2->fy -= uy; 
+    #####:  639:	a2->fz -= uz; 
+        -:  640:	}
+        -:  641:	}
+    #####:  642:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  643:	bp = (BOND*) bp->next;
+        -:  644:       }
+        -:  645:}

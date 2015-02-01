@@ -1,0 +1,2 @@
+-u /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/Base
+-i ammp.in >ammp.out 2>ammp.err ../Base/ammp_parallel

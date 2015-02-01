@@ -1,0 +1,315 @@
+desc: (none)
+cmd: /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specinvoke speccmds.cmd
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=149259
+mem_heap_B=352
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=154628
+mem_heap_B=376
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=155830
+mem_heap_B=408
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=160257
+mem_heap_B=489
+mem_heap_extra_B=39
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=161087
+mem_heap_B=496
+mem_heap_extra_B=48
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=161359
+mem_heap_B=561
+mem_heap_extra_B=63
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=164215
+mem_heap_B=561
+mem_heap_extra_B=63
+mem_stacks_B=0
+heap_tree=detailed
+n4: 561 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 352 0x409E2B6: __fopen_internal (iofopen.c:76)
+  n1: 352 0x409E38A: fopen@@GLIBC_2.1 (iofopen.c:107)
+   n0: 352 0x8048E1F: main (specinvoke.c:207)
+ n3: 153 0x40B5A9E: strdup (strdup.c:43)
+  n0: 81 0x804939B: main (specinvoke.c:318)
+  n0: 65 0x80493FE: main (specinvoke.c:327)
+  n0: 7 0x80492D7: main (specinvoke.c:307)
+ n0: 32 0x8048FFB: main (specinvoke.c:253)
+ n0: 24 0x8048FD7: main (specinvoke.c:251)
+#-----------
+snapshot=8
+#-----------
+time=164215
+mem_heap_B=209
+mem_heap_extra_B=55
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=170916
+mem_heap_B=224
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=171056
+mem_heap_B=576
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=172156
+mem_heap_B=624
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=173784
+mem_heap_B=640
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=174255
+mem_heap_B=640
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=peak
+n6: 640 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 352 0x409E2B6: __fopen_internal (iofopen.c:76)
+  n2: 352 0x409E38A: fopen@@GLIBC_2.1 (iofopen.c:107)
+   n1: 352 0x40CD738: __tzfile_read (tzfile.c:182)
+    n1: 352 0x40CD0FC: tzset_internal (tzset.c:439)
+     n1: 352 0x40CD3C3: __tz_convert (tzset.c:624)
+      n1: 352 0x40CBA9D: localtime (localtime.c:43)
+       n1: 352 0x40CB94F: ctime (ctime.c:32)
+        n0: 352 0x80494DC: main (specinvoke.c:348)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+ n4: 168 0x40B5A9E: strdup (strdup.c:43)
+  n0: 81 0x804939B: main (specinvoke.c:318)
+  n0: 65 0x80493FE: main (specinvoke.c:327)
+  n1: 15 0x40CD0DB: tzset_internal (tzset.c:436)
+   n1: 15 0x40CD3C3: __tz_convert (tzset.c:624)
+    n1: 15 0x40CBA9D: localtime (localtime.c:43)
+     n1: 15 0x40CB94F: ctime (ctime.c:32)
+      n0: 15 0x80494DC: main (specinvoke.c:348)
+  n0: 7 0x80492D7: main (specinvoke.c:307)
+ n1: 48 0x40CD8BC: __tzfile_read (tzfile.c:257)
+  n1: 48 0x40CD0FC: tzset_internal (tzset.c:439)
+   n1: 48 0x40CD3C3: __tz_convert (tzset.c:624)
+    n1: 48 0x40CBA9D: localtime (localtime.c:43)
+     n1: 48 0x40CB94F: ctime (ctime.c:32)
+      n0: 48 0x80494DC: main (specinvoke.c:348)
+ n0: 32 0x8048FFB: main (specinvoke.c:253)
+ n0: 24 0x8048FD7: main (specinvoke.c:251)
+ n1: 16 0x40CC88A: __tzstring (tzset.c:107)
+  n1: 16 0x40CE0EF: __tzfile_read (tzfile.c:419)
+   n1: 16 0x40CD0FC: tzset_internal (tzset.c:439)
+    n1: 16 0x40CD3C3: __tz_convert (tzset.c:624)
+     n1: 16 0x40CBA9D: localtime (localtime.c:43)
+      n1: 16 0x40CB94F: ctime (ctime.c:32)
+       n0: 16 0x80494DC: main (specinvoke.c:348)
+#-----------
+snapshot=14
+#-----------
+time=174255
+mem_heap_B=288
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=174376
+mem_heap_B=300
+mem_heap_extra_B=92
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=174571
+mem_heap_B=312
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=184656
+mem_heap_B=297
+mem_heap_extra_B=95
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=184762
+mem_heap_B=312
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=194686
+mem_heap_B=377
+mem_heap_extra_B=119
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=201127
+mem_heap_B=312
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=207023
+mem_heap_B=297
+mem_heap_extra_B=95
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=207129
+mem_heap_B=312
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=220536
+mem_heap_B=297
+mem_heap_extra_B=95
+mem_stacks_B=0
+heap_tree=detailed
+n6: 297 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n4: 153 0x40B5A9E: strdup (strdup.c:43)
+  n0: 81 0x804939B: main (specinvoke.c:318)
+  n0: 65 0x80493FE: main (specinvoke.c:327)
+  n0: 7 0x80492D7: main (specinvoke.c:307)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 48 0x40CD8BC: __tzfile_read (tzfile.c:257)
+  n1: 48 0x40CD0FC: tzset_internal (tzset.c:439)
+   n1: 48 0x40CD3C3: __tz_convert (tzset.c:624)
+    n1: 48 0x40CBA9D: localtime (localtime.c:43)
+     n1: 48 0x40CB94F: ctime (ctime.c:32)
+      n0: 48 0x80494DC: main (specinvoke.c:348)
+ n2: 40 0x40CC88A: __tzstring (tzset.c:107)
+  n1: 24 0x40CDDC2: __tzfile_read (tzfile.c:430)
+   n1: 24 0x40CD0FC: tzset_internal (tzset.c:439)
+    n1: 24 0x40CD3C3: __tz_convert (tzset.c:624)
+     n1: 24 0x40CBA9D: localtime (localtime.c:43)
+      n1: 24 0x40CB94F: ctime (ctime.c:32)
+       n0: 24 0x80494DC: main (specinvoke.c:348)
+  n1: 16 0x40CE0EF: __tzfile_read (tzfile.c:419)
+   n1: 16 0x40CD0FC: tzset_internal (tzset.c:439)
+    n1: 16 0x40CD3C3: __tz_convert (tzset.c:624)
+     n1: 16 0x40CBA9D: localtime (localtime.c:43)
+      n1: 16 0x40CB94F: ctime (ctime.c:32)
+       n0: 16 0x80494DC: main (specinvoke.c:348)
+ n0: 32 0x8048FFB: main (specinvoke.c:253)
+ n0: 24 0x8048FD7: main (specinvoke.c:251)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=24
+#-----------
+time=220642
+mem_heap_B=312
+mem_heap_extra_B=104
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=241281
+mem_heap_B=296
+mem_heap_extra_B=96
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=241322
+mem_heap_B=284
+mem_heap_extra_B=84
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=241363
+mem_heap_B=272
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=241402
+mem_heap_B=257
+mem_heap_extra_B=63
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=243120
+mem_heap_B=209
+mem_heap_extra_B=55
+mem_stacks_B=0
+heap_tree=empty

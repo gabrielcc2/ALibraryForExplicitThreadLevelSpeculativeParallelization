@@ -1,0 +1,11 @@
+Reading Profile files in profile.*
+
+NODE 0;CONTEXT 0;THREAD 0:
+---------------------------------------------------------------------------------------
+%Time    Exclusive    Inclusive       #Call      #Subrs  Inclusive Name
+              msec   total msec                          usec/call 
+---------------------------------------------------------------------------------------
+100.0     1:38.014     1:38.015           1         374   98015207 main 
+  0.0        0.701        0.701         374           0          2 std::ceil(float) 
+  0.0        0.038        0.041           1           1         41 global constructors keyed to num_primes 
+  0.0        0.003        0.003           1           0          3 __static_initialization_and_destruction_0(int, int) 

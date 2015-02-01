@@ -1,0 +1,787 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/enable.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - enable.c<span style="font-size: 80%;"> (source / <a href="enable.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">276</td>
+            <td class="headerCovTableEntryLo">9.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryLo">28.6 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">207</td>
+            <td class="headerCovTableEntryLo">6.3 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: enable.c,v 1.23 1997/10/29 02:23:54 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: enable.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.23  1997/10/29 02:23:54  brianp
+<span class="lineNum">      27 </span>                :            :  * added UseGlobalTexturePalette() dd function (David Bucciarelli v20 3dfx)
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.22  1997/10/16 01:59:08  brianp
+<span class="lineNum">      30 </span>                :            :  * added GL_EXT_shared_texture_palette extension
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.21  1997/07/24 01:25:01  brianp
+<span class="lineNum">      33 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.20  1997/06/20 02:20:32  brianp
+<span class="lineNum">      36 </span>                :            :  * replaced Current.IntColor with Current.ByteColor
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.19  1997/05/31 16:57:14  brianp
+<span class="lineNum">      39 </span>                :            :  * added MESA_NO_RASTER env var support
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.18  1997/05/28 03:24:22  brianp
+<span class="lineNum">      42 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.17  1997/04/24 01:49:30  brianp
+<span class="lineNum">      45 </span>                :            :  * call gl_set_color_function() instead of directly setting pointers
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.16  1997/04/12 16:54:05  brianp
+<span class="lineNum">      48 </span>                :            :  * new NEW_POLYGON state flag
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.15  1997/04/12 16:20:27  brianp
+<span class="lineNum">      51 </span>                :            :  * removed call to Driver.Dither()
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.14  1997/04/02 03:10:36  brianp
+<span class="lineNum">      54 </span>                :            :  * changed some #include's
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.13  1997/02/27 19:59:08  brianp
+<span class="lineNum">      57 </span>                :            :  * issue a warning if enable depth or stencil test without such a buffer
+<span class="lineNum">      58 </span>                :            :  *
+<span class="lineNum">      59 </span>                :            :  * Revision 1.12  1997/02/09 19:53:43  brianp
+<span class="lineNum">      60 </span>                :            :  * now use TEXTURE_xD enable constants
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  * Revision 1.11  1997/02/09 18:49:37  brianp
+<span class="lineNum">      63 </span>                :            :  * added GL_EXT_texture3D support
+<span class="lineNum">      64 </span>                :            :  *
+<span class="lineNum">      65 </span>                :            :  * Revision 1.10  1997/01/28 22:13:42  brianp
+<span class="lineNum">      66 </span>                :            :  * now there's separate state for CI and RGBA logic op enabled
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  * Revision 1.9  1996/12/18 20:00:57  brianp
+<span class="lineNum">      69 </span>                :            :  * gl_set_material() now takes a bitmask instead of face and pname
+<span class="lineNum">      70 </span>                :            :  *
+<span class="lineNum">      71 </span>                :            :  * Revision 1.8  1996/12/11 20:16:49  brianp
+<span class="lineNum">      72 </span>                :            :  * more work on the GL_COLOR_MATERIAL bug
+<span class="lineNum">      73 </span>                :            :  *
+<span class="lineNum">      74 </span>                :            :  * Revision 1.7  1996/12/09 22:51:51  brianp
+<span class="lineNum">      75 </span>                :            :  * update API Color4f and Color4ub pointers for GL_COLOR_MATERIAL
+<span class="lineNum">      76 </span>                :            :  *
+<span class="lineNum">      77 </span>                :            :  * Revision 1.6  1996/12/07 10:21:07  brianp
+<span class="lineNum">      78 </span>                :            :  * call gl_set_material() instead of gl_Materialfv()
+<span class="lineNum">      79 </span>                :            :  *
+<span class="lineNum">      80 </span>                :            :  * Revision 1.5  1996/11/09 03:11:18  brianp
+<span class="lineNum">      81 </span>                :            :  * added missing GL_EXT_vertex_array caps to gl_enable()
+<span class="lineNum">      82 </span>                :            :  *
+<span class="lineNum">      83 </span>                :            :  * Revision 1.4  1996/10/11 03:44:09  brianp
+<span class="lineNum">      84 </span>                :            :  * added comments for GL_POLYGON_OFFSET_EXT symbol
+<span class="lineNum">      85 </span>                :            :  *
+<span class="lineNum">      86 </span>                :            :  * Revision 1.3  1996/09/27 01:26:40  brianp
+<span class="lineNum">      87 </span>                :            :  * removed unused variables
+<span class="lineNum">      88 </span>                :            :  *
+<span class="lineNum">      89 </span>                :            :  * Revision 1.2  1996/09/15 14:17:30  brianp
+<span class="lineNum">      90 </span>                :            :  * now use GLframebuffer and GLvisual
+<span class="lineNum">      91 </span>                :            :  *
+<span class="lineNum">      92 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      93 </span>                :            :  * Initial revision
+<span class="lineNum">      94 </span>                :            :  *
+<span class="lineNum">      95 </span>                :            :  */
+<span class="lineNum">      96 </span>                :            : 
+<span class="lineNum">      97 </span>                :            : 
+<span class="lineNum">      98 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      99 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">     100 </span>                :            : #else
+<span class="lineNum">     101 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">     102 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">     103 </span>                :            : #include &quot;depth.h&quot;
+<span class="lineNum">     104 </span>                :            : #include &quot;enable.h&quot;
+<span class="lineNum">     105 </span>                :            : #include &quot;light.h&quot;
+<span class="lineNum">     106 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">     107 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">     108 </span>                :            : #include &quot;stencil.h&quot;
+<span class="lineNum">     109 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">     110 </span>                :            : #include &quot;vbfill.h&quot;
+<span class="lineNum">     111 </span>                :            : #endif
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>                :            : /*
+<a name="116"><span class="lineNum">     116 </span>                :            :  * Perform glEnable and glDisable calls.</a>
+<span class="lineNum">     117 </span>                :            :  */
+<span class="lineNum">     118 </span>                :<span class="lineCov">          7 : static void gl_enable( GLcontext* ctx, GLenum cap, GLboolean state )</span>
+<span class="lineNum">     119 </span>                :            : {
+<span class="lineNum">     120 </span>                :            :    GLuint p;
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 7 times"> + </span>]:<span class="lineCov">          7 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     123 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (state) {</span>
+<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_OPERATION, &quot;glEnable&quot; );</span>
+<span class="lineNum">     125 </span>                :            :       }
+<span class="lineNum">     126 </span>                :            :       else {
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_OPERATION, &quot;glDisable&quot; );</span>
+<span class="lineNum">     128 </span>                :            :       }
+<span class="lineNum">     129 </span>                :            :       return;
+<span class="lineNum">     130 </span>                :            :    }
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span> :<span class="lineCov">          7 :    switch (cap) {</span>
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchCov" title="Branch 6 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span><span class="branchNoCov" title="Branch 8 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchCov" title="Branch 9 was taken 3 times"> + </span><span class="branchCov" title="Branch 10 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 11 was not taken"> - </span><span class="branchNoCov" title="Branch 12 was not taken"> - </span><span class="branchNoCov" title="Branch 13 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 14 was not taken"> - </span><span class="branchNoCov" title="Branch 15 was not taken"> - </span><span class="branchNoCov" title="Branch 16 was not taken"> - </span><span class="branchNoCov" title="Branch 17 was not taken"> - </span><span class="branchNoCov" title="Branch 18 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 19 was not taken"> - </span><span class="branchNoCov" title="Branch 20 was not taken"> - </span><span class="branchNoCov" title="Branch 21 was not taken"> - </span><span class="branchNoCov" title="Branch 22 was not taken"> - </span><span class="branchNoCov" title="Branch 23 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 24 was not taken"> - </span><span class="branchNoCov" title="Branch 25 was not taken"> - </span><span class="branchNoCov" title="Branch 26 was not taken"> - </span><span class="branchNoCov" title="Branch 27 was not taken"> - </span><span class="branchNoCov" title="Branch 28 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 29 was not taken"> - </span><span class="branchNoCov" title="Branch 30 was not taken"> - </span><span class="branchNoCov" title="Branch 31 was not taken"> - </span><span class="branchNoCov" title="Branch 32 was not taken"> - </span><span class="branchNoCov" title="Branch 33 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 34 was not taken"> - </span><span class="branchNoCov" title="Branch 35 was not taken"> - </span><span class="branchNoCov" title="Branch 36 was not taken"> - </span><span class="branchNoCov" title="Branch 37 was not taken"> - </span><span class="branchNoCov" title="Branch 38 was not taken"> - </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 39 was not taken"> - </span><span class="branchNoCov" title="Branch 40 was not taken"> - </span><span class="branchNoCov" title="Branch 41 was not taken"> - </span><span class="branchNoCov" title="Branch 42 was not taken"> - </span><span class="branchCov" title="Branch 43 was taken 1 time"> + </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 44 was not taken"> - </span><span class="branchNoCov" title="Branch 45 was not taken"> - </span><span class="branchNoCov" title="Branch 46 was not taken"> - </span><span class="branchNoCov" title="Branch 47 was not taken"> - </span><span class="branchCov" title="Branch 48 was taken 1 time"> + </span> 
+<span class="lineNum">         </span><span class="branchNoCov" title="Branch 49 was not taken"> - </span><span class="branchNoCov" title="Branch 50 was not taken"> - </span><span class="branchNoCov" title="Branch 51 was not taken"> - </span><span class="branchNoCov" title="Branch 52 was not taken"> - </span><span class="branchNoCov" title="Branch 53 was not taken"> - </span> 
+<span class="lineNum">         </span>      <span class="branchNoCov" title="Branch 54 was not taken"> - </span><span class="branchNoCov" title="Branch 55 was not taken"> - </span><span class="branchNoCov" title="Branch 56 was not taken"> - </span>]
+<span class="lineNum">     133 </span>                :            :       case GL_ALPHA_TEST:
+<span class="lineNum">     134 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Color.AlphaEnabled!=state) {</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Color.AlphaEnabled = state;</span>
+<span class="lineNum">     136 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     137 </span>                :            :          }
+<span class="lineNum">     138 </span>                :            :          break;
+<span class="lineNum">     139 </span>                :            :       case GL_AUTO_NORMAL:
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.AutoNormal = state;</span>
+<span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     142 </span>                :            :       case GL_BLEND:
+<span class="lineNum">     143 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Color.BlendEnabled!=state) {</span>
+<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Color.BlendEnabled = state;</span>
+<span class="lineNum">     145 </span>                :            :             /* The following needed to accomodate 1.0 RGB logic op blending */
+<span class="lineNum">     146 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Color.BlendEquation==GL_LOGIC_OP &amp;&amp; state) {</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Color.ColorLogicOpEnabled = GL_TRUE;</span>
+<span class="lineNum">     148 </span>                :            :             }
+<span class="lineNum">     149 </span>                :            :             else {
+<span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Color.ColorLogicOpEnabled = GL_FALSE;</span>
+<span class="lineNum">     151 </span>                :            :             }
+<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     153 </span>                :            :          }
+<span class="lineNum">     154 </span>                :            :          break;
+<span class="lineNum">     155 </span>                :            :       case GL_CLIP_PLANE0:
+<span class="lineNum">     156 </span>                :            :       case GL_CLIP_PLANE1:
+<span class="lineNum">     157 </span>                :            :       case GL_CLIP_PLANE2:
+<span class="lineNum">     158 </span>                :            :       case GL_CLIP_PLANE3:
+<span class="lineNum">     159 </span>                :            :       case GL_CLIP_PLANE4:
+<span class="lineNum">     160 </span>                :            :       case GL_CLIP_PLANE5:
+<span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Transform.ClipEnabled[cap-GL_CLIP_PLANE0] = state;</span>
+<span class="lineNum">     162 </span>                :            :          /* Check if any clip planes enabled */
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Transform.AnyClip = GL_FALSE;</span>
+<span class="lineNum">     164 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (p=0;p&lt;MAX_CLIP_PLANES;p++) {</span>
+<span class="lineNum">     165 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Transform.ClipEnabled[p]) {</span>
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Transform.AnyClip = GL_TRUE;</span>
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     168 </span>                :            :             }
+<span class="lineNum">     169 </span>                :            :          }
+<span class="lineNum">     170 </span>                :            :          break;
+<span class="lineNum">     171 </span>                :            :       case GL_COLOR_MATERIAL:
+<span class="lineNum">     172 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Light.ColorMaterialEnabled!=state) {</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Light.ColorMaterialEnabled = state;</span>
+<span class="lineNum">     174 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (state) {</span>
+<span class="lineNum">     175 </span>                :            :                GLfloat color[4];
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 :                color[0] = ctx-&gt;Current.ByteColor[0] * ctx-&gt;Visual-&gt;InvRedScale;</span>
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :                color[1] = ctx-&gt;Current.ByteColor[1] * ctx-&gt;Visual-&gt;InvGreenScale;</span>
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :                color[2] = ctx-&gt;Current.ByteColor[2] * ctx-&gt;Visual-&gt;InvBlueScale;</span>
+<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :                color[3] = ctx-&gt;Current.ByteColor[3] * ctx-&gt;Visual-&gt;InvAlphaScale;</span>
+<span class="lineNum">     180 </span>                :            :                /* update material with current color */
+<span class="lineNum">     181 </span>                :<span class="lineNoCov">          0 :                gl_set_material( ctx, ctx-&gt;Light.ColorMaterialBitmask, color );</span>
+<span class="lineNum">     182 </span>                :            :             }
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :             gl_set_color_function(ctx);</span>
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     185 </span>                :            :          }
+<span class="lineNum">     186 </span>                :            :          break;
+<span class="lineNum">     187 </span>                :            :       case GL_CULL_FACE:
+<span class="lineNum">     188 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.CullFlag!=state) {</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.CullFlag = state;</span>
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_POLYGON;</span>
+<span class="lineNum">     191 </span>                :            :          }
+<span class="lineNum">     192 </span>                :            :          break;
+<span class="lineNum">     193 </span>                :            :       case GL_DEPTH_TEST:
+<span class="lineNum">     194 </span>[<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 1 time"> + </span>]:<span class="lineCov">          1 :          if (state &amp;&amp; ctx-&gt;Visual-&gt;DepthBits==0) {</span>
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :             gl_warning(ctx,&quot;glEnable(GL_DEPTH_TEST) but no depth buffer&quot;);</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     197 </span>                :            :          }
+<span class="lineNum">     198 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          if (ctx-&gt;Depth.Test!=state) {</span>
+<span class="lineNum">     199 </span>                :<span class="lineCov">          1 :             ctx-&gt;Depth.Test = state;</span>
+<span class="lineNum">     200 </span>                :<span class="lineCov">          1 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     201 </span>                :            :          }
+<span class="lineNum">     202 </span>                :            :          break;
+<span class="lineNum">     203 </span>                :            :       case GL_DITHER:
+<span class="lineNum">     204 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;NoDither) {</span>
+<span class="lineNum">     205 </span>                :            :             /* MESA_NO_DITHER env var */
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 :             state = GL_FALSE;</span>
+<span class="lineNum">     207 </span>                :            :          }
+<span class="lineNum">     208 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Color.DitherFlag!=state) {</span>
+<span class="lineNum">     209 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Color.DitherFlag = state;</span>
+<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     211 </span>                :            :          }
+<span class="lineNum">     212 </span>                :            :          break;
+<span class="lineNum">     213 </span>                :            :       case GL_FOG:
+<span class="lineNum">     214 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Fog.Enabled!=state) {</span>
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Fog.Enabled = state;</span>
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     217 </span>                :            :          }
+<span class="lineNum">     218 </span>                :            :          break;
+<span class="lineNum">     219 </span>                :            :       case GL_LIGHT0:
+<span class="lineNum">     220 </span>                :            :       case GL_LIGHT1:
+<span class="lineNum">     221 </span>                :            :       case GL_LIGHT2:
+<span class="lineNum">     222 </span>                :            :       case GL_LIGHT3:
+<span class="lineNum">     223 </span>                :            :       case GL_LIGHT4:
+<span class="lineNum">     224 </span>                :            :       case GL_LIGHT5:
+<span class="lineNum">     225 </span>                :            :       case GL_LIGHT6:
+<span class="lineNum">     226 </span>                :            :       case GL_LIGHT7:
+<span class="lineNum">     227 </span>                :<span class="lineCov">          3 :          ctx-&gt;Light.Light[cap-GL_LIGHT0].Enabled = state;</span>
+<span class="lineNum">     228 </span>                :<span class="lineCov">          3 :          ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">          3 :          break;</span>
+<span class="lineNum">     230 </span>                :            :       case GL_LIGHTING:
+<span class="lineNum">     231 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          if (ctx-&gt;Light.Enabled!=state) {</span>
+<span class="lineNum">     232 </span>                :<span class="lineCov">          1 :             ctx-&gt;Light.Enabled = state;</span>
+<span class="lineNum">     233 </span>                :<span class="lineCov">          1 :             ctx-&gt;NewState |= NEW_LIGHTING;</span>
+<span class="lineNum">     234 </span>                :            :          }
+<span class="lineNum">     235 </span>                :            :          break;
+<span class="lineNum">     236 </span>                :            :       case GL_LINE_SMOOTH:
+<span class="lineNum">     237 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Line.SmoothFlag!=state) {</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Line.SmoothFlag = state;</span>
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     240 </span>                :            :          }
+<span class="lineNum">     241 </span>                :            :          break;
+<span class="lineNum">     242 </span>                :            :       case GL_LINE_STIPPLE:
+<span class="lineNum">     243 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Line.StippleFlag!=state) {</span>
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Line.StippleFlag = state;</span>
+<span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     246 </span>                :            :          }
+<span class="lineNum">     247 </span>                :            :          break;
+<span class="lineNum">     248 </span>                :            :       case GL_INDEX_LOGIC_OP:
+<span class="lineNum">     249 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Color.IndexLogicOpEnabled!=state) {</span>
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     251 </span>                :            :          }
+<span class="lineNum">     252 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Color.IndexLogicOpEnabled = state;</span>
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     254 </span>                :            :       case GL_COLOR_LOGIC_OP:
+<span class="lineNum">     255 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Color.ColorLogicOpEnabled!=state) {</span>
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     257 </span>                :            :          }
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Color.ColorLogicOpEnabled = state;</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     260 </span>                :            :       case GL_MAP1_COLOR_4:
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1Color4 = state;</span>
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     263 </span>                :            :       case GL_MAP1_INDEX:
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1Index = state;</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     266 </span>                :            :       case GL_MAP1_NORMAL:
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1Normal = state;</span>
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     269 </span>                :            :       case GL_MAP1_TEXTURE_COORD_1:
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1TextureCoord1 = state;</span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     272 </span>                :            :       case GL_MAP1_TEXTURE_COORD_2:
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1TextureCoord2 = state;</span>
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     275 </span>                :            :       case GL_MAP1_TEXTURE_COORD_3:
+<span class="lineNum">     276 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1TextureCoord3 = state;</span>
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     278 </span>                :            :       case GL_MAP1_TEXTURE_COORD_4:
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1TextureCoord4 = state;</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     281 </span>                :            :       case GL_MAP1_VERTEX_3:
+<span class="lineNum">     282 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1Vertex3 = state;</span>
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     284 </span>                :            :       case GL_MAP1_VERTEX_4:
+<span class="lineNum">     285 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map1Vertex4 = state;</span>
+<span class="lineNum">     286 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     287 </span>                :            :       case GL_MAP2_COLOR_4:
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2Color4 = state;</span>
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     290 </span>                :            :       case GL_MAP2_INDEX:
+<span class="lineNum">     291 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2Index = state;</span>
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     293 </span>                :            :       case GL_MAP2_NORMAL:
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2Normal = state;</span>
+<span class="lineNum">     295 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     296 </span>                :            :       case GL_MAP2_TEXTURE_COORD_1: 
+<span class="lineNum">     297 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2TextureCoord1 = state;</span>
+<span class="lineNum">     298 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     299 </span>                :            :       case GL_MAP2_TEXTURE_COORD_2:
+<span class="lineNum">     300 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2TextureCoord2 = state;</span>
+<span class="lineNum">     301 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     302 </span>                :            :       case GL_MAP2_TEXTURE_COORD_3:
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2TextureCoord3 = state;</span>
+<span class="lineNum">     304 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     305 </span>                :            :       case GL_MAP2_TEXTURE_COORD_4:
+<span class="lineNum">     306 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2TextureCoord4 = state;</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     308 </span>                :            :       case GL_MAP2_VERTEX_3:
+<span class="lineNum">     309 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2Vertex3 = state;</span>
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     311 </span>                :            :       case GL_MAP2_VERTEX_4:
+<span class="lineNum">     312 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Eval.Map2Vertex4 = state;</span>
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     314 </span>                :            :       case GL_NORMALIZE:
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Transform.Normalize = state;</span>
+<span class="lineNum">     316 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     317 </span>                :            :       case GL_POINT_SMOOTH:
+<span class="lineNum">     318 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Point.SmoothFlag!=state) {</span>
+<span class="lineNum">     319 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Point.SmoothFlag = state;</span>
+<span class="lineNum">     320 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     321 </span>                :            :          }
+<span class="lineNum">     322 </span>                :            :          break;
+<span class="lineNum">     323 </span>                :            :       case GL_POLYGON_SMOOTH:
+<span class="lineNum">     324 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.SmoothFlag!=state) {</span>
+<span class="lineNum">     325 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.SmoothFlag = state;</span>
+<span class="lineNum">     326 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     327 </span>                :            :          }
+<span class="lineNum">     328 </span>                :            :          break;
+<span class="lineNum">     329 </span>                :            :       case GL_POLYGON_STIPPLE:
+<span class="lineNum">     330 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.StippleFlag!=state) {</span>
+<span class="lineNum">     331 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.StippleFlag = state;</span>
+<span class="lineNum">     332 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     333 </span>                :            :          }
+<span class="lineNum">     334 </span>                :            :          break;
+<span class="lineNum">     335 </span>                :            :       case GL_POLYGON_OFFSET_POINT:
+<span class="lineNum">     336 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.OffsetPoint!=state) {</span>
+<span class="lineNum">     337 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.OffsetPoint = state;</span>
+<span class="lineNum">     338 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_POLYGON;</span>
+<span class="lineNum">     339 </span>                :            :          }
+<span class="lineNum">     340 </span>                :            :          break;
+<span class="lineNum">     341 </span>                :            :       case GL_POLYGON_OFFSET_LINE:
+<span class="lineNum">     342 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.OffsetLine!=state) {</span>
+<span class="lineNum">     343 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.OffsetLine = state;</span>
+<span class="lineNum">     344 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_POLYGON;</span>
+<span class="lineNum">     345 </span>                :            :          }
+<span class="lineNum">     346 </span>                :            :          break;
+<span class="lineNum">     347 </span>                :            :       case GL_POLYGON_OFFSET_FILL:
+<span class="lineNum">     348 </span>                :            :       /*case GL_POLYGON_OFFSET_EXT:*/
+<span class="lineNum">     349 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Polygon.OffsetFill!=state) {</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Polygon.OffsetFill = state;</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_POLYGON;</span>
+<span class="lineNum">     352 </span>                :            :          }
+<span class="lineNum">     353 </span>                :            :          break;
+<span class="lineNum">     354 </span>                :            :       case GL_SCISSOR_TEST:
+<span class="lineNum">     355 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Scissor.Enabled!=state) {</span>
+<span class="lineNum">     356 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Scissor.Enabled = state;</span>
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     358 </span>                :            :          }
+<span class="lineNum">     359 </span>                :            :          break;
+<span class="lineNum">     360 </span>                :            :       case GL_SHARED_TEXTURE_PALETTE_EXT:
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Texture.SharedPalette = state;</span>
+<span class="lineNum">     362 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Driver.UseGlobalTexturePalette)</span>
+<span class="lineNum">     363 </span>                :<span class="lineNoCov">          0 :             (*ctx-&gt;Driver.UseGlobalTexturePalette)( ctx, state );</span>
+<span class="lineNum">     364 </span>                :            :          break;
+<span class="lineNum">     365 </span>                :            :       case GL_STENCIL_TEST:
+<span class="lineNum">     366 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (state &amp;&amp; ctx-&gt;Visual-&gt;StencilBits==0) {</span>
+<span class="lineNum">     367 </span>                :<span class="lineNoCov">          0 :             gl_warning(ctx, &quot;glEnable(GL_STENCIL_TEST) but no stencil buffer&quot;);</span>
+<span class="lineNum">     368 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     369 </span>                :            :          }
+<span class="lineNum">     370 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Stencil.Enabled!=state) {</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Stencil.Enabled = state;</span>
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= NEW_RASTER_OPS;</span>
+<span class="lineNum">     373 </span>                :            :          }
+<span class="lineNum">     374 </span>                :            :          break;
+<span class="lineNum">     375 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     376 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     377 </span>                :            :             /* texturing only works in RGB mode */
+<span class="lineNum">     378 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :             if (state) {</span>
+<span class="lineNum">     379 </span>                :<span class="lineCov">          1 :                ctx-&gt;Texture.Enabled |= TEXTURE_1D;</span>
+<span class="lineNum">     380 </span>                :            :             }
+<span class="lineNum">     381 </span>                :            :             else {
+<span class="lineNum">     382 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.Enabled &amp;= (~TEXTURE_1D);</span>
+<span class="lineNum">     383 </span>                :            :             }
+<span class="lineNum">     384 </span>                :<span class="lineCov">          1 :             ctx-&gt;NewState |= (NEW_RASTER_OPS | NEW_TEXTURING);</span>
+<span class="lineNum">     385 </span>                :            :          }
+<span class="lineNum">     386 </span>                :            :          break;
+<span class="lineNum">     387 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     388 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     389 </span>                :            :             /* texturing only works in RGB mode */
+<span class="lineNum">     390 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (state) {</span>
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.Enabled |= TEXTURE_2D;</span>
+<span class="lineNum">     392 </span>                :            :             }
+<span class="lineNum">     393 </span>                :            :             else {
+<span class="lineNum">     394 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.Enabled &amp;= (~TEXTURE_2D);</span>
+<span class="lineNum">     395 </span>                :            :             }
+<span class="lineNum">     396 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= (NEW_RASTER_OPS | NEW_TEXTURING);</span>
+<span class="lineNum">     397 </span>                :            :          }
+<span class="lineNum">     398 </span>                :            :          break;
+<span class="lineNum">     399 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     400 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     401 </span>                :            :             /* texturing only works in RGB mode */
+<span class="lineNum">     402 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (state) {</span>
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.Enabled |= TEXTURE_3D;</span>
+<span class="lineNum">     404 </span>                :            :             }
+<span class="lineNum">     405 </span>                :            :             else {
+<span class="lineNum">     406 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.Enabled &amp;= (~TEXTURE_3D);</span>
+<span class="lineNum">     407 </span>                :            :             }
+<span class="lineNum">     408 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;NewState |= (NEW_RASTER_OPS | NEW_TEXTURING);</span>
+<span class="lineNum">     409 </span>                :            :          }
+<span class="lineNum">     410 </span>                :            :          break;
+<span class="lineNum">     411 </span>                :            :       case GL_TEXTURE_GEN_Q:
+<span class="lineNum">     412 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (state) {</span>
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled |= Q_BIT;</span>
+<span class="lineNum">     414 </span>                :            :          }
+<span class="lineNum">     415 </span>                :            :          else {
+<span class="lineNum">     416 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled &amp;= ~Q_BIT;</span>
+<span class="lineNum">     417 </span>                :            :          }
+<span class="lineNum">     418 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     419 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     420 </span>                :            :       case GL_TEXTURE_GEN_R:
+<span class="lineNum">     421 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (state) {</span>
+<span class="lineNum">     422 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled |= R_BIT;</span>
+<span class="lineNum">     423 </span>                :            :          }
+<span class="lineNum">     424 </span>                :            :          else {
+<span class="lineNum">     425 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled &amp;= ~R_BIT;</span>
+<span class="lineNum">     426 </span>                :            :          }
+<span class="lineNum">     427 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     428 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     429 </span>                :            :       case GL_TEXTURE_GEN_S:
+<span class="lineNum">     430 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          if (state) {</span>
+<span class="lineNum">     431 </span>                :<span class="lineCov">          1 :             ctx-&gt;Texture.TexGenEnabled |= S_BIT;</span>
+<span class="lineNum">     432 </span>                :            :          }
+<span class="lineNum">     433 </span>                :            :          else {
+<span class="lineNum">     434 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled &amp;= ~S_BIT;</span>
+<span class="lineNum">     435 </span>                :            :          }
+<span class="lineNum">     436 </span>                :<span class="lineCov">          1 :          ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     437 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     438 </span>                :            :       case GL_TEXTURE_GEN_T:
+<span class="lineNum">     439 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (state) {</span>
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled |= T_BIT;</span>
+<span class="lineNum">     441 </span>                :            :          }
+<span class="lineNum">     442 </span>                :            :          else {
+<span class="lineNum">     443 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.TexGenEnabled &amp;= ~T_BIT;</span>
+<span class="lineNum">     444 </span>                :            :          }
+<span class="lineNum">     445 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     446 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     447 </span>                :            : 
+<span class="lineNum">     448 </span>                :            :       /*
+<span class="lineNum">     449 </span>                :            :        * CLIENT STATE!!!
+<span class="lineNum">     450 </span>                :            :        */
+<span class="lineNum">     451 </span>                :            :       case GL_VERTEX_ARRAY:
+<span class="lineNum">     452 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.VertexEnabled = state;</span>
+<span class="lineNum">     453 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     454 </span>                :            :       case GL_NORMAL_ARRAY:
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.NormalEnabled = state;</span>
+<span class="lineNum">     456 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     457 </span>                :            :       case GL_COLOR_ARRAY:
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.ColorEnabled = state;</span>
+<span class="lineNum">     459 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     460 </span>                :            :       case GL_INDEX_ARRAY:
+<span class="lineNum">     461 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.IndexEnabled = state;</span>
+<span class="lineNum">     462 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     463 </span>                :            :       case GL_TEXTURE_COORD_ARRAY:
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.TexCoordEnabled = state;</span>
+<span class="lineNum">     465 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     466 </span>                :            :       case GL_EDGE_FLAG_ARRAY:
+<span class="lineNum">     467 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.EdgeFlagEnabled = state;</span>
+<span class="lineNum">     468 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     469 </span>                :            : 
+<span class="lineNum">     470 </span>                :            :       default:
+<span class="lineNum">     471 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (state) {</span>
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glEnable&quot; );</span>
+<span class="lineNum">     473 </span>                :            :          }
+<span class="lineNum">     474 </span>                :            :          else {
+<span class="lineNum">     475 </span>                :<span class="lineCov">          7 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glDisable&quot; );</span>
+<span class="lineNum">     476 </span>                :            :          }
+<span class="lineNum">     477 </span>                :            :          break;
+<span class="lineNum">     478 </span>                :            :    }
+<span class="lineNum">     479 </span>                :            : }
+<span class="lineNum">     480 </span>                :            : 
+<span class="lineNum">     481 </span>                :            : 
+<a name="482"><span class="lineNum">     482 </span>                :            : </a>
+<span class="lineNum">     483 </span>                :            : 
+<span class="lineNum">     484 </span>                :<span class="lineCov">          7 : void gl_Enable( GLcontext* ctx, GLenum cap )</span>
+<span class="lineNum">     485 </span>                :            : {
+<span class="lineNum">     486 </span>                :<span class="lineCov">          7 :    gl_enable( ctx, cap, GL_TRUE );</span>
+<span class="lineNum">     487 </span>                :<span class="lineCov">          7 : }</span>
+<span class="lineNum">     488 </span>                :            : 
+<a name="489"><span class="lineNum">     489 </span>                :            : </a>
+<span class="lineNum">     490 </span>                :            : 
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 : void gl_Disable( GLcontext* ctx, GLenum cap )</span>
+<span class="lineNum">     492 </span>                :            : {
+<span class="lineNum">     493 </span>                :<span class="lineNoCov">          0 :    gl_enable( ctx, cap, GL_FALSE );</span>
+<span class="lineNum">     494 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     495 </span>                :            : 
+<a name="496"><span class="lineNum">     496 </span>                :            : </a>
+<span class="lineNum">     497 </span>                :            : 
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 : GLboolean gl_IsEnabled( GLcontext* ctx, GLenum cap )</span>
+<span class="lineNum">     499 </span>                :            : {
+<span class="lineNum">     500 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (cap) {</span>
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span><span class="branchNoExec" title="Branch 8 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span><span class="branchNoExec" title="Branch 10 was not executed"> # </span><span class="branchNoExec" title="Branch 11 was not executed"> # </span><span class="branchNoExec" title="Branch 12 was not executed"> # </span><span class="branchNoExec" title="Branch 13 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 14 was not executed"> # </span><span class="branchNoExec" title="Branch 15 was not executed"> # </span><span class="branchNoExec" title="Branch 16 was not executed"> # </span><span class="branchNoExec" title="Branch 17 was not executed"> # </span><span class="branchNoExec" title="Branch 18 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 19 was not executed"> # </span><span class="branchNoExec" title="Branch 20 was not executed"> # </span><span class="branchNoExec" title="Branch 21 was not executed"> # </span><span class="branchNoExec" title="Branch 22 was not executed"> # </span><span class="branchNoExec" title="Branch 23 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 24 was not executed"> # </span><span class="branchNoExec" title="Branch 25 was not executed"> # </span><span class="branchNoExec" title="Branch 26 was not executed"> # </span><span class="branchNoExec" title="Branch 27 was not executed"> # </span><span class="branchNoExec" title="Branch 28 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 29 was not executed"> # </span><span class="branchNoExec" title="Branch 30 was not executed"> # </span><span class="branchNoExec" title="Branch 31 was not executed"> # </span><span class="branchNoExec" title="Branch 32 was not executed"> # </span><span class="branchNoExec" title="Branch 33 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 34 was not executed"> # </span><span class="branchNoExec" title="Branch 35 was not executed"> # </span><span class="branchNoExec" title="Branch 36 was not executed"> # </span><span class="branchNoExec" title="Branch 37 was not executed"> # </span><span class="branchNoExec" title="Branch 38 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 39 was not executed"> # </span><span class="branchNoExec" title="Branch 40 was not executed"> # </span><span class="branchNoExec" title="Branch 41 was not executed"> # </span><span class="branchNoExec" title="Branch 42 was not executed"> # </span><span class="branchNoExec" title="Branch 43 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 44 was not executed"> # </span><span class="branchNoExec" title="Branch 45 was not executed"> # </span><span class="branchNoExec" title="Branch 46 was not executed"> # </span><span class="branchNoExec" title="Branch 47 was not executed"> # </span><span class="branchNoExec" title="Branch 48 was not executed"> # </span> 
+<span class="lineNum">         </span><span class="branchNoExec" title="Branch 49 was not executed"> # </span><span class="branchNoExec" title="Branch 50 was not executed"> # </span><span class="branchNoExec" title="Branch 51 was not executed"> # </span><span class="branchNoExec" title="Branch 52 was not executed"> # </span><span class="branchNoExec" title="Branch 53 was not executed"> # </span> 
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 54 was not executed"> # </span><span class="branchNoExec" title="Branch 55 was not executed"> # </span><span class="branchNoExec" title="Branch 56 was not executed"> # </span>]
+<span class="lineNum">     501 </span>                :            :       case GL_ALPHA_TEST:
+<span class="lineNum">     502 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Color.AlphaEnabled;</span>
+<span class="lineNum">     503 </span>                :            :       case GL_AUTO_NORMAL:
+<span class="lineNum">     504 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.AutoNormal;</span>
+<span class="lineNum">     505 </span>                :            :       case GL_BLEND:
+<span class="lineNum">     506 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Color.BlendEnabled;</span>
+<span class="lineNum">     507 </span>                :            :       case GL_CLIP_PLANE0:
+<span class="lineNum">     508 </span>                :            :       case GL_CLIP_PLANE1:
+<span class="lineNum">     509 </span>                :            :       case GL_CLIP_PLANE2:
+<span class="lineNum">     510 </span>                :            :       case GL_CLIP_PLANE3:
+<span class="lineNum">     511 </span>                :            :       case GL_CLIP_PLANE4:
+<span class="lineNum">     512 </span>                :            :       case GL_CLIP_PLANE5:
+<span class="lineNum">     513 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Transform.ClipEnabled[cap-GL_CLIP_PLANE0];</span>
+<span class="lineNum">     514 </span>                :            :       case GL_COLOR_MATERIAL:
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Light.ColorMaterialEnabled;</span>
+<span class="lineNum">     516 </span>                :            :       case GL_CULL_FACE:
+<span class="lineNum">     517 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.CullFlag;</span>
+<span class="lineNum">     518 </span>                :            :       case GL_DEPTH_TEST:
+<span class="lineNum">     519 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Depth.Test;</span>
+<span class="lineNum">     520 </span>                :            :       case GL_DITHER:
+<span class="lineNum">     521 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Color.DitherFlag;</span>
+<span class="lineNum">     522 </span>                :            :       case GL_FOG:
+<span class="lineNum">     523 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Fog.Enabled;</span>
+<span class="lineNum">     524 </span>                :            :       case GL_LIGHTING:
+<span class="lineNum">     525 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Light.Enabled;</span>
+<span class="lineNum">     526 </span>                :            :       case GL_LIGHT0:
+<span class="lineNum">     527 </span>                :            :       case GL_LIGHT1:
+<span class="lineNum">     528 </span>                :            :       case GL_LIGHT2:
+<span class="lineNum">     529 </span>                :            :       case GL_LIGHT3:
+<span class="lineNum">     530 </span>                :            :       case GL_LIGHT4:
+<span class="lineNum">     531 </span>                :            :       case GL_LIGHT5:
+<span class="lineNum">     532 </span>                :            :       case GL_LIGHT6:
+<span class="lineNum">     533 </span>                :            :       case GL_LIGHT7:
+<span class="lineNum">     534 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Light.Light[cap-GL_LIGHT0].Enabled;</span>
+<span class="lineNum">     535 </span>                :            :       case GL_LINE_SMOOTH:
+<span class="lineNum">     536 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Line.SmoothFlag;</span>
+<span class="lineNum">     537 </span>                :            :       case GL_LINE_STIPPLE:
+<span class="lineNum">     538 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Line.StippleFlag;</span>
+<span class="lineNum">     539 </span>                :            :       case GL_INDEX_LOGIC_OP:
+<span class="lineNum">     540 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Color.IndexLogicOpEnabled;</span>
+<span class="lineNum">     541 </span>                :            :       case GL_COLOR_LOGIC_OP:
+<span class="lineNum">     542 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Color.ColorLogicOpEnabled;</span>
+<span class="lineNum">     543 </span>                :            :       case GL_MAP1_COLOR_4:
+<span class="lineNum">     544 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1Color4;</span>
+<span class="lineNum">     545 </span>                :            :       case GL_MAP1_INDEX:
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1Index;</span>
+<span class="lineNum">     547 </span>                :            :       case GL_MAP1_NORMAL:
+<span class="lineNum">     548 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1Normal;</span>
+<span class="lineNum">     549 </span>                :            :       case GL_MAP1_TEXTURE_COORD_1:
+<span class="lineNum">     550 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1TextureCoord1;</span>
+<span class="lineNum">     551 </span>                :            :       case GL_MAP1_TEXTURE_COORD_2:
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1TextureCoord2;</span>
+<span class="lineNum">     553 </span>                :            :       case GL_MAP1_TEXTURE_COORD_3:
+<span class="lineNum">     554 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1TextureCoord3;</span>
+<span class="lineNum">     555 </span>                :            :       case GL_MAP1_TEXTURE_COORD_4:
+<span class="lineNum">     556 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1TextureCoord4;</span>
+<span class="lineNum">     557 </span>                :            :       case GL_MAP1_VERTEX_3:
+<span class="lineNum">     558 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1Vertex3;</span>
+<span class="lineNum">     559 </span>                :            :       case GL_MAP1_VERTEX_4:
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map1Vertex4;</span>
+<span class="lineNum">     561 </span>                :            :       case GL_MAP2_COLOR_4:
+<span class="lineNum">     562 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2Color4;</span>
+<span class="lineNum">     563 </span>                :            :       case GL_MAP2_INDEX:
+<span class="lineNum">     564 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2Index;</span>
+<span class="lineNum">     565 </span>                :            :       case GL_MAP2_NORMAL:
+<span class="lineNum">     566 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2Normal;</span>
+<span class="lineNum">     567 </span>                :            :       case GL_MAP2_TEXTURE_COORD_1: 
+<span class="lineNum">     568 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2TextureCoord1;</span>
+<span class="lineNum">     569 </span>                :            :       case GL_MAP2_TEXTURE_COORD_2:
+<span class="lineNum">     570 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2TextureCoord2;</span>
+<span class="lineNum">     571 </span>                :            :       case GL_MAP2_TEXTURE_COORD_3:
+<span class="lineNum">     572 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2TextureCoord3;</span>
+<span class="lineNum">     573 </span>                :            :       case GL_MAP2_TEXTURE_COORD_4:
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2TextureCoord4;</span>
+<span class="lineNum">     575 </span>                :            :       case GL_MAP2_VERTEX_3:
+<span class="lineNum">     576 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2Vertex3;</span>
+<span class="lineNum">     577 </span>                :            :       case GL_MAP2_VERTEX_4:
+<span class="lineNum">     578 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Eval.Map2Vertex4;</span>
+<span class="lineNum">     579 </span>                :            :       case GL_NORMALIZE:
+<span class="lineNum">     580 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Transform.Normalize;</span>
+<span class="lineNum">     581 </span>                :            :       case GL_POINT_SMOOTH:
+<span class="lineNum">     582 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Point.SmoothFlag;</span>
+<span class="lineNum">     583 </span>                :            :       case GL_POLYGON_SMOOTH:
+<span class="lineNum">     584 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.SmoothFlag;</span>
+<span class="lineNum">     585 </span>                :            :       case GL_POLYGON_STIPPLE:
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.StippleFlag;</span>
+<span class="lineNum">     587 </span>                :            :       case GL_POLYGON_OFFSET_POINT:
+<span class="lineNum">     588 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.OffsetPoint;</span>
+<span class="lineNum">     589 </span>                :            :       case GL_POLYGON_OFFSET_LINE:
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.OffsetLine;</span>
+<span class="lineNum">     591 </span>                :            :       case GL_POLYGON_OFFSET_FILL:
+<span class="lineNum">     592 </span>                :            :       /*case GL_POLYGON_OFFSET_EXT:*/
+<span class="lineNum">     593 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Polygon.OffsetFill;</span>
+<span class="lineNum">     594 </span>                :            :       case GL_SCISSOR_TEST:
+<span class="lineNum">     595 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Scissor.Enabled;</span>
+<span class="lineNum">     596 </span>                :            :       case GL_SHARED_TEXTURE_PALETTE_EXT:
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Texture.SharedPalette;</span>
+<span class="lineNum">     598 </span>                :            :          break;
+<span class="lineNum">     599 </span>                :            :       case GL_STENCIL_TEST:
+<span class="lineNum">     600 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Stencil.Enabled;</span>
+<span class="lineNum">     601 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.Enabled &amp; TEXTURE_1D) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     603 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.Enabled &amp; TEXTURE_2D) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     605 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     606 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.Enabled &amp; TEXTURE_3D) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     607 </span>                :            :       case GL_TEXTURE_GEN_Q:
+<span class="lineNum">     608 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.TexGenEnabled &amp; Q_BIT) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     609 </span>                :            :       case GL_TEXTURE_GEN_R:
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.TexGenEnabled &amp; R_BIT) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     611 </span>                :            :       case GL_TEXTURE_GEN_S:
+<span class="lineNum">     612 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.TexGenEnabled &amp; S_BIT) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     613 </span>                :            :       case GL_TEXTURE_GEN_T:
+<span class="lineNum">     614 </span>                :<span class="lineNoCov">          0 :          return (ctx-&gt;Texture.TexGenEnabled &amp; T_BIT) ? GL_TRUE : GL_FALSE;</span>
+<span class="lineNum">     615 </span>                :            : 
+<span class="lineNum">     616 </span>                :            :       /*
+<span class="lineNum">     617 </span>                :            :        * CLIENT STATE!!!
+<span class="lineNum">     618 </span>                :            :        */
+<span class="lineNum">     619 </span>                :            :       case GL_VERTEX_ARRAY:
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.VertexEnabled;</span>
+<span class="lineNum">     621 </span>                :            :       case GL_NORMAL_ARRAY:
+<span class="lineNum">     622 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.NormalEnabled;</span>
+<span class="lineNum">     623 </span>                :            :       case GL_COLOR_ARRAY:
+<span class="lineNum">     624 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.ColorEnabled;</span>
+<span class="lineNum">     625 </span>                :            :       case GL_INDEX_ARRAY:
+<span class="lineNum">     626 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.IndexEnabled;</span>
+<span class="lineNum">     627 </span>                :            :       case GL_TEXTURE_COORD_ARRAY:
+<span class="lineNum">     628 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.TexCoordEnabled;</span>
+<span class="lineNum">     629 </span>                :            :       case GL_EDGE_FLAG_ARRAY:
+<span class="lineNum">     630 </span>                :<span class="lineNoCov">          0 :          return ctx-&gt;Array.EdgeFlagEnabled;</span>
+<span class="lineNum">     631 </span>                :            :       default:
+<span class="lineNum">     632 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glIsEnabled&quot; );</span>
+<span class="lineNum">     633 </span>                :<span class="lineNoCov">          0 :          return GL_FALSE;</span>
+<span class="lineNum">     634 </span>                :            :    }
+<span class="lineNum">     635 </span>                :            : }
+<span class="lineNum">     636 </span>                :            : 
+<span class="lineNum">     637 </span>                :            : 
+<a name="638"><span class="lineNum">     638 </span>                :            : </a>
+<span class="lineNum">     639 </span>                :            : 
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 : void gl_client_state( GLcontext *ctx, GLenum cap, GLboolean state )</span>
+<span class="lineNum">     641 </span>                :            : {
+<span class="lineNum">     642 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (cap) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     643 </span>                :            :       case GL_VERTEX_ARRAY:
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.VertexEnabled = state;</span>
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     646 </span>                :            :       case GL_NORMAL_ARRAY:
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.NormalEnabled = state;</span>
+<span class="lineNum">     648 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     649 </span>                :            :       case GL_COLOR_ARRAY:
+<span class="lineNum">     650 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.ColorEnabled = state;</span>
+<span class="lineNum">     651 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     652 </span>                :            :       case GL_INDEX_ARRAY:
+<span class="lineNum">     653 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.IndexEnabled = state;</span>
+<span class="lineNum">     654 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     655 </span>                :            :       case GL_TEXTURE_COORD_ARRAY:
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.TexCoordEnabled = state;</span>
+<span class="lineNum">     657 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     658 </span>                :            :       case GL_EDGE_FLAG_ARRAY:
+<span class="lineNum">     659 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Array.EdgeFlagEnabled = state;</span>
+<span class="lineNum">     660 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     661 </span>                :            :       default:
+<span class="lineNum">     662 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glEnable/DisableClientState&quot; );</span>
+<span class="lineNum">     663 </span>                :            :    }
+<span class="lineNum">     664 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     665 </span>                :            : 
+<a name="666"><span class="lineNum">     666 </span>                :            : </a>
+<span class="lineNum">     667 </span>                :            : 
+<span class="lineNum">     668 </span>                :<span class="lineNoCov">          0 : void gl_EnableClientState( GLcontext *ctx, GLenum cap )</span>
+<span class="lineNum">     669 </span>                :            : {
+<span class="lineNum">     670 </span>                :<span class="lineNoCov">          0 :    gl_client_state( ctx, cap, GL_TRUE );</span>
+<span class="lineNum">     671 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     672 </span>                :            : 
+<a name="673"><span class="lineNum">     673 </span>                :            : </a>
+<span class="lineNum">     674 </span>                :            : 
+<span class="lineNum">     675 </span>                :<span class="lineNoCov">          0 : void gl_DisableClientState( GLcontext *ctx, GLenum cap )</span>
+<span class="lineNum">     676 </span>                :            : {
+<span class="lineNum">     677 </span>                :<span class="lineNoCov">          0 :    gl_client_state( ctx, cap, GL_FALSE );</span>
+<span class="lineNum">     678 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     679 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

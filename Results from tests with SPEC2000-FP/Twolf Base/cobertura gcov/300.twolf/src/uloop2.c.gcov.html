@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/uloop2.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - uloop2.c<span style="font-size: 80%;"> (source / <a href="uloop2.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">70</td>
+            <td class="headerCovTableEntry">103</td>
+            <td class="headerCovTableEntryLo">68.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">32</td>
+            <td class="headerCovTableEntry">84</td>
+            <td class="headerCovTableEntryLo">38.1 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : #define DELTA_B 1
+<span class="lineNum">       3 </span>                :            : #define PICK_INT(l,u) (((l)&lt;(u)) ? ((RAND % ((u)-(l)+1))+(l)) : (l))
+<span class="lineNum">       4 </span>                :            : extern int estimate_feeds ;
+<span class="lineNum">       5 </span>                :            : extern int randVar ;
+<span class="lineNum">       6 </span>                :            : extern BINBOX ***binptr ;
+<span class="lineNum">       7 </span>                :            : extern int totalR ;
+<span class="lineNum">       8 </span>                :            : extern int minxspan ;
+<span class="lineNum">       9 </span>                :            : extern int attmax ;
+<span class="lineNum">      10 </span>                :            : extern int blkxspan ;
+<span class="lineNum">      11 </span>                :            : extern int blkyspan ;
+<span class="lineNum">      12 </span>                :            : extern int rowHeight ;
+<span class="lineNum">      13 </span>                :            : extern int attprcel ;
+<span class="lineNum">      14 </span>                :            : extern int iteration ;
+<span class="lineNum">      15 </span>                :            : extern int penalty , binpenal , rowpenal ;
+<span class="lineNum">      16 </span>                :            : extern double binpenCon , roLenCon ;
+<span class="lineNum">      17 </span>                :            : extern double mean_width ;
+<span class="lineNum">      18 </span>                :            : extern int offset_limit ;
+<span class="lineNum">      19 </span>                :            : extern double cost_scale_factor ;
+<span class="lineNum">      20 </span>                :            : extern double T ;
+<span class="lineNum">      21 </span>                :            : extern double rowSep ;
+<span class="lineNum">      22 </span>                :            : extern int newpenal ;
+<span class="lineNum">      23 </span>                :            : extern int Apost , Bpost ;
+<span class="lineNum">      24 </span>                :            : extern int *cellaptr , *cellbptr ;
+<span class="lineNum">      25 </span>                :            : extern int earlyRej , Rej_error ;
+<span class="lineNum">      26 </span>                :            : extern int wire_chg , binpen_chg , rowpen_chg ;
+<span class="lineNum">      27 </span>                :            : extern int a , b , ablock , bblock ;
+<span class="lineNum">      28 </span>                :            : extern int attempts ;
+<span class="lineNum">      29 </span>                :            : extern int potential_errors , error_count , P_limit ;
+<span class="lineNum">      30 </span>                :            : extern double total_wire_chg ;
+<span class="lineNum">      31 </span>                :            : extern double sigma_wire_chg ;
+<span class="lineNum">      32 </span>                :            : extern double mean_wire_chg ;
+<a name="33"><span class="lineNum">      33 </span>                :            : extern int wire_chgs ;</a>
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :<span class="lineCov">          1 : uloop2()</span>
+<span class="lineNum">      36 </span>                :            : {
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :            : CBOXPTR acellptr, bcellptr ; 
+<span class="lineNum">      39 </span>                :            : BBOXPTR ablckptr , bblckptr ;
+<span class="lineNum">      40 </span>                :            : int botblk , topblk ;
+<span class="lineNum">      41 </span>                :            : int flips ;
+<span class="lineNum">      42 </span>                :            : int axcenter , bxcenter , bycenter ; 
+<span class="lineNum">      43 </span>                :            : int aorient , borient ;
+<span class="lineNum">      44 </span>                :            : int bleft , bright ; 
+<span class="lineNum">      45 </span>                :            : int blk , pairflips ;
+<span class="lineNum">      46 </span>                :            : int i , r , l , t ;
+<span class="lineNum">      47 </span>                :            : int abin , bbin ;
+<span class="lineNum">      48 </span>                :            : int firstTry , fds ;
+<span class="lineNum">      49 </span>                :            : double temp , fp_ratio , percent_error ;
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :<span class="lineCov">          1 : attempts  = 0 ;</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">          1 : flips     = 0 ;</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">          1 : pairflips = 0 ;</span>
+<span class="lineNum">      55 </span>                :<span class="lineCov">          1 : earlyRej  = 0 ;</span>
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :<span class="lineCov">          1 : P_limit = -1 ;</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">          1 : windx = minxspan ;</span>
+<span class="lineNum">      59 </span>                :            : 
+<span class="lineNum">      60 </span>                :<span class="lineCov">          1 : attmax = 2 * attprcel * numcells ;</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">          1 : binpenCon = 0.0 ;</span>
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>                :<span class="lineCov">          1 : fds = 0 ;</span>
+<span class="lineNum">      64 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 : if( estimate_feeds ) {</span>
+<span class="lineNum">      65 </span>                :<span class="lineCov">          1 :     fds = controlf( 1 ) ;</span>
+<span class="lineNum">      66 </span>                :            : }
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>        [<span class="branchCov" title="Branch 0 was taken 143488 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">     143489 : while( attempts &lt; attmax ) {</span>
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>        [<span class="branchCov" title="Branch 0 was taken 143488 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     143488 :     a = PICK_INT( 1 , numcells ) ;</span>
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :<span class="lineCov">     143488 :     acellptr = carray[ a ]  ;</span>
+<span class="lineNum">      73 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 143488 times"> + </span>]:<span class="lineCov">     143488 :     if( acellptr-&gt;cclass == -1 ) {</span>
+<span class="lineNum">      74 </span>                :<span class="lineNoCov">          0 :         continue ;</span>
+<span class="lineNum">      75 </span>                :            :     }
+<span class="lineNum">      76 </span>                :<span class="lineCov">     143488 :     ablock   = acellptr-&gt;cblock ;</span>
+<span class="lineNum">      77 </span>                :<span class="lineCov">     143488 :     ablckptr = barray[ ablock ] ;</span>
+<span class="lineNum">      78 </span>                :<span class="lineCov">     143488 :     axcenter = acellptr-&gt;cxcenter ;</span>
+<span class="lineNum">      79 </span>                :<span class="lineCov">     143488 :     aorient = acellptr-&gt;corient ;</span>
+<span class="lineNum">      80 </span>        [<span class="branchCov" title="Branch 0 was taken 143488 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     143488 :     abin = SetBin( axcenter ) ;</span>
+<span class="lineNum">      81 </span>                :<span class="lineCov">     143488 :     cellaptr = binptr[ablock][abin]-&gt;cell ;</span>
+<span class="lineNum">      82 </span>        [<span class="branchCov" title="Branch 0 was taken 167449 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     167449 :     for( i = 1 ; i &lt;= *cellaptr ; i++ ) {</span>
+<span class="lineNum">      83 </span>        [<span class="branchCov" title="Branch 0 was taken 143488 times"> + </span><span class="branchCov" title="Branch 1 was taken 23961 times"> + </span>]:<span class="lineCov">     167449 :         if( cellaptr[i] == a ) {</span>
+<span class="lineNum">      84 </span>                :<span class="lineCov">     143488 :              Apost = i ;</span>
+<span class="lineNum">      85 </span>                :<span class="lineCov">     143488 :              break ;</span>
+<span class="lineNum">      86 </span>                :            :         }
+<span class="lineNum">      87 </span>                :            :     }
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :            :     /* 
+<span class="lineNum">      91 </span>                :            :      *  select block for cell a to be placed in 
+<span class="lineNum">      92 </span>                :            :      */
+<span class="lineNum">      93 </span>                :<span class="lineCov">     143488 :     bblock = 0 ;</span>
+<span class="lineNum">      94 </span>                :<span class="lineCov">     143488 :     firstTry = 0 ;</span>
+<span class="lineNum">      95 </span>                :            : 
+<span class="lineNum">      96 </span>        [<span class="branchCov" title="Branch 0 was taken 7882 times"> + </span><span class="branchCov" title="Branch 1 was taken 135606 times"> + </span>]:<span class="lineCov">     143488 :     if( (botblk = ablock - DELTA_B) &lt; 1) {</span>
+<span class="lineNum">      97 </span>                :<span class="lineCov">       7882 :         botblk = 1 ;</span>
+<span class="lineNum">      98 </span>                :            :     }
+<span class="lineNum">      99 </span>        [<span class="branchCov" title="Branch 0 was taken 7852 times"> + </span><span class="branchCov" title="Branch 1 was taken 135636 times"> + </span>]:<span class="lineCov">     143488 :     if( (topblk = ablock + DELTA_B) &gt; numblock ) {</span>
+<span class="lineNum">     100 </span>                :<span class="lineCov">       7852 :          topblk = numblock ;</span>
+<span class="lineNum">     101 </span>                :            :     }
+<span class="lineNum">     102 </span>                :<span class="lineCov">     143488 :     for( i = 1 ; ; i++ ) {</span>
+<span class="lineNum">     103 </span>                :            :         do {
+<span class="lineNum">     104 </span>                :<span class="lineCov">     223639 :             blk = XPICK_INT( botblk , topblk , firstTry ) ; </span>
+<span class="lineNum">     105 </span>                :<span class="lineCov">     223639 :             bblckptr = barray[ blk ] ;</span>
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 143488 times"> + </span>]:<span class="lineCov">     143488 :         } while( ablock == blk || </span>
+<span class="lineNum">     108 </span>        [<span class="branchCov" title="Branch 0 was taken 80151 times"> + </span><span class="branchCov" title="Branch 1 was taken 143488 times"> + </span>]:<span class="lineCov">     223639 :                         ablckptr-&gt;bclass != bblckptr-&gt;bclass ) ;</span>
+<span class="lineNum">     109 </span>                :            :         
+<span class="lineNum">     110 </span>                :<span class="lineCov">     143488 :         bleft = bblckptr-&gt;bxcenter + bblckptr-&gt;bleft ;</span>
+<span class="lineNum">     111 </span>                :<span class="lineCov">     143488 :         bright = bblckptr-&gt;bxcenter + bblckptr-&gt;bright ;</span>
+<span class="lineNum">     112 </span>                :<span class="lineCov">     143488 :         l = (bleft &gt;= axcenter - windx) ? bleft : (axcenter-windx);</span>
+<span class="lineNum">     113 </span>                :<span class="lineCov">     143488 :         r = (bright &lt;= axcenter + windx) ? bright : (axcenter+windx);</span>
+<span class="lineNum">     114 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 143488 times"> + </span>]:<span class="lineCov">     143488 :         if( l &gt; r ) {</span>
+<span class="lineNum">     115 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( i == 1 ) {</span>
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :                 firstTry = blk ;</span>
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :                 continue ;</span>
+<span class="lineNum">     118 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             } else if( i == 3 ) {</span>
+<span class="lineNum">     119 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( r &lt; bleft ) {</span>
+<span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :                     l = r = bleft ;</span>
+<span class="lineNum">     121 </span>                :            :                 } else {
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :                     l = r = bright ;</span>
+<span class="lineNum">     123 </span>                :            :                 }
+<span class="lineNum">     124 </span>                :            :             } else {
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :                 firstTry = - ablock ;</span>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :                 continue ;</span>
+<span class="lineNum">     127 </span>                :            :             }
+<span class="lineNum">     128 </span>                :            :         } 
+<span class="lineNum">     129 </span>                :<span class="lineCov">     143488 :         bblock = blk ;</span>
+<span class="lineNum">     130 </span>                :<span class="lineCov">     143488 :         bycenter = bblckptr-&gt;bycenter ;</span>
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 143488 times"> + </span>]:<span class="lineCov">     143488 :         if( bblock == ablock ) {</span>
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :             bxcenter = XPICK_INT( l, r, axcenter ) ;</span>
+<span class="lineNum">     134 </span>                :            :         } else {
+<span class="lineNum">     135 </span>                :<span class="lineCov">     143488 :             bxcenter = XPICK_INT( l, r, 0 ) ;</span>
+<span class="lineNum">     136 </span>                :            :         }
+<span class="lineNum">     137 </span>                :            :         break ;
+<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     139 </span>        [<span class="branchCov" title="Branch 0 was taken 143488 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     143488 :     bbin = SetBin( bxcenter ) ;</span>
+<span class="lineNum">     140 </span>                :<span class="lineCov">     143488 :     cellbptr = binptr[bblock][bbin]-&gt;cell ;</span>
+<span class="lineNum">     141 </span>                :            : 
+<span class="lineNum">     142 </span>        [<span class="branchCov" title="Branch 0 was taken 4486 times"> + </span><span class="branchCov" title="Branch 1 was taken 139002 times"> + </span>]:<span class="lineCov">     143488 :     if( *cellbptr == 0 ) {</span>
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>        [<span class="branchCov" title="Branch 0 was taken 4486 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       4486 :         if( ablckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 0 was taken 4486 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       4486 :             if( bblckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     146 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 4486 times"> + </span>]:<span class="lineCov">       4486 :                 if( ucxx1( bxcenter, bycenter)){</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :                     flips++ ;</span>
+<span class="lineNum">     148 </span>                :            :                 }
+<span class="lineNum">     149 </span>                :            :             } else {  /* bblckptr-&gt;borient == 2 */
+<span class="lineNum">     150 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( ucxxo1( bxcenter,bycenter,(aorient == 0) ? 1 : 3 )){</span>
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :                     flips++ ;</span>
+<span class="lineNum">     152 </span>                :            :                 }
+<span class="lineNum">     153 </span>                :            :             }
+<span class="lineNum">     154 </span>                :            :         } else {  /* ablockptr-&gt;borient == 2 */      
+<span class="lineNum">     155 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( bblckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     156 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( ucxxo1( bxcenter, bycenter,</span>
+<span class="lineNum">     157 </span>                :            :                             (aorient == 1) ? 0 : 2)){
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :                     flips++ ;</span>
+<span class="lineNum">     159 </span>                :            :                 }
+<span class="lineNum">     160 </span>                :            :             } else {  /*  bblckptr-&gt;borient == 2 */
+<span class="lineNum">     161 </span>        [<span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( ucxx1( bxcenter, bycenter) ){</span>
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :                     flips++ ;</span>
+<span class="lineNum">     163 </span>                :            :                 }
+<span class="lineNum">     164 </span>                :            :             }
+<span class="lineNum">     165 </span>                :            :         }
+<span class="lineNum">     166 </span>                :            :     } else { /*   *cellbptr &gt;= 1   */
+<span class="lineNum">     167 </span>                :            : 
+<span class="lineNum">     168 </span>        [<span class="branchCov" title="Branch 0 was taken 26884 times"> + </span><span class="branchCov" title="Branch 1 was taken 112118 times"> + </span>]:<span class="lineCov">     139002 :         Bpost = PICK_INT( 1 , *cellbptr ) ;</span>
+<span class="lineNum">     169 </span>                :<span class="lineCov">     139002 :         b = cellbptr[ Bpost ] ;</span>
+<span class="lineNum">     170 </span>                :<span class="lineCov">     139002 :         bcellptr  = carray[b] ;</span>
+<span class="lineNum">     171 </span>                :<span class="lineCov">     139002 :         bblock    = bcellptr-&gt;cblock   ;</span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">     139002 :         bblckptr = barray[ bblock ] ;</span>
+<span class="lineNum">     173 </span>                :            : 
+<span class="lineNum">     174 </span>[<span class="branchCov" title="Branch 0 was taken 139002 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 139002 times"> + </span>]:<span class="lineCov">     139002 :         if( bcellptr-&gt;cclass == -1 || a == b ) {</span>
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :             continue ;</span>
+<span class="lineNum">     176 </span>                :            :         }
+<span class="lineNum">     177 </span>                :            :         
+<span class="lineNum">     178 </span>                :<span class="lineCov">     139002 :         borient   = bcellptr-&gt;corient  ;</span>
+<span class="lineNum">     179 </span>        [<span class="branchCov" title="Branch 0 was taken 139002 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     139002 :         if( ablckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     180 </span>        [<span class="branchCov" title="Branch 0 was taken 139002 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     139002 :             if( bblckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">     139002 :                 t = ucxx2( ) ;</span>
+<span class="lineNum">     182 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 139002 times"> + </span>]:<span class="lineCov">     139002 :                 if( t == 1 ) {</span>
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :                     pairflips++ ;</span>
+<span class="lineNum">     184 </span>                :            :                 }
+<span class="lineNum">     185 </span>                :            :             } else {  /* bblock-&gt;orient == 2 */
+<span class="lineNum">     186 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 t = ucxxo2( (aorient == 0) ? 1:3, (borient == 1)</span>
+<span class="lineNum">     187 </span>                :            :                                                          ? 0:2 ) ;
+<span class="lineNum">     188 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( t == 1 ) {</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :                     pairflips++ ;</span>
+<span class="lineNum">     190 </span>                :            :                 }
+<span class="lineNum">     191 </span>                :            :             }
+<span class="lineNum">     192 </span>                :            :         } else { /* ablock-&gt;borient == 2 */
+<span class="lineNum">     193 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( bblckptr-&gt;borient == 1 ) {</span>
+<span class="lineNum">     194 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 t = ucxxo2( (aorient == 1) ? 0:2, (borient == 0)</span>
+<span class="lineNum">     195 </span>                :            :                                                             ? 1:3) ;
+<span class="lineNum">     196 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( t == 1 ) {</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :                     pairflips++ ;</span>
+<span class="lineNum">     198 </span>                :            :                 }
+<span class="lineNum">     199 </span>                :            :             } else { /* bblock-&gt;borient == 2 */  
+<span class="lineNum">     200 </span>                :<span class="lineNoCov">          0 :                 t = ucxx2( ) ;</span>
+<span class="lineNum">     201 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( t == 1 ) {</span>
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :                     pairflips++ ;</span>
+<span class="lineNum">     203 </span>                :            :                 }
+<span class="lineNum">     204 </span>                :            :             }
+<span class="lineNum">     205 </span>                :            :         }
+<span class="lineNum">     206 </span>                :            :     }
+<span class="lineNum">     207 </span>                :<span class="lineCov">     143488 :     attempts++ ;</span>
+<span class="lineNum">     208 </span>                :            : }
+<span class="lineNum">     209 </span>                :            : 
+<span class="lineNum">     210 </span>                :            : 
+<span class="lineNum">     211 </span>                :<span class="lineCov">          1 : temp = 100.0 * (double)(pairflips + flips) / (double)(attmax) ;</span>
+<span class="lineNum">     212 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : if( pairflips &gt; 0.0001 ) {</span>
+<span class="lineNum">     213 </span>                :<span class="lineNoCov">          0 :     fp_ratio = 100.0 * (double)flips/(double)pairflips ;</span>
+<span class="lineNum">     214 </span>                :            : } else {
+<span class="lineNum">     215 </span>                :<span class="lineCov">          1 :     fp_ratio = 100.0 ;</span>
+<span class="lineNum">     216 </span>                :            : }
+<span class="lineNum">     217 </span>                :            : 
+<span class="lineNum">     218 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot;%3d %3d %4d %8d %7d %5d 0.0 %4.1f %4.1f %4.1f %4.1f&quot;,</span>
+<span class="lineNum">     219 </span>                :            :         iteration+1, (int)T, fds , funccost, penalty, P_limit,
+<span class="lineNum">     220 </span>                :            :         binpenCon, roLenCon, temp, fp_ratio);
+<span class="lineNum">     221 </span>                :<span class="lineCov">          1 : fprintf(fpo,&quot; %4.1f\n&quot;, 100.0*(double)earlyRej/(double)attmax );</span>
+<span class="lineNum">     222 </span>                :<span class="lineCov">          1 : fflush( fpo ) ;</span>
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :            : return ;
+<span class="lineNum">     225 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

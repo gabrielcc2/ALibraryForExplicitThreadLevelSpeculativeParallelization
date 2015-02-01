@@ -1,0 +1,551 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/readcell.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - readcell.c<span style="font-size: 80%;"> (source / <a href="readcell.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">122</td>
+            <td class="headerCovTableEntry">254</td>
+            <td class="headerCovTableEntryLo">48.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">62</td>
+            <td class="headerCovTableEntry">430</td>
+            <td class="headerCovTableEntryLo">14.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : extern int pin_layers_given ;
+<span class="lineNum">       3 </span>                :            : extern int maxCellO ;
+<span class="lineNum">       4 </span>                :            : int totallen ;
+<span class="lineNum">       5 </span>                :            : int maxterm ;
+<span class="lineNum">       6 </span>                :            : int move()  ;
+<span class="lineNum">       7 </span>                :            : int rect()  ;
+<span class="lineNum">       8 </span>                :            : int point() ;
+<span class="lineNum">       9 </span>                :            : extern int celllen ;
+<span class="lineNum">      10 </span>                :            : extern FILE *fpo ;
+<span class="lineNum">      11 </span>                :            : extern double macspace[] ;
+<span class="lineNum">      12 </span>                :            : extern double *padspace ;
+<span class="lineNum">      13 </span>                :            : extern int *fixLRBT ;
+<a name="14"><span class="lineNum">      14 </span>                :            : </a>
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :<span class="lineCov">          1 : readcell( fp )</span>
+<span class="lineNum">      17 </span>                :            : FILE *fp ;
+<span class="lineNum">      18 </span>                :            : {
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : int cell , orient  , layer ;
+<span class="lineNum">      21 </span>                :            : int block , left , right , bottom , top ;
+<span class="lineNum">      22 </span>                :            : int xpos , ypos , from ;
+<span class="lineNum">      23 </span>                :            : int terms , pinctr , netx ;
+<span class="lineNum">      24 </span>                :            : int tot , totx , toty ;
+<span class="lineNum">      25 </span>                :            : char input[1024] ;
+<span class="lineNum">      26 </span>                :            : char netname[1024] ;
+<span class="lineNum">      27 </span>                :            : double space ;
+<span class="lineNum">      28 </span>                :            : CBOXPTR ptr ;
+<span class="lineNum">      29 </span>                :            : TIBOXPTR tile , tptr ;
+<span class="lineNum">      30 </span>                :            : TEBOXPTR term , tmptr ;
+<span class="lineNum">      31 </span>                :            : NBOXPTR netptr , saveptr ;
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : 
+<span class="lineNum">      34 </span>                :<span class="lineCov">          1 : parser( fp ) ;  </span>
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :            : 
+<span class="lineNum">      37 </span>                :<span class="lineCov">          1 : carray = (CBOXPTR *) safe_malloc( ( 1 + numcells + </span>
+<span class="lineNum">      38 </span>                :<span class="lineCov">          1 :                                numterms) * sizeof( CBOXPTR ) ) ;</span>
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>        [<span class="branchCov" title="Branch 0 was taken 1888 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1889 : for( cell = 1 ; cell &lt;= numcells + numterms ; cell++ ) {</span>
+<span class="lineNum">      41 </span>                :            : 
+<span class="lineNum">      42 </span>                :<span class="lineCov">       1888 :     ptr = carray[ cell ] = (CBOXPTR) safe_malloc( sizeof(CBOX) ) ;</span>
+<span class="lineNum">      43 </span>                :            : 
+<span class="lineNum">      44 </span>                :<span class="lineCov">       1888 :     ptr-&gt;cxcenter    = 0 ;</span>
+<span class="lineNum">      45 </span>                :<span class="lineCov">       1888 :     ptr-&gt;cycenter    = 0 ;</span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">       1888 :     ptr-&gt;cheight     = 0 ;</span>
+<span class="lineNum">      47 </span>                :<span class="lineCov">       1888 :     ptr-&gt;clength     = 0 ;</span>
+<span class="lineNum">      48 </span>                :<span class="lineCov">       1888 :     ptr-&gt;cblock      = 0 ;</span>
+<span class="lineNum">      49 </span>                :<span class="lineCov">       1888 :     ptr-&gt;cclass      = 0 ;</span>
+<span class="lineNum">      50 </span>                :<span class="lineCov">       1888 :     ptr-&gt;corient     = 0 ;</span>
+<span class="lineNum">      51 </span>                :<span class="lineCov">       1888 :     ptr-&gt;orflag      = 1 ;</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">       1888 :     ptr-&gt;numterms    = 0 ;</span>
+<span class="lineNum">      53 </span>                :<span class="lineCov">       1888 :     ptr-&gt;padside     = 0 ;</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">       1888 :     ptr-&gt;tileptr     = TILENULL ;</span>
+<span class="lineNum">      55 </span>                :            : }
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :<span class="lineCov">          1 : implicit_feed_count = 0 ;</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">          1 : cell  = 0 ;</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">          1 : terms = 0 ;</span>
+<span class="lineNum">      60 </span>                :<span class="lineCov">          1 : pinctr = 0 ;</span>
+<span class="lineNum">      61 </span>                :            : 
+<span class="lineNum">      62 </span>        [<span class="branchCov" title="Branch 1 was taken 21726 times"> + </span><span class="branchCov" title="Branch 2 was taken 1 time"> + </span>]:<span class="lineCov">      21727 : while( fscanf( fp , &quot; %s &quot; , input ) == 1 ) {</span>
+<span class="lineNum">      63 </span>                :            : 
+<span class="lineNum">      64 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 21726 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      21726 :     if( strcmp( input , &quot;cell&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1888 times"> + </span><span class="branchCov" title="Branch 9 was taken 19838 times"> + </span>]
+<span class="lineNum">      65 </span>                :            :             
+<span class="lineNum">      66 </span>                :<span class="lineCov">       1888 :         cell++ ;</span>
+<span class="lineNum">      67 </span>                :<span class="lineCov">       1888 :         ptr = carray[ cell ] ;</span>
+<span class="lineNum">      68 </span>                :<span class="lineCov">       1888 :         ptr-&gt;corient  = 0       ;</span>
+<span class="lineNum">      69 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      70 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      71 </span>                :<span class="lineCov">       1888 :         ptr-&gt;cname = (char *) safe_malloc( (strlen( input ) + 1 ) *</span>
+<span class="lineNum">      72 </span>                :            :                                             sizeof( char ) ) ;
+<span class="lineNum">      73 </span>                :<span class="lineCov">       1888 :         sprintf( ptr-&gt;cname , &quot;%s&quot; , input ) ;</span>
+<span class="lineNum">      74 </span>                :            : 
+<span class="lineNum">      75 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 19838 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      19838 :     } else if( strcmp( input , &quot;nomirror&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 19838 times"> + </span>]
+<span class="lineNum">      76 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;orflag = 0 ;</span>
+<span class="lineNum">      77 </span>                :            : 
+<span class="lineNum">      78 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 19838 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      19838 :     } else if( strcmp( input , &quot;initially&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoCov" title="Branch 8 was not taken"> - </span><span class="branchCov" title="Branch 9 was taken 19838 times"> + </span>]
+<span class="lineNum">      79 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      80 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( input , &quot;fixed&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">      81 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cclass = -1 ;</span>
+<span class="lineNum">      82 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;orflag = 0 ;</span>
+<span class="lineNum">      83 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;nonfixed&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">      84 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cclass = 0 ;</span>
+<span class="lineNum">      85 </span>                :            :         }
+<span class="lineNum">      86 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %d &quot; , &amp;from ) ;</span>
+<span class="lineNum">      87 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      89 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( input , &quot;left&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cxcenter = from ;</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cycenter = 1 ;</span>
+<span class="lineNum">      92 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;right&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">      93 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cxcenter = -from ;</span>
+<span class="lineNum">      94 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;cycenter = -1 ;</span>
+<span class="lineNum">      95 </span>                :            :         }
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">      98 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %d &quot; , &amp;block ) ;</span>
+<span class="lineNum">      99 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;cblock = block ;</span>
+<span class="lineNum">     100 </span>                :            : 
+<span class="lineNum">     101 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 19838 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      19838 :     } else if( strcmp( input , &quot;left&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1888 times"> + </span><span class="branchCov" title="Branch 9 was taken 17950 times"> + </span>]
+<span class="lineNum">     102 </span>                :            : 
+<span class="lineNum">     103 </span>                :<span class="lineCov">       1888 :         tile = ptr-&gt;tileptr = (TIBOXPTR) safe_malloc( sizeof(TIBOX) ) ;</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">       1888 :         tile-&gt;termsptr = TERMNULL ;</span>
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %d &quot; , &amp;left ) ;</span>
+<span class="lineNum">     107 </span>                :<span class="lineCov">       1888 :         tile-&gt;left = left ;</span>
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 17950 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      17950 :     } else if( strcmp( input , &quot;right&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1888 times"> + </span><span class="branchCov" title="Branch 9 was taken 16062 times"> + </span>]
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %d &quot; , &amp;right ) ;</span>
+<span class="lineNum">     112 </span>                :<span class="lineCov">       1888 :         tile-&gt;right = right ;</span>
+<span class="lineNum">     113 </span>                :            : 
+<span class="lineNum">     114 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 16062 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">      16062 :     } else if( strcmp( input , &quot;bottom&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1888 times"> + </span><span class="branchCov" title="Branch 9 was taken 14174 times"> + </span>]
+<span class="lineNum">     115 </span>                :            : 
+<span class="lineNum">     116 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %d &quot; , &amp;bottom ) ;</span>
+<span class="lineNum">     117 </span>                :<span class="lineCov">       1888 :         tile-&gt;bottom = bottom ;</span>
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>[<span class="branchCov" title="Branch 0 was taken 14174 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 1888 times"> + </span><span class="branchCov" title="Branch 3 was taken 12286 times"> + </span>]:<span class="lineCov">      14174 :     } else if( strcmp( input , &quot;top&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 1888 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 1888 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 1888 times"> + </span><span class="branchCov" title="Branch 9 was taken 12286 times"> + </span>]
+<span class="lineNum">     120 </span>                :            : 
+<span class="lineNum">     121 </span>                :<span class="lineCov">       1888 :         fscanf( fp , &quot; %d &quot; , &amp;top ) ;</span>
+<span class="lineNum">     122 </span>                :<span class="lineCov">       1888 :         tile-&gt;top = top ;</span>
+<span class="lineNum">     123 </span>                :<span class="lineCov">       1888 :         ptr-&gt;cheight = top - bottom ;</span>
+<span class="lineNum">     124 </span>                :<span class="lineCov">       1888 :         ptr-&gt;clength = right - left ;</span>
+<span class="lineNum">     125 </span>                :            : 
+<span class="lineNum">     126 </span>[<span class="branchCov" title="Branch 0 was taken 12286 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 6143 times"> + </span><span class="branchCov" title="Branch 3 was taken 6143 times"> + </span>]:<span class="lineCov">      12286 :     } else if( strcmp( input , &quot;pin&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchCov" title="Branch 4 was taken 6143 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>][<span class="branchCov" title="Branch 6 was taken 6143 times"> + </span><span class="branchNoCov" title="Branch 7 was not taken"> - </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 6143 times"> + </span><span class="branchCov" title="Branch 9 was taken 6143 times"> + </span>]
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;name&quot; */</span>
+<span class="lineNum">     129 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* pin name */</span>
+<span class="lineNum">     130 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;signal&quot; */</span>
+<span class="lineNum">     131 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* signal name */</span>
+<span class="lineNum">     132 </span>                :<span class="lineCov">       6143 :         strcpy( netname , input ) ;</span>
+<span class="lineNum">     133 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6143 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">       6143 :         if( strcmp( input , &quot;TW_PASS_THRU&quot; ) != 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 5407 times"> + </span><span class="branchCov" title="Branch 9 was taken 736 times"> + </span>]
+<span class="lineNum">     134 </span>                :<span class="lineCov">       5407 :             netx = hashfind( input ) ;</span>
+<span class="lineNum">     135 </span>        [<span class="branchCov" title="Branch 0 was taken 1920 times"> + </span><span class="branchCov" title="Branch 1 was taken 3487 times"> + </span>]:<span class="lineCov">       5407 :             if( netarray[netx]-&gt;name == NULL ) {</span>
+<span class="lineNum">     136 </span>                :<span class="lineCov">       1920 :                 netarray[netx]-&gt;name = (char *) safe_malloc( </span>
+<span class="lineNum">     137 </span>                :<span class="lineCov">       1920 :                              (strlen( input ) + 1) * sizeof( char ) ) ;</span>
+<span class="lineNum">     138 </span>                :<span class="lineCov">       1920 :                 sprintf( netarray[netx]-&gt;name , &quot;%s&quot; , input ) ;</span>
+<span class="lineNum">     139 </span>                :            :             }
+<span class="lineNum">     140 </span>                :<span class="lineCov">       5407 :             tot = 1 ;</span>
+<span class="lineNum">     141 </span>                :            : 
+<span class="lineNum">     142 </span>                :<span class="lineCov">       5407 :             ptr-&gt;numterms++ ;</span>
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>        [<span class="branchCov" title="Branch 0 was taken 1888 times"> + </span><span class="branchCov" title="Branch 1 was taken 3519 times"> + </span>]:<span class="lineCov">       5407 :             if( ptr-&gt;numterms == 1 ) {</span>
+<span class="lineNum">     145 </span>                :<span class="lineCov">       1888 :                 term = ptr-&gt;tileptr-&gt;termsptr = (TEBOXPTR) </span>
+<span class="lineNum">     146 </span>                :<span class="lineCov">       1888 :                                         safe_malloc( sizeof( TEBOX ) ) ;</span>
+<span class="lineNum">     147 </span>                :            :             } else {
+<span class="lineNum">     148 </span>                :<span class="lineCov">       3519 :                 term = term-&gt;nextterm = (TEBOXPTR) safe_malloc( </span>
+<span class="lineNum">     149 </span>                :            :                                                    sizeof( TEBOX ) ) ;
+<span class="lineNum">     150 </span>                :            :             }
+<span class="lineNum">     151 </span>                :<span class="lineCov">       5407 :             term-&gt;nextterm = TERMNULL ;</span>
+<span class="lineNum">     152 </span>                :<span class="lineCov">       5407 :             term-&gt;cellterm = ++pinctr ;</span>
+<span class="lineNum">     153 </span>                :<span class="lineCov">       5407 :             term-&gt;ue = 0 ;</span>
+<span class="lineNum">     154 </span>                :            : 
+<span class="lineNum">     155 </span>                :<span class="lineCov">       5407 :             saveptr = netarray[ netx ]-&gt;netptr ;</span>
+<span class="lineNum">     156 </span>                :<span class="lineCov">      10814 :             netptr = netarray[ netx ]-&gt;netptr = (NBOXPTR) </span>
+<span class="lineNum">     157 </span>                :<span class="lineCov">       5407 :                                      safe_malloc( sizeof( NBOX ) ) ;</span>
+<span class="lineNum">     158 </span>                :<span class="lineCov">       5407 :             netptr-&gt;nterm    = saveptr ;</span>
+<span class="lineNum">     159 </span>                :<span class="lineCov">       5407 :             netptr-&gt;terminal = pinctr ;</span>
+<span class="lineNum">     160 </span>                :<span class="lineCov">       5407 :             netptr-&gt;net      = netx ;</span>
+<span class="lineNum">     161 </span>                :<span class="lineCov">       5407 :             netptr-&gt;xpos     = 0    ;</span>
+<span class="lineNum">     162 </span>                :<span class="lineCov">       5407 :             netptr-&gt;ypos     = 0    ;</span>
+<span class="lineNum">     163 </span>                :<span class="lineCov">       5407 :             netptr-&gt;newx     = 0    ;</span>
+<span class="lineNum">     164 </span>                :<span class="lineCov">       5407 :             netptr-&gt;newy     = 0    ;</span>
+<span class="lineNum">     165 </span>                :<span class="lineCov">       5407 :             netptr-&gt;flag     = 0    ;</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">       5407 :             netptr-&gt;cell     = cell + terms ;</span>
+<span class="lineNum">     167 </span>                :            : 
+<span class="lineNum">     168 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 5407 times"> + </span>]:<span class="lineCov">       5407 :             if( pin_layers_given != 0 ) {</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :                 fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;layer&quot; */</span>
+<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :                 fscanf( fp , &quot; %d &quot; , &amp;layer ) ; /* layer number */</span>
+<span class="lineNum">     171 </span>                :            :             }
+<span class="lineNum">     172 </span>                :<span class="lineCov">       5407 :             fscanf( fp , &quot; %d %d &quot; , &amp;xpos , &amp;ypos ) ;</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">       5407 :             totx = xpos ;</span>
+<span class="lineNum">     174 </span>                :<span class="lineCov">       5407 :             toty = ypos ;</span>
+<span class="lineNum">     175 </span>                :<span class="lineCov">       5407 :             term-&gt;txpos[0] = xpos ;</span>
+<span class="lineNum">     176 </span>                :<span class="lineCov">       5407 :             term-&gt;typos[0] = ypos ;</span>
+<span class="lineNum">     177 </span>                :            :         } else {
+<span class="lineNum">     178 </span>                :<span class="lineCov">        736 :             implicit_feed_count++ ;</span>
+<span class="lineNum">     179 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 736 times"> + </span>]:<span class="lineCov">        736 :             if( pin_layers_given != 0 ) {</span>
+<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :                 fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;layer&quot; */</span>
+<span class="lineNum">     181 </span>                :<span class="lineNoCov">          0 :                 fscanf( fp , &quot; %d &quot; , &amp;layer ) ; /* layer number */</span>
+<span class="lineNum">     182 </span>                :            :             }
+<span class="lineNum">     183 </span>                :<span class="lineCov">        736 :             fscanf( fp , &quot; %d %d &quot; , &amp;xpos , &amp;ypos ) ;</span>
+<span class="lineNum">     184 </span>                :            :         }
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6143 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">       6143 :     } else if( strcmp( input , &quot;equiv&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 6143 times"> + </span><span class="branchNoCov" title="Branch 9 was not taken"> - </span>]
+<span class="lineNum">     187 </span>                :            : 
+<span class="lineNum">     188 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;name&quot; */</span>
+<span class="lineNum">     189 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %s &quot; , input ) ; /* pin name */</span>
+<span class="lineNum">     190 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6143 times"> + </span>]:<span class="lineCov">       6143 :         if( pin_layers_given != 0 ) {</span>
+<span class="lineNum">     191 </span>                :<span class="lineNoCov">          0 :             fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;layer&quot; */</span>
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :             fscanf( fp , &quot; %d &quot; , &amp;layer ) ; /* layer number */</span>
+<span class="lineNum">     193 </span>                :            :         }
+<span class="lineNum">     194 </span>                :<span class="lineCov">       6143 :         fscanf( fp , &quot; %d %d &quot; , &amp;xpos , &amp;ypos ) ;</span>
+<span class="lineNum">     195 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6143 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">       6143 :         if( strcmp( netname , &quot;TW_PASS_THRU&quot; ) != 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchCov" title="Branch 8 was taken 5407 times"> + </span><span class="branchCov" title="Branch 9 was taken 736 times"> + </span>]
+<span class="lineNum">     196 </span>                :<span class="lineCov">       5407 :             tot++ ;</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">       5407 :             totx += xpos ;</span>
+<span class="lineNum">     198 </span>                :<span class="lineCov">       5407 :             toty += ypos ;</span>
+<span class="lineNum">     199 </span>                :<span class="lineCov">       5407 :             term-&gt;txpos[0] = totx / tot ;</span>
+<span class="lineNum">     200 </span>        [<span class="branchCov" title="Branch 0 was taken 5407 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       5407 :             if( terms == 0 ) {</span>
+<span class="lineNum">     201 </span>                :<span class="lineCov">       5407 :                 term-&gt;typos[0] = 0 ;</span>
+<span class="lineNum">     202 </span>                :            :             } else {
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :                 term-&gt;typos[0] = toty / tot ;</span>
+<span class="lineNum">     204 </span>                :            :             }
+<span class="lineNum">     205 </span>                :            :         }
+<span class="lineNum">     206 </span>                :            : 
+<span class="lineNum">     207 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     } else if( strcmp( input , &quot;unequiv&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;name&quot; */</span>
+<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ; /* pin name */</span>
+<span class="lineNum">     211 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( pin_layers_given != 0 ) {</span>
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :             fscanf( fp , &quot; %s &quot; , input ) ; /* &quot;layer&quot; */</span>
+<span class="lineNum">     213 </span>                :<span class="lineNoCov">          0 :             fscanf( fp , &quot; %d &quot; , &amp;layer ) ; /* layer number */</span>
+<span class="lineNum">     214 </span>                :            :         }
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %d %d &quot; , &amp;xpos , &amp;ypos ) ;</span>
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :         tot++ ;</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :         totx += xpos ;</span>
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :         term-&gt;txpos[0] = totx / tot ;</span>
+<span class="lineNum">     219 </span>                :<span class="lineNoCov">          0 :         term-&gt;typos[0] = 0 ;</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :         term-&gt;ue = 1 ;</span>
+<span class="lineNum">     221 </span>                :            : 
+<span class="lineNum">     222 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     } else if( strcmp( input , &quot;pad&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :         terms++ ;</span>
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 :         ptr = carray[ numcells + terms ] ;</span>
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;cname = (char *) safe_malloc( (strlen( input ) + 1 ) *</span>
+<span class="lineNum">     229 </span>                :            :                                             sizeof( char ) ) ;
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :         sprintf( ptr-&gt;cname , &quot;%s&quot; , input ) ;</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;cclass = 0 ;</span>
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;orflag = 0 ;</span>
+<span class="lineNum">     233 </span>                :            : 
+<span class="lineNum">     234 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     } else if( strcmp( input , &quot;orient&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     235 </span>                :            : 
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %d &quot; , &amp;orient ) ;</span>
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :         ptr-&gt;corient = orient ;</span>
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     } else if( strcmp( input , &quot;padside&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     240 </span>                :            : 
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %s &quot; , input ) ;</span>
+<span class="lineNum">     242 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( strcmp( input , &quot;L&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 1 ;</span>
+<span class="lineNum">     244 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;T&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 2 ;</span>
+<span class="lineNum">     246 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;R&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     247 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 3 ;</span>
+<span class="lineNum">     248 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;B&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 4 ;</span>
+<span class="lineNum">     250 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MUL&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 5 ;</span>
+<span class="lineNum">     252 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MUR&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 6 ;</span>
+<span class="lineNum">     254 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MLL&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 7 ;</span>
+<span class="lineNum">     256 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MLR&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 8 ;</span>
+<span class="lineNum">     258 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;ML&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 9 ;</span>
+<span class="lineNum">     260 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MR&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 10 ;</span>
+<span class="lineNum">     262 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MB&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :             printf(&quot;macro at position MB is no longer supported -- sorry!\n&quot;);</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :             exit( TW_FAIL ) ;</span>
+<span class="lineNum">     265 </span>                :            :             ptr-&gt;padside = 11 ;
+<span class="lineNum">     266 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MT&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :             printf(&quot;macro at position MT is no longer supported -- sorry!\n&quot;);</span>
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :             exit( TW_FAIL ) ;</span>
+<span class="lineNum">     269 </span>                :            :             ptr-&gt;padside = 12 ;
+<span class="lineNum">     270 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MM&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :             printf(&quot;macro at position MM is no longer supported -- sorry!\n&quot;);</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :             exit( TW_FAIL ) ;</span>
+<span class="lineNum">     273 </span>                :            :             ptr-&gt;padside = 13 ;
+<span class="lineNum">     274 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MTT&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 14 ;</span>
+<span class="lineNum">     276 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( strcmp( input , &quot;MBB&quot; ) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :             ptr-&gt;padside = 15 ;</span>
+<span class="lineNum">     278 </span>                :            :         } else {
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :             fprintf(fpo,&quot;padside not specified properly for &quot;);</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :             fprintf(fpo,&quot;pad: %s\n&quot;, ptr-&gt;cname ) ;</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :             exit(TW_FAIL);</span>
+<span class="lineNum">     282 </span>                :            :         }
+<span class="lineNum">     283 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     } else if( strcmp( input , &quot;sidespace&quot;) == 0 ) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 8 was not executed"> # </span><span class="branchNoExec" title="Branch 9 was not executed"> # </span>]
+<span class="lineNum">     284 </span>                :<span class="lineNoCov">          0 :         fscanf( fp , &quot; %lf &quot; , &amp;space ) ;</span>
+<span class="lineNum">     285 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( ptr-&gt;padside == 1 ) {</span>
+<span class="lineNum">     286 </span>                :<span class="lineNoCov">          0 :             fixLRBT[0] = 1 ;    </span>
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :             padspace[ terms ] = space ;</span>
+<span class="lineNum">     288 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( ptr-&gt;padside == 3 ) {</span>
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :             fixLRBT[1] = 1 ;    </span>
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :             padspace[ terms ] = space ;</span>
+<span class="lineNum">     291 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( ptr-&gt;padside == 4 ) {</span>
+<span class="lineNum">     292 </span>                :<span class="lineNoCov">          0 :             fixLRBT[2] = 1 ;    </span>
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :             padspace[ terms ] = space ;</span>
+<span class="lineNum">     294 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( ptr-&gt;padside == 2 ) {</span>
+<span class="lineNum">     295 </span>                :<span class="lineNoCov">          0 :             fixLRBT[3] = 1 ;    </span>
+<span class="lineNum">     296 </span>                :<span class="lineNoCov">          0 :             padspace[ terms ] = space ;</span>
+<span class="lineNum">     297 </span>                :            :         } else {
+<span class="lineNum">     298 </span>                :<span class="lineNoCov">          0 :             macspace[ ptr-&gt;padside ] = space ;</span>
+<span class="lineNum">     299 </span>                :            :         }
+<span class="lineNum">     300 </span>                :            :     }
+<span class="lineNum">     301 </span>                :            : }
+<span class="lineNum">     302 </span>                :            : 
+<span class="lineNum">     303 </span>                :            : 
+<span class="lineNum">     304 </span>                :            : 
+<span class="lineNum">     305 </span>                :            : /*
+<span class="lineNum">     306 </span>                :            :     NOW WE HAVE TO LOAD IN THE OTHER CONFIGURATIONS
+<span class="lineNum">     307 </span>                :            : */
+<span class="lineNum">     308 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 : for( cell = 1 ; cell &lt;= numcells ; cell++ ) {</span>
+<span class="lineNum">     309 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :     if( carray[cell]-&gt;orflag == 1 ) {</span>
+<span class="lineNum">     310 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         if( maxCellO == 0 ) {</span>
+<span class="lineNum">     311 </span>                :<span class="lineCov">          1 :             maxCellO = 2 ;</span>
+<span class="lineNum">     312 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         } else if( maxCellO == 1 ) {</span>
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :             maxCellO = 3 ;</span>
+<span class="lineNum">     314 </span>                :            :         } 
+<span class="lineNum">     315 </span>                :            :         break ;
+<span class="lineNum">     316 </span>                :            :     }
+<span class="lineNum">     317 </span>                :            : }
+<span class="lineNum">     318 </span>                :            : 
+<span class="lineNum">     319 </span>                :            : 
+<span class="lineNum">     320 </span>        [<span class="branchCov" title="Branch 0 was taken 1888 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       1889 : for( cell = 1 ; cell &lt;= numcells ; cell++ ) {</span>
+<span class="lineNum">     321 </span>                :            : 
+<span class="lineNum">     322 </span>                :<span class="lineCov">       1888 :     ptr = carray[ cell ] ;</span>
+<span class="lineNum">     323 </span>                :<span class="lineCov">       1888 :     tptr = ptr-&gt;tileptr ;</span>
+<span class="lineNum">     324 </span>                :            : 
+<span class="lineNum">     325 </span>        [<span class="branchCov" title="Branch 0 was taken 5407 times"> + </span><span class="branchCov" title="Branch 1 was taken 1888 times"> + </span>]:<span class="lineCov">       7295 :     for( tmptr = tptr-&gt;termsptr ; tmptr != TERMNULL ;</span>
+<span class="lineNum">     326 </span>                :<span class="lineCov">       5407 :                                     tmptr = tmptr-&gt;nextterm ) {</span>
+<span class="lineNum">     327 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 5407 times"> + </span>]:<span class="lineCov">       5407 :         if( ( ptr-&gt;clength %2 != 0 ) ) {</span>
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :             tmptr-&gt;txpos[1] = -tmptr-&gt;txpos[0] + 1 ;</span>
+<span class="lineNum">     329 </span>                :            :         } else {
+<span class="lineNum">     330 </span>                :<span class="lineCov">       5407 :             tmptr-&gt;txpos[1] = -tmptr-&gt;txpos[0] ;</span>
+<span class="lineNum">     331 </span>                :            :         }
+<span class="lineNum">     332 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 5407 times"> + </span>]:<span class="lineCov">       5407 :         if( ( ptr-&gt;cheight %2 != 0 ) ) {</span>
+<span class="lineNum">     333 </span>                :<span class="lineNoCov">          0 :             tmptr-&gt;typos[1] = -tmptr-&gt;typos[0] + 1 ;</span>
+<span class="lineNum">     334 </span>                :            :         } else {
+<span class="lineNum">     335 </span>                :<span class="lineCov">       5407 :             tmptr-&gt;typos[1] = -tmptr-&gt;typos[0] ;</span>
+<span class="lineNum">     336 </span>                :            :         }
+<span class="lineNum">     337 </span>                :            :     }
+<span class="lineNum">     338 </span>                :            : 
+<span class="lineNum">     339 </span>                :            : }
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 : for( cell = numcells + 1 ; cell &lt;= numcells + numterms ; cell++ ) {</span>
+<span class="lineNum">     342 </span>                :            :     
+<span class="lineNum">     343 </span>                :<span class="lineNoCov">          0 :     ptr = carray[ cell ] ;</span>
+<span class="lineNum">     344 </span>                :<span class="lineNoCov">          0 :     tptr = ptr-&gt;tileptr ;</span>
+<span class="lineNum">     345 </span>                :<span class="lineNoCov">          0 :     orient = ptr-&gt;corient ;</span>
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :     move( orient ) ;</span>
+<span class="lineNum">     347 </span>                :<span class="lineNoCov">          0 :     rect( &amp;tptr-&gt;left , &amp;tptr-&gt;bottom , &amp;tptr-&gt;right ,</span>
+<span class="lineNum">     348 </span>                :            :                                                 &amp;tptr-&gt;top ) ;
+<span class="lineNum">     349 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( (ptr-&gt;cheight % 2 != 0 &amp;&amp; (orient == 4 || orient == 6))||</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     350 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         (ptr-&gt;clength % 2 != 0 &amp;&amp; (orient == 2 || orient == 3))){</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :         tptr-&gt;left++ ;</span>
+<span class="lineNum">     352 </span>                :<span class="lineNoCov">          0 :         tptr-&gt;right++ ;</span>
+<span class="lineNum">     353 </span>                :            :     }
+<span class="lineNum">     354 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( (ptr-&gt;cheight % 2 != 0 &amp;&amp; (orient == 1 || orient == 3))||</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     355 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         (ptr-&gt;clength % 2 != 0 &amp;&amp; (orient == 4 || orient == 7))){</span>
+<span class="lineNum">     356 </span>                :<span class="lineNoCov">          0 :         tptr-&gt;bottom++ ;</span>
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 :         tptr-&gt;top++ ;</span>
+<span class="lineNum">     358 </span>                :            :     }
+<span class="lineNum">     359 </span>                :            : 
+<span class="lineNum">     360 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( tmptr = tptr-&gt;termsptr ; tmptr != TERMNULL ;</span>
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :                                     tmptr = tmptr-&gt;nextterm ) {</span>
+<span class="lineNum">     362 </span>                :<span class="lineNoCov">          0 :         tmptr-&gt;txpos[1] = tmptr-&gt;txpos[0] ;</span>
+<span class="lineNum">     363 </span>                :<span class="lineNoCov">          0 :         tmptr-&gt;typos[1] = tmptr-&gt;typos[0] ;</span>
+<span class="lineNum">     364 </span>                :<span class="lineNoCov">          0 :         point( &amp;tmptr-&gt;txpos[1] , &amp;tmptr-&gt;typos[1] ) ;</span>
+<span class="lineNum">     365 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (ptr-&gt;cheight % 2 != 0 &amp;&amp; (orient == 4 || orient == 6))||</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     366 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (ptr-&gt;clength % 2 != 0 &amp;&amp; (orient == 2 || orient == 3))){</span>
+<span class="lineNum">     367 </span>                :<span class="lineNoCov">          0 :             tmptr-&gt;txpos[1]++ ; </span>
+<span class="lineNum">     368 </span>                :            :         }
+<span class="lineNum">     369 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( (ptr-&gt;cheight % 2 != 0 &amp;&amp; (orient == 1 || orient == 3))||</span>
+<span class="lineNum">         </span>        [<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     370 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             (ptr-&gt;clength % 2 != 0 &amp;&amp; (orient == 4 || orient == 7))){</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :             tmptr-&gt;typos[1]++ ;</span>
+<span class="lineNum">     372 </span>                :            :         }
+<span class="lineNum">     373 </span>                :            :     }
+<span class="lineNum">     374 </span>                :            : }
+<span class="lineNum">     375 </span>                :            : 
+<span class="lineNum">     376 </span>                :            : /* 
+<span class="lineNum">     377 </span>                :            :  *   Configure the blocks, place the macro blocks and pads.
+<span class="lineNum">     378 </span>                :            :  *   Also generate an initial placement of the standard cells
+<span class="lineNum">     379 </span>                :            :  */
+<span class="lineNum">     380 </span>                :            : 
+<span class="lineNum">     381 </span>                :<span class="lineCov">          1 : configure() ;</span>
+<span class="lineNum">     382 </span>                :<span class="lineCov">          1 : carray = (CBOXPTR *) safe_realloc( carray, (1 + numcells + numterms) *</span>
+<span class="lineNum">     383 </span>                :            :                                                 sizeof( CBOXPTR ) ) ;
+<span class="lineNum">     384 </span>                :            : 
+<span class="lineNum">     385 </span>        [<span class="branchCov" title="Branch 0 was taken 16 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         17 : for( block = 1 ; block &lt;= numblock ; block++ ) {</span>
+<span class="lineNum">     386 </span>                :<span class="lineCov">         16 :     totallen += barray[ block ]-&gt;blength ;</span>
+<span class="lineNum">     387 </span>                :            : }
+<span class="lineNum">     388 </span>                :<span class="lineCov">          1 : fprintf( fpo, &quot;total cell length: %d\n&quot;, celllen ) ;</span>
+<span class="lineNum">     389 </span>                :<span class="lineCov">          1 : fprintf( fpo, &quot;total block length: %d\n&quot;, totallen ) ;</span>
+<span class="lineNum">     390 </span>                :            : 
+<span class="lineNum">     391 </span>                :            : return ;
+<span class="lineNum">     392 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/shade.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - shade.c<span style="font-size: 80%;"> (source / <a href="shade.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">47</td>
+            <td class="headerCovTableEntry">249</td>
+            <td class="headerCovTableEntryLo">18.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntry">102</td>
+            <td class="headerCovTableEntryLo">17.6 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: shade.c,v 1.9 1997/07/24 01:21:56 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.4
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: shade.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.9  1997/07/24 01:21:56  brianp
+<span class="lineNum">      27 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.8  1997/07/09 03:04:44  brianp
+<span class="lineNum">      30 </span>                :            :  * fixed bug in gl_color_shade_vertices() with GL_COLOR_MATERIAL
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.7  1997/07/05 16:24:26  brianp
+<span class="lineNum">      33 </span>                :            :  * fixed FP underflow problem in pow().  Renamed h[xyz] to h_[xyz].
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.6  1997/06/20 04:15:43  brianp
+<span class="lineNum">      36 </span>                :            :  * optimized changing of SHININESS (Henk Kok)
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.5  1997/06/20 02:28:40  brianp
+<span class="lineNum">      39 </span>                :            :  * changed color components from GLfixed to GLubyte
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.4  1997/05/28 03:26:29  brianp
+<span class="lineNum">      42 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.3  1997/05/23 03:01:18  brianp
+<span class="lineNum">      45 </span>                :            :  * commented out a few const keywords because IRIX cc chokes on them
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.2  1997/05/09 02:41:08  brianp
+<span class="lineNum">      48 </span>                :            :  * call GL_SQRT() instead of sqrt()
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.1  1997/04/01 04:11:04  brianp
+<span class="lineNum">      51 </span>                :            :  * Initial revision
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  */
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      57 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      58 </span>                :            : #else
+<span class="lineNum">      59 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      60 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      61 </span>                :            : #include &quot;mmath.h&quot;
+<span class="lineNum">      62 </span>                :            : #include &quot;shade.h&quot;
+<span class="lineNum">      63 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      64 </span>                :            : #endif
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            : /*
+<a name="69"><span class="lineNum">      69 </span>                :            :  * Return x^y.</a>
+<span class="lineNum">      70 </span>                :            :  */
+<span class="lineNum">      71 </span>                :<span class="lineCov">        198 : static GLfloat gl_pow( GLfloat x, GLfloat y )</span>
+<span class="lineNum">      72 </span>                :            : {
+<span class="lineNum">      73 </span>                :<span class="lineCov">        198 :    GLdouble z = pow(x, y);</span>
+<span class="lineNum">      74 </span>        [<span class="branchCov" title="Branch 0 was taken 42 times"> + </span><span class="branchCov" title="Branch 1 was taken 156 times"> + </span>]:<span class="lineCov">        198 :    if (z&lt;1.0e-10)</span>
+<span class="lineNum">      75 </span>                :<span class="lineCov">         42 :       return 0.0F;</span>
+<span class="lineNum">      76 </span>                :            :    else
+<span class="lineNum">      77 </span>                :<span class="lineCov">        198 :       return (GLfloat) z;</span>
+<span class="lineNum">      78 </span>                :            : }
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>                :            : /*
+<span class="lineNum">      83 </span>                :            :  * Use current lighting/material settings to compute the RGBA colors of
+<span class="lineNum">      84 </span>                :            :  * an array of vertexes.
+<span class="lineNum">      85 </span>                :            :  * Input:  side - 0=use front material, 1=use back material
+<span class="lineNum">      86 </span>                :            :  *         n - number of vertexes to process
+<span class="lineNum">      87 </span>                :            :  *         vertex - array of vertex positions in eye coordinates
+<span class="lineNum">      88 </span>                :            :  *         normal - array of surface normal vectors
+<a name="89"><span class="lineNum">      89 </span>                :            :  * Output:  color - array of resulting colors</a>
+<span class="lineNum">      90 </span>                :            :  */
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 : void gl_color_shade_vertices( GLcontext *ctx,</span>
+<span class="lineNum">      92 </span>                :            :                               GLuint side,
+<span class="lineNum">      93 </span>                :            :                               GLuint n,
+<span class="lineNum">      94 </span>                :            :                               /*const*/ GLfloat vertex[][4],
+<span class="lineNum">      95 </span>                :            :                               /*const*/ GLfloat normal[][3],
+<span class="lineNum">      96 </span>                :            :                               GLubyte color[][4] )
+<span class="lineNum">      97 </span>                :            : {
+<span class="lineNum">      98 </span>                :            :    GLint j;
+<span class="lineNum">      99 </span>                :            :    GLfloat rscale, gscale, bscale, ascale;
+<span class="lineNum">     100 </span>                :            :    GLfloat baseR, baseG, baseB, baseA;
+<span class="lineNum">     101 </span>                :            :    GLint sumA;
+<span class="lineNum">     102 </span>                :            :    struct gl_light *light;
+<span class="lineNum">     103 </span>                :            :    struct gl_material *mat;
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :            :    /* Compute scale factor to go from floats in [0,1] to integers or fixed
+<span class="lineNum">     106 </span>                :            :     * point values:
+<span class="lineNum">     107 </span>                :            :     */
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 :    rscale = ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 :    gscale = ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :    bscale = ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :    ascale = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>                :<span class="lineNoCov">          0 :    mat = &amp;ctx-&gt;Light.Material[side];</span>
+<span class="lineNum">     114 </span>                :            : 
+<span class="lineNum">     115 </span>                :            :    /*** Compute color contribution from global lighting ***/
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :    baseR = mat-&gt;Emission[0] + ctx-&gt;Light.Model.Ambient[0] * mat-&gt;Ambient[0];</span>
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :    baseG = mat-&gt;Emission[1] + ctx-&gt;Light.Model.Ambient[1] * mat-&gt;Ambient[1];</span>
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :    baseB = mat-&gt;Emission[2] + ctx-&gt;Light.Model.Ambient[2] * mat-&gt;Ambient[2];</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :    baseA = mat-&gt;Diffuse[3];  /* Alpha is simple, same for all vertices */</span>
+<span class="lineNum">     120 </span>                :            : 
+<span class="lineNum">     121 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    sumA = (GLint) (CLAMP( baseA, 0.0F, 1.0F ) * ascale);</span>
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0;j&lt;n;j++) {</span>
+<span class="lineNum">     124 </span>                :            :       GLfloat sumR, sumG, sumB;
+<span class="lineNum">     125 </span>                :            :       GLfloat nx, ny, nz;
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (side==0) {</span>
+<span class="lineNum">     128 </span>                :            :          /* shade frontside */
+<span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :          nx = normal[j][0];</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :          ny = normal[j][1];</span>
+<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :          nz = normal[j][2];</span>
+<span class="lineNum">     132 </span>                :            :       }
+<span class="lineNum">     133 </span>                :            :       else {
+<span class="lineNum">     134 </span>                :            :          /* shade backside */
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :          nx = -normal[j][0];</span>
+<span class="lineNum">     136 </span>                :<span class="lineNoCov">          0 :          ny = -normal[j][1];</span>
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :          nz = -normal[j][2];</span>
+<span class="lineNum">     138 </span>                :            :       }
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :       sumR = baseR;</span>
+<span class="lineNum">     141 </span>                :<span class="lineNoCov">          0 :       sumG = baseG;</span>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :       sumB = baseB;</span>
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>                :            :       /* Add contribution from each enabled light source */
+<span class="lineNum">     145 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (light=ctx-&gt;Light.FirstEnabled; light; light=light-&gt;NextEnabled) {</span>
+<span class="lineNum">     146 </span>                :            :          GLfloat ambientR, ambientG, ambientB;
+<span class="lineNum">     147 </span>                :            :          GLfloat attenuation, spot;
+<span class="lineNum">     148 </span>                :            :          GLfloat VPx, VPy, VPz;  /* unit vector from vertex to light */
+<span class="lineNum">     149 </span>                :            :          GLfloat n_dot_VP;       /* n dot VP */
+<span class="lineNum">     150 </span>                :            : 
+<span class="lineNum">     151 </span>                :            :          /* compute VP and attenuation */
+<span class="lineNum">     152 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (light-&gt;Position[3]==0.0) {</span>
+<span class="lineNum">     153 </span>                :            :             /* directional light */
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :             VPx = light-&gt;VP_inf_norm[0];</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :             VPy = light-&gt;VP_inf_norm[1];</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :             VPz = light-&gt;VP_inf_norm[2];</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :             attenuation = 1.0F;</span>
+<span class="lineNum">     158 </span>                :            :          }
+<span class="lineNum">     159 </span>                :            :          else {
+<span class="lineNum">     160 </span>                :            :             /* positional light */
+<span class="lineNum">     161 </span>                :            :             GLfloat d;     /* distance from vertex to light */
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :             VPx = light-&gt;Position[0] - vertex[j][0];</span>
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :             VPy = light-&gt;Position[1] - vertex[j][1];</span>
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :             VPz = light-&gt;Position[2] - vertex[j][2];</span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :             d = (GLfloat) GL_SQRT( VPx*VPx + VPy*VPy + VPz*VPz );</span>
+<span class="lineNum">     166 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (d&gt;0.001F) {</span>
+<span class="lineNum">     167 </span>                :<span class="lineNoCov">          0 :                GLfloat invd = 1.0F / d;</span>
+<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :                VPx *= invd;</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :                VPy *= invd;</span>
+<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :                VPz *= invd;</span>
+<span class="lineNum">     171 </span>                :            :             }
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :             attenuation = 1.0F / (light-&gt;ConstantAttenuation</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :                         + d * (light-&gt;LinearAttenuation</span>
+<span class="lineNum">     174 </span>                :<span class="lineNoCov">          0 :                         + d * light-&gt;QuadraticAttenuation));</span>
+<span class="lineNum">     175 </span>                :            :          }
+<span class="lineNum">     176 </span>                :            : 
+<span class="lineNum">     177 </span>                :            :          /* spotlight factor */
+<span class="lineNum">     178 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (light-&gt;SpotCutoff==180.0F) {</span>
+<span class="lineNum">     179 </span>                :            :             /* not a spot light */
+<span class="lineNum">     180 </span>                :<span class="lineNoCov">          0 :             spot = 1.0F;</span>
+<span class="lineNum">     181 </span>                :            :          }
+<span class="lineNum">     182 </span>                :            :          else {
+<span class="lineNum">     183 </span>                :            :             GLfloat PVx, PVy, PVz, PV_dot_dir;
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :             PVx = -VPx;</span>
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :             PVy = -VPy;</span>
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :             PVz = -VPz;</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :             PV_dot_dir = PVx*light-&gt;NormDirection[0]</span>
+<span class="lineNum">     188 </span>                :<span class="lineNoCov">          0 :                        + PVy*light-&gt;NormDirection[1]</span>
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :                        + PVz*light-&gt;NormDirection[2];</span>
+<span class="lineNum">     190 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (PV_dot_dir&lt;=0.0F || PV_dot_dir&lt;light-&gt;CosCutoff) {</span>
+<span class="lineNum">     191 </span>                :            :                /* outside of cone */
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 :                spot = 0.0F;</span>
+<span class="lineNum">     193 </span>                :            :             }
+<span class="lineNum">     194 </span>                :            :             else {
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :                double x = PV_dot_dir * (EXP_TABLE_SIZE-1);</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :                int k = (int) x;</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :                spot = light-&gt;SpotExpTable[k][0]</span>
+<span class="lineNum">     198 </span>                :<span class="lineNoCov">          0 :                     + (x-k)*light-&gt;SpotExpTable[k][1];</span>
+<span class="lineNum">     199 </span>                :            :             }
+<span class="lineNum">     200 </span>                :            :          }
+<span class="lineNum">     201 </span>                :            : 
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :          ambientR = mat-&gt;Ambient[0] * light-&gt;Ambient[0];</span>
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :          ambientG = mat-&gt;Ambient[1] * light-&gt;Ambient[1];</span>
+<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :          ambientB = mat-&gt;Ambient[2] * light-&gt;Ambient[2];</span>
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :            :          /* Compute dot product or normal and vector from V to light pos */
+<span class="lineNum">     207 </span>                :<span class="lineNoCov">          0 :          n_dot_VP = nx * VPx + ny * VPy + nz * VPz;</span>
+<span class="lineNum">     208 </span>                :            : 
+<span class="lineNum">     209 </span>                :            :          /* diffuse and specular terms */
+<span class="lineNum">     210 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (n_dot_VP&lt;=0.0F) {</span>
+<span class="lineNum">     211 </span>                :            :             /* surface face away from light, no diffuse or specular */
+<span class="lineNum">     212 </span>                :<span class="lineNoCov">          0 :             GLfloat t = attenuation * spot;</span>
+<span class="lineNum">     213 </span>                :<span class="lineNoCov">          0 :             sumR += t * ambientR;</span>
+<span class="lineNum">     214 </span>                :<span class="lineNoCov">          0 :             sumG += t * ambientG;</span>
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :             sumB += t * ambientB;</span>
+<span class="lineNum">     216 </span>                :            :             /* done with this light */
+<span class="lineNum">     217 </span>                :            :          }
+<span class="lineNum">     218 </span>                :            :          else {
+<span class="lineNum">     219 </span>                :            :             GLfloat diffuseR, diffuseG, diffuseB;
+<span class="lineNum">     220 </span>                :            :             GLfloat specularR, specularG, specularB;
+<span class="lineNum">     221 </span>                :            :             GLfloat h_x, h_y, h_z, n_dot_h, t;
+<span class="lineNum">     222 </span>                :            :                   
+<span class="lineNum">     223 </span>                :            :             /* diffuse term */
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :             diffuseR = n_dot_VP * mat-&gt;Diffuse[0] * light-&gt;Diffuse[0];</span>
+<span class="lineNum">     225 </span>                :<span class="lineNoCov">          0 :             diffuseG = n_dot_VP * mat-&gt;Diffuse[1] * light-&gt;Diffuse[1];</span>
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :             diffuseB = n_dot_VP * mat-&gt;Diffuse[2] * light-&gt;Diffuse[2];</span>
+<span class="lineNum">     227 </span>                :            : 
+<span class="lineNum">     228 </span>                :            :             /* specular term */
+<span class="lineNum">     229 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Light.Model.LocalViewer) {</span>
+<span class="lineNum">     230 </span>                :            :                GLfloat vx, vy, vz, vlen;
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :                vx = vertex[j][0];</span>
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :                vy = vertex[j][1];</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :                vz = vertex[j][2];</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :                vlen = GL_SQRT( vx*vx + vy*vy + vz*vz );</span>
+<span class="lineNum">     235 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (vlen&gt;0.0001F) {</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :                   GLfloat invlen = 1.0F / vlen;</span>
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :                   vx *= invlen;</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :                   vy *= invlen;</span>
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 :                   vz *= invlen;</span>
+<span class="lineNum">     240 </span>                :            :                }
+<span class="lineNum">     241 </span>                :            :                /* h = VP + VPe */
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :                h_x = VPx - vx;</span>
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :                h_y = VPy - vy;</span>
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :                h_z = VPz - vz;</span>
+<span class="lineNum">     245 </span>                :            :             }
+<span class="lineNum">     246 </span>                :            :             else {
+<span class="lineNum">     247 </span>                :            :                /* h = VP + &lt;0,0,1&gt; */
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :                h_x = VPx;</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :                h_y = VPy;</span>
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :                h_z = VPz + 1.0F;</span>
+<span class="lineNum">     251 </span>                :            :             }
+<span class="lineNum">     252 </span>                :            : 
+<span class="lineNum">     253 </span>                :            :             /* attention: h is not normalized, done later if needed */
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :             n_dot_h = nx*h_x + ny*h_y + nz*h_z;</span>
+<span class="lineNum">     255 </span>                :            : 
+<span class="lineNum">     256 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (n_dot_h&lt;=0.0F) {</span>
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 :                specularR = 0.0F;</span>
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :                specularG = 0.0F;</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :                specularB = 0.0F;</span>
+<span class="lineNum">     260 </span>                :            :             }
+<span class="lineNum">     261 </span>                :            :             else {
+<span class="lineNum">     262 </span>                :            :                GLfloat spec_coef;
+<span class="lineNum">     263 </span>                :            :                /* now `correct' the dot product */
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :                n_dot_h = n_dot_h / GL_SQRT( h_x*h_x + h_y*h_y + h_z*h_z );</span>
+<span class="lineNum">     265 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (n_dot_h&gt;1.0F) {</span>
+<span class="lineNum">     266 </span>                :            :                   /* only happens if normal vector length &gt; 1.0 */
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :                   spec_coef = pow( n_dot_h, mat-&gt;Shininess );</span>
+<span class="lineNum">     268 </span>                :            :                }
+<span class="lineNum">     269 </span>                :            :                else {
+<span class="lineNum">     270 </span>                :            :                   /* use table lookup approximation */
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :                   int k = (int) (n_dot_h * (GLfloat) (SHINE_TABLE_SIZE-1));</span>
+<span class="lineNum">     272 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (mat-&gt;ShineTable[k] &lt; 0.0F)</span>
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :                      mat-&gt;ShineTable[k] = gl_pow( n_dot_h, mat-&gt;Shininess );</span>
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :                   spec_coef = mat-&gt;ShineTable[k];</span>
+<span class="lineNum">     275 </span>                :            :                }
+<span class="lineNum">     276 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (spec_coef&lt;1.0e-10) {</span>
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :                   specularR = 0.0F;</span>
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :                   specularG = 0.0F;</span>
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :                   specularB = 0.0F;</span>
+<span class="lineNum">     280 </span>                :            :                }
+<span class="lineNum">     281 </span>                :            :                else {
+<span class="lineNum">     282 </span>                :<span class="lineNoCov">          0 :                   specularR = spec_coef * mat-&gt;Specular[0]*light-&gt;Specular[0];</span>
+<span class="lineNum">     283 </span>                :<span class="lineNoCov">          0 :                   specularG = spec_coef * mat-&gt;Specular[1]*light-&gt;Specular[1];</span>
+<span class="lineNum">     284 </span>                :<span class="lineNoCov">          0 :                   specularB = spec_coef * mat-&gt;Specular[2]*light-&gt;Specular[2];</span>
+<span class="lineNum">     285 </span>                :            :                }
+<span class="lineNum">     286 </span>                :            :             }
+<span class="lineNum">     287 </span>                :            : 
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 :             t = attenuation * spot;</span>
+<span class="lineNum">     289 </span>                :<span class="lineNoCov">          0 :             sumR += t * (ambientR + diffuseR + specularR);</span>
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :             sumG += t * (ambientG + diffuseG + specularG);</span>
+<span class="lineNum">     291 </span>                :<span class="lineNoCov">          0 :             sumB += t * (ambientB + diffuseB + specularB);</span>
+<span class="lineNum">     292 </span>                :            :          }
+<span class="lineNum">     293 </span>                :            : 
+<span class="lineNum">     294 </span>                :            :       } /*loop over lights*/
+<span class="lineNum">     295 </span>                :            : 
+<span class="lineNum">     296 </span>                :            :       /* clamp and convert to integer or fixed point */
+<span class="lineNum">     297 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       color[j][0] = (GLint) (CLAMP( sumR, 0.0F, 1.0F ) * rscale);</span>
+<span class="lineNum">     298 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       color[j][1] = (GLint) (CLAMP( sumG, 0.0F, 1.0F ) * gscale);</span>
+<span class="lineNum">     299 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       color[j][2] = (GLint) (CLAMP( sumB, 0.0F, 1.0F ) * bscale);</span>
+<span class="lineNum">     300 </span>                :<span class="lineNoCov">          0 :       color[j][3] = sumA;</span>
+<span class="lineNum">     301 </span>                :            : 
+<span class="lineNum">     302 </span>                :            :    } /*loop over vertices*/
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     304 </span>                :            : 
+<span class="lineNum">     305 </span>                :            : 
+<span class="lineNum">     306 </span>                :            : 
+<span class="lineNum">     307 </span>                :            : /*
+<a name="308"><span class="lineNum">     308 </span>                :            :  * This is an optimized version of the above function.</a>
+<span class="lineNum">     309 </span>                :            :  */
+<span class="lineNum">     310 </span>                :<span class="lineCov">     149000 : void gl_color_shade_vertices_fast( GLcontext *ctx,</span>
+<span class="lineNum">     311 </span>                :            :                                    GLuint side,
+<span class="lineNum">     312 </span>                :            :                                    GLuint n,
+<span class="lineNum">     313 </span>                :            :                                    /*const*/ GLfloat normal[][3],
+<span class="lineNum">     314 </span>                :            :                                    GLubyte color[][4] )
+<span class="lineNum">     315 </span>                :            : {
+<span class="lineNum">     316 </span>                :            :    GLint j;
+<span class="lineNum">     317 </span>                :            :    GLfloat rscale, gscale, bscale, ascale;
+<span class="lineNum">     318 </span>                :            :    GLint sumA;
+<span class="lineNum">     319 </span>                :<span class="lineCov">     149000 :    GLfloat *baseColor = ctx-&gt;Light.BaseColor[side];</span>
+<span class="lineNum">     320 </span>                :            : 
+<span class="lineNum">     321 </span>                :            :    /* Compute scale factor to go from floats in [0,1] to integers or fixed
+<span class="lineNum">     322 </span>                :            :     * point values:
+<span class="lineNum">     323 </span>                :            :     */
+<span class="lineNum">     324 </span>                :<span class="lineCov">     149000 :    rscale = ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     325 </span>                :<span class="lineCov">     149000 :    gscale = ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     326 </span>                :<span class="lineCov">     149000 :    bscale = ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     327 </span>                :<span class="lineCov">     149000 :    ascale = ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     328 </span>                :            : 
+<span class="lineNum">     329 </span>                :            :    /* Alpha is easy to compute, same for all vertices */
+<span class="lineNum">     330 </span>                :<span class="lineCov">     149000 :    sumA = (GLint) (baseColor[3] * ascale);</span>
+<span class="lineNum">     331 </span>                :            : 
+<span class="lineNum">     332 </span>                :            :    /* Loop over vertices */
+<span class="lineNum">     333 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">   44849000 :    for (j=0;j&lt;n;j++) {</span>
+<span class="lineNum">     334 </span>                :            :       GLfloat sumR, sumG, sumB;
+<span class="lineNum">     335 </span>                :            :       GLfloat nx, ny, nz;
+<span class="lineNum">     336 </span>                :            :       struct gl_light *light;
+<span class="lineNum">     337 </span>                :            : 
+<span class="lineNum">     338 </span>                :            :       /* the normal vector */
+<span class="lineNum">     339 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   44700000 :       if (side==0) {</span>
+<span class="lineNum">     340 </span>                :<span class="lineCov">   44700000 :          nx = normal[j][0];</span>
+<span class="lineNum">     341 </span>                :<span class="lineCov">   44700000 :          ny = normal[j][1];</span>
+<span class="lineNum">     342 </span>                :<span class="lineCov">   44700000 :          nz = normal[j][2];</span>
+<span class="lineNum">     343 </span>                :            :       }
+<span class="lineNum">     344 </span>                :            :       else {
+<span class="lineNum">     345 </span>                :<span class="lineNoCov">          0 :          nx = -normal[j][0];</span>
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :          ny = -normal[j][1];</span>
+<span class="lineNum">     347 </span>                :<span class="lineNoCov">          0 :          nz = -normal[j][2];</span>
+<span class="lineNum">     348 </span>                :            :       }
+<span class="lineNum">     349 </span>                :            : 
+<span class="lineNum">     350 </span>                :            : #ifdef SPEED_HACK
+<span class="lineNum">     351 </span>                :            :       if (nz&lt;0.0F) {
+<span class="lineNum">     352 </span>                :            :          color[j][0] = 0.0F;
+<span class="lineNum">     353 </span>                :            :          color[j][1] = 0.0F;
+<span class="lineNum">     354 </span>                :            :          color[j][2] = 0.0F;
+<span class="lineNum">     355 </span>                :            :          color[j][3] = A;
+<span class="lineNum">     356 </span>                :            :          continue;
+<span class="lineNum">     357 </span>                :            :       }
+<span class="lineNum">     358 </span>                :            : #endif
+<span class="lineNum">     359 </span>                :            : 
+<span class="lineNum">     360 </span>                :            :       /* base color from global illumination and enabled light's ambient */
+<span class="lineNum">     361 </span>                :<span class="lineCov">   44700000 :       sumR = baseColor[0];</span>
+<span class="lineNum">     362 </span>                :<span class="lineCov">   44700000 :       sumG = baseColor[1];</span>
+<span class="lineNum">     363 </span>                :<span class="lineCov">   44700000 :       sumB = baseColor[2];</span>
+<span class="lineNum">     364 </span>                :            : 
+<span class="lineNum">     365 </span>                :            :       /* Add contribution from each light source */
+<span class="lineNum">     366 </span>        [<span class="branchCov" title="Branch 0 was taken 134100000 times"> + </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">  178800000 :       for (light=ctx-&gt;Light.FirstEnabled; light; light=light-&gt;NextEnabled) {</span>
+<span class="lineNum">     367 </span>                :            :          GLfloat n_dot_VP;     /* n dot VP */
+<span class="lineNum">     368 </span>                :            : 
+<span class="lineNum">     369 </span>                :<span class="lineCov">  268200000 :          n_dot_VP = nx * light-&gt;VP_inf_norm[0]</span>
+<span class="lineNum">     370 </span>                :<span class="lineCov">  134100000 :                   + ny * light-&gt;VP_inf_norm[1]</span>
+<span class="lineNum">     371 </span>                :<span class="lineCov">  134100000 :                   + nz * light-&gt;VP_inf_norm[2];</span>
+<span class="lineNum">     372 </span>                :            : 
+<span class="lineNum">     373 </span>                :            :          /* diffuse and specular terms */
+<span class="lineNum">     374 </span>        [<span class="branchCov" title="Branch 0 was taken 133083848 times"> + </span><span class="branchCov" title="Branch 1 was taken 1016152 times"> + </span>]:<span class="lineCov">  134100000 :          if (n_dot_VP&gt;0.0F) {</span>
+<span class="lineNum">     375 </span>                :            :             GLfloat n_dot_h;
+<span class="lineNum">     376 </span>                :<span class="lineCov">  133083848 :             GLfloat *lightMatDiffuse = light-&gt;MatDiffuse[side];</span>
+<span class="lineNum">     377 </span>                :            : 
+<span class="lineNum">     378 </span>                :            :             /** add diffuse term **/
+<span class="lineNum">     379 </span>                :<span class="lineCov">  133083848 :             sumR += n_dot_VP * lightMatDiffuse[0];</span>
+<span class="lineNum">     380 </span>                :<span class="lineCov">  133083848 :             sumG += n_dot_VP * lightMatDiffuse[1];</span>
+<span class="lineNum">     381 </span>                :<span class="lineCov">  133083848 :             sumB += n_dot_VP * lightMatDiffuse[2];</span>
+<span class="lineNum">     382 </span>                :            : 
+<span class="lineNum">     383 </span>                :            :             /** specular term **/
+<span class="lineNum">     384 </span>                :            :             /* dot product of n and h_inf_norm */
+<span class="lineNum">     385 </span>                :<span class="lineCov">  266167696 :             n_dot_h = nx * light-&gt;h_inf_norm[0]</span>
+<span class="lineNum">     386 </span>                :<span class="lineCov">  133083848 :                     + ny * light-&gt;h_inf_norm[1]</span>
+<span class="lineNum">     387 </span>                :<span class="lineCov">  133083848 :                     + nz * light-&gt;h_inf_norm[2];</span>
+<span class="lineNum">     388 </span>        [<span class="branchCov" title="Branch 0 was taken 130713128 times"> + </span><span class="branchCov" title="Branch 1 was taken 2370720 times"> + </span>]:<span class="lineCov">  133083848 :             if (n_dot_h&gt;0.0F) {</span>
+<span class="lineNum">     389 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 130713128 times"> + </span>]:<span class="lineCov">  130713128 :                if (n_dot_h&gt;1.0F) {</span>
+<span class="lineNum">     390 </span>                :            :                   /* only happens if Magnitude(n) &gt; 1.0 */
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :                   GLfloat spec_coef = pow( n_dot_h,</span>
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :                                         ctx-&gt;Light.Material[side].Shininess );</span>
+<span class="lineNum">     393 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (spec_coef&gt;1.0e-10F) {</span>
+<span class="lineNum">     394 </span>                :<span class="lineNoCov">          0 :                      sumR += spec_coef * light-&gt;MatSpecular[side][0];</span>
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :                      sumG += spec_coef * light-&gt;MatSpecular[side][1];</span>
+<span class="lineNum">     396 </span>                :<span class="lineNoCov">          0 :                      sumB += spec_coef * light-&gt;MatSpecular[side][2];</span>
+<span class="lineNum">     397 </span>                :            :                   }
+<span class="lineNum">     398 </span>                :            :                }
+<span class="lineNum">     399 </span>                :            :                else {
+<span class="lineNum">     400 </span>                :            :                   /* use table lookup approximation */
+<span class="lineNum">     401 </span>                :<span class="lineCov">  130713128 :                   int k = (int) (n_dot_h * (GLfloat) (SHINE_TABLE_SIZE-1));</span>
+<span class="lineNum">     402 </span>                :<span class="lineCov">  130713128 :                   struct gl_material *m = &amp;ctx-&gt;Light.Material[side];</span>
+<span class="lineNum">     403 </span>                :            :                   GLfloat spec_coef;
+<span class="lineNum">     404 </span>        [<span class="branchCov" title="Branch 0 was taken 198 times"> + </span><span class="branchCov" title="Branch 1 was taken 130712930 times"> + </span>]:<span class="lineCov">  130713128 :                   if (m-&gt;ShineTable[k] &lt; 0.0F)</span>
+<span class="lineNum">     405 </span>                :<span class="lineCov">        198 :                      m-&gt;ShineTable[k] = gl_pow( n_dot_h, m-&gt;Shininess );</span>
+<span class="lineNum">     406 </span>                :<span class="lineCov">  130713128 :                   spec_coef = m-&gt;ShineTable[k];</span>
+<span class="lineNum">     407 </span>                :<span class="lineCov">  130713128 :                   sumR += spec_coef * light-&gt;MatSpecular[side][0];</span>
+<span class="lineNum">     408 </span>                :<span class="lineCov">  130713128 :                   sumG += spec_coef * light-&gt;MatSpecular[side][1];</span>
+<span class="lineNum">     409 </span>                :<span class="lineCov">  130713128 :                   sumB += spec_coef * light-&gt;MatSpecular[side][2];</span>
+<span class="lineNum">     410 </span>                :            :                }
+<span class="lineNum">     411 </span>                :            :             }
+<span class="lineNum">     412 </span>                :            :          }
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>                :            :       } /*loop over lights*/
+<span class="lineNum">     415 </span>                :            : 
+<span class="lineNum">     416 </span>                :            :       /* clamp and convert to integer or fixed point */
+<span class="lineNum">     417 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   44700000 :       color[j][0] = (GLint) (MIN2( sumR, 1.0F ) * rscale);</span>
+<span class="lineNum">     418 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   44700000 :       color[j][1] = (GLint) (MIN2( sumG, 1.0F ) * gscale);</span>
+<span class="lineNum">     419 </span>        [<span class="branchCov" title="Branch 0 was taken 41331136 times"> + </span><span class="branchCov" title="Branch 1 was taken 3368864 times"> + </span>]:<span class="lineCov">   44700000 :       color[j][2] = (GLint) (MIN2( sumB, 1.0F ) * bscale);</span>
+<span class="lineNum">     420 </span>                :<span class="lineCov">   44700000 :       color[j][3] = sumA;</span>
+<span class="lineNum">     421 </span>                :            : 
+<span class="lineNum">     422 </span>                :            :    } /*loop over vertices*/
+<span class="lineNum">     423 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">     424 </span>                :            : 
+<span class="lineNum">     425 </span>                :            : 
+<span class="lineNum">     426 </span>                :            : 
+<span class="lineNum">     427 </span>                :            : /*
+<span class="lineNum">     428 </span>                :            :  * Use current lighting/material settings to compute the color indexes
+<span class="lineNum">     429 </span>                :            :  * for an array of vertices.
+<span class="lineNum">     430 </span>                :            :  * Input:  n - number of vertices to shade
+<span class="lineNum">     431 </span>                :            :  *         side - 0=use front material, 1=use back material
+<span class="lineNum">     432 </span>                :            :  *         vertex - array of [n] vertex position in eye coordinates
+<span class="lineNum">     433 </span>                :            :  *         normal - array of [n] surface normal vector
+<a name="434"><span class="lineNum">     434 </span>                :            :  * Output:  indexResult - resulting array of [n] color indexes</a>
+<span class="lineNum">     435 </span>                :            :  */
+<span class="lineNum">     436 </span>                :<span class="lineNoCov">          0 : void gl_index_shade_vertices( GLcontext *ctx,</span>
+<span class="lineNum">     437 </span>                :            :                               GLuint side,
+<span class="lineNum">     438 </span>                :            :                               GLuint n,
+<span class="lineNum">     439 </span>                :            :                               GLfloat vertex[][4],
+<span class="lineNum">     440 </span>                :            :                               GLfloat normal[][3],
+<span class="lineNum">     441 </span>                :            :                               GLuint indexResult[] )
+<span class="lineNum">     442 </span>                :            : {
+<span class="lineNum">     443 </span>                :<span class="lineNoCov">          0 :    struct gl_material *mat = &amp;ctx-&gt;Light.Material[side];</span>
+<span class="lineNum">     444 </span>                :            :    GLint j;
+<span class="lineNum">     445 </span>                :            : 
+<span class="lineNum">     446 </span>                :            :    /* loop over vertices */
+<span class="lineNum">     447 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0;j&lt;n;j++) {</span>
+<span class="lineNum">     448 </span>                :            :       GLfloat index;
+<span class="lineNum">     449 </span>                :            :       GLfloat diffuse, specular;  /* accumulated diffuse and specular */
+<span class="lineNum">     450 </span>                :            :       GLfloat nx, ny, nz;  /* normal vector */
+<span class="lineNum">     451 </span>                :            :       struct gl_light *light;
+<span class="lineNum">     452 </span>                :            : 
+<span class="lineNum">     453 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (side==0) {</span>
+<span class="lineNum">     454 </span>                :            :          /* shade frontside */
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 :          nx = normal[j][0];</span>
+<span class="lineNum">     456 </span>                :<span class="lineNoCov">          0 :          ny = normal[j][1];</span>
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :          nz = normal[j][2];</span>
+<span class="lineNum">     458 </span>                :            :       }
+<span class="lineNum">     459 </span>                :            :       else {
+<span class="lineNum">     460 </span>                :            :          /* shade backside */
+<span class="lineNum">     461 </span>                :<span class="lineNoCov">          0 :          nx = -normal[j][0];</span>
+<span class="lineNum">     462 </span>                :<span class="lineNoCov">          0 :          ny = -normal[j][1];</span>
+<span class="lineNum">     463 </span>                :<span class="lineNoCov">          0 :          nz = -normal[j][2];</span>
+<span class="lineNum">     464 </span>                :            :       }
+<span class="lineNum">     465 </span>                :            : 
+<span class="lineNum">     466 </span>                :<span class="lineNoCov">          0 :       diffuse = specular = 0.0F;</span>
+<span class="lineNum">     467 </span>                :            : 
+<span class="lineNum">     468 </span>                :            :       /* Accumulate diffuse and specular from each light source */
+<span class="lineNum">     469 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (light=ctx-&gt;Light.FirstEnabled; light; light=light-&gt;NextEnabled) {</span>
+<span class="lineNum">     470 </span>                :            :          GLfloat attenuation;
+<span class="lineNum">     471 </span>                :            :          GLfloat lx, ly, lz;  /* unit vector from vertex to light */
+<span class="lineNum">     472 </span>                :            :          GLfloat l_dot_norm;  /* dot product of l and n */
+<span class="lineNum">     473 </span>                :            : 
+<span class="lineNum">     474 </span>                :            :          /* compute l and attenuation */
+<span class="lineNum">     475 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (light-&gt;Position[3]==0.0) {</span>
+<span class="lineNum">     476 </span>                :            :             /* directional light */
+<span class="lineNum">     477 </span>                :            :             /* Effectively, l is a vector from the origin to the light. */
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :             lx = light-&gt;VP_inf_norm[0];</span>
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :             ly = light-&gt;VP_inf_norm[1];</span>
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :             lz = light-&gt;VP_inf_norm[2];</span>
+<span class="lineNum">     481 </span>                :<span class="lineNoCov">          0 :             attenuation = 1.0F;</span>
+<span class="lineNum">     482 </span>                :            :          }
+<span class="lineNum">     483 </span>                :            :          else {
+<span class="lineNum">     484 </span>                :            :             /* positional light */
+<span class="lineNum">     485 </span>                :            :             GLfloat d;     /* distance from vertex to light */
+<span class="lineNum">     486 </span>                :<span class="lineNoCov">          0 :             lx = light-&gt;Position[0] - vertex[j][0];</span>
+<span class="lineNum">     487 </span>                :<span class="lineNoCov">          0 :             ly = light-&gt;Position[1] - vertex[j][1];</span>
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :             lz = light-&gt;Position[2] - vertex[j][2];</span>
+<span class="lineNum">     489 </span>                :<span class="lineNoCov">          0 :             d = (GLfloat) GL_SQRT( lx*lx + ly*ly + lz*lz );</span>
+<span class="lineNum">     490 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (d&gt;0.001F) {</span>
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :                GLfloat invd = 1.0F / d;</span>
+<span class="lineNum">     492 </span>                :<span class="lineNoCov">          0 :                lx *= invd;</span>
+<span class="lineNum">     493 </span>                :<span class="lineNoCov">          0 :                ly *= invd;</span>
+<span class="lineNum">     494 </span>                :<span class="lineNoCov">          0 :                lz *= invd;</span>
+<span class="lineNum">     495 </span>                :            :             }
+<span class="lineNum">     496 </span>                :<span class="lineNoCov">          0 :             attenuation = 1.0F / (light-&gt;ConstantAttenuation</span>
+<span class="lineNum">     497 </span>                :<span class="lineNoCov">          0 :                         + d * (light-&gt;LinearAttenuation</span>
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :                         + d * light-&gt;QuadraticAttenuation));</span>
+<span class="lineNum">     499 </span>                :            :          }
+<span class="lineNum">     500 </span>                :            : 
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :          l_dot_norm = lx*nx + ly*ny + lz*nz;</span>
+<span class="lineNum">     502 </span>                :            : 
+<span class="lineNum">     503 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (l_dot_norm&gt;0.0F) {</span>
+<span class="lineNum">     504 </span>                :            :             GLfloat spot_times_atten;
+<span class="lineNum">     505 </span>                :            : 
+<span class="lineNum">     506 </span>                :            :             /* spotlight factor */
+<span class="lineNum">     507 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (light-&gt;SpotCutoff==180.0F) {</span>
+<span class="lineNum">     508 </span>                :            :                /* not a spot light */
+<span class="lineNum">     509 </span>                :<span class="lineNoCov">          0 :                spot_times_atten = attenuation;</span>
+<span class="lineNum">     510 </span>                :            :             }
+<span class="lineNum">     511 </span>                :            :             else {
+<span class="lineNum">     512 </span>                :            :                GLfloat v[3], dot;
+<span class="lineNum">     513 </span>                :<span class="lineNoCov">          0 :                v[0] = -lx;  /* v points from light to vertex */</span>
+<span class="lineNum">     514 </span>                :<span class="lineNoCov">          0 :                v[1] = -ly;</span>
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :                v[2] = -lz;</span>
+<span class="lineNum">     516 </span>                :<span class="lineNoCov">          0 :                dot = DOT3( v, light-&gt;NormDirection );</span>
+<span class="lineNum">     517 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (dot&lt;=0.0F || dot&lt;light-&gt;CosCutoff) {</span>
+<span class="lineNum">     518 </span>                :            :                   /* outside of cone */
+<span class="lineNum">     519 </span>                :<span class="lineNoCov">          0 :                   spot_times_atten = 0.0F;</span>
+<span class="lineNum">     520 </span>                :            :                }
+<span class="lineNum">     521 </span>                :            :                else {
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 :                   double x = dot * (EXP_TABLE_SIZE-1);</span>
+<span class="lineNum">     523 </span>                :<span class="lineNoCov">          0 :                   int k = (int) x;</span>
+<span class="lineNum">     524 </span>                :<span class="lineNoCov">          0 :                   GLfloat spot = light-&gt;SpotExpTable[k][0]</span>
+<span class="lineNum">     525 </span>                :<span class="lineNoCov">          0 :                                + (x-k)*light-&gt;SpotExpTable[k][1];</span>
+<span class="lineNum">     526 </span>                :<span class="lineNoCov">          0 :                   spot_times_atten = spot * attenuation;</span>
+<span class="lineNum">     527 </span>                :            :                }
+<span class="lineNum">     528 </span>                :            :             }
+<span class="lineNum">     529 </span>                :            : 
+<span class="lineNum">     530 </span>                :            :             /* accumulate diffuse term */
+<span class="lineNum">     531 </span>                :<span class="lineNoCov">          0 :             diffuse += l_dot_norm * light-&gt;dli * spot_times_atten;</span>
+<span class="lineNum">     532 </span>                :            : 
+<span class="lineNum">     533 </span>                :            :             /* accumulate specular term */
+<span class="lineNum">     534 </span>                :            :             {
+<span class="lineNum">     535 </span>                :            :                GLfloat h_x, h_y, h_z, n_dot_h, spec_coef;
+<span class="lineNum">     536 </span>                :            : 
+<span class="lineNum">     537 </span>                :            :                /* specular term */
+<span class="lineNum">     538 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ctx-&gt;Light.Model.LocalViewer) {</span>
+<span class="lineNum">     539 </span>                :            :                   GLfloat vx, vy, vz, vlen;
+<span class="lineNum">     540 </span>                :<span class="lineNoCov">          0 :                   vx = vertex[j][0];</span>
+<span class="lineNum">     541 </span>                :<span class="lineNoCov">          0 :                   vy = vertex[j][1];</span>
+<span class="lineNum">     542 </span>                :<span class="lineNoCov">          0 :                   vz = vertex[j][2];</span>
+<span class="lineNum">     543 </span>                :<span class="lineNoCov">          0 :                   vlen = GL_SQRT( vx*vx + vy*vy + vz*vz );</span>
+<span class="lineNum">     544 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (vlen&gt;0.0001F) {</span>
+<span class="lineNum">     545 </span>                :<span class="lineNoCov">          0 :                      GLfloat invlen = 1.0F / vlen;</span>
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 :                      vx *= invlen;</span>
+<span class="lineNum">     547 </span>                :<span class="lineNoCov">          0 :                      vy *= invlen;</span>
+<span class="lineNum">     548 </span>                :<span class="lineNoCov">          0 :                      vz *= invlen;</span>
+<span class="lineNum">     549 </span>                :            :                   }
+<span class="lineNum">     550 </span>                :<span class="lineNoCov">          0 :                   h_x = lx - vx;</span>
+<span class="lineNum">     551 </span>                :<span class="lineNoCov">          0 :                   h_y = ly - vy;</span>
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :                   h_z = lz - vz;</span>
+<span class="lineNum">     553 </span>                :            :                }
+<span class="lineNum">     554 </span>                :            :                else {
+<span class="lineNum">     555 </span>                :<span class="lineNoCov">          0 :                   h_x = lx;</span>
+<span class="lineNum">     556 </span>                :<span class="lineNoCov">          0 :                   h_y = ly;</span>
+<span class="lineNum">     557 </span>                :<span class="lineNoCov">          0 :                   h_z = lz + 1.0F;</span>
+<span class="lineNum">     558 </span>                :            :                }
+<span class="lineNum">     559 </span>                :            :                /* attention: s is not normalized, done later if necessary */
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :                n_dot_h = h_x*nx + h_y*ny + h_z*nz;</span>
+<span class="lineNum">     561 </span>                :            : 
+<span class="lineNum">     562 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (n_dot_h &lt;= 0.0F) {</span>
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 :                   spec_coef = 0.0F;</span>
+<span class="lineNum">     564 </span>                :            :                }
+<span class="lineNum">     565 </span>                :            :                else {
+<span class="lineNum">     566 </span>                :            :                   /* now `correct' the dot product */
+<span class="lineNum">     567 </span>                :<span class="lineNoCov">          0 :                   n_dot_h = n_dot_h / GL_SQRT(h_x*h_x + h_y*h_y + h_z*h_z);</span>
+<span class="lineNum">     568 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   if (n_dot_h&gt;1.0F) {</span>
+<span class="lineNum">     569 </span>                :<span class="lineNoCov">          0 :                      spec_coef = pow( n_dot_h, mat-&gt;Shininess );</span>
+<span class="lineNum">     570 </span>                :            :                   }
+<span class="lineNum">     571 </span>                :            :                   else {
+<span class="lineNum">     572 </span>                :<span class="lineNoCov">          0 :                      int k = (int) (n_dot_h * (GLfloat)(SHINE_TABLE_SIZE-1));</span>
+<span class="lineNum">     573 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                      if (mat-&gt;ShineTable[k] &lt; 0.0F)</span>
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :                         mat-&gt;ShineTable[k] = gl_pow( n_dot_h, mat-&gt;Shininess );</span>
+<span class="lineNum">     575 </span>                :<span class="lineNoCov">          0 :                      spec_coef = mat-&gt;ShineTable[k];</span>
+<span class="lineNum">     576 </span>                :            :                   }
+<span class="lineNum">     577 </span>                :            :                }
+<span class="lineNum">     578 </span>                :<span class="lineNoCov">          0 :                specular += spec_coef * light-&gt;sli * spot_times_atten;</span>
+<span class="lineNum">     579 </span>                :            :             }
+<span class="lineNum">     580 </span>                :            :          }
+<span class="lineNum">     581 </span>                :            : 
+<span class="lineNum">     582 </span>                :            :       } /*loop over lights*/
+<span class="lineNum">     583 </span>                :            : 
+<span class="lineNum">     584 </span>                :            :       /* Now compute final color index */
+<span class="lineNum">     585 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (specular&gt;1.0F) {</span>
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :          index = mat-&gt;SpecularIndex;</span>
+<span class="lineNum">     587 </span>                :            :       }
+<span class="lineNum">     588 </span>                :            :       else {
+<span class="lineNum">     589 </span>                :            :          GLfloat d_a, s_a;
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 :          d_a = mat-&gt;DiffuseIndex - mat-&gt;AmbientIndex;</span>
+<span class="lineNum">     591 </span>                :<span class="lineNoCov">          0 :          s_a = mat-&gt;SpecularIndex - mat-&gt;AmbientIndex;</span>
+<span class="lineNum">     592 </span>                :            : 
+<span class="lineNum">     593 </span>                :<span class="lineNoCov">          0 :          index = mat-&gt;AmbientIndex</span>
+<span class="lineNum">     594 </span>                :<span class="lineNoCov">          0 :                + diffuse * (1.0F-specular) * d_a</span>
+<span class="lineNum">     595 </span>                :<span class="lineNoCov">          0 :                + specular * s_a;</span>
+<span class="lineNum">     596 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (index&gt;mat-&gt;SpecularIndex) {</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :             index = mat-&gt;SpecularIndex;</span>
+<span class="lineNum">     598 </span>                :            :          }
+<span class="lineNum">     599 </span>                :            :       }
+<span class="lineNum">     600 </span>                :<span class="lineNoCov">          0 :       indexResult[j] = (GLuint) (GLint) index;</span>
+<span class="lineNum">     601 </span>                :            : 
+<span class="lineNum">     602 </span>                :            :    } /*for vertex*/
+<span class="lineNum">     603 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     604 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

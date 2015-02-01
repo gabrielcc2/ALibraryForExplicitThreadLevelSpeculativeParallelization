@@ -1,0 +1,45 @@
+SPEC CPU2000 Benchmark Description File
+
+Benchmark Name: 188.ammp
+
+Benchmark Author: Robert W. Harrison
+
+Benchmark Program General Category: 
+Computational Chemistry.  Modeling large systems of molecules usually
+associated with Biology.
+
+Benchmark Description: 
+The benchmark runs molecular dynamics (i.e. solves the ODE defined
+by Newton's equations for the motions of the atoms in the system) on a
+protein-inhibitor complex which is embedded in water (see Harrison 1993 for
+descriptions of the algorithm and stability analysis on it). The energy is 
+approximated by a classical potential or "force field".   The protein is
+HIV protease complexed with the inhibitor indinavir.  There are 9582 
+atoms in the water and protein making this representative of a typical 
+large simulation.  This benchmark is derived from published work on 
+understanding drug resistance in HIV (Weber and Harrison 1999).
+
+Input Description: The problem tracks how the atoms move from an initial 
+coorinates and initial velocities.
+
+Output Description: 
+The output is the energy of the final configuration of atoms.
+
+Programming Language: C
+
+Known portability issues: none
+
+Reference: 
+
+AMMP web site http://asterix.jci.tju.edu/ammp.html
+
+Harrison CV http://asterix.jci.tju.edu/harrisoncv.html
+
+Dynamics in AMMP 
+   Harrison R.W. (1993) Stiffness and energy conservation in molecular 
+   dynamics, an improved integrator J. Comp. Chem 14,1112-1122.
+
+Background on the benchmark
+   Weber I.T. and Harrison R.W. (1999) Molecular mechanics analysis of drug 
+   resistant mutations of HIV protease Protein Engineering 12,469-474.
+

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/uc0.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - uc0.c<span style="font-size: 80%;"> (source / <a href="uc0.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<a name="2"><span class="lineNum">       2 </span>                :            : </a>
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :<span class="lineCov">   13978274 : uc0( a , newaor )</span>
+<span class="lineNum">       5 </span>                :            : int a , newaor ;
+<span class="lineNum">       6 </span>                :            : {
+<span class="lineNum">       7 </span>                :            : 
+<span class="lineNum">       8 </span>                :            : CBOXPTR acellptr ;
+<span class="lineNum">       9 </span>                :            : TEBOXPTR antrmptr ;
+<span class="lineNum">      10 </span>                :            : int cost , truth ;
+<span class="lineNum">      11 </span>                :            : 
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :<span class="lineCov">   13978274 : acellptr = carray[ a ]    ;</span>
+<span class="lineNum">      14 </span>                :<span class="lineCov">   13978274 : antrmptr = acellptr-&gt;tileptr-&gt;termsptr ;</span>
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :<span class="lineCov">   13978274 : term_newpos( antrmptr, acellptr-&gt;cxcenter, acellptr-&gt;cycenter, newaor );</span>
+<span class="lineNum">      17 </span>                :            : 
+<span class="lineNum">      18 </span>                :<span class="lineCov">   13978274 : cost = funccost ;</span>
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :<span class="lineCov">   13978274 : new_dbox( antrmptr , &amp;cost ) ;</span>
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :<span class="lineCov">   13978274 : truth =  acceptt( funccost - cost ) ; </span>
+<span class="lineNum">      23 </span>        [<span class="branchCov" title="Branch 0 was taken 10135295 times"> + </span><span class="branchCov" title="Branch 1 was taken 3842979 times"> + </span>]:<span class="lineCov">   13978274 : if( truth == 1 ) {</span>
+<span class="lineNum">      24 </span>                :            : 
+<span class="lineNum">      25 </span>                :<span class="lineCov">   10135295 :     dbox_pos( antrmptr ) ;</span>
+<span class="lineNum">      26 </span>                :<span class="lineCov">   10135295 :     acellptr-&gt;corient = newaor ;</span>
+<span class="lineNum">      27 </span>                :<span class="lineCov">   13978274 :     funccost = cost ;</span>
+<span class="lineNum">      28 </span>                :            : }
+<span class="lineNum">      29 </span>                :            : return ;
+<span class="lineNum">      30 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+quake.c: In function ‘readpackfile’:
+quake.c:1059:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1060:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1061:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1062:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1063:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1064:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1078:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1092:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1094:13: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1102:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1116:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1118:13: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1126:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1144:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1145:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1160:9: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c: In function ‘arch_readdouble’:
+quake.c:1037:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1048:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c: In function ‘arch_readelemvector’:
+quake.c:1012:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:1024:8: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c: In function ‘arch_readnodevector’:
+quake.c:984:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+quake.c:997:8: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result

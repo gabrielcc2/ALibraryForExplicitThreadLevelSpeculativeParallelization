@@ -1,0 +1,671 @@
+desc: (none)
+cmd: ../Base/mesa_base.x86_linux -frames 1000 -meshfile mesa.in -ppmfile mesa.ppm
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=152746
+mem_heap_B=4876
+mem_heap_extra_B=12
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=152871
+mem_heap_B=4952
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=153208
+mem_heap_B=62616
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=153284
+mem_heap_B=1005132
+mem_heap_extra_B=44
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=157905
+mem_heap_B=1168364
+mem_heap_extra_B=52
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=177181
+mem_heap_B=1168392
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=177322
+mem_heap_B=1176408
+mem_heap_extra_B=80
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=177622
+mem_heap_B=1179876
+mem_heap_extra_B=116
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=743022
+mem_heap_B=1181032
+mem_heap_extra_B=128
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=743335
+mem_heap_B=1183404
+mem_heap_extra_B=164
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=743561
+mem_heap_B=1183584
+mem_heap_extra_B=200
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=743786
+mem_heap_B=1183764
+mem_heap_extra_B=236
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=744011
+mem_heap_B=1183944
+mem_heap_extra_B=272
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=744236
+mem_heap_B=1184124
+mem_heap_extra_B=308
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=744461
+mem_heap_B=1184304
+mem_heap_extra_B=344
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=744686
+mem_heap_B=1184484
+mem_heap_extra_B=380
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=744911
+mem_heap_B=1184664
+mem_heap_extra_B=416
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=745136
+mem_heap_B=1184844
+mem_heap_extra_B=452
+mem_stacks_B=0
+heap_tree=detailed
+n4: 1184844 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 942516 0x80C9718: gl_alloc_vb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 942516 0x805BE0B: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 942516 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 942516 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 163232 0x8099098: gl_alloc_pb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 163232 0x805BE21: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 163232 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 163232 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 57664 0x805BDDD: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 57664 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n0: 57664 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 21432 in 6 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=19
+#-----------
+time=745361
+mem_heap_B=1185024
+mem_heap_extra_B=488
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=745586
+mem_heap_B=1185204
+mem_heap_extra_B=524
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=745728
+mem_heap_B=1185324
+mem_heap_extra_B=548
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=748595
+mem_heap_B=1185376
+mem_heap_extra_B=560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=749802
+mem_heap_B=6428256
+mem_heap_extra_B=568
+mem_stacks_B=0
+heap_tree=detailed
+n4: 6428256 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 5242880 0x80D112A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 942516 0x80C9718: gl_alloc_vb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 942516 0x805BE0B: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 942516 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 942516 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 163232 0x8099098: gl_alloc_pb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 163232 0x805BE21: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 163232 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 163232 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 79628 in 8 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=24
+#-----------
+time=756589
+mem_heap_B=9049696
+mem_heap_extra_B=576
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=756718
+mem_heap_B=20846176
+mem_heap_extra_B=592
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=762092
+mem_heap_B=20846432
+mem_heap_extra_B=600
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=763495
+mem_heap_B=20846468
+mem_heap_extra_B=612
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=763780
+mem_heap_B=20846528
+mem_heap_extra_B=624
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=763931
+mem_heap_B=20846784
+mem_heap_extra_B=632
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=774088
+mem_heap_B=20846784
+mem_heap_extra_B=632
+mem_stacks_B=0
+heap_tree=detailed
+n6: 20846784 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10485760 0x8048AD1: gl_alloc_accum_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 10485760 0x805EF4E: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 10485760 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 10485760 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 5242880 0x80D112A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 2621440 0x8061F20: gl_alloc_depth_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 2621440 0x805EF24: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 2621440 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 2621440 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 1310720 0x80B0291: gl_alloc_stencil_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 1310720 0x805EF39: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 1310720 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 1310720 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 942516 0x80C9718: gl_alloc_vb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 942516 0x805BE0B: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 942516 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 942516 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 243468 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=31
+#-----------
+time=774127
+mem_heap_B=20846492
+mem_heap_extra_B=612
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=777209
+mem_heap_B=20846844
+mem_heap_extra_B=620
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=780690
+mem_heap_B=21116844
+mem_heap_extra_B=628
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=780729
+mem_heap_B=21386844
+mem_heap_extra_B=636
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=208028401
+mem_heap_B=21386844
+mem_heap_extra_B=636
+mem_stacks_B=0
+heap_tree=peak
+n8: 21386844 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 10485760 0x8048AD1: gl_alloc_accum_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 10485760 0x805EF4E: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 10485760 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 10485760 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 5242880 0x80D112A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 2621440 0x8061F20: gl_alloc_depth_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 2621440 0x805EF24: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 2621440 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 2621440 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 1310720 0x80B0291: gl_alloc_stencil_buffer (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 1310720 0x805EF39: gl_ResizeBuffersMESA (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 1310720 0x8098EB6: OSMesaMakeCurrent (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 1310720 0x80D1156: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 942516 0x80C9718: gl_alloc_vb (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 942516 0x805BE0B: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n1: 942516 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+    n0: 942516 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14E0: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14EF: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 243528 in 14 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=36
+#-----------
+time=208028471
+mem_heap_B=21386844
+mem_heap_extra_B=636
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=208028954
+mem_heap_B=21387196
+mem_heap_extra_B=644
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=296575331582
+mem_heap_B=21387548
+mem_heap_extra_B=652
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=298422723900
+mem_heap_B=21387196
+mem_heap_extra_B=644
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=298422724045
+mem_heap_B=13522800
+mem_heap_extra_B=616
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=298422724253
+mem_heap_B=620520
+mem_heap_extra_B=568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=298422737344
+mem_heap_B=616512
+mem_heap_extra_B=560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=298422737622
+mem_heap_B=613944
+mem_heap_extra_B=528
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=298422737730
+mem_heap_B=612728
+mem_heap_extra_B=504
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=298422744795
+mem_heap_B=608720
+mem_heap_extra_B=496
+mem_stacks_B=0
+heap_tree=detailed
+n4: 608720 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 270000 0x80D14E0: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14EF: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 57664 0x805BDDD: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 57664 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n0: 57664 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 11056 in 18 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=46
+#-----------
+time=298422745109
+mem_heap_B=608392
+mem_heap_extra_B=424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=298422745317
+mem_heap_B=608152
+mem_heap_extra_B=376
+mem_stacks_B=0
+heap_tree=detailed
+n4: 608152 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 270000 0x80D14E0: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14EF: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 57664 0x805BDDD: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 57664 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n0: 57664 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 10488 in 18 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=48
+#-----------
+time=298422745460
+mem_heap_B=606876
+mem_heap_extra_B=340
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=298422745633
+mem_heap_B=606696
+mem_heap_extra_B=304
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=298422745685
+mem_heap_B=606636
+mem_heap_extra_B=292
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=298422745737
+mem_heap_B=606576
+mem_heap_extra_B=280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=298422745789
+mem_heap_B=606516
+mem_heap_extra_B=268
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=298422745841
+mem_heap_B=606456
+mem_heap_extra_B=256
+mem_stacks_B=0
+heap_tree=detailed
+n4: 606456 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 270000 0x80D14E0: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14EF: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 57664 0x805BDDD: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 57664 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n0: 57664 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 8792 in 18 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=54
+#-----------
+time=298422745893
+mem_heap_B=606396
+mem_heap_extra_B=244
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=298422745945
+mem_heap_B=606336
+mem_heap_extra_B=232
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=298422745997
+mem_heap_B=606276
+mem_heap_extra_B=220
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=298422746049
+mem_heap_B=606216
+mem_heap_extra_B=208
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=298422746088
+mem_heap_B=605060
+mem_heap_extra_B=196
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=298422746157
+mem_heap_B=605000
+mem_heap_extra_B=184
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=298422746209
+mem_heap_B=604940
+mem_heap_extra_B=172
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=298422746261
+mem_heap_B=604880
+mem_heap_extra_B=160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=298422746313
+mem_heap_B=604820
+mem_heap_extra_B=148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=298422746365
+mem_heap_B=604760
+mem_heap_extra_B=136
+mem_stacks_B=0
+heap_tree=detailed
+n4: 604760 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 270000 0x80D14E0: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 270000 0x80D14EF: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n1: 57664 0x805BDDD: gl_create_context (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+  n1: 57664 0x8098BCB: OSMesaCreateContext (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+   n0: 57664 0x80D111A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/177.mesa/run/Base/mesa_base.x86_linux)
+ n0: 7096 in 18 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=64
+#-----------
+time=298422746417
+mem_heap_B=604700
+mem_heap_extra_B=124
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=298422746469
+mem_heap_B=604640
+mem_heap_extra_B=112
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=298422746521
+mem_heap_B=604580
+mem_heap_extra_B=100
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=298422746573
+mem_heap_B=604520
+mem_heap_extra_B=88
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=298422746625
+mem_heap_B=604460
+mem_heap_extra_B=76
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=298422746677
+mem_heap_B=604400
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=298422746716
+mem_heap_B=603244
+mem_heap_extra_B=52
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=298422746799
+mem_heap_B=540704
+mem_heap_extra_B=32
+mem_stacks_B=0
+heap_tree=empty

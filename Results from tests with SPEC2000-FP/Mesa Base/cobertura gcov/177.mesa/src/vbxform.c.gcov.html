@@ -1,0 +1,1325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/vbxform.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - vbxform.c<span style="font-size: 80%;"> (source / <a href="vbxform.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">106</td>
+            <td class="headerCovTableEntry">460</td>
+            <td class="headerCovTableEntryLo">23.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryLo">60.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">248</td>
+            <td class="headerCovTableEntryLo">14.5 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: vbxform.c,v 1.20 1997/11/20 00:09:38 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: vbxform.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.20  1997/11/20 00:09:38  brianp
+<span class="lineNum">      27 </span>                :            :  * transform_points4() wasn't calling asm routines
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.19  1997/10/30 06:00:06  brianp
+<span class="lineNum">      30 </span>                :            :  * added Intel X86 assembly optimzations (Josh Vanderhoof)
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.18  1997/10/15 00:36:36  brianp
+<span class="lineNum">      33 </span>                :            :  * renamed the FAST/REGULAR_MATH macros
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.17  1997/10/04 00:30:52  brianp
+<span class="lineNum">      36 </span>                :            :  * vertices specified with glVertex4 weren't always projected correctly
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.16  1997/09/29 22:24:22  brianp
+<span class="lineNum">      39 </span>                :            :  * added REGULAR/FAST_MATH macros
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.15  1997/09/18 01:32:47  brianp
+<span class="lineNum">      42 </span>                :            :  * fixed divide by zero problem for &quot;weird&quot; projection matrices
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.14  1997/09/10 00:28:11  brianp
+<span class="lineNum">      45 </span>                :            :  * fixed an optimization bug in viewport_map_vertices()
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.13  1997/07/24 01:25:27  brianp
+<span class="lineNum">      48 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.12  1997/06/20 02:57:59  brianp
+<span class="lineNum">      51 </span>                :            :  * changed color components from GLfixed to GLubyte
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.11  1997/05/28 03:26:49  brianp
+<span class="lineNum">      54 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.10  1997/05/23 03:01:45  brianp
+<span class="lineNum">      57 </span>                :            :  * commented out a few const keywords because IRIX cc chokes on them
+<span class="lineNum">      58 </span>                :            :  *
+<span class="lineNum">      59 </span>                :            :  * Revision 1.9  1997/04/29 01:31:07  brianp
+<span class="lineNum">      60 </span>                :            :  * added RasterSetup() function to device driver
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  * Revision 1.8  1997/04/21 01:21:52  brianp
+<span class="lineNum">      63 </span>                :            :  * added MATRIX_2D_NO_ROT
+<span class="lineNum">      64 </span>                :            :  *
+<span class="lineNum">      65 </span>                :            :  * Revision 1.7  1997/04/20 19:47:27  brianp
+<span class="lineNum">      66 </span>                :            :  * added RenderVB to device driver
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  * Revision 1.6  1997/04/20 15:59:30  brianp
+<span class="lineNum">      69 </span>                :            :  * removed VERTEX2_BIT stuff
+<span class="lineNum">      70 </span>                :            :  *
+<span class="lineNum">      71 </span>                :            :  * Revision 1.5  1997/04/14 02:12:53  brianp
+<span class="lineNum">      72 </span>                :            :  * small optimization in transform_texcoords()
+<span class="lineNum">      73 </span>                :            :  *
+<span class="lineNum">      74 </span>                :            :  * Revision 1.4  1997/04/12 16:22:22  brianp
+<span class="lineNum">      75 </span>                :            :  * removed gl_init_vb()
+<span class="lineNum">      76 </span>                :            :  *
+<span class="lineNum">      77 </span>                :            :  * Revision 1.3  1997/04/12 12:28:39  brianp
+<span class="lineNum">      78 </span>                :            :  * fixed &lt;= material_update bug, removed some unused vars
+<span class="lineNum">      79 </span>                :            :  *
+<span class="lineNum">      80 </span>                :            :  * Revision 1.2  1997/04/07 03:01:11  brianp
+<span class="lineNum">      81 </span>                :            :  * optimized vertex[234] code
+<span class="lineNum">      82 </span>                :            :  *
+<span class="lineNum">      83 </span>                :            :  * Revision 1.1  1997/04/02 03:14:29  brianp
+<span class="lineNum">      84 </span>                :            :  * Initial revision
+<span class="lineNum">      85 </span>                :            :  *
+<span class="lineNum">      86 </span>                :            :  */
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :            : /*
+<span class="lineNum">      90 </span>                :            :  * This file implements transformation, clip testing, and lighting of
+<span class="lineNum">      91 </span>                :            :  * vertices in the vertex buffer.
+<span class="lineNum">      92 </span>                :            :  *
+<span class="lineNum">      93 </span>                :            :  * The entry points to this file are the functions:
+<span class="lineNum">      94 </span>                :            :  *    gl_init_vb() - initialize the vertex buffer
+<span class="lineNum">      95 </span>                :            :  *    gl_transform_vb_part1() - first stage of vertex transformation
+<span class="lineNum">      96 </span>                :            :  *    gl_transform_vb_part2() - second stage of vertex transformation
+<span class="lineNum">      97 </span>                :            :  */
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">     101 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">     102 </span>                :            : #else
+<span class="lineNum">     103 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">     104 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">     105 </span>                :            : #include &quot;fog.h&quot;
+<span class="lineNum">     106 </span>                :            : #include &quot;light.h&quot;
+<span class="lineNum">     107 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">     108 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">     109 </span>                :            : #include &quot;mmath.h&quot;
+<span class="lineNum">     110 </span>                :            : #include &quot;shade.h&quot;
+<span class="lineNum">     111 </span>                :            : #include &quot;texture.h&quot;
+<span class="lineNum">     112 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">     113 </span>                :            : #include &quot;vb.h&quot;
+<span class="lineNum">     114 </span>                :            : #include &quot;vbrender.h&quot;
+<span class="lineNum">     115 </span>                :            : #include &quot;vbxform.h&quot;
+<span class="lineNum">     116 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">     117 </span>                :            : #endif
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            : 
+<span class="lineNum">     120 </span>                :            : #if 0
+<span class="lineNum">     121 </span>                :            : /*
+<span class="lineNum">     122 </span>                :            :  * Use the current modelview matrix to transform XY vertices from object
+<span class="lineNum">     123 </span>                :            :  * to eye coordinates.
+<span class="lineNum">     124 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     125 </span>                :            :  *         n - number of vertices to transform
+<span class="lineNum">     126 </span>                :            :  *         vObj - array [n][4] of object coordinates
+<span class="lineNum">     127 </span>                :            :  * In/Out;  vEye - array [n][4] of eye coordinates
+<span class="lineNum">     128 </span>                :            :  */
+<span class="lineNum">     129 </span>                :            : static void transform_points2( GLcontext *ctx, GLuint n,
+<span class="lineNum">     130 </span>                :            :                                const GLfloat vObj[][4], GLfloat vEye[][4] )
+<span class="lineNum">     131 </span>                :            : {
+<span class="lineNum">     132 </span>                :            :    switch (ctx-&gt;ModelViewMatrixType) {
+<span class="lineNum">     133 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     134 </span>                :            :          {
+<span class="lineNum">     135 </span>                :            :             const GLfloat *m = ctx-&gt;ModelViewMatrix;
+<span class="lineNum">     136 </span>                :            :             GLfloat m0 = m[0],  m4 = m[4],  m12 = m[12];
+<span class="lineNum">     137 </span>                :            :             GLfloat m1 = m[1],  m5 = m[5],  m13 = m[13];
+<span class="lineNum">     138 </span>                :            :             GLfloat m2 = m[2],  m6 = m[6],  m14 = m[14];
+<span class="lineNum">     139 </span>                :            :             GLfloat m3 = m[3],  m7 = m[7],  m15 = m[15];
+<span class="lineNum">     140 </span>                :            :             GLuint i;
+<span class="lineNum">     141 </span>                :            :             for (i=0;i&lt;n;i++) {
+<span class="lineNum">     142 </span>                :            :                GLfloat ox = vObj[i][0], oy = vObj[i][1];
+<span class="lineNum">     143 </span>                :            :                vEye[i][0] = m0 * ox + m4 * oy + m12;
+<span class="lineNum">     144 </span>                :            :                vEye[i][1] = m1 * ox + m5 * oy + m13;
+<span class="lineNum">     145 </span>                :            :                vEye[i][2] = m2 * ox + m6 * oy + m14;
+<span class="lineNum">     146 </span>                :            :                vEye[i][3] = m3 * ox + m7 * oy + m15;
+<span class="lineNum">     147 </span>                :            :             }
+<span class="lineNum">     148 </span>                :            :          }
+<span class="lineNum">     149 </span>                :            :          break;
+<span class="lineNum">     150 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     151 </span>                :            :          {
+<span class="lineNum">     152 </span>                :            :             GLuint i;
+<span class="lineNum">     153 </span>                :            :             for (i=0;i&lt;n;i++) {
+<span class="lineNum">     154 </span>                :            :                vEye[i][0] = vObj[i][0];
+<span class="lineNum">     155 </span>                :            :                vEye[i][1] = vObj[i][1];
+<span class="lineNum">     156 </span>                :            :                vEye[i][2] = 0.0F;
+<span class="lineNum">     157 </span>                :            :                vEye[i][3] = 1.0F;
+<span class="lineNum">     158 </span>                :            :             }
+<span class="lineNum">     159 </span>                :            :          }
+<span class="lineNum">     160 </span>                :            :          break;
+<span class="lineNum">     161 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     162 </span>                :            :          {
+<span class="lineNum">     163 </span>                :            :             const GLfloat *m = ctx-&gt;ModelViewMatrix;
+<span class="lineNum">     164 </span>                :            :             GLfloat m0 = m[0], m1 = m[1], m4 = m[4], m5 = m[5];
+<span class="lineNum">     165 </span>                :            :             GLfloat m12 = m[12], m13 = m[13];
+<span class="lineNum">     166 </span>                :            :             GLuint i;
+<span class="lineNum">     167 </span>                :            :             for (i=0;i&lt;n;i++) {
+<span class="lineNum">     168 </span>                :            :                GLfloat ox = vObj[i][0], oy = vObj[i][1];
+<span class="lineNum">     169 </span>                :            :                vEye[i][0] = m0 * ox + m4 * oy + m12;
+<span class="lineNum">     170 </span>                :            :                vEye[i][1] = m1 * ox + m5 * oy + m13;
+<span class="lineNum">     171 </span>                :            :                vEye[i][2] = 0.0F;
+<span class="lineNum">     172 </span>                :            :                vEye[i][3] = 1.0F;
+<span class="lineNum">     173 </span>                :            :             }
+<span class="lineNum">     174 </span>                :            :          }
+<span class="lineNum">     175 </span>                :            :          break;
+<span class="lineNum">     176 </span>                :            :       case MATRIX_2D_NO_ROT:
+<span class="lineNum">     177 </span>                :            :          {
+<span class="lineNum">     178 </span>                :            :             const GLfloat *m = ctx-&gt;ModelViewMatrix;
+<span class="lineNum">     179 </span>                :            :             GLfloat m0 = m[0], m5 = m[5], m12 = m[12], m13 = m[13];
+<span class="lineNum">     180 </span>                :            :             GLuint i;
+<span class="lineNum">     181 </span>                :            :             for (i=0;i&lt;n;i++) {
+<span class="lineNum">     182 </span>                :            :                GLfloat ox = vObj[i][0], oy = vObj[i][1];
+<span class="lineNum">     183 </span>                :            :                vEye[i][0] = m0 * ox           + m12;
+<span class="lineNum">     184 </span>                :            :                vEye[i][1] =           m5 * oy + m13;
+<span class="lineNum">     185 </span>                :            :                vEye[i][2] = 0.0F;
+<span class="lineNum">     186 </span>                :            :                vEye[i][3] = 1.0F;
+<span class="lineNum">     187 </span>                :            :             }
+<span class="lineNum">     188 </span>                :            :          }
+<span class="lineNum">     189 </span>                :            :          break;
+<span class="lineNum">     190 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     191 </span>                :            :          {
+<span class="lineNum">     192 </span>                :            :             const GLfloat *m = ctx-&gt;ModelViewMatrix;
+<span class="lineNum">     193 </span>                :            :             GLfloat m0 = m[0], m1 = m[1], m2 = m[2], m4 = m[4], m5 = m[5];
+<span class="lineNum">     194 </span>                :            :             GLfloat m6 = m[6], m12 = m[12], m13 = m[13], m14 = m[14];
+<span class="lineNum">     195 </span>                :            :             GLuint i;
+<span class="lineNum">     196 </span>                :            :             for (i=0;i&lt;n;i++) {
+<span class="lineNum">     197 </span>                :            :                GLfloat ox = vObj[i][0], oy = vObj[i][1];
+<span class="lineNum">     198 </span>                :            :                vEye[i][0] = m0 * ox + m4 * oy + m12;
+<span class="lineNum">     199 </span>                :            :                vEye[i][1] = m1 * ox + m5 * oy + m13;
+<span class="lineNum">     200 </span>                :            :                vEye[i][2] = m2 * ox + m6 * oy + m14;
+<span class="lineNum">     201 </span>                :            :                vEye[i][3] = 1.0F;
+<span class="lineNum">     202 </span>                :            :             }
+<span class="lineNum">     203 </span>                :            :          }
+<span class="lineNum">     204 </span>                :            :          break;
+<span class="lineNum">     205 </span>                :            :       default:
+<span class="lineNum">     206 </span>                :            :          /* should never get here */
+<span class="lineNum">     207 </span>                :            :          gl_problem( NULL, &quot;invalid matrix type in transform_points3()&quot; );
+<span class="lineNum">     208 </span>                :            :          return;
+<span class="lineNum">     209 </span>                :            :    }
+<span class="lineNum">     210 </span>                :            : }
+<span class="lineNum">     211 </span>                :            : #endif
+<span class="lineNum">     212 </span>                :            : 
+<span class="lineNum">     213 </span>                :            : 
+<span class="lineNum">     214 </span>                :            : /*
+<span class="lineNum">     215 </span>                :            :  * Use the current modelview matrix to transform XYZ vertices from object
+<span class="lineNum">     216 </span>                :            :  * to eye coordinates.
+<span class="lineNum">     217 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     218 </span>                :            :  *         n - number of vertices to transform
+<span class="lineNum">     219 </span>                :            :  *         vObj - array [n][4] of object coordinates
+<a name="220"><span class="lineNum">     220 </span>                :            :  * In/Out;  vEye - array [n][4] of eye coordinates</a>
+<span class="lineNum">     221 </span>                :            :  */
+<span class="lineNum">     222 </span>                :<span class="lineCov">     149000 : static void transform_points3( GLcontext *ctx, GLuint n,</span>
+<span class="lineNum">     223 </span>                :            :                                /*const*/ GLfloat vObj[][4], GLfloat vEye[][4] )
+<span class="lineNum">     224 </span>                :            : {
+<span class="lineNum">     225 </span>                :            : #ifndef USE_ASM
+<span class="lineNum">     226 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     227 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span> :<span class="lineCov">     149000 :    switch (ctx-&gt;ModelViewMatrixType) {</span>
+<span class="lineNum">         </span>         <span class="branchCov" title="Branch 4 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span>]
+<span class="lineNum">     228 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     229 </span>                :            :          {
+<span class="lineNum">     230 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :             GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :             GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :             GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     235 </span>                :            :             GLuint i;
+<span class="lineNum">     236 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     237 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1], oz = vObj[i][2];</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox + m4 * oy + m8  * oz + m12;</span>
+<span class="lineNum">     239 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = m1 * ox + m5 * oy + m9  * oz + m13;</span>
+<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] = m2 * ox + m6 * oy + m10 * oz + m14;</span>
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] = m3 * ox + m7 * oy + m11 * oz + m15;</span>
+<span class="lineNum">     242 </span>                :            :             }
+<span class="lineNum">     243 </span>                :            :          }
+<span class="lineNum">     244 </span>                :            :          break;
+<span class="lineNum">     245 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     246 </span>                :            :          {
+<span class="lineNum">     247 </span>                :            :             GLuint i;
+<span class="lineNum">     248 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = vObj[i][0];</span>
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = vObj[i][1];</span>
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] = vObj[i][2];</span>
+<span class="lineNum">     252 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] = 1.0F;</span>
+<span class="lineNum">     253 </span>                :            :             }
+<span class="lineNum">     254 </span>                :            :          }
+<span class="lineNum">     255 </span>                :            :          break;
+<span class="lineNum">     256 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     257 </span>                :            :          {
+<span class="lineNum">     258 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     259 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m1 = m[1], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     260 </span>                :<span class="lineNoCov">          0 :             GLfloat m12 = m[12], m13 = m[13];</span>
+<span class="lineNum">     261 </span>                :            :             GLuint i;
+<span class="lineNum">     262 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     263 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1], oz = vObj[i][2];</span>
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox + m4 * oy            + m12       ;</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = m1 * ox + m5 * oy            + m13       ;</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] =                   +       oz             ;</span>
+<span class="lineNum">     267 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] =                                      1.0F;</span>
+<span class="lineNum">     268 </span>                :            :             }
+<span class="lineNum">     269 </span>                :            :          }
+<span class="lineNum">     270 </span>                :            :          break;
+<span class="lineNum">     271 </span>                :            :       case MATRIX_2D_NO_ROT:
+<span class="lineNum">     272 </span>                :            :          {
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     274 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m5 = m[5], m12 = m[12], m13 = m[13];</span>
+<span class="lineNum">     275 </span>                :            :             GLuint i;
+<span class="lineNum">     276 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1], oz = vObj[i][2];</span>
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox                      + m12       ;</span>
+<span class="lineNum">     279 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] =           m5 * oy            + m13       ;</span>
+<span class="lineNum">     280 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] =                   +       oz             ;</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] =                                      1.0F;</span>
+<span class="lineNum">     282 </span>                :            :             }
+<span class="lineNum">     283 </span>                :            :          }
+<span class="lineNum">     284 </span>                :            :          break;
+<span class="lineNum">     285 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     286 </span>                :            :          {
+<span class="lineNum">     287 </span>                :<span class="lineCov">     149000 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     288 </span>                :<span class="lineCov">     149000 :             GLfloat m0 = m[0], m1 = m[1], m2 = m[2], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     289 </span>                :<span class="lineCov">     149000 :             GLfloat m6 = m[6], m8 = m[8], m9 = m[9], m10 = m[10];</span>
+<span class="lineNum">     290 </span>                :<span class="lineCov">     149000 :             GLfloat m12 = m[12], m13 = m[13], m14 = m[14];</span>
+<span class="lineNum">     291 </span>                :            :             GLuint i;
+<span class="lineNum">     292 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">   44849000 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     293 </span>                :<span class="lineCov">   44700000 :                GLfloat ox = vObj[i][0], oy = vObj[i][1], oz = vObj[i][2];</span>
+<span class="lineNum">     294 </span>                :<span class="lineCov">   44700000 :                vEye[i][0] = m0 * ox + m4 * oy +  m8 * oz + m12       ;</span>
+<span class="lineNum">     295 </span>                :<span class="lineCov">   44700000 :                vEye[i][1] = m1 * ox + m5 * oy +  m9 * oz + m13       ;</span>
+<span class="lineNum">     296 </span>                :<span class="lineCov">   44700000 :                vEye[i][2] = m2 * ox + m6 * oy + m10 * oz + m14       ;</span>
+<span class="lineNum">     297 </span>                :<span class="lineCov">   44700000 :                vEye[i][3] =                                      1.0F;</span>
+<span class="lineNum">     298 </span>                :            :             }
+<span class="lineNum">     299 </span>                :            :          }
+<span class="lineNum">     300 </span>                :            :          break;
+<span class="lineNum">     301 </span>                :            :       default:
+<span class="lineNum">     302 </span>                :            :          /* should never get here */
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :          gl_problem( NULL, &quot;invalid matrix type in transform_points3()&quot; );</span>
+<span class="lineNum">     304 </span>                :            :    }
+<span class="lineNum">     305 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     306 </span>                :            : #else
+<span class="lineNum">     307 </span>                :            :    switch (ctx-&gt;ModelViewMatrixType) {
+<span class="lineNum">     308 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     309 </span>                :            :          asm_transform_points3_general( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     310 </span>                :            :          break;
+<span class="lineNum">     311 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     312 </span>                :            :          asm_transform_points3_identity( n, vEye, vObj );
+<span class="lineNum">     313 </span>                :            :          break;
+<span class="lineNum">     314 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     315 </span>                :            :          asm_transform_points3_2d( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     316 </span>                :            :          break;
+<span class="lineNum">     317 </span>                :            :       case MATRIX_2D_NO_ROT:
+<span class="lineNum">     318 </span>                :            :          asm_transform_points3_2d_no_rot( n, vEye, ctx-&gt;ModelViewMatrix,
+<span class="lineNum">     319 </span>                :            :                                           vObj );
+<span class="lineNum">     320 </span>                :            :          break;
+<span class="lineNum">     321 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     322 </span>                :            :          asm_transform_points3_3d( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     323 </span>                :            :          break;
+<span class="lineNum">     324 </span>                :            :       default:
+<span class="lineNum">     325 </span>                :            :          /* should never get here */
+<span class="lineNum">     326 </span>                :            :          gl_problem( NULL, &quot;invalid matrix type in transform_points3()&quot; );
+<span class="lineNum">     327 </span>                :            :          return;
+<span class="lineNum">     328 </span>                :            :    }
+<span class="lineNum">     329 </span>                :            : #endif
+<span class="lineNum">     330 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">     331 </span>                :            : 
+<span class="lineNum">     332 </span>                :            : 
+<span class="lineNum">     333 </span>                :            : 
+<span class="lineNum">     334 </span>                :            : /*
+<span class="lineNum">     335 </span>                :            :  * Use the current modelview matrix to transform XYZW vertices from object
+<span class="lineNum">     336 </span>                :            :  * to eye coordinates.
+<span class="lineNum">     337 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     338 </span>                :            :  *         n - number of vertices to transform
+<span class="lineNum">     339 </span>                :            :  *         vObj - array [n][4] of object coordinates
+<a name="340"><span class="lineNum">     340 </span>                :            :  * In/Out;  vEye - array [n][4] of eye coordinates</a>
+<span class="lineNum">     341 </span>                :            :  */
+<span class="lineNum">     342 </span>                :<span class="lineNoCov">          0 : static void transform_points4( GLcontext *ctx, GLuint n,</span>
+<span class="lineNum">     343 </span>                :            :                                /*const*/ GLfloat vObj[][4], GLfloat vEye[][4] )
+<span class="lineNum">     344 </span>                :            : {
+<span class="lineNum">     345 </span>                :            : #ifndef USE_ASM
+<span class="lineNum">     346 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     347 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (ctx-&gt;ModelViewMatrixType) {</span>
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     348 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     349 </span>                :            :          {
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">     352 </span>                :<span class="lineNoCov">          0 :             GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">     353 </span>                :<span class="lineNoCov">          0 :             GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     354 </span>                :<span class="lineNoCov">          0 :             GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     355 </span>                :            :             GLuint i;
+<span class="lineNum">     356 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     357 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1];</span>
+<span class="lineNum">     358 </span>                :<span class="lineNoCov">          0 :                GLfloat oz = vObj[i][2], ow = vObj[i][3];</span>
+<span class="lineNum">     359 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox + m4 * oy + m8  * oz + m12 * ow;</span>
+<span class="lineNum">     360 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = m1 * ox + m5 * oy + m9  * oz + m13 * ow;</span>
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] = m2 * ox + m6 * oy + m10 * oz + m14 * ow;</span>
+<span class="lineNum">     362 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] = m3 * ox + m7 * oy + m11 * oz + m15 * ow;</span>
+<span class="lineNum">     363 </span>                :            :             }
+<span class="lineNum">     364 </span>                :            :          }
+<span class="lineNum">     365 </span>                :            :          break;
+<span class="lineNum">     366 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     367 </span>                :            :          {
+<span class="lineNum">     368 </span>                :            :             GLuint i;
+<span class="lineNum">     369 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = vObj[i][0];</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = vObj[i][1];</span>
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] = vObj[i][2];</span>
+<span class="lineNum">     373 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] = vObj[i][3];</span>
+<span class="lineNum">     374 </span>                :            :             }
+<span class="lineNum">     375 </span>                :            :          }
+<span class="lineNum">     376 </span>                :            :          break;
+<span class="lineNum">     377 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     378 </span>                :            :          {
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     380 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m1 = m[1], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 :             GLfloat m12 = m[12], m13 = m[13];</span>
+<span class="lineNum">     382 </span>                :            :             GLuint i;
+<span class="lineNum">     383 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     384 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1];</span>
+<span class="lineNum">     385 </span>                :<span class="lineNoCov">          0 :                GLfloat oz = vObj[i][2], ow = vObj[i][3];</span>
+<span class="lineNum">     386 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox + m4 * oy            + m12 * ow;</span>
+<span class="lineNum">     387 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = m1 * ox + m5 * oy            + m13 * ow;</span>
+<span class="lineNum">     388 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] =                   +       oz           ;</span>
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] =                                      ow;</span>
+<span class="lineNum">     390 </span>                :            :             }
+<span class="lineNum">     391 </span>                :            :          }
+<span class="lineNum">     392 </span>                :            :          break;
+<span class="lineNum">     393 </span>                :            :       case MATRIX_2D_NO_ROT:
+<span class="lineNum">     394 </span>                :            :          {
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     396 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m5 = m[5], m12 = m[12], m13 = m[13];</span>
+<span class="lineNum">     397 </span>                :            :             GLuint i;
+<span class="lineNum">     398 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     399 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1];</span>
+<span class="lineNum">     400 </span>                :<span class="lineNoCov">          0 :                GLfloat oz = vObj[i][2], ow = vObj[i][3];</span>
+<span class="lineNum">     401 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox                      + m12 * ow;</span>
+<span class="lineNum">     402 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] =           m5 * oy            + m13 * ow;</span>
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] =                   +       oz           ;</span>
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] =                                      ow;</span>
+<span class="lineNum">     405 </span>                :            :             }
+<span class="lineNum">     406 </span>                :            :          }
+<span class="lineNum">     407 </span>                :            :          break;
+<span class="lineNum">     408 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     409 </span>                :            :          {
+<span class="lineNum">     410 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ModelViewMatrix;</span>
+<span class="lineNum">     411 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m1 = m[1], m2 = m[2], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     412 </span>                :<span class="lineNoCov">          0 :             GLfloat m6 = m[6], m8 = m[8], m9 = m[9], m10 = m[10];</span>
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :             GLfloat m12 = m[12], m13 = m[13], m14 = m[14];</span>
+<span class="lineNum">     414 </span>                :            :             GLuint i;
+<span class="lineNum">     415 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     416 </span>                :<span class="lineNoCov">          0 :                GLfloat ox = vObj[i][0], oy = vObj[i][1];</span>
+<span class="lineNum">     417 </span>                :<span class="lineNoCov">          0 :                GLfloat oz = vObj[i][2], ow = vObj[i][3];</span>
+<span class="lineNum">     418 </span>                :<span class="lineNoCov">          0 :                vEye[i][0] = m0 * ox + m4 * oy +  m8 * oz + m12 * ow;</span>
+<span class="lineNum">     419 </span>                :<span class="lineNoCov">          0 :                vEye[i][1] = m1 * ox + m5 * oy +  m9 * oz + m13 * ow;</span>
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 :                vEye[i][2] = m2 * ox + m6 * oy + m10 * oz + m14 * ow;</span>
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :                vEye[i][3] =                                      ow;</span>
+<span class="lineNum">     422 </span>                :            :             }
+<span class="lineNum">     423 </span>                :            :          }
+<span class="lineNum">     424 </span>                :            :          break;
+<span class="lineNum">     425 </span>                :            :       default:
+<span class="lineNum">     426 </span>                :            :          /* should never get here */
+<span class="lineNum">     427 </span>                :<span class="lineNoCov">          0 :          gl_problem( NULL, &quot;invalid matrix type in transform_points4()&quot; );</span>
+<span class="lineNum">     428 </span>                :            :    }
+<span class="lineNum">     429 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     430 </span>                :            : #else
+<span class="lineNum">     431 </span>                :            :    switch (ctx-&gt;ModelViewMatrixType) {
+<span class="lineNum">     432 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     433 </span>                :            :          asm_transform_points4_general( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     434 </span>                :            :          break;
+<span class="lineNum">     435 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     436 </span>                :            :          asm_transform_points4_identity( n, vEye, vObj );
+<span class="lineNum">     437 </span>                :            :          break;
+<span class="lineNum">     438 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     439 </span>                :            :          asm_transform_points4_2d( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     440 </span>                :            :          break;
+<span class="lineNum">     441 </span>                :            :       case MATRIX_2D_NO_ROT:
+<span class="lineNum">     442 </span>                :            :          asm_transform_points4_2d_no_rot( n, vEye, ctx-&gt;ModelViewMatrix,
+<span class="lineNum">     443 </span>                :            :                                           vObj );
+<span class="lineNum">     444 </span>                :            :          break;
+<span class="lineNum">     445 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     446 </span>                :            :          asm_transform_points4_3d( n, vEye, ctx-&gt;ModelViewMatrix, vObj );
+<span class="lineNum">     447 </span>                :            :          break;
+<span class="lineNum">     448 </span>                :            :       default:
+<span class="lineNum">     449 </span>                :            :          /* should never get here */
+<span class="lineNum">     450 </span>                :            :          gl_problem( NULL, &quot;invalid matrix type in transform_points4()&quot; );
+<span class="lineNum">     451 </span>                :            :          return;
+<span class="lineNum">     452 </span>                :            :    }
+<span class="lineNum">     453 </span>                :            : #endif
+<span class="lineNum">     454 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     455 </span>                :            : 
+<span class="lineNum">     456 </span>                :            : 
+<span class="lineNum">     457 </span>                :            : 
+<span class="lineNum">     458 </span>                :            : /*
+<span class="lineNum">     459 </span>                :            :  * Transform an array of texture coordinates by the current texture matrix.
+<span class="lineNum">     460 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     461 </span>                :            :  *         n - number of texture coordinates in array
+<a name="462"><span class="lineNum">     462 </span>                :            :  * In/Out:  t - array [n][4] of texture coordinates to transform</a>
+<span class="lineNum">     463 </span>                :            :  */
+<span class="lineNum">     464 </span>                :<span class="lineNoCov">          0 : static void transform_texcoords( GLcontext *ctx, GLuint n, GLfloat t[][4] )</span>
+<span class="lineNum">     465 </span>                :            : {
+<span class="lineNum">     466 </span>                :            : #ifndef USE_ASM
+<span class="lineNum">     467 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     468 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (ctx-&gt;TextureMatrixType) {</span>
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 4 was not executed"> # </span>]
+<span class="lineNum">     469 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     470 </span>                :            :          {
+<span class="lineNum">     471 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">     473 </span>                :<span class="lineNoCov">          0 :             GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">     474 </span>                :<span class="lineNoCov">          0 :             GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     475 </span>                :<span class="lineNoCov">          0 :             GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     476 </span>                :            :             GLuint i;
+<span class="lineNum">     477 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     478 </span>                :<span class="lineNoCov">          0 :                GLfloat t0 = t[i][0], t1 = t[i][1], t2 = t[i][2], t3 = t[i][3];</span>
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :                t[i][0] = m0 * t0 + m4 * t1 + m8  * t2 + m12 * t3;</span>
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :                t[i][1] = m1 * t0 + m5 * t1 + m9  * t2 + m13 * t3;</span>
+<span class="lineNum">     481 </span>                :<span class="lineNoCov">          0 :                t[i][2] = m2 * t0 + m6 * t1 + m10 * t2 + m14 * t3;</span>
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :                t[i][3] = m3 * t0 + m7 * t1 + m11 * t2 + m15 * t3;</span>
+<span class="lineNum">     483 </span>                :            :             }
+<span class="lineNum">     484 </span>                :            :          }
+<span class="lineNum">     485 </span>                :            :          break;
+<span class="lineNum">     486 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     487 </span>                :            :          /* Do nothing */
+<span class="lineNum">     488 </span>                :            :          break;
+<span class="lineNum">     489 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     490 </span>                :            :          {
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     492 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m1 = m[1], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     493 </span>                :<span class="lineNoCov">          0 :             GLfloat m12 = m[12], m13 = m[13];</span>
+<span class="lineNum">     494 </span>                :            :             GLuint i;
+<span class="lineNum">     495 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     496 </span>                :<span class="lineNoCov">          0 :                GLfloat t0 = t[i][0], t1 = t[i][1], t2 = t[i][2], t3 = t[i][3];</span>
+<span class="lineNum">     497 </span>                :<span class="lineNoCov">          0 :                t[i][0] = m0 * t0 + m4 * t1            + m12 * t3;</span>
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :                t[i][1] = m1 * t0 + m5 * t1            + m13 * t3;</span>
+<span class="lineNum">     499 </span>                :<span class="lineNoCov">          0 :                t[i][2] =                   +       t2           ;</span>
+<span class="lineNum">     500 </span>                :            :                /*t[i][3] unchanged*/
+<span class="lineNum">     501 </span>                :            :             }
+<span class="lineNum">     502 </span>                :            :          }
+<span class="lineNum">     503 </span>                :            :          break;
+<span class="lineNum">     504 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     505 </span>                :            :          {
+<span class="lineNum">     506 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;TextureMatrix;</span>
+<span class="lineNum">     507 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m1 = m[1], m2 = m[2], m4 = m[4], m5 = m[5];</span>
+<span class="lineNum">     508 </span>                :<span class="lineNoCov">          0 :             GLfloat m6 = m[6], m8 = m[8], m9 = m[9], m10 = m[10];</span>
+<span class="lineNum">     509 </span>                :<span class="lineNoCov">          0 :             GLfloat m12 = m[12], m13 = m[13], m14 = m[14];</span>
+<span class="lineNum">     510 </span>                :            :             GLuint i;
+<span class="lineNum">     511 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     512 </span>                :<span class="lineNoCov">          0 :                GLfloat t0 = t[i][0], t1 = t[i][1], t2 = t[i][2], t3 = t[i][3];</span>
+<span class="lineNum">     513 </span>                :<span class="lineNoCov">          0 :                t[i][0] = m0 * t0 + m4 * t1 +  m8 * t2 + m12 * t3;</span>
+<span class="lineNum">     514 </span>                :<span class="lineNoCov">          0 :                t[i][1] = m1 * t0 + m5 * t1 +  m9 * t2 + m13 * t3;</span>
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :                t[i][2] = m2 * t0 + m6 * t1 + m10 * t2 + m14 * t3;</span>
+<span class="lineNum">     516 </span>                :            :                /*t[i][3] unchanged*/
+<span class="lineNum">     517 </span>                :            :             }
+<span class="lineNum">     518 </span>                :            :          }
+<span class="lineNum">     519 </span>                :            :          break;
+<span class="lineNum">     520 </span>                :            :       default:
+<span class="lineNum">     521 </span>                :            :          /* should never get here */
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 :          gl_problem( NULL, &quot;invalid matrix type in transform_texcoords()&quot; );</span>
+<span class="lineNum">     523 </span>                :            :    }
+<span class="lineNum">     524 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     525 </span>                :            : #else
+<span class="lineNum">     526 </span>                :            :    switch (ctx-&gt;TextureMatrixType) {
+<span class="lineNum">     527 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     528 </span>                :            :          asm_transform_points4_general( n, t, ctx-&gt;TextureMatrix, t );
+<span class="lineNum">     529 </span>                :            :          break;
+<span class="lineNum">     530 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     531 </span>                :            :          /* Do nothing */
+<span class="lineNum">     532 </span>                :            :          break;
+<span class="lineNum">     533 </span>                :            :       case MATRIX_2D:
+<span class="lineNum">     534 </span>                :            :          asm_transform_points4_2d( n, t, ctx-&gt;TextureMatrix, t );
+<span class="lineNum">     535 </span>                :            :          break;
+<span class="lineNum">     536 </span>                :            :       case MATRIX_3D:
+<span class="lineNum">     537 </span>                :            :          asm_transform_points4_3d( n, t, ctx-&gt;TextureMatrix, t );
+<span class="lineNum">     538 </span>                :            :          break;
+<span class="lineNum">     539 </span>                :            :       default:
+<span class="lineNum">     540 </span>                :            :          /* should never get here */
+<span class="lineNum">     541 </span>                :            :          gl_problem( NULL, &quot;invalid matrix type in transform_texcoords()&quot; );
+<span class="lineNum">     542 </span>                :            :          return;
+<span class="lineNum">     543 </span>                :            :    }
+<span class="lineNum">     544 </span>                :            : #endif
+<span class="lineNum">     545 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     546 </span>                :            : 
+<span class="lineNum">     547 </span>                :            : 
+<span class="lineNum">     548 </span>                :            : 
+<span class="lineNum">     549 </span>                :            : /*
+<span class="lineNum">     550 </span>                :            :  * Apply the projection matrix to an array of vertices in Eye coordinates
+<span class="lineNum">     551 </span>                :            :  * resulting in Clip coordinates.  Also, compute the ClipMask bitfield for
+<span class="lineNum">     552 </span>                :            :  * each vertex.
+<span class="lineNum">     553 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     554 </span>                :            :  *         n - number of vertices
+<span class="lineNum">     555 </span>                :            :  *         vEye - array [n][4] of Eye coordinates
+<span class="lineNum">     556 </span>                :            :  * Output:  vClip - array [n][4] of Clip coordinates
+<a name="557"><span class="lineNum">     557 </span>                :            :  *          clipMask - array [n] of clip masks</a>
+<span class="lineNum">     558 </span>                :            :  */
+<span class="lineNum">     559 </span>                :<span class="lineCov">     149000 : static void project_and_cliptest( GLcontext *ctx,</span>
+<span class="lineNum">     560 </span>                :            :                                   GLuint n, /*const*/ GLfloat vEye[][4],
+<span class="lineNum">     561 </span>                :            :                                   GLfloat vClip[][4], GLubyte clipMask[],
+<span class="lineNum">     562 </span>                :            :                                   GLubyte *orMask, GLubyte *andMask )
+<span class="lineNum">     563 </span>                :            : 
+<span class="lineNum">     564 </span>                :            : {
+<span class="lineNum">     565 </span>                :            : #ifndef USE_ASM
+<span class="lineNum">     566 </span>                :<span class="lineCov">     149000 :    GLubyte tmpOrMask = *orMask;</span>
+<span class="lineNum">     567 </span>                :<span class="lineCov">     149000 :    GLubyte tmpAndMask = *andMask;</span>
+<span class="lineNum">     568 </span>                :            : 
+<span class="lineNum">     569 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     570 </span>  [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchCov" title="Branch 3 was taken 149000 times"> + </span> :<span class="lineCov">     149000 :    switch (ctx-&gt;ProjectionMatrixType) {</span>
+<span class="lineNum">         </span>            <span class="branchNoCov" title="Branch 4 was not taken"> - </span>]
+<span class="lineNum">     571 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     572 </span>                :            :          {
+<span class="lineNum">     573 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">     575 </span>                :<span class="lineNoCov">          0 :             GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">     576 </span>                :<span class="lineNoCov">          0 :             GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     577 </span>                :<span class="lineNoCov">          0 :             GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     578 </span>                :            :             GLuint i;
+<span class="lineNum">     579 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     580 </span>                :<span class="lineNoCov">          0 :                GLfloat ex = vEye[i][0], ey = vEye[i][1];</span>
+<span class="lineNum">     581 </span>                :<span class="lineNoCov">          0 :                GLfloat ez = vEye[i][2], ew = vEye[i][3];</span>
+<span class="lineNum">     582 </span>                :<span class="lineNoCov">          0 :                GLfloat cx = m0 * ex + m4 * ey + m8  * ez + m12 * ew;</span>
+<span class="lineNum">     583 </span>                :<span class="lineNoCov">          0 :                GLfloat cy = m1 * ex + m5 * ey + m9  * ez + m13 * ew;</span>
+<span class="lineNum">     584 </span>                :<span class="lineNoCov">          0 :                GLfloat cz = m2 * ex + m6 * ey + m10 * ez + m14 * ew;</span>
+<span class="lineNum">     585 </span>                :<span class="lineNoCov">          0 :                GLfloat cw = m3 * ex + m7 * ey + m11 * ez + m15 * ew;</span>
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :                GLubyte mask = 0;</span>
+<span class="lineNum">     587 </span>                :<span class="lineNoCov">          0 :                vClip[i][0] = cx;</span>
+<span class="lineNum">     588 </span>                :<span class="lineNoCov">          0 :                vClip[i][1] = cy;</span>
+<span class="lineNum">     589 </span>                :<span class="lineNoCov">          0 :                vClip[i][2] = cz;</span>
+<span class="lineNum">     590 </span>                :<span class="lineNoCov">          0 :                vClip[i][3] = cw;</span>
+<span class="lineNum">     591 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cx &gt;  cw)       mask |= CLIP_RIGHT_BIT;</span>
+<span class="lineNum">     592 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cx &lt; -cw)  mask |= CLIP_LEFT_BIT;</span>
+<span class="lineNum">     593 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cy &gt;  cw)       mask |= CLIP_TOP_BIT;</span>
+<span class="lineNum">     594 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cy &lt; -cw)  mask |= CLIP_BOTTOM_BIT;</span>
+<span class="lineNum">     595 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cz &gt;  cw)       mask |= CLIP_FAR_BIT;</span>
+<span class="lineNum">     596 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cz &lt; -cw)  mask |= CLIP_NEAR_BIT;</span>
+<span class="lineNum">     597 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (mask) {</span>
+<span class="lineNum">     598 </span>                :<span class="lineNoCov">          0 :                   clipMask[i] |= mask;</span>
+<span class="lineNum">     599 </span>                :<span class="lineNoCov">          0 :                   tmpOrMask |= mask;</span>
+<span class="lineNum">     600 </span>                :            :                }
+<span class="lineNum">     601 </span>                :<span class="lineNoCov">          0 :                tmpAndMask &amp;= mask;</span>
+<span class="lineNum">     602 </span>                :            :             }
+<span class="lineNum">     603 </span>                :            :          }
+<span class="lineNum">     604 </span>                :            :          break;
+<span class="lineNum">     605 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     606 </span>                :            :          {
+<span class="lineNum">     607 </span>                :            :             GLuint i;
+<span class="lineNum">     608 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     609 </span>                :<span class="lineNoCov">          0 :                GLfloat cx = vClip[i][0] = vEye[i][0];</span>
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 :                GLfloat cy = vClip[i][1] = vEye[i][1];</span>
+<span class="lineNum">     611 </span>                :<span class="lineNoCov">          0 :                GLfloat cz = vClip[i][2] = vEye[i][2];</span>
+<span class="lineNum">     612 </span>                :<span class="lineNoCov">          0 :                GLfloat cw = vClip[i][3] = vEye[i][3];</span>
+<span class="lineNum">     613 </span>                :<span class="lineNoCov">          0 :                GLubyte mask = 0;</span>
+<span class="lineNum">     614 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cx &gt;  cw)       mask |= CLIP_RIGHT_BIT;</span>
+<span class="lineNum">     615 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cx &lt; -cw)  mask |= CLIP_LEFT_BIT;</span>
+<span class="lineNum">     616 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cy &gt;  cw)       mask |= CLIP_TOP_BIT;</span>
+<span class="lineNum">     617 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cy &lt; -cw)  mask |= CLIP_BOTTOM_BIT;</span>
+<span class="lineNum">     618 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cz &gt;  cw)       mask |= CLIP_FAR_BIT;</span>
+<span class="lineNum">     619 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cz &lt; -cw)  mask |= CLIP_NEAR_BIT;</span>
+<span class="lineNum">     620 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (mask) {</span>
+<span class="lineNum">     621 </span>                :<span class="lineNoCov">          0 :                   clipMask[i] |= mask;</span>
+<span class="lineNum">     622 </span>                :<span class="lineNoCov">          0 :                   tmpOrMask |= mask;</span>
+<span class="lineNum">     623 </span>                :            :                }
+<span class="lineNum">     624 </span>                :<span class="lineNoCov">          0 :                tmpAndMask &amp;= mask;</span>
+<span class="lineNum">     625 </span>                :            :             }
+<span class="lineNum">     626 </span>                :            :          }
+<span class="lineNum">     627 </span>                :            :          break;
+<span class="lineNum">     628 </span>                :            :       case MATRIX_ORTHO:
+<span class="lineNum">     629 </span>                :            :          {
+<span class="lineNum">     630 </span>                :<span class="lineNoCov">          0 :             const GLfloat *m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     631 </span>                :<span class="lineNoCov">          0 :             GLfloat m0 = m[0], m5 = m[5], m10 = m[10], m12 = m[12];</span>
+<span class="lineNum">     632 </span>                :<span class="lineNoCov">          0 :             GLfloat m13 = m[13], m14 = m[14];</span>
+<span class="lineNum">     633 </span>                :            :             GLuint i;
+<span class="lineNum">     634 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     635 </span>                :<span class="lineNoCov">          0 :                GLfloat ex = vEye[i][0], ey = vEye[i][1];</span>
+<span class="lineNum">     636 </span>                :<span class="lineNoCov">          0 :                GLfloat ez = vEye[i][2], ew = vEye[i][3];</span>
+<span class="lineNum">     637 </span>                :<span class="lineNoCov">          0 :                GLfloat cx = m0 * ex                      + m12 * ew;</span>
+<span class="lineNum">     638 </span>                :<span class="lineNoCov">          0 :                GLfloat cy =           m5 * ey            + m13 * ew;</span>
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :                GLfloat cz =                     m10 * ez + m14 * ew;</span>
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 :                GLfloat cw =                                      ew;</span>
+<span class="lineNum">     641 </span>                :<span class="lineNoCov">          0 :                GLubyte mask = 0;</span>
+<span class="lineNum">     642 </span>                :<span class="lineNoCov">          0 :                vClip[i][0] = cx;</span>
+<span class="lineNum">     643 </span>                :<span class="lineNoCov">          0 :                vClip[i][1] = cy;</span>
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :                vClip[i][2] = cz;</span>
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :                vClip[i][3] = cw;</span>
+<span class="lineNum">     646 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cx &gt;  cw)       mask |= CLIP_RIGHT_BIT;</span>
+<span class="lineNum">     647 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cx &lt; -cw)  mask |= CLIP_LEFT_BIT;</span>
+<span class="lineNum">     648 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cy &gt;  cw)       mask |= CLIP_TOP_BIT;</span>
+<span class="lineNum">     649 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cy &lt; -cw)  mask |= CLIP_BOTTOM_BIT;</span>
+<span class="lineNum">     650 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (cz &gt;  cw)       mask |= CLIP_FAR_BIT;</span>
+<span class="lineNum">     651 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                else if (cz &lt; -cw)  mask |= CLIP_NEAR_BIT;</span>
+<span class="lineNum">     652 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (mask) {</span>
+<span class="lineNum">     653 </span>                :<span class="lineNoCov">          0 :                   clipMask[i] |= mask;</span>
+<span class="lineNum">     654 </span>                :<span class="lineNoCov">          0 :                   tmpOrMask |= mask;</span>
+<span class="lineNum">     655 </span>                :            :                }
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :                tmpAndMask &amp;= mask;</span>
+<span class="lineNum">     657 </span>                :            :             }
+<span class="lineNum">     658 </span>                :            :          }
+<span class="lineNum">     659 </span>                :            :          break;
+<span class="lineNum">     660 </span>                :            :       case MATRIX_PERSPECTIVE:
+<span class="lineNum">     661 </span>                :            :          {
+<span class="lineNum">     662 </span>                :<span class="lineCov">     149000 :             const GLfloat *m = ctx-&gt;ProjectionMatrix;</span>
+<span class="lineNum">     663 </span>                :<span class="lineCov">     149000 :             GLfloat m0 = m[0], m5 = m[5], m8 = m[8], m9 = m[9];</span>
+<span class="lineNum">     664 </span>                :<span class="lineCov">     149000 :             GLfloat m10 = m[10], m14 = m[14];</span>
+<span class="lineNum">     665 </span>                :            :             GLuint i;
+<span class="lineNum">     666 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">   44849000 :             for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     667 </span>                :<span class="lineCov">   44700000 :                GLfloat ex = vEye[i][0], ey = vEye[i][1];</span>
+<span class="lineNum">     668 </span>                :<span class="lineCov">   44700000 :                GLfloat ez = vEye[i][2], ew = vEye[i][3];</span>
+<span class="lineNum">     669 </span>                :<span class="lineCov">   44700000 :                GLfloat cx = m0 * ex           + m8  * ez           ;</span>
+<span class="lineNum">     670 </span>                :<span class="lineCov">   44700000 :                GLfloat cy =           m5 * ey + m9  * ez           ;</span>
+<span class="lineNum">     671 </span>                :<span class="lineCov">   44700000 :                GLfloat cz =                     m10 * ez + m14 * ew;</span>
+<span class="lineNum">     672 </span>                :<span class="lineCov">   44700000 :                GLfloat cw =                          -ez           ;</span>
+<span class="lineNum">     673 </span>                :<span class="lineCov">   44700000 :                GLubyte mask = 0;</span>
+<span class="lineNum">     674 </span>                :<span class="lineCov">   44700000 :                vClip[i][0] = cx;</span>
+<span class="lineNum">     675 </span>                :<span class="lineCov">   44700000 :                vClip[i][1] = cy;</span>
+<span class="lineNum">     676 </span>                :<span class="lineCov">   44700000 :                vClip[i][2] = cz;</span>
+<span class="lineNum">     677 </span>                :<span class="lineCov">   44700000 :                vClip[i][3] = cw;</span>
+<span class="lineNum">     678 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                if (cx &gt;  cw)       mask |= CLIP_RIGHT_BIT;</span>
+<span class="lineNum">     679 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                else if (cx &lt; -cw)  mask |= CLIP_LEFT_BIT;</span>
+<span class="lineNum">     680 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                if (cy &gt;  cw)       mask |= CLIP_TOP_BIT;</span>
+<span class="lineNum">     681 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                else if (cy &lt; -cw)  mask |= CLIP_BOTTOM_BIT;</span>
+<span class="lineNum">     682 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                if (cz &gt;  cw)       mask |= CLIP_FAR_BIT;</span>
+<span class="lineNum">     683 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                else if (cz &lt; -cw)  mask |= CLIP_NEAR_BIT;</span>
+<span class="lineNum">     684 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 44700000 times"> + </span>]:<span class="lineCov">   44700000 :                if (mask) {</span>
+<span class="lineNum">     685 </span>                :<span class="lineNoCov">          0 :                   clipMask[i] |= mask;</span>
+<span class="lineNum">     686 </span>                :<span class="lineNoCov">          0 :                   tmpOrMask |= mask;</span>
+<span class="lineNum">     687 </span>                :            :                }
+<span class="lineNum">     688 </span>                :<span class="lineCov">   44700000 :                tmpAndMask &amp;= mask;</span>
+<span class="lineNum">     689 </span>                :            :             }
+<span class="lineNum">     690 </span>                :            :          }
+<span class="lineNum">     691 </span>                :            :          break;
+<span class="lineNum">     692 </span>                :            :       default:
+<span class="lineNum">     693 </span>                :            :          /* should never get here */
+<span class="lineNum">     694 </span>                :<span class="lineNoCov">          0 :          gl_problem( NULL, &quot;invalid matrix type in project_and_cliptest()&quot; );</span>
+<span class="lineNum">     695 </span>                :            :    }
+<span class="lineNum">     696 </span>                :            : 
+<span class="lineNum">     697 </span>                :<span class="lineCov">     149000 :    *orMask = tmpOrMask;</span>
+<span class="lineNum">     698 </span>                :<span class="lineCov">     149000 :    *andMask = tmpAndMask;</span>
+<span class="lineNum">     699 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     700 </span>                :            : #else
+<span class="lineNum">     701 </span>                :            :    switch (ctx-&gt;ProjectionMatrixType) {
+<span class="lineNum">     702 </span>                :            :       case MATRIX_GENERAL:
+<span class="lineNum">     703 </span>                :            :          asm_project_and_cliptest_general( n, vClip, ctx-&gt;ProjectionMatrix, vEye, 
+<span class="lineNum">     704 </span>                :            :                                            clipMask, orMask, andMask );
+<span class="lineNum">     705 </span>                :            :          break;
+<span class="lineNum">     706 </span>                :            :       case MATRIX_IDENTITY:
+<span class="lineNum">     707 </span>                :            :          asm_project_and_cliptest_identity( n, vClip, vEye, clipMask, orMask, andMask );
+<span class="lineNum">     708 </span>                :            :          break;
+<span class="lineNum">     709 </span>                :            :       case MATRIX_ORTHO:
+<span class="lineNum">     710 </span>                :            :          asm_project_and_cliptest_ortho( n, vClip, ctx-&gt;ProjectionMatrix, vEye, 
+<span class="lineNum">     711 </span>                :            :                                          clipMask, orMask, andMask );
+<span class="lineNum">     712 </span>                :            :          break;
+<span class="lineNum">     713 </span>                :            :       case MATRIX_PERSPECTIVE:
+<span class="lineNum">     714 </span>                :            :          asm_project_and_cliptest_perspective( n, vClip, ctx-&gt;ProjectionMatrix,
+<span class="lineNum">     715 </span>                :            :                                                vEye, clipMask, orMask, andMask );
+<span class="lineNum">     716 </span>                :            :          break;
+<span class="lineNum">     717 </span>                :            :       default:
+<span class="lineNum">     718 </span>                :            :          /* should never get here */
+<span class="lineNum">     719 </span>                :            :          gl_problem( NULL, &quot;invalid matrix type in project_and_cliptest()&quot; );
+<span class="lineNum">     720 </span>                :            :          return;
+<span class="lineNum">     721 </span>                :            :    }
+<span class="lineNum">     722 </span>                :            : #endif
+<span class="lineNum">     723 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">     724 </span>                :            : 
+<span class="lineNum">     725 </span>                :            : 
+<span class="lineNum">     726 </span>                :            : 
+<span class="lineNum">     727 </span>                :            : /*
+<span class="lineNum">     728 </span>                :            :  * Test an array of vertices against the user-defined clipping planes.
+<span class="lineNum">     729 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     730 </span>                :            :  *         n - number of vertices
+<span class="lineNum">     731 </span>                :            :  *         vEye - array [n] of vertices, in eye coordinate system
+<span class="lineNum">     732 </span>                :            :  * Output:  clipMask - array [n] of clip values: 0=not clipped, !0=clipped
+<span class="lineNum">     733 </span>                :            :  * Return:  CLIP_ALL - if all vertices are clipped by one of the planes
+<span class="lineNum">     734 </span>                :            :  *          CLIP_NONE - if no vertices were clipped
+<span class="lineNum">     735 </span>                :            :  *          CLIP_SOME - if some vertices were clipped
+<span class="lineNum">     736 </span>                :            :  */
+<span class="lineNum">     737 </span>                :            : static GLuint userclip_vertices( GLcontext *ctx, GLuint n,
+<span class="lineNum">     738 </span>                :            :                                  /*const*/ GLfloat vEye[][4],
+<a name="739"><span class="lineNum">     739 </span>                :            :                                  GLubyte clipMask[] )</a>
+<span class="lineNum">     740 </span>                :            : {
+<span class="lineNum">     741 </span>                :<span class="lineNoCov">          0 :    GLboolean anyClipped = GL_FALSE;</span>
+<span class="lineNum">     742 </span>                :            :    GLuint p;
+<span class="lineNum">     743 </span>                :            : 
+<span class="lineNum">     744 </span>                :            :    ASSERT(ctx-&gt;Transform.AnyClip);
+<span class="lineNum">     745 </span>                :            : 
+<span class="lineNum">     746 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     747 </span>                :            : 
+<span class="lineNum">     748 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (p=0;p&lt;MAX_CLIP_PLANES;p++) {</span>
+<span class="lineNum">     749 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Transform.ClipEnabled[p]) {</span>
+<span class="lineNum">     750 </span>                :<span class="lineNoCov">          0 :          GLfloat a = ctx-&gt;Transform.ClipEquation[p][0];</span>
+<span class="lineNum">     751 </span>                :<span class="lineNoCov">          0 :          GLfloat b = ctx-&gt;Transform.ClipEquation[p][1];</span>
+<span class="lineNum">     752 </span>                :<span class="lineNoCov">          0 :          GLfloat c = ctx-&gt;Transform.ClipEquation[p][2];</span>
+<span class="lineNum">     753 </span>                :<span class="lineNoCov">          0 :          GLfloat d = ctx-&gt;Transform.ClipEquation[p][3];</span>
+<span class="lineNum">     754 </span>                :<span class="lineNoCov">          0 :          GLboolean allClipped = GL_TRUE;</span>
+<span class="lineNum">     755 </span>                :            :          GLuint i;
+<span class="lineNum">     756 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     757 </span>                :<span class="lineNoCov">          0 :             GLfloat dot = vEye[i][0] * a + vEye[i][1] * b</span>
+<span class="lineNum">     758 </span>                :<span class="lineNoCov">          0 :                         + vEye[i][2] * c + vEye[i][3] * d;</span>
+<span class="lineNum">     759 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (dot &lt; 0.0F) {</span>
+<span class="lineNum">     760 </span>                :            :                /* this vertex is clipped */
+<span class="lineNum">     761 </span>                :<span class="lineNoCov">          0 :                clipMask[i] = CLIP_USER_BIT;</span>
+<span class="lineNum">     762 </span>                :<span class="lineNoCov">          0 :                anyClipped = GL_TRUE;</span>
+<span class="lineNum">     763 </span>                :            :             }
+<span class="lineNum">     764 </span>                :            :             else {
+<span class="lineNum">     765 </span>                :            :                /* vertex not clipped */
+<span class="lineNum">     766 </span>                :<span class="lineNoCov">          0 :                allClipped = GL_FALSE;</span>
+<span class="lineNum">     767 </span>                :            :             }
+<span class="lineNum">     768 </span>                :            :          }
+<span class="lineNum">     769 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (allClipped) {</span>
+<span class="lineNum">     770 </span>                :<span class="lineNoCov">          0 :             return CLIP_ALL;</span>
+<span class="lineNum">     771 </span>                :            :          }
+<span class="lineNum">     772 </span>                :            :       }
+<span class="lineNum">     773 </span>                :            :    }
+<span class="lineNum">     774 </span>                :            : 
+<span class="lineNum">     775 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     776 </span>                :            : 
+<span class="lineNum">     777 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    return anyClipped ? CLIP_SOME : CLIP_NONE;</span>
+<span class="lineNum">     778 </span>                :            : }
+<span class="lineNum">     779 </span>                :            : 
+<span class="lineNum">     780 </span>                :            : 
+<span class="lineNum">     781 </span>                :            : 
+<span class="lineNum">     782 </span>                :            : /*
+<span class="lineNum">     783 </span>                :            :  * Transform an array of vertices from clip coordinate space to window
+<span class="lineNum">     784 </span>                :            :  * coordinates.
+<span class="lineNum">     785 </span>                :            :  * Input:  ctx - the context
+<span class="lineNum">     786 </span>                :            :  *         n - number of vertices to transform
+<span class="lineNum">     787 </span>                :            :  *         vClip - array [n] of input vertices
+<span class="lineNum">     788 </span>                :            :  *         clipMask - array [n] of vertex clip masks.  NULL = no clipped verts
+<a name="789"><span class="lineNum">     789 </span>                :            :  * Output:  vWin - array [n] of vertices in window coordinate system</a>
+<span class="lineNum">     790 </span>                :            :  */
+<span class="lineNum">     791 </span>                :<span class="lineCov">     149000 : static void viewport_map_vertices( GLcontext *ctx,</span>
+<span class="lineNum">     792 </span>                :            :                                    GLuint n, /*const*/ GLfloat vClip[][4],
+<span class="lineNum">     793 </span>                :            :                                    const GLubyte clipMask[], GLfloat vWin[][3])
+<span class="lineNum">     794 </span>                :            : {
+<span class="lineNum">     795 </span>                :<span class="lineCov">     149000 :    GLfloat sx = ctx-&gt;Viewport.Sx;</span>
+<span class="lineNum">     796 </span>                :<span class="lineCov">     149000 :    GLfloat tx = ctx-&gt;Viewport.Tx;</span>
+<span class="lineNum">     797 </span>                :<span class="lineCov">     149000 :    GLfloat sy = ctx-&gt;Viewport.Sy;</span>
+<span class="lineNum">     798 </span>                :<span class="lineCov">     149000 :    GLfloat ty = ctx-&gt;Viewport.Ty;</span>
+<span class="lineNum">     799 </span>                :<span class="lineCov">     149000 :    GLfloat sz = ctx-&gt;Viewport.Sz;</span>
+<span class="lineNum">     800 </span>                :<span class="lineCov">     149000 :    GLfloat tz = ctx-&gt;Viewport.Tz;</span>
+<span class="lineNum">     801 </span>                :            : 
+<span class="lineNum">     802 </span>                :            :    START_FAST_MATH;
+<span class="lineNum">     803 </span>                :            : 
+<span class="lineNum">     804 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if ((ctx-&gt;ProjectionMatrixType==MATRIX_ORTHO || </span>
+<span class="lineNum">     805 </span>                :            :         ctx-&gt;ProjectionMatrixType==MATRIX_IDENTITY)
+<span class="lineNum">     806 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; ctx-&gt;ModelViewMatrixType!=MATRIX_GENERAL</span>
+<span class="lineNum">     807 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; (ctx-&gt;VB-&gt;VertexSizeMask &amp; VERTEX4_BIT)==0) {</span>
+<span class="lineNum">     808 </span>                :            :       /* don't need to divide by W */
+<span class="lineNum">     809 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (clipMask) {</span>
+<span class="lineNum">     810 </span>                :            :          /* one or more vertices are clipped */
+<span class="lineNum">     811 </span>                :            :          GLuint i;
+<span class="lineNum">     812 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     813 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (clipMask[i]==0) {</span>
+<span class="lineNum">     814 </span>                :<span class="lineNoCov">          0 :                vWin[i][0] = vClip[i][0] * sx + tx;</span>
+<span class="lineNum">     815 </span>                :<span class="lineNoCov">          0 :                vWin[i][1] = vClip[i][1] * sy + ty;</span>
+<span class="lineNum">     816 </span>                :<span class="lineNoCov">          0 :                vWin[i][2] = vClip[i][2] * sz + tz;</span>
+<span class="lineNum">     817 </span>                :            :             }
+<span class="lineNum">     818 </span>                :            :          }
+<span class="lineNum">     819 </span>                :            :       }
+<span class="lineNum">     820 </span>                :            :       else {
+<span class="lineNum">     821 </span>                :            :          /* no vertices are clipped */
+<span class="lineNum">     822 </span>                :            :          GLuint i;
+<span class="lineNum">     823 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     824 </span>                :<span class="lineNoCov">          0 :             vWin[i][0] = vClip[i][0] * sx + tx;</span>
+<span class="lineNum">     825 </span>                :<span class="lineNoCov">          0 :             vWin[i][1] = vClip[i][1] * sy + ty;</span>
+<span class="lineNum">     826 </span>                :<span class="lineNoCov">          0 :             vWin[i][2] = vClip[i][2] * sz + tz;</span>
+<span class="lineNum">     827 </span>                :            :          }
+<span class="lineNum">     828 </span>                :            :       }
+<span class="lineNum">     829 </span>                :            :    }
+<span class="lineNum">     830 </span>                :            :    else {
+<span class="lineNum">     831 </span>                :            :       /* need to divide by W */
+<span class="lineNum">     832 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :       if (clipMask) {</span>
+<span class="lineNum">     833 </span>                :            :          /* one or more vertices are clipped */
+<span class="lineNum">     834 </span>                :            :          GLuint i;
+<span class="lineNum">     835 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     836 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (clipMask[i] == 0) {</span>
+<span class="lineNum">     837 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (vClip[i][3] != 0.0F) {</span>
+<span class="lineNum">     838 </span>                :<span class="lineNoCov">          0 :                   GLfloat wInv = 1.0F / vClip[i][3];</span>
+<span class="lineNum">     839 </span>                :<span class="lineNoCov">          0 :                   vWin[i][0] = vClip[i][0] * wInv * sx + tx;</span>
+<span class="lineNum">     840 </span>                :<span class="lineNoCov">          0 :                   vWin[i][1] = vClip[i][1] * wInv * sy + ty;</span>
+<span class="lineNum">     841 </span>                :<span class="lineNoCov">          0 :                   vWin[i][2] = vClip[i][2] * wInv * sz + tz;</span>
+<span class="lineNum">     842 </span>                :            :                }
+<span class="lineNum">     843 </span>                :            :                else {
+<span class="lineNum">     844 </span>                :            :                   /* Div by zero!  Can't set window coords to infinity, so...*/
+<span class="lineNum">     845 </span>                :<span class="lineNoCov">          0 :                   vWin[i][0] = 0.0F;</span>
+<span class="lineNum">     846 </span>                :<span class="lineNoCov">          0 :                   vWin[i][1] = 0.0F;</span>
+<span class="lineNum">     847 </span>                :<span class="lineNoCov">          0 :                   vWin[i][2] = 0.0F;</span>
+<span class="lineNum">     848 </span>                :            :                }
+<span class="lineNum">     849 </span>                :            :             }
+<span class="lineNum">     850 </span>                :            :          }
+<span class="lineNum">     851 </span>                :            :       }
+<span class="lineNum">     852 </span>                :            :       else {
+<span class="lineNum">     853 </span>                :            :          /* no vertices are clipped */
+<span class="lineNum">     854 </span>                :            :          GLuint i;
+<span class="lineNum">     855 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">   44849000 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     856 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">   44700000 :             if (vClip[i][3] != 0.0F) {</span>
+<span class="lineNum">     857 </span>                :<span class="lineCov">   44700000 :                GLfloat wInv = 1.0F / vClip[i][3];</span>
+<span class="lineNum">     858 </span>                :<span class="lineCov">   44700000 :                vWin[i][0] = vClip[i][0] * wInv * sx + tx;</span>
+<span class="lineNum">     859 </span>                :<span class="lineCov">   44700000 :                vWin[i][1] = vClip[i][1] * wInv * sy + ty;</span>
+<span class="lineNum">     860 </span>                :<span class="lineCov">   44700000 :                vWin[i][2] = vClip[i][2] * wInv * sz + tz;</span>
+<span class="lineNum">     861 </span>                :            :             }
+<span class="lineNum">     862 </span>                :            :             else {
+<span class="lineNum">     863 </span>                :            :                /* Divide by zero!  Can't set window coords to infinity, so...*/
+<span class="lineNum">     864 </span>                :<span class="lineNoCov">          0 :                vWin[i][0] = 0.0F;</span>
+<span class="lineNum">     865 </span>                :<span class="lineNoCov">          0 :                vWin[i][1] = 0.0F;</span>
+<span class="lineNum">     866 </span>                :<span class="lineNoCov">          0 :                vWin[i][2] = 0.0F;</span>
+<span class="lineNum">     867 </span>                :            :             }
+<span class="lineNum">     868 </span>                :            :          }
+<span class="lineNum">     869 </span>                :            :       }
+<span class="lineNum">     870 </span>                :            :    }
+<span class="lineNum">     871 </span>                :            : 
+<span class="lineNum">     872 </span>                :            :    END_FAST_MATH;
+<span class="lineNum">     873 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">     874 </span>                :            : 
+<span class="lineNum">     875 </span>                :            : 
+<span class="lineNum">     876 </span>                :            : 
+<span class="lineNum">     877 </span>                :            : /*
+<span class="lineNum">     878 </span>                :            :  * Check if the global material has to be updated with info that was
+<span class="lineNum">     879 </span>                :            :  * associated with a vertex via glMaterial.
+<span class="lineNum">     880 </span>                :            :  * This function is used when any material values get changed between
+<span class="lineNum">     881 </span>                :            :  * glBegin/glEnd either by calling glMaterial() or by calling glColor()
+<a name="882"><span class="lineNum">     882 </span>                :            :  * when GL_COLOR_MATERIAL is enabled.</a>
+<span class="lineNum">     883 </span>                :            :  */
+<span class="lineNum">     884 </span>                :<span class="lineNoCov">          0 : static void update_material( GLcontext *ctx, GLuint i )</span>
+<span class="lineNum">     885 </span>                :            : {
+<span class="lineNum">     886 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     887 </span>                :            : 
+<span class="lineNum">     888 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (VB-&gt;MaterialMask[i]) {</span>
+<span class="lineNum">     889 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_AMBIENT_BIT) {</span>
+<span class="lineNum">     890 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[0].Ambient, VB-&gt;Material[i][0].Ambient );</span>
+<span class="lineNum">     891 </span>                :            :       }
+<span class="lineNum">     892 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_AMBIENT_BIT) {</span>
+<span class="lineNum">     893 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[1].Ambient, VB-&gt;Material[i][1].Ambient );</span>
+<span class="lineNum">     894 </span>                :            :       }
+<span class="lineNum">     895 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_DIFFUSE_BIT) {</span>
+<span class="lineNum">     896 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[0].Diffuse, VB-&gt;Material[i][0].Diffuse );</span>
+<span class="lineNum">     897 </span>                :            :       }
+<span class="lineNum">     898 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_DIFFUSE_BIT) {</span>
+<span class="lineNum">     899 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[1].Diffuse, VB-&gt;Material[i][1].Diffuse );</span>
+<span class="lineNum">     900 </span>                :            :       }
+<span class="lineNum">     901 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_SPECULAR_BIT) {</span>
+<span class="lineNum">     902 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[0].Specular, VB-&gt;Material[i][0].Specular );</span>
+<span class="lineNum">     903 </span>                :            :       }
+<span class="lineNum">     904 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_SPECULAR_BIT) {</span>
+<span class="lineNum">     905 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[1].Specular, VB-&gt;Material[i][1].Specular );</span>
+<span class="lineNum">     906 </span>                :            :       }
+<span class="lineNum">     907 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_EMISSION_BIT) {</span>
+<span class="lineNum">     908 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[0].Emission, VB-&gt;Material[i][0].Emission );</span>
+<span class="lineNum">     909 </span>                :            :       }
+<span class="lineNum">     910 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_EMISSION_BIT) {</span>
+<span class="lineNum">     911 </span>                :<span class="lineNoCov">          0 :          COPY_4V( ctx-&gt;Light.Material[1].Emission, VB-&gt;Material[i][1].Emission );</span>
+<span class="lineNum">     912 </span>                :            :       }
+<span class="lineNum">     913 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_SHININESS_BIT) {</span>
+<span class="lineNum">     914 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[0].Shininess = VB-&gt;Material[i][0].Shininess;</span>
+<span class="lineNum">     915 </span>                :<span class="lineNoCov">          0 :          gl_compute_material_shine_table( &amp;ctx-&gt;Light.Material[0] );</span>
+<span class="lineNum">     916 </span>                :            :       }
+<span class="lineNum">     917 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_SHININESS_BIT) {</span>
+<span class="lineNum">     918 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[1].Shininess = VB-&gt;Material[i][1].Shininess;</span>
+<span class="lineNum">     919 </span>                :<span class="lineNoCov">          0 :          gl_compute_material_shine_table( &amp;ctx-&gt;Light.Material[1] );</span>
+<span class="lineNum">     920 </span>                :            :       }
+<span class="lineNum">     921 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; FRONT_INDEXES_BIT) {</span>
+<span class="lineNum">     922 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[0].AmbientIndex = VB-&gt;Material[i][0].AmbientIndex;</span>
+<span class="lineNum">     923 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[0].DiffuseIndex = VB-&gt;Material[i][0].DiffuseIndex;</span>
+<span class="lineNum">     924 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[0].SpecularIndex = VB-&gt;Material[i][0].SpecularIndex;</span>
+<span class="lineNum">     925 </span>                :            :       }
+<span class="lineNum">     926 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (VB-&gt;MaterialMask[i] &amp; BACK_INDEXES_BIT) {</span>
+<span class="lineNum">     927 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[1].AmbientIndex = VB-&gt;Material[i][1].AmbientIndex;</span>
+<span class="lineNum">     928 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[1].DiffuseIndex = VB-&gt;Material[i][1].DiffuseIndex;</span>
+<span class="lineNum">     929 </span>                :<span class="lineNoCov">          0 :          ctx-&gt;Light.Material[1].SpecularIndex = VB-&gt;Material[i][1].SpecularIndex;</span>
+<span class="lineNum">     930 </span>                :            :       }
+<span class="lineNum">     931 </span>                :<span class="lineNoCov">          0 :       VB-&gt;MaterialMask[i] = 0;  /* reset now */</span>
+<span class="lineNum">     932 </span>                :            :    }
+<span class="lineNum">     933 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     934 </span>                :            : 
+<span class="lineNum">     935 </span>                :            : 
+<span class="lineNum">     936 </span>                :            : /*
+<a name="937"><span class="lineNum">     937 </span>                :            :  * Compute the shading (lighting) for the vertices in the vertex buffer.</a>
+<span class="lineNum">     938 </span>                :            :  */
+<span class="lineNum">     939 </span>                :<span class="lineCov">     149000 : static void shade_vertices( GLcontext *ctx )</span>
+<span class="lineNum">     940 </span>                :            : {
+<span class="lineNum">     941 </span>                :<span class="lineCov">     149000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">     942 </span>                :            : 
+<span class="lineNum">     943 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     944 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :       if (!VB-&gt;MonoMaterial) {</span>
+<span class="lineNum">     945 </span>                :            :          /* Material may change with each vertex */
+<span class="lineNum">     946 </span>                :            :          GLuint i;
+<span class="lineNum">     947 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=VB-&gt;Start; i&lt;VB-&gt;Count; i++) {</span>
+<span class="lineNum">     948 </span>                :<span class="lineNoCov">          0 :             update_material( ctx, i );</span>
+<span class="lineNum">     949 </span>                :<span class="lineNoCov">          0 :             gl_color_shade_vertices( ctx, 0, 1, &amp;VB-&gt;Eye[i],</span>
+<span class="lineNum">     950 </span>                :<span class="lineNoCov">          0 :                                      &amp;VB-&gt;Normal[i], &amp;VB-&gt;Fcolor[i]);</span>
+<span class="lineNum">     951 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">     952 </span>                :<span class="lineNoCov">          0 :                gl_color_shade_vertices( ctx, 1, 1, &amp;VB-&gt;Eye[i],</span>
+<span class="lineNum">     953 </span>                :<span class="lineNoCov">          0 :                                         &amp;VB-&gt;Normal[i], &amp;VB-&gt;Bcolor[i]);</span>
+<span class="lineNum">     954 </span>                :            :             }
+<span class="lineNum">     955 </span>                :            :          }
+<span class="lineNum">     956 </span>                :            :          /* Need this in case a glColor/glMaterial is called after the
+<span class="lineNum">     957 </span>                :            :           * last vertex between glBegin/glEnd.
+<span class="lineNum">     958 </span>                :            :           */
+<span class="lineNum">     959 </span>                :<span class="lineNoCov">          0 :          update_material( ctx, VB-&gt;Count );</span>
+<span class="lineNum">     960 </span>                :            :       }
+<span class="lineNum">     961 </span>                :            :       else {
+<span class="lineNum">     962 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :          if (ctx-&gt;Light.Fast) {</span>
+<span class="lineNum">     963 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :             if (VB-&gt;MonoNormal) {</span>
+<span class="lineNum">     964 </span>                :            :                /* call optimized shader */
+<span class="lineNum">     965 </span>                :            :                GLubyte color[1][4];
+<span class="lineNum">     966 </span>                :            :                GLuint i;
+<span class="lineNum">     967 </span>                :<span class="lineNoCov">          0 :                gl_color_shade_vertices_fast( ctx, 0,  /* front side */</span>
+<span class="lineNum">     968 </span>                :            :                                              1,
+<span class="lineNum">     969 </span>                :<span class="lineNoCov">          0 :                                              VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">     970 </span>                :            :                                              color );
+<span class="lineNum">     971 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                for (i=VB-&gt;Start; i&lt;VB-&gt;Count; i++) {</span>
+<span class="lineNum">     972 </span>                :<span class="lineNoCov">          0 :                   COPY_4V( VB-&gt;Fcolor[i], color[0] );</span>
+<span class="lineNum">     973 </span>                :            :                }
+<span class="lineNum">     974 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">     975 </span>                :<span class="lineNoCov">          0 :                   gl_color_shade_vertices_fast( ctx, 1,  /* back side */</span>
+<span class="lineNum">     976 </span>                :            :                                                 1,
+<span class="lineNum">     977 </span>                :<span class="lineNoCov">          0 :                                                 VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">     978 </span>                :            :                                                 color );
+<span class="lineNum">     979 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                   for (i=VB-&gt;Start; i&lt;VB-&gt;Count; i++) {</span>
+<span class="lineNum">     980 </span>                :<span class="lineNoCov">          0 :                      COPY_4V( VB-&gt;Bcolor[i], color[0] );</span>
+<span class="lineNum">     981 </span>                :            :                   }
+<span class="lineNum">     982 </span>                :            :                }
+<span class="lineNum">     983 </span>                :            : 
+<span class="lineNum">     984 </span>                :            :             }
+<span class="lineNum">     985 </span>                :            :             else {
+<span class="lineNum">     986 </span>                :            :                /* call optimized shader */
+<span class="lineNum">     987 </span>                :<span class="lineCov">     149000 :                gl_color_shade_vertices_fast( ctx, 0,  /* front side */</span>
+<span class="lineNum">     988 </span>                :<span class="lineCov">     149000 :                                              VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">     989 </span>                :<span class="lineCov">     149000 :                                              VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">     990 </span>                :<span class="lineCov">     149000 :                                              VB-&gt;Fcolor + VB-&gt;Start );</span>
+<span class="lineNum">     991 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :                if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">     992 </span>                :<span class="lineNoCov">          0 :                   gl_color_shade_vertices_fast( ctx, 1,  /* back side */</span>
+<span class="lineNum">     993 </span>                :<span class="lineNoCov">          0 :                                                 VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">     994 </span>                :<span class="lineNoCov">          0 :                                                 VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">     995 </span>                :<span class="lineNoCov">          0 :                                                 VB-&gt;Bcolor + VB-&gt;Start );</span>
+<span class="lineNum">     996 </span>                :            :                }
+<span class="lineNum">     997 </span>                :            :             }
+<span class="lineNum">     998 </span>                :            :          }
+<span class="lineNum">     999 </span>                :            :          else {
+<span class="lineNum">    1000 </span>                :            :             /* call slower, full-featured shader */
+<span class="lineNum">    1001 </span>                :<span class="lineNoCov">          0 :             gl_color_shade_vertices( ctx, 0,</span>
+<span class="lineNum">    1002 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1003 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1004 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">    1005 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Fcolor + VB-&gt;Start );</span>
+<span class="lineNum">    1006 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">    1007 </span>                :<span class="lineNoCov">          0 :                gl_color_shade_vertices( ctx, 1,</span>
+<span class="lineNum">    1008 </span>                :<span class="lineNoCov">          0 :                                         VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1009 </span>                :<span class="lineNoCov">          0 :                                         VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1010 </span>                :<span class="lineNoCov">          0 :                                         VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">    1011 </span>                :<span class="lineNoCov">          0 :                                         VB-&gt;Bcolor + VB-&gt;Start );</span>
+<span class="lineNum">    1012 </span>                :            :             }
+<span class="lineNum">    1013 </span>                :            :          }
+<span class="lineNum">    1014 </span>                :            :       }
+<span class="lineNum">    1015 </span>                :            :    }
+<span class="lineNum">    1016 </span>                :            :    else {
+<span class="lineNum">    1017 </span>                :            :       /* Color index mode */
+<span class="lineNum">    1018 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (!VB-&gt;MonoMaterial) {</span>
+<span class="lineNum">    1019 </span>                :            :          /* Material may change with each vertex */
+<span class="lineNum">    1020 </span>                :            :          GLuint i;
+<span class="lineNum">    1021 </span>                :            :          /* NOTE the &lt;= here.  This is needed in case glColor/glMaterial
+<span class="lineNum">    1022 </span>                :            :           * is called after the last glVertex inside a glBegin/glEnd pair.
+<span class="lineNum">    1023 </span>                :            :           */
+<span class="lineNum">    1024 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=VB-&gt;Start; i&lt;VB-&gt;Count; i++) {</span>
+<span class="lineNum">    1025 </span>                :<span class="lineNoCov">          0 :             update_material( ctx, i );</span>
+<span class="lineNum">    1026 </span>                :<span class="lineNoCov">          0 :             gl_index_shade_vertices( ctx, 0, 1, &amp;VB-&gt;Eye[i],</span>
+<span class="lineNum">    1027 </span>                :<span class="lineNoCov">          0 :                                      &amp;VB-&gt;Normal[i], &amp;VB-&gt;Findex[i] );</span>
+<span class="lineNum">    1028 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">    1029 </span>                :<span class="lineNoCov">          0 :                gl_index_shade_vertices( ctx, 1, 1, &amp;VB-&gt;Eye[i],</span>
+<span class="lineNum">    1030 </span>                :<span class="lineNoCov">          0 :                                         &amp;VB-&gt;Normal[i], &amp;VB-&gt;Bindex[i] );</span>
+<span class="lineNum">    1031 </span>                :            :             }
+<span class="lineNum">    1032 </span>                :            :          }
+<span class="lineNum">    1033 </span>                :            :          /* Need this in case a glColor/glMaterial is called after the
+<span class="lineNum">    1034 </span>                :            :           * last vertex between glBegin/glEnd.
+<span class="lineNum">    1035 </span>                :            :           */
+<span class="lineNum">    1036 </span>                :<span class="lineNoCov">          0 :          update_material( ctx, VB-&gt;Count );</span>
+<span class="lineNum">    1037 </span>                :            :       }
+<span class="lineNum">    1038 </span>                :            :       else {
+<span class="lineNum">    1039 </span>                :<span class="lineNoCov">          0 :          gl_index_shade_vertices( ctx, 0,</span>
+<span class="lineNum">    1040 </span>                :<span class="lineNoCov">          0 :                                   VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1041 </span>                :<span class="lineNoCov">          0 :                                   VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1042 </span>                :<span class="lineNoCov">          0 :                                   VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">    1043 </span>                :<span class="lineNoCov">          0 :                                   VB-&gt;Findex + VB-&gt;Start );</span>
+<span class="lineNum">    1044 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Light.Model.TwoSide) {</span>
+<span class="lineNum">    1045 </span>                :<span class="lineNoCov">          0 :             gl_index_shade_vertices( ctx, 1,</span>
+<span class="lineNum">    1046 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1047 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1048 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">    1049 </span>                :<span class="lineNoCov">          0 :                                      VB-&gt;Bindex + VB-&gt;Start );</span>
+<span class="lineNum">    1050 </span>                :            :          }
+<span class="lineNum">    1051 </span>                :            :       }
+<span class="lineNum">    1052 </span>                :            :    }
+<span class="lineNum">    1053 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">    1054 </span>                :            : 
+<span class="lineNum">    1055 </span>                :            : 
+<span class="lineNum">    1056 </span>                :            : 
+<span class="lineNum">    1057 </span>                :            : /*
+<a name="1058"><span class="lineNum">    1058 </span>                :            :  * Compute fog for the vertices in the vertex buffer.</a>
+<span class="lineNum">    1059 </span>                :            :  */
+<span class="lineNum">    1060 </span>                :<span class="lineNoCov">          0 : static void fog_vertices( GLcontext *ctx )</span>
+<span class="lineNum">    1061 </span>                :            : {
+<span class="lineNum">    1062 </span>                :<span class="lineNoCov">          0 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1063 </span>                :            : 
+<span class="lineNum">    1064 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">    1065 </span>                :            :       /* Fog RGB colors */
+<span class="lineNum">    1066 </span>                :<span class="lineNoCov">          0 :       gl_fog_color_vertices( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1067 </span>                :<span class="lineNoCov">          0 :                              VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1068 </span>                :<span class="lineNoCov">          0 :                              VB-&gt;Fcolor + VB-&gt;Start );</span>
+<span class="lineNum">    1069 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;LightTwoSide) {</span>
+<span class="lineNum">    1070 </span>                :<span class="lineNoCov">          0 :          gl_fog_color_vertices( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1071 </span>                :<span class="lineNoCov">          0 :                                 VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1072 </span>                :<span class="lineNoCov">          0 :                                 VB-&gt;Bcolor + VB-&gt;Start );</span>
+<span class="lineNum">    1073 </span>                :            :       }
+<span class="lineNum">    1074 </span>                :            :    }
+<span class="lineNum">    1075 </span>                :            :    else {
+<span class="lineNum">    1076 </span>                :            :       /* Fog color indexes */
+<span class="lineNum">    1077 </span>                :<span class="lineNoCov">          0 :       gl_fog_index_vertices( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1078 </span>                :<span class="lineNoCov">          0 :                              VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1079 </span>                :<span class="lineNoCov">          0 :                              VB-&gt;Findex + VB-&gt;Start );</span>
+<span class="lineNum">    1080 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;LightTwoSide) {</span>
+<span class="lineNum">    1081 </span>                :<span class="lineNoCov">          0 :          gl_fog_index_vertices( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1082 </span>                :<span class="lineNoCov">          0 :                                 VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1083 </span>                :<span class="lineNoCov">          0 :                                 VB-&gt;Bindex + VB-&gt;Start );</span>
+<span class="lineNum">    1084 </span>                :            :       }
+<span class="lineNum">    1085 </span>                :            :    }
+<span class="lineNum">    1086 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1087 </span>                :            : 
+<span class="lineNum">    1088 </span>                :            : 
+<span class="lineNum">    1089 </span>                :            : 
+<span class="lineNum">    1090 </span>                :            : /*
+<span class="lineNum">    1091 </span>                :            :  * When the Vertex Buffer is full, this function applies the modelview
+<span class="lineNum">    1092 </span>                :            :  * matrix to transform vertices and normals from object coordinates to
+<span class="lineNum">    1093 </span>                :            :  * eye coordinates.  Next, we'll call gl_transform_vb_part2()...
+<a name="1094"><span class="lineNum">    1094 </span>                :            :  * This function might not be called when using vertex arrays.</a>
+<span class="lineNum">    1095 </span>                :            :  */
+<span class="lineNum">    1096 </span>                :<span class="lineCov">     149000 : void gl_transform_vb_part1( GLcontext *ctx, GLboolean allDone )</span>
+<span class="lineNum">    1097 </span>                :            : {
+<span class="lineNum">    1098 </span>                :<span class="lineCov">     149000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1099 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1100 </span>                :            :    GLdouble t0 = gl_time();
+<span class="lineNum">    1101 </span>                :            : #endif
+<span class="lineNum">    1102 </span>                :            : 
+<span class="lineNum">    1103 </span>                :            :    ASSERT( VB-&gt;Count&gt;0 );
+<span class="lineNum">    1104 </span>                :            : 
+<span class="lineNum">    1105 </span>                :            :    /* Apply the modelview matrix to transform vertexes from Object
+<span class="lineNum">    1106 </span>                :            :     * to Eye coords.
+<span class="lineNum">    1107 </span>                :            :     */
+<span class="lineNum">    1108 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (VB-&gt;VertexSizeMask==VERTEX4_BIT) {</span>
+<span class="lineNum">    1109 </span>                :<span class="lineNoCov">          0 :       transform_points4( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1110 </span>                :<span class="lineNoCov">          0 :                          VB-&gt;Obj + VB-&gt;Start, VB-&gt;Eye + VB-&gt;Start );</span>
+<span class="lineNum">    1111 </span>                :            :    }
+<span class="lineNum">    1112 </span>                :            :    else {
+<span class="lineNum">    1113 </span>                :<span class="lineCov">     149000 :       transform_points3( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1114 </span>                :<span class="lineCov">     298000 :                          VB-&gt;Obj + VB-&gt;Start, VB-&gt;Eye + VB-&gt;Start );</span>
+<span class="lineNum">    1115 </span>                :            :    }
+<span class="lineNum">    1116 </span>                :            : 
+<span class="lineNum">    1117 </span>                :            :    /* Now transform the normal vectors */
+<span class="lineNum">    1118 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;NeedNormals) {</span>
+<span class="lineNum">    1119 </span>                :<span class="lineCov">     149000 :       gl_xform_normals_3fv( VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1120 </span>                :<span class="lineCov">     149000 :                             VB-&gt;Normal + VB-&gt;Start, ctx-&gt;ModelViewInv,</span>
+<span class="lineNum">    1121 </span>                :<span class="lineCov">     298000 :                             VB-&gt;Normal + VB-&gt;Start, ctx-&gt;Transform.Normalize );</span>
+<span class="lineNum">    1122 </span>                :            :    }
+<span class="lineNum">    1123 </span>                :            : 
+<span class="lineNum">    1124 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1125 </span>                :            :    ctx-&gt;VertexTime += gl_time() - t0;
+<span class="lineNum">    1126 </span>                :            : #endif
+<span class="lineNum">    1127 </span>                :            : 
+<span class="lineNum">    1128 </span>                :            :    /* lighting, project, etc */
+<span class="lineNum">    1129 </span>                :<span class="lineCov">     149000 :    gl_transform_vb_part2( ctx, allDone );</span>
+<span class="lineNum">    1130 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">    1131 </span>                :            : 
+<span class="lineNum">    1132 </span>                :            : 
+<span class="lineNum">    1133 </span>                :            : 
+<span class="lineNum">    1134 </span>                :            : /*
+<span class="lineNum">    1135 </span>                :            :  * Part 2 of Vertex Buffer transformation:  compute lighting, clipflags,
+<span class="lineNum">    1136 </span>                :            :  * fog, texture coords, etc.
+<span class="lineNum">    1137 </span>                :            :  * Before this function is called the VB-&gt;Eye coordinates must have
+<span class="lineNum">    1138 </span>                :            :  * already been computed.
+<span class="lineNum">    1139 </span>                :            :  * Callers:  gl_transform_vb_part1(), glDrawArraysEXT()
+<span class="lineNum">    1140 </span>                :            :  */
+<span class="lineNum">    1141 </span>                :<span class="lineCov">     149000 : void gl_transform_vb_part2( GLcontext *ctx, GLboolean allDone )</span>
+<span class="lineNum">    1142 </span>                :            : {
+<span class="lineNum">    1143 </span>                :<span class="lineCov">     149000 :    struct vertex_buffer *VB = ctx-&gt;VB;</span>
+<span class="lineNum">    1144 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1145 </span>                :            :    GLdouble t0 = gl_time();
+<span class="lineNum">    1146 </span>                :            : #endif
+<span class="lineNum">    1147 </span>                :            : 
+<span class="lineNum">    1148 </span>                :            :    ASSERT( VB-&gt;Count&gt;0 );
+<span class="lineNum">    1149 </span>                :            : 
+<span class="lineNum">    1150 </span>                :            :    /* Test vertices in eye coordinate space against user clipping planes */
+<span class="lineNum">    1151 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Transform.AnyClip) {</span>
+<span class="lineNum">    1152 </span>                :<span class="lineNoCov">          0 :       GLuint result = userclip_vertices( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1153 </span>                :<span class="lineNoCov">          0 :                                          VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1154 </span>                :<span class="lineNoCov">          0 :                                          VB-&gt;ClipMask + VB-&gt;Start );</span>
+<span class="lineNum">    1155 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (result==CLIP_ALL) {</span>
+<span class="lineNum">    1156 </span>                :            :          /* All vertices were outside one of the clip planes! */
+<span class="lineNum">    1157 </span>                :<span class="lineNoCov">          0 :          gl_reset_vb( ctx, allDone );</span>
+<span class="lineNum">    1158 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">    1159 </span>                :            :       }
+<span class="lineNum">    1160 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       else if (result==CLIP_SOME) {</span>
+<span class="lineNum">    1161 </span>                :<span class="lineNoCov">          0 :          VB-&gt;ClipOrMask = CLIP_USER_BIT;</span>
+<span class="lineNum">    1162 </span>                :            :       }
+<span class="lineNum">    1163 </span>                :            :       else {
+<span class="lineNum">    1164 </span>                :<span class="lineNoCov">          0 :          VB-&gt;ClipAndMask = 0;</span>
+<span class="lineNum">    1165 </span>                :            :       }
+<span class="lineNum">    1166 </span>                :            :    }
+<span class="lineNum">    1167 </span>                :            : 
+<span class="lineNum">    1168 </span>                :            :    /* Apply the projection matrix to the Eye coordinates, resulting in
+<span class="lineNum">    1169 </span>                :            :     * Clip coordinates.  Also, compute the ClipMask for each vertex.
+<span class="lineNum">    1170 </span>                :            :     */
+<span class="lineNum">    1171 </span>                :<span class="lineCov">     149000 :    project_and_cliptest( ctx, VB-&gt;Count - VB-&gt;Start, VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1172 </span>                :<span class="lineCov">     298000 :                          VB-&gt;Clip + VB-&gt;Start, VB-&gt;ClipMask + VB-&gt;Start,</span>
+<span class="lineNum">    1173 </span>                :            :                          &amp;VB-&gt;ClipOrMask, &amp;VB-&gt;ClipAndMask );
+<span class="lineNum">    1174 </span>                :            : 
+<span class="lineNum">    1175 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (VB-&gt;ClipAndMask) {</span>
+<span class="lineNum">    1176 </span>                :            :       /* All vertices clipped by one plane, all done! */
+<span class="lineNum">    1177 </span>                :<span class="lineNoCov">          0 :       gl_reset_vb( ctx, allDone );</span>
+<span class="lineNum">    1178 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">    1179 </span>                :            :    }
+<span class="lineNum">    1180 </span>                :            : 
+<span class="lineNum">    1181 </span>                :            :    /* Lighting */
+<span class="lineNum">    1182 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Light.Enabled) {</span>
+<span class="lineNum">    1183 </span>                :<span class="lineCov">     149000 :       shade_vertices(ctx);</span>
+<span class="lineNum">    1184 </span>                :            :    }
+<span class="lineNum">    1185 </span>                :            : 
+<span class="lineNum">    1186 </span>                :            :    /* Per-vertex fog */
+<span class="lineNum">    1187 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Fog.Enabled &amp;&amp; ctx-&gt;Hint.Fog!=GL_NICEST) {</span>
+<span class="lineNum">    1188 </span>                :<span class="lineNoCov">          0 :       fog_vertices(ctx);</span>
+<span class="lineNum">    1189 </span>                :            :    }
+<span class="lineNum">    1190 </span>                :            : 
+<span class="lineNum">    1191 </span>                :            :    /* Generate/transform texture coords */
+<span class="lineNum">    1192 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Texture.Enabled || ctx-&gt;RenderMode==GL_FEEDBACK) {</span>
+<span class="lineNum">    1193 </span>        [<span class="branchCov" title="Branch 0 was taken 149000 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">     149000 :       if (ctx-&gt;Texture.TexGenEnabled) {</span>
+<span class="lineNum">    1194 </span>                :<span class="lineCov">     149000 :          gl_texgen( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1195 </span>                :<span class="lineCov">     149000 :                     VB-&gt;Obj + VB-&gt;Start,</span>
+<span class="lineNum">    1196 </span>                :<span class="lineCov">     149000 :                     VB-&gt;Eye + VB-&gt;Start,</span>
+<span class="lineNum">    1197 </span>                :<span class="lineCov">     149000 :                     VB-&gt;Normal + VB-&gt;Start,</span>
+<span class="lineNum">    1198 </span>                :<span class="lineCov">     149000 :                     VB-&gt;TexCoord + VB-&gt;Start );</span>
+<span class="lineNum">    1199 </span>                :            :       }
+<span class="lineNum">    1200 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :       if (ctx-&gt;NewTextureMatrix) {</span>
+<span class="lineNum">    1201 </span>                :<span class="lineNoCov">          0 :          gl_analyze_texture_matrix(ctx);</span>
+<span class="lineNum">    1202 </span>                :            :       }
+<span class="lineNum">    1203 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :       if (ctx-&gt;TextureMatrixType!=MATRIX_IDENTITY) {</span>
+<span class="lineNum">    1204 </span>                :<span class="lineNoCov">          0 :          transform_texcoords( ctx, VB-&gt;Count - VB-&gt;Start,</span>
+<span class="lineNum">    1205 </span>                :<span class="lineNoCov">          0 :                               VB-&gt;TexCoord + VB-&gt;Start );</span>
+<span class="lineNum">    1206 </span>                :            :       }
+<span class="lineNum">    1207 </span>                :            :    }
+<span class="lineNum">    1208 </span>                :            : 
+<span class="lineNum">    1209 </span>                :            :    /* Use the viewport parameters to transform vertices from Clip
+<span class="lineNum">    1210 </span>                :            :     * coordinates to Window coordinates.
+<span class="lineNum">    1211 </span>                :            :     */
+<span class="lineNum">    1212 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    viewport_map_vertices( ctx, VB-&gt;Count - VB-&gt;Start, VB-&gt;Clip + VB-&gt;Start,</span>
+<span class="lineNum">    1213 </span>                :<span class="lineCov">     149000 :                           VB-&gt;ClipOrMask ? VB-&gt;ClipMask + VB-&gt;Start : NULL,</span>
+<span class="lineNum">    1214 </span>                :<span class="lineCov">     149000 :                           VB-&gt;Win + VB-&gt;Start );</span>
+<span class="lineNum">    1215 </span>                :            : 
+<span class="lineNum">    1216 </span>                :            :    /* Device driver rasterization setup.  3Dfx driver, for example. */
+<span class="lineNum">    1217 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (ctx-&gt;Driver.RasterSetup) {</span>
+<span class="lineNum">    1218 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.RasterSetup)( ctx, 0, VB-&gt;Count );</span>
+<span class="lineNum">    1219 </span>                :            :    }
+<span class="lineNum">    1220 </span>                :            : 
+<span class="lineNum">    1221 </span>                :            : 
+<span class="lineNum">    1222 </span>                :            : #ifdef PROFILE
+<span class="lineNum">    1223 </span>                :            :    ctx-&gt;VertexTime += gl_time() - t0;
+<span class="lineNum">    1224 </span>                :            :    ctx-&gt;VertexCount += VB-&gt;Count - VB-&gt;Start;
+<span class="lineNum">    1225 </span>                :            : #endif
+<span class="lineNum">    1226 </span>                :            : 
+<span class="lineNum">    1227 </span>                :            :    /*
+<span class="lineNum">    1228 </span>                :            :     * Now we're ready to rasterize the Vertex Buffer!!!
+<span class="lineNum">    1229 </span>                :            :     *
+<span class="lineNum">    1230 </span>                :            :     * If the device driver can't rasterize the vertex buffer then we'll
+<span class="lineNum">    1231 </span>                :            :     * do it ourselves.
+<span class="lineNum">    1232 </span>                :            :     */
+<span class="lineNum">    1233 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>][<span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span>]:<span class="lineCov">     149000 :    if (!ctx-&gt;Driver.RenderVB || !(*ctx-&gt;Driver.RenderVB)(ctx,allDone)) {</span>
+<span class="lineNum">    1234 </span>                :<span class="lineCov">     149000 :       gl_render_vb( ctx, allDone );</span>
+<span class="lineNum">    1235 </span>                :            :    }
+<span class="lineNum">    1236 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

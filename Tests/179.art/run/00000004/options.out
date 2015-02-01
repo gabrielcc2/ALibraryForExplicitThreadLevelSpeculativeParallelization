@@ -1,0 +1,2 @@
+COMP: gcc -c -o options.o            -O3   
+LINK: gcc     -O3       -lm  -o options

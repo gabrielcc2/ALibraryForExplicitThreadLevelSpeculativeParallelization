@@ -1,0 +1,651 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/pointers.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - pointers.c<span style="font-size: 80%;"> (source / <a href="pointers.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">382</td>
+            <td class="headerCovTableEntry">384</td>
+            <td class="headerCovTableEntryHi">99.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: pointers.c,v 1.20 1997/10/29 01:29:09 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: pointers.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.20  1997/10/29 01:29:09  brianp
+<span class="lineNum">      27 </span>                :            :  * added GL_EXT_point_parameters extension from Daniel Barrero
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.19  1997/09/27 00:16:30  brianp
+<span class="lineNum">      30 </span>                :            :  * added GL_EXT_paletted_texture extension
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.18  1997/07/24 01:23:44  brianp
+<span class="lineNum">      33 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.17  1997/06/20 02:50:55  brianp
+<span class="lineNum">      36 </span>                :            :  * added Color4ubv API pointer
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.16  1997/05/28 03:26:02  brianp
+<span class="lineNum">      39 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.15  1997/05/24 12:08:25  brianp
+<span class="lineNum">      42 </span>                :            :  * broke gl_init_api_function_pointers() into sub-functions
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.14  1997/04/24 01:50:53  brianp
+<span class="lineNum">      45 </span>                :            :  * optimized glColor3f, glColor3fv, glColor4fv
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.13  1997/04/21 01:22:27  brianp
+<span class="lineNum">      48 </span>                :            :  * added gl_save_Rectf()
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.12  1997/04/20 20:28:49  brianp
+<span class="lineNum">      51 </span>                :            :  * replaced abort() with gl_problem()
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.11  1997/04/20 16:18:15  brianp
+<span class="lineNum">      54 </span>                :            :  * added glOrtho and glFrustum API pointers
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  * Revision 1.10  1997/04/16 23:55:33  brianp
+<span class="lineNum">      57 </span>                :            :  * added optimized glTexCoord2f code
+<span class="lineNum">      58 </span>                :            :  *
+<span class="lineNum">      59 </span>                :            :  * Revision 1.9  1997/04/14 22:18:23  brianp
+<span class="lineNum">      60 </span>                :            :  * added optimized glVertex3fv code
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  * Revision 1.8  1997/04/14 02:00:39  brianp
+<span class="lineNum">      63 </span>                :            :  * #include &quot;texstate.h&quot; instead of &quot;texture.h&quot;
+<span class="lineNum">      64 </span>                :            :  *
+<span class="lineNum">      65 </span>                :            :  * Revision 1.7  1997/04/12 12:33:12  brianp
+<span class="lineNum">      66 </span>                :            :  * added #include &quot;rect.h&quot;
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  * Revision 1.6  1997/04/07 02:57:13  brianp
+<span class="lineNum">      69 </span>                :            :  * added API.Vertex[23] functions
+<span class="lineNum">      70 </span>                :            :  *
+<span class="lineNum">      71 </span>                :            :  * Revision 1.5  1997/04/01 04:25:18  brianp
+<span class="lineNum">      72 </span>                :            :  * added pointer for LoadIdentity, changed #include's
+<span class="lineNum">      73 </span>                :            :  *
+<span class="lineNum">      74 </span>                :            :  * Revision 1.4  1997/02/10 19:49:29  brianp
+<span class="lineNum">      75 </span>                :            :  * added glResizeBuffersMESA() code
+<span class="lineNum">      76 </span>                :            :  *
+<span class="lineNum">      77 </span>                :            :  * Revision 1.3  1997/02/09 18:50:42  brianp
+<span class="lineNum">      78 </span>                :            :  * added GL_EXT_texture3D support
+<span class="lineNum">      79 </span>                :            :  *
+<span class="lineNum">      80 </span>                :            :  * Revision 1.2  1996/10/16 00:52:22  brianp
+<span class="lineNum">      81 </span>                :            :  * gl_initialize_api_function_pointers() now gl_init_api_function_pointers()
+<span class="lineNum">      82 </span>                :            :  *
+<span class="lineNum">      83 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      84 </span>                :            :  * Initial revision
+<span class="lineNum">      85 </span>                :            :  *
+<span class="lineNum">      86 </span>                :            :  */
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :            : 
+<span class="lineNum">      89 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      90 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      91 </span>                :            : #else
+<span class="lineNum">      92 </span>                :            : #include &lt;stdio.h&gt;
+<span class="lineNum">      93 </span>                :            : #include &lt;stdlib.h&gt;
+<span class="lineNum">      94 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      95 </span>                :            : #include &quot;accum.h&quot;
+<span class="lineNum">      96 </span>                :            : #include &quot;alpha.h&quot;
+<span class="lineNum">      97 </span>                :            : #include &quot;attrib.h&quot;
+<span class="lineNum">      98 </span>                :            : #include &quot;bitmap.h&quot;
+<span class="lineNum">      99 </span>                :            : #include &quot;blend.h&quot;
+<span class="lineNum">     100 </span>                :            : #include &quot;clip.h&quot;
+<span class="lineNum">     101 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">     102 </span>                :            : #include &quot;colortab.h&quot;
+<span class="lineNum">     103 </span>                :            : #include &quot;copypix.h&quot;
+<span class="lineNum">     104 </span>                :            : #include &quot;depth.h&quot;
+<span class="lineNum">     105 </span>                :            : #include &quot;drawpix.h&quot;
+<span class="lineNum">     106 </span>                :            : #include &quot;enable.h&quot;
+<span class="lineNum">     107 </span>                :            : #include &quot;eval.h&quot;
+<span class="lineNum">     108 </span>                :            : #include &quot;feedback.h&quot;
+<span class="lineNum">     109 </span>                :            : #include &quot;fog.h&quot;
+<span class="lineNum">     110 </span>                :            : #include &quot;get.h&quot;
+<span class="lineNum">     111 </span>                :            : #include &quot;light.h&quot;
+<span class="lineNum">     112 </span>                :            : #include &quot;lines.h&quot;
+<span class="lineNum">     113 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">     114 </span>                :            : #include &quot;logic.h&quot;
+<span class="lineNum">     115 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">     116 </span>                :            : #include &quot;masking.h&quot;
+<span class="lineNum">     117 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">     118 </span>                :            : #include &quot;misc.h&quot;
+<span class="lineNum">     119 </span>                :            : #include &quot;pixel.h&quot;
+<span class="lineNum">     120 </span>                :            : #include &quot;points.h&quot;
+<span class="lineNum">     121 </span>                :            : #include &quot;polygon.h&quot;
+<span class="lineNum">     122 </span>                :            : #include &quot;rastpos.h&quot;
+<span class="lineNum">     123 </span>                :            : #include &quot;readpix.h&quot;
+<span class="lineNum">     124 </span>                :            : #include &quot;rect.h&quot;
+<span class="lineNum">     125 </span>                :            : #include &quot;scissor.h&quot;
+<span class="lineNum">     126 </span>                :            : #include &quot;stencil.h&quot;
+<span class="lineNum">     127 </span>                :            : #include &quot;teximage.h&quot;
+<span class="lineNum">     128 </span>                :            : #include &quot;texobj.h&quot;
+<span class="lineNum">     129 </span>                :            : #include &quot;texstate.h&quot;
+<span class="lineNum">     130 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">     131 </span>                :            : #include &quot;varray.h&quot;
+<span class="lineNum">     132 </span>                :            : #include &quot;vbfill.h&quot;
+<span class="lineNum">     133 </span>                :            : #include &quot;winpos.h&quot;
+<span class="lineNum">     134 </span>                :            : #endif
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :            : 
+<span class="lineNum">     137 </span>                :            : 
+<span class="lineNum">     138 </span>                :            : /*
+<a name="139"><span class="lineNum">     139 </span>                :            :  * For debugging</a>
+<span class="lineNum">     140 </span>                :            :  */
+<span class="lineNum">     141 </span>                :<span class="lineCov">          2 : static void check_pointers( struct gl_api_table *table )</span>
+<span class="lineNum">     142 </span>                :            : {
+<span class="lineNum">     143 </span>                :            :    void **entry;
+<span class="lineNum">     144 </span>                :<span class="lineCov">          2 :    int numentries = sizeof( struct gl_api_table ) / sizeof(void*);</span>
+<span class="lineNum">     145 </span>                :            :    int i;
+<span class="lineNum">     146 </span>                :            : 
+<span class="lineNum">     147 </span>                :<span class="lineCov">          2 :    entry = (void **) table;</span>
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>        [<span class="branchCov" title="Branch 0 was taken 366 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">        368 :    for (i=0;i&lt;numentries;i++) {</span>
+<span class="lineNum">     150 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 366 times"> + </span>]:<span class="lineCov">        366 :       if (!entry[i]) {</span>
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :          printf(&quot;found uninitialized function pointer at %d\n&quot;, i );</span>
+<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :          gl_problem(NULL, &quot;Missing pointer in pointers.c&quot;);</span>
+<span class="lineNum">     153 </span>                :            :          /*abort()*/
+<span class="lineNum">     154 </span>                :            :       }
+<span class="lineNum">     155 </span>                :            :    }
+<span class="lineNum">     156 </span>                :<span class="lineCov">          2 : }</span>
+<span class="lineNum">     157 </span>                :            : 
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :            : /*
+<span class="lineNum">     160 </span>                :            :  * Assign all the pointers in 'table' to point to Mesa's immediate-mode
+<a name="161"><span class="lineNum">     161 </span>                :            :  * execution functions.</a>
+<span class="lineNum">     162 </span>                :            :  */
+<span class="lineNum">     163 </span>                :<span class="lineCov">          1 : static void init_exec_pointers( struct gl_api_table *table )</span>
+<span class="lineNum">     164 </span>                :            : {
+<span class="lineNum">     165 </span>                :<span class="lineCov">          1 :    table-&gt;Accum = gl_Accum;</span>
+<span class="lineNum">     166 </span>                :<span class="lineCov">          1 :    table-&gt;AlphaFunc = gl_AlphaFunc;</span>
+<span class="lineNum">     167 </span>                :<span class="lineCov">          1 :    table-&gt;AreTexturesResident = gl_AreTexturesResident;</span>
+<span class="lineNum">     168 </span>                :<span class="lineCov">          1 :    table-&gt;ArrayElement = gl_ArrayElement;</span>
+<span class="lineNum">     169 </span>                :<span class="lineCov">          1 :    table-&gt;Begin = gl_Begin;</span>
+<span class="lineNum">     170 </span>                :<span class="lineCov">          1 :    table-&gt;BindTexture = gl_BindTexture;</span>
+<span class="lineNum">     171 </span>                :<span class="lineCov">          1 :    table-&gt;Bitmap = gl_Bitmap;</span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">          1 :    table-&gt;BlendColor = gl_BlendColor;</span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">          1 :    table-&gt;BlendEquation = gl_BlendEquation;</span>
+<span class="lineNum">     174 </span>                :<span class="lineCov">          1 :    table-&gt;BlendFunc = gl_BlendFunc;</span>
+<span class="lineNum">     175 </span>                :<span class="lineCov">          1 :    table-&gt;CallList = gl_CallList;</span>
+<span class="lineNum">     176 </span>                :<span class="lineCov">          1 :    table-&gt;CallLists = gl_CallLists;</span>
+<span class="lineNum">     177 </span>                :<span class="lineCov">          1 :    table-&gt;Clear = gl_Clear;</span>
+<span class="lineNum">     178 </span>                :<span class="lineCov">          1 :    table-&gt;ClearAccum = gl_ClearAccum;</span>
+<span class="lineNum">     179 </span>                :<span class="lineCov">          1 :    table-&gt;ClearColor = gl_ClearColor;</span>
+<span class="lineNum">     180 </span>                :<span class="lineCov">          1 :    table-&gt;ClearDepth = gl_ClearDepth;</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">          1 :    table-&gt;ClearIndex = gl_ClearIndex;</span>
+<span class="lineNum">     182 </span>                :<span class="lineCov">          1 :    table-&gt;ClearStencil = gl_ClearStencil;</span>
+<span class="lineNum">     183 </span>                :<span class="lineCov">          1 :    table-&gt;ClipPlane = gl_ClipPlane;</span>
+<span class="lineNum">     184 </span>                :<span class="lineCov">          1 :    table-&gt;Color3f = gl_Color3f;</span>
+<span class="lineNum">     185 </span>                :<span class="lineCov">          1 :    table-&gt;Color3fv = gl_Color3fv;</span>
+<span class="lineNum">     186 </span>                :<span class="lineCov">          1 :    table-&gt;Color4f = gl_Color4f;</span>
+<span class="lineNum">     187 </span>                :<span class="lineCov">          1 :    table-&gt;Color4fv = gl_Color4fv;</span>
+<span class="lineNum">     188 </span>                :<span class="lineCov">          1 :    table-&gt;Color4ub = gl_Color4ub;</span>
+<span class="lineNum">     189 </span>                :<span class="lineCov">          1 :    table-&gt;Color4ubv = gl_Color4ubv;</span>
+<span class="lineNum">     190 </span>                :<span class="lineCov">          1 :    table-&gt;ColorMask = gl_ColorMask;</span>
+<span class="lineNum">     191 </span>                :<span class="lineCov">          1 :    table-&gt;ColorMaterial = gl_ColorMaterial;</span>
+<span class="lineNum">     192 </span>                :<span class="lineCov">          1 :    table-&gt;ColorPointer = gl_ColorPointer;</span>
+<span class="lineNum">     193 </span>                :<span class="lineCov">          1 :    table-&gt;ColorTable = gl_ColorTable;</span>
+<span class="lineNum">     194 </span>                :<span class="lineCov">          1 :    table-&gt;ColorSubTable = gl_ColorSubTable;</span>
+<span class="lineNum">     195 </span>                :<span class="lineCov">          1 :    table-&gt;CopyPixels = gl_CopyPixels;</span>
+<span class="lineNum">     196 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexImage1D = gl_CopyTexImage1D;</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexImage2D = gl_CopyTexImage2D;</span>
+<span class="lineNum">     198 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage1D = gl_CopyTexSubImage1D;</span>
+<span class="lineNum">     199 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage2D = gl_CopyTexSubImage2D;</span>
+<span class="lineNum">     200 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage3DEXT = gl_CopyTexSubImage3DEXT;</span>
+<span class="lineNum">     201 </span>                :<span class="lineCov">          1 :    table-&gt;CullFace = gl_CullFace;</span>
+<span class="lineNum">     202 </span>                :<span class="lineCov">          1 :    table-&gt;DeleteLists = gl_DeleteLists;</span>
+<span class="lineNum">     203 </span>                :<span class="lineCov">          1 :    table-&gt;DeleteTextures = gl_DeleteTextures;</span>
+<span class="lineNum">     204 </span>                :<span class="lineCov">          1 :    table-&gt;DepthFunc = gl_DepthFunc;</span>
+<span class="lineNum">     205 </span>                :<span class="lineCov">          1 :    table-&gt;DepthMask = gl_DepthMask;</span>
+<span class="lineNum">     206 </span>                :<span class="lineCov">          1 :    table-&gt;DepthRange = gl_DepthRange;</span>
+<span class="lineNum">     207 </span>                :<span class="lineCov">          1 :    table-&gt;Disable = gl_Disable;</span>
+<span class="lineNum">     208 </span>                :<span class="lineCov">          1 :    table-&gt;DisableClientState = gl_DisableClientState;</span>
+<span class="lineNum">     209 </span>                :<span class="lineCov">          1 :    table-&gt;DrawArrays = gl_DrawArrays;</span>
+<span class="lineNum">     210 </span>                :<span class="lineCov">          1 :    table-&gt;DrawBuffer = gl_DrawBuffer;</span>
+<span class="lineNum">     211 </span>                :<span class="lineCov">          1 :    table-&gt;DrawElements = gl_DrawElements;</span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">          1 :    table-&gt;DrawPixels = gl_DrawPixels;</span>
+<span class="lineNum">     213 </span>                :<span class="lineCov">          1 :    table-&gt;EdgeFlag = gl_EdgeFlag;</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">          1 :    table-&gt;EdgeFlagPointer = gl_EdgeFlagPointer;</span>
+<span class="lineNum">     215 </span>                :<span class="lineCov">          1 :    table-&gt;Enable = gl_Enable;</span>
+<span class="lineNum">     216 </span>                :<span class="lineCov">          1 :    table-&gt;EnableClientState = gl_EnableClientState;</span>
+<span class="lineNum">     217 </span>                :<span class="lineCov">          1 :    table-&gt;End = gl_End;</span>
+<span class="lineNum">     218 </span>                :<span class="lineCov">          1 :    table-&gt;EndList = gl_EndList;</span>
+<span class="lineNum">     219 </span>                :<span class="lineCov">          1 :    table-&gt;EvalCoord1f = gl_EvalCoord1f;</span>
+<span class="lineNum">     220 </span>                :<span class="lineCov">          1 :    table-&gt;EvalCoord2f = gl_EvalCoord2f;</span>
+<span class="lineNum">     221 </span>                :<span class="lineCov">          1 :    table-&gt;EvalMesh1 = gl_EvalMesh1;</span>
+<span class="lineNum">     222 </span>                :<span class="lineCov">          1 :    table-&gt;EvalMesh2 = gl_EvalMesh2;</span>
+<span class="lineNum">     223 </span>                :<span class="lineCov">          1 :    table-&gt;EvalPoint1 = gl_EvalPoint1;</span>
+<span class="lineNum">     224 </span>                :<span class="lineCov">          1 :    table-&gt;EvalPoint2 = gl_EvalPoint2;</span>
+<span class="lineNum">     225 </span>                :<span class="lineCov">          1 :    table-&gt;FeedbackBuffer = gl_FeedbackBuffer;</span>
+<span class="lineNum">     226 </span>                :<span class="lineCov">          1 :    table-&gt;Finish = gl_Finish;</span>
+<span class="lineNum">     227 </span>                :<span class="lineCov">          1 :    table-&gt;Flush = gl_Flush;</span>
+<span class="lineNum">     228 </span>                :<span class="lineCov">          1 :    table-&gt;Fogfv = gl_Fogfv;</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">          1 :    table-&gt;FrontFace = gl_FrontFace;</span>
+<span class="lineNum">     230 </span>                :<span class="lineCov">          1 :    table-&gt;Frustum = gl_Frustum;</span>
+<span class="lineNum">     231 </span>                :<span class="lineCov">          1 :    table-&gt;GenLists = gl_GenLists;</span>
+<span class="lineNum">     232 </span>                :<span class="lineCov">          1 :    table-&gt;GenTextures = gl_GenTextures;</span>
+<span class="lineNum">     233 </span>                :<span class="lineCov">          1 :    table-&gt;GetBooleanv = gl_GetBooleanv;</span>
+<span class="lineNum">     234 </span>                :<span class="lineCov">          1 :    table-&gt;GetClipPlane = gl_GetClipPlane;</span>
+<span class="lineNum">     235 </span>                :<span class="lineCov">          1 :    table-&gt;GetColorTable = gl_GetColorTable;</span>
+<span class="lineNum">     236 </span>                :<span class="lineCov">          1 :    table-&gt;GetColorTableParameteriv = gl_GetColorTableParameteriv;</span>
+<span class="lineNum">     237 </span>                :<span class="lineCov">          1 :    table-&gt;GetDoublev = gl_GetDoublev;</span>
+<span class="lineNum">     238 </span>                :<span class="lineCov">          1 :    table-&gt;GetError = gl_GetError;</span>
+<span class="lineNum">     239 </span>                :<span class="lineCov">          1 :    table-&gt;GetFloatv = gl_GetFloatv;</span>
+<span class="lineNum">     240 </span>                :<span class="lineCov">          1 :    table-&gt;GetIntegerv = gl_GetIntegerv;</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">          1 :    table-&gt;GetPointerv = gl_GetPointerv;</span>
+<span class="lineNum">     242 </span>                :<span class="lineCov">          1 :    table-&gt;GetLightfv = gl_GetLightfv;</span>
+<span class="lineNum">     243 </span>                :<span class="lineCov">          1 :    table-&gt;GetLightiv = gl_GetLightiv;</span>
+<span class="lineNum">     244 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapdv = gl_GetMapdv;</span>
+<span class="lineNum">     245 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapfv = gl_GetMapfv;</span>
+<span class="lineNum">     246 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapiv = gl_GetMapiv;</span>
+<span class="lineNum">     247 </span>                :<span class="lineCov">          1 :    table-&gt;GetMaterialfv = gl_GetMaterialfv;</span>
+<span class="lineNum">     248 </span>                :<span class="lineCov">          1 :    table-&gt;GetMaterialiv = gl_GetMaterialiv;</span>
+<span class="lineNum">     249 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapfv = gl_GetPixelMapfv;</span>
+<span class="lineNum">     250 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapuiv = gl_GetPixelMapuiv;</span>
+<span class="lineNum">     251 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapusv = gl_GetPixelMapusv;</span>
+<span class="lineNum">     252 </span>                :<span class="lineCov">          1 :    table-&gt;GetPolygonStipple = gl_GetPolygonStipple;</span>
+<span class="lineNum">     253 </span>                :<span class="lineCov">          1 :    table-&gt;GetString = gl_GetString;</span>
+<span class="lineNum">     254 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexEnvfv = gl_GetTexEnvfv;</span>
+<span class="lineNum">     255 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexEnviv = gl_GetTexEnviv;</span>
+<span class="lineNum">     256 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGendv = gl_GetTexGendv;</span>
+<span class="lineNum">     257 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGenfv = gl_GetTexGenfv;</span>
+<span class="lineNum">     258 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGeniv = gl_GetTexGeniv;</span>
+<span class="lineNum">     259 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexImage = gl_GetTexImage;</span>
+<span class="lineNum">     260 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexLevelParameterfv = gl_GetTexLevelParameterfv;</span>
+<span class="lineNum">     261 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexLevelParameteriv = gl_GetTexLevelParameteriv;</span>
+<span class="lineNum">     262 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexParameterfv = gl_GetTexParameterfv;</span>
+<span class="lineNum">     263 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexParameteriv = gl_GetTexParameteriv;</span>
+<span class="lineNum">     264 </span>                :<span class="lineCov">          1 :    table-&gt;Hint = gl_Hint;</span>
+<span class="lineNum">     265 </span>                :<span class="lineCov">          1 :    table-&gt;Indexf = gl_Indexf;</span>
+<span class="lineNum">     266 </span>                :<span class="lineCov">          1 :    table-&gt;Indexi = gl_Indexi;</span>
+<span class="lineNum">     267 </span>                :<span class="lineCov">          1 :    table-&gt;IndexMask = gl_IndexMask;</span>
+<span class="lineNum">     268 </span>                :<span class="lineCov">          1 :    table-&gt;IndexPointer = gl_IndexPointer;</span>
+<span class="lineNum">     269 </span>                :<span class="lineCov">          1 :    table-&gt;InitNames = gl_InitNames;</span>
+<span class="lineNum">     270 </span>                :<span class="lineCov">          1 :    table-&gt;InterleavedArrays = gl_InterleavedArrays;</span>
+<span class="lineNum">     271 </span>                :<span class="lineCov">          1 :    table-&gt;IsEnabled = gl_IsEnabled;</span>
+<span class="lineNum">     272 </span>                :<span class="lineCov">          1 :    table-&gt;IsList = gl_IsList;</span>
+<span class="lineNum">     273 </span>                :<span class="lineCov">          1 :    table-&gt;IsTexture = gl_IsTexture;</span>
+<span class="lineNum">     274 </span>                :<span class="lineCov">          1 :    table-&gt;LightModelfv = gl_LightModelfv;</span>
+<span class="lineNum">     275 </span>                :<span class="lineCov">          1 :    table-&gt;Lightfv = gl_Lightfv;</span>
+<span class="lineNum">     276 </span>                :<span class="lineCov">          1 :    table-&gt;LineStipple = gl_LineStipple;</span>
+<span class="lineNum">     277 </span>                :<span class="lineCov">          1 :    table-&gt;LineWidth = gl_LineWidth;</span>
+<span class="lineNum">     278 </span>                :<span class="lineCov">          1 :    table-&gt;ListBase = gl_ListBase;</span>
+<span class="lineNum">     279 </span>                :<span class="lineCov">          1 :    table-&gt;LoadIdentity = gl_LoadIdentity;</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">          1 :    table-&gt;LoadMatrixf = gl_LoadMatrixf;</span>
+<span class="lineNum">     281 </span>                :<span class="lineCov">          1 :    table-&gt;LoadName = gl_LoadName;</span>
+<span class="lineNum">     282 </span>                :<span class="lineCov">          1 :    table-&gt;LogicOp = gl_LogicOp;</span>
+<span class="lineNum">     283 </span>                :<span class="lineCov">          1 :    table-&gt;Map1f = gl_Map1f;</span>
+<span class="lineNum">     284 </span>                :<span class="lineCov">          1 :    table-&gt;Map2f = gl_Map2f;</span>
+<span class="lineNum">     285 </span>                :<span class="lineCov">          1 :    table-&gt;MapGrid1f = gl_MapGrid1f;</span>
+<span class="lineNum">     286 </span>                :<span class="lineCov">          1 :    table-&gt;MapGrid2f = gl_MapGrid2f;</span>
+<span class="lineNum">     287 </span>                :<span class="lineCov">          1 :    table-&gt;Materialfv = gl_Materialfv;</span>
+<span class="lineNum">     288 </span>                :<span class="lineCov">          1 :    table-&gt;MatrixMode = gl_MatrixMode;</span>
+<span class="lineNum">     289 </span>                :<span class="lineCov">          1 :    table-&gt;MultMatrixf = gl_MultMatrixf;</span>
+<span class="lineNum">     290 </span>                :<span class="lineCov">          1 :    table-&gt;NewList = gl_NewList;</span>
+<span class="lineNum">     291 </span>                :<span class="lineCov">          1 :    table-&gt;Normal3f = gl_Normal3f;</span>
+<span class="lineNum">     292 </span>                :<span class="lineCov">          1 :    table-&gt;NormalPointer = gl_NormalPointer;</span>
+<span class="lineNum">     293 </span>                :<span class="lineCov">          1 :    table-&gt;Normal3fv = gl_Normal3fv;</span>
+<span class="lineNum">     294 </span>                :<span class="lineCov">          1 :    table-&gt;Ortho = gl_Ortho;</span>
+<span class="lineNum">     295 </span>                :<span class="lineCov">          1 :    table-&gt;PassThrough = gl_PassThrough;</span>
+<span class="lineNum">     296 </span>                :<span class="lineCov">          1 :    table-&gt;PixelMapfv = gl_PixelMapfv;</span>
+<span class="lineNum">     297 </span>                :<span class="lineCov">          1 :    table-&gt;PixelStorei = gl_PixelStorei;</span>
+<span class="lineNum">     298 </span>                :<span class="lineCov">          1 :    table-&gt;PixelTransferf = gl_PixelTransferf;</span>
+<span class="lineNum">     299 </span>                :<span class="lineCov">          1 :    table-&gt;PixelZoom = gl_PixelZoom;</span>
+<span class="lineNum">     300 </span>                :<span class="lineCov">          1 :    table-&gt;PointSize = gl_PointSize;</span>
+<span class="lineNum">     301 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonMode = gl_PolygonMode;</span>
+<span class="lineNum">     302 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonOffset = gl_PolygonOffset;</span>
+<span class="lineNum">     303 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonStipple = gl_PolygonStipple;</span>
+<span class="lineNum">     304 </span>                :<span class="lineCov">          1 :    table-&gt;PopAttrib = gl_PopAttrib;</span>
+<span class="lineNum">     305 </span>                :<span class="lineCov">          1 :    table-&gt;PopClientAttrib = gl_PopClientAttrib;</span>
+<span class="lineNum">     306 </span>                :<span class="lineCov">          1 :    table-&gt;PopMatrix = gl_PopMatrix;</span>
+<span class="lineNum">     307 </span>                :<span class="lineCov">          1 :    table-&gt;PopName = gl_PopName;</span>
+<span class="lineNum">     308 </span>                :<span class="lineCov">          1 :    table-&gt;PrioritizeTextures = gl_PrioritizeTextures;</span>
+<span class="lineNum">     309 </span>                :<span class="lineCov">          1 :    table-&gt;PushAttrib = gl_PushAttrib;</span>
+<span class="lineNum">     310 </span>                :<span class="lineCov">          1 :    table-&gt;PushClientAttrib = gl_PushClientAttrib;</span>
+<span class="lineNum">     311 </span>                :<span class="lineCov">          1 :    table-&gt;PushMatrix = gl_PushMatrix;</span>
+<span class="lineNum">     312 </span>                :<span class="lineCov">          1 :    table-&gt;PushName = gl_PushName;</span>
+<span class="lineNum">     313 </span>                :<span class="lineCov">          1 :    table-&gt;RasterPos4f = gl_RasterPos4f;</span>
+<span class="lineNum">     314 </span>                :<span class="lineCov">          1 :    table-&gt;ReadBuffer = gl_ReadBuffer;</span>
+<span class="lineNum">     315 </span>                :<span class="lineCov">          1 :    table-&gt;ReadPixels = gl_ReadPixels;</span>
+<span class="lineNum">     316 </span>                :<span class="lineCov">          1 :    table-&gt;Rectf = gl_Rectf;</span>
+<span class="lineNum">     317 </span>                :<span class="lineCov">          1 :    table-&gt;RenderMode = gl_RenderMode;</span>
+<span class="lineNum">     318 </span>                :<span class="lineCov">          1 :    table-&gt;Rotatef = gl_Rotatef;</span>
+<span class="lineNum">     319 </span>                :<span class="lineCov">          1 :    table-&gt;Scalef = gl_Scalef;</span>
+<span class="lineNum">     320 </span>                :<span class="lineCov">          1 :    table-&gt;Scissor = gl_Scissor;</span>
+<span class="lineNum">     321 </span>                :<span class="lineCov">          1 :    table-&gt;SelectBuffer = gl_SelectBuffer;</span>
+<span class="lineNum">     322 </span>                :<span class="lineCov">          1 :    table-&gt;ShadeModel = gl_ShadeModel;</span>
+<span class="lineNum">     323 </span>                :<span class="lineCov">          1 :    table-&gt;StencilFunc = gl_StencilFunc;</span>
+<span class="lineNum">     324 </span>                :<span class="lineCov">          1 :    table-&gt;StencilMask = gl_StencilMask;</span>
+<span class="lineNum">     325 </span>                :<span class="lineCov">          1 :    table-&gt;StencilOp = gl_StencilOp;</span>
+<span class="lineNum">     326 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoord2f = gl_TexCoord2f;</span>
+<span class="lineNum">     327 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoord4f = gl_TexCoord4f;</span>
+<span class="lineNum">     328 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoordPointer = gl_TexCoordPointer;</span>
+<span class="lineNum">     329 </span>                :<span class="lineCov">          1 :    table-&gt;TexEnvfv = gl_TexEnvfv;</span>
+<span class="lineNum">     330 </span>                :<span class="lineCov">          1 :    table-&gt;TexGenfv = gl_TexGenfv;</span>
+<span class="lineNum">     331 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage1D = gl_TexImage1D;</span>
+<span class="lineNum">     332 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage2D = gl_TexImage2D;</span>
+<span class="lineNum">     333 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage3DEXT = gl_TexImage3DEXT;</span>
+<span class="lineNum">     334 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage1D = gl_TexSubImage1D;</span>
+<span class="lineNum">     335 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage2D = gl_TexSubImage2D;</span>
+<span class="lineNum">     336 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage3DEXT = gl_TexSubImage3DEXT;</span>
+<span class="lineNum">     337 </span>                :<span class="lineCov">          1 :    table-&gt;PointParameterfvEXT = gl_PointParameterfvEXT;</span>
+<span class="lineNum">     338 </span>                :<span class="lineCov">          1 :    table-&gt;TexParameterfv = gl_TexParameterfv;</span>
+<span class="lineNum">     339 </span>                :<span class="lineCov">          1 :    table-&gt;Translatef = gl_Translatef;</span>
+<span class="lineNum">     340 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex2f = gl_vertex2f_nop;</span>
+<span class="lineNum">     341 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex3f = gl_vertex3f_nop;</span>
+<span class="lineNum">     342 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex4f = gl_vertex4f_nop;</span>
+<span class="lineNum">     343 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex3fv = gl_vertex3fv_nop;</span>
+<span class="lineNum">     344 </span>                :<span class="lineCov">          1 :    table-&gt;VertexPointer = gl_VertexPointer;</span>
+<span class="lineNum">     345 </span>                :<span class="lineCov">          1 :    table-&gt;Viewport = gl_Viewport;</span>
+<span class="lineNum">     346 </span>                :            : 
+<span class="lineNum">     347 </span>                :            :    /* GL_MESA_window_pos extension */
+<span class="lineNum">     348 </span>                :<span class="lineCov">          1 :    table-&gt;WindowPos4fMESA = gl_WindowPos4fMESA;</span>
+<span class="lineNum">     349 </span>                :            : 
+<span class="lineNum">     350 </span>                :            :    /* GL_MESA_resize_buffers extension */
+<span class="lineNum">     351 </span>                :<span class="lineCov">          1 :    table-&gt;ResizeBuffersMESA = gl_ResizeBuffersMESA;</span>
+<span class="lineNum">     352 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     353 </span>                :            : 
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>                :            : 
+<span class="lineNum">     356 </span>                :            : /*
+<span class="lineNum">     357 </span>                :            :  * Assign all the pointers in 'table' to point to Mesa's display list
+<a name="358"><span class="lineNum">     358 </span>                :            :  * building functions.</a>
+<span class="lineNum">     359 </span>                :            :  */
+<span class="lineNum">     360 </span>                :<span class="lineCov">          1 : static void init_dlist_pointers( struct gl_api_table *table )</span>
+<span class="lineNum">     361 </span>                :            : {
+<span class="lineNum">     362 </span>                :<span class="lineCov">          1 :    table-&gt;Accum = gl_save_Accum;</span>
+<span class="lineNum">     363 </span>                :<span class="lineCov">          1 :    table-&gt;AlphaFunc = gl_save_AlphaFunc;</span>
+<span class="lineNum">     364 </span>                :<span class="lineCov">          1 :    table-&gt;AreTexturesResident = gl_AreTexturesResident;</span>
+<span class="lineNum">     365 </span>                :<span class="lineCov">          1 :    table-&gt;ArrayElement = gl_save_ArrayElement;</span>
+<span class="lineNum">     366 </span>                :<span class="lineCov">          1 :    table-&gt;Begin = gl_save_Begin;</span>
+<span class="lineNum">     367 </span>                :<span class="lineCov">          1 :    table-&gt;BindTexture = gl_save_BindTexture;</span>
+<span class="lineNum">     368 </span>                :<span class="lineCov">          1 :    table-&gt;Bitmap = gl_save_Bitmap;</span>
+<span class="lineNum">     369 </span>                :<span class="lineCov">          1 :    table-&gt;BlendColor = gl_save_BlendColor;</span>
+<span class="lineNum">     370 </span>                :<span class="lineCov">          1 :    table-&gt;BlendEquation = gl_save_BlendEquation;</span>
+<span class="lineNum">     371 </span>                :<span class="lineCov">          1 :    table-&gt;BlendFunc = gl_save_BlendFunc;</span>
+<span class="lineNum">     372 </span>                :<span class="lineCov">          1 :    table-&gt;CallList = gl_save_CallList;</span>
+<span class="lineNum">     373 </span>                :<span class="lineCov">          1 :    table-&gt;CallLists = gl_save_CallLists;</span>
+<span class="lineNum">     374 </span>                :<span class="lineCov">          1 :    table-&gt;Clear = gl_save_Clear;</span>
+<span class="lineNum">     375 </span>                :<span class="lineCov">          1 :    table-&gt;ClearAccum = gl_save_ClearAccum;</span>
+<span class="lineNum">     376 </span>                :<span class="lineCov">          1 :    table-&gt;ClearColor = gl_save_ClearColor;</span>
+<span class="lineNum">     377 </span>                :<span class="lineCov">          1 :    table-&gt;ClearDepth = gl_save_ClearDepth;</span>
+<span class="lineNum">     378 </span>                :<span class="lineCov">          1 :    table-&gt;ClearIndex = gl_save_ClearIndex;</span>
+<span class="lineNum">     379 </span>                :<span class="lineCov">          1 :    table-&gt;ClearStencil = gl_save_ClearStencil;</span>
+<span class="lineNum">     380 </span>                :<span class="lineCov">          1 :    table-&gt;ClipPlane = gl_save_ClipPlane;</span>
+<span class="lineNum">     381 </span>                :<span class="lineCov">          1 :    table-&gt;Color3f = gl_save_Color3f;</span>
+<span class="lineNum">     382 </span>                :<span class="lineCov">          1 :    table-&gt;Color3fv = gl_save_Color3fv;</span>
+<span class="lineNum">     383 </span>                :<span class="lineCov">          1 :    table-&gt;Color4f = gl_save_Color4f;</span>
+<span class="lineNum">     384 </span>                :<span class="lineCov">          1 :    table-&gt;Color4fv = gl_save_Color4fv;</span>
+<span class="lineNum">     385 </span>                :<span class="lineCov">          1 :    table-&gt;Color4ub = gl_save_Color4ub;</span>
+<span class="lineNum">     386 </span>                :<span class="lineCov">          1 :    table-&gt;Color4ubv = gl_save_Color4ubv;</span>
+<span class="lineNum">     387 </span>                :<span class="lineCov">          1 :    table-&gt;ColorMask = gl_save_ColorMask;</span>
+<span class="lineNum">     388 </span>                :<span class="lineCov">          1 :    table-&gt;ColorMaterial = gl_save_ColorMaterial;</span>
+<span class="lineNum">     389 </span>                :<span class="lineCov">          1 :    table-&gt;ColorPointer = gl_ColorPointer;</span>
+<span class="lineNum">     390 </span>                :<span class="lineCov">          1 :    table-&gt;ColorTable = gl_save_ColorTable;</span>
+<span class="lineNum">     391 </span>                :<span class="lineCov">          1 :    table-&gt;ColorSubTable = gl_save_ColorSubTable;</span>
+<span class="lineNum">     392 </span>                :<span class="lineCov">          1 :    table-&gt;CopyPixels = gl_save_CopyPixels;</span>
+<span class="lineNum">     393 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexImage1D = gl_save_CopyTexImage1D;</span>
+<span class="lineNum">     394 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexImage2D = gl_save_CopyTexImage2D;</span>
+<span class="lineNum">     395 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage1D = gl_save_CopyTexSubImage1D;</span>
+<span class="lineNum">     396 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage2D = gl_save_CopyTexSubImage2D;</span>
+<span class="lineNum">     397 </span>                :<span class="lineCov">          1 :    table-&gt;CopyTexSubImage3DEXT = gl_save_CopyTexSubImage3DEXT;</span>
+<span class="lineNum">     398 </span>                :<span class="lineCov">          1 :    table-&gt;CullFace = gl_save_CullFace;</span>
+<span class="lineNum">     399 </span>                :<span class="lineCov">          1 :    table-&gt;DeleteLists = gl_DeleteLists;   /* NOT SAVED */</span>
+<span class="lineNum">     400 </span>                :<span class="lineCov">          1 :    table-&gt;DeleteTextures = gl_DeleteTextures;  /* NOT SAVED */</span>
+<span class="lineNum">     401 </span>                :<span class="lineCov">          1 :    table-&gt;DepthFunc = gl_save_DepthFunc;</span>
+<span class="lineNum">     402 </span>                :<span class="lineCov">          1 :    table-&gt;DepthMask = gl_save_DepthMask;</span>
+<span class="lineNum">     403 </span>                :<span class="lineCov">          1 :    table-&gt;DepthRange = gl_save_DepthRange;</span>
+<span class="lineNum">     404 </span>                :<span class="lineCov">          1 :    table-&gt;Disable = gl_save_Disable;</span>
+<span class="lineNum">     405 </span>                :<span class="lineCov">          1 :    table-&gt;DisableClientState = gl_DisableClientState;  /* NOT SAVED */</span>
+<span class="lineNum">     406 </span>                :<span class="lineCov">          1 :    table-&gt;DrawArrays = gl_save_DrawArrays;</span>
+<span class="lineNum">     407 </span>                :<span class="lineCov">          1 :    table-&gt;DrawBuffer = gl_save_DrawBuffer;</span>
+<span class="lineNum">     408 </span>                :<span class="lineCov">          1 :    table-&gt;DrawElements = gl_save_DrawElements;</span>
+<span class="lineNum">     409 </span>                :<span class="lineCov">          1 :    table-&gt;DrawPixels = gl_DrawPixels;   /* SPECIAL CASE */</span>
+<span class="lineNum">     410 </span>                :<span class="lineCov">          1 :    table-&gt;EdgeFlag = gl_save_EdgeFlag;</span>
+<span class="lineNum">     411 </span>                :<span class="lineCov">          1 :    table-&gt;EdgeFlagPointer = gl_EdgeFlagPointer;</span>
+<span class="lineNum">     412 </span>                :<span class="lineCov">          1 :    table-&gt;Enable = gl_save_Enable;</span>
+<span class="lineNum">     413 </span>                :<span class="lineCov">          1 :    table-&gt;EnableClientState = gl_EnableClientState;   /* NOT SAVED */</span>
+<span class="lineNum">     414 </span>                :<span class="lineCov">          1 :    table-&gt;End = gl_save_End;</span>
+<span class="lineNum">     415 </span>                :<span class="lineCov">          1 :    table-&gt;EndList = gl_EndList;   /* NOT SAVED */</span>
+<span class="lineNum">     416 </span>                :<span class="lineCov">          1 :    table-&gt;EvalCoord1f = gl_save_EvalCoord1f;</span>
+<span class="lineNum">     417 </span>                :<span class="lineCov">          1 :    table-&gt;EvalCoord2f = gl_save_EvalCoord2f;</span>
+<span class="lineNum">     418 </span>                :<span class="lineCov">          1 :    table-&gt;EvalMesh1 = gl_save_EvalMesh1;</span>
+<span class="lineNum">     419 </span>                :<span class="lineCov">          1 :    table-&gt;EvalMesh2 = gl_save_EvalMesh2;</span>
+<span class="lineNum">     420 </span>                :<span class="lineCov">          1 :    table-&gt;EvalPoint1 = gl_save_EvalPoint1;</span>
+<span class="lineNum">     421 </span>                :<span class="lineCov">          1 :    table-&gt;EvalPoint2 = gl_save_EvalPoint2;</span>
+<span class="lineNum">     422 </span>                :<span class="lineCov">          1 :    table-&gt;FeedbackBuffer = gl_FeedbackBuffer;   /* NOT SAVED */</span>
+<span class="lineNum">     423 </span>                :<span class="lineCov">          1 :    table-&gt;Finish = gl_Finish;   /* NOT SAVED */</span>
+<span class="lineNum">     424 </span>                :<span class="lineCov">          1 :    table-&gt;Flush = gl_Flush;   /* NOT SAVED */</span>
+<span class="lineNum">     425 </span>                :<span class="lineCov">          1 :    table-&gt;Fogfv = gl_save_Fogfv;</span>
+<span class="lineNum">     426 </span>                :<span class="lineCov">          1 :    table-&gt;FrontFace = gl_save_FrontFace;</span>
+<span class="lineNum">     427 </span>                :<span class="lineCov">          1 :    table-&gt;Frustum = gl_save_Frustum;</span>
+<span class="lineNum">     428 </span>                :<span class="lineCov">          1 :    table-&gt;GenLists = gl_GenLists;   /* NOT SAVED */</span>
+<span class="lineNum">     429 </span>                :<span class="lineCov">          1 :    table-&gt;GenTextures = gl_GenTextures;   /* NOT SAVED */</span>
+<span class="lineNum">     430 </span>                :            : 
+<span class="lineNum">     431 </span>                :            :    /* NONE OF THESE COMMANDS ARE COMPILED INTO DISPLAY LISTS */
+<span class="lineNum">     432 </span>                :<span class="lineCov">          1 :    table-&gt;GetBooleanv = gl_GetBooleanv;</span>
+<span class="lineNum">     433 </span>                :<span class="lineCov">          1 :    table-&gt;GetClipPlane = gl_GetClipPlane;</span>
+<span class="lineNum">     434 </span>                :<span class="lineCov">          1 :    table-&gt;GetColorTable = gl_GetColorTable;</span>
+<span class="lineNum">     435 </span>                :<span class="lineCov">          1 :    table-&gt;GetColorTableParameteriv = gl_GetColorTableParameteriv;</span>
+<span class="lineNum">     436 </span>                :<span class="lineCov">          1 :    table-&gt;GetDoublev = gl_GetDoublev;</span>
+<span class="lineNum">     437 </span>                :<span class="lineCov">          1 :    table-&gt;GetError = gl_GetError;</span>
+<span class="lineNum">     438 </span>                :<span class="lineCov">          1 :    table-&gt;GetFloatv = gl_GetFloatv;</span>
+<span class="lineNum">     439 </span>                :<span class="lineCov">          1 :    table-&gt;GetIntegerv = gl_GetIntegerv;</span>
+<span class="lineNum">     440 </span>                :<span class="lineCov">          1 :    table-&gt;GetString = gl_GetString;</span>
+<span class="lineNum">     441 </span>                :<span class="lineCov">          1 :    table-&gt;GetLightfv = gl_GetLightfv;</span>
+<span class="lineNum">     442 </span>                :<span class="lineCov">          1 :    table-&gt;GetLightiv = gl_GetLightiv;</span>
+<span class="lineNum">     443 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapdv = gl_GetMapdv;</span>
+<span class="lineNum">     444 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapfv = gl_GetMapfv;</span>
+<span class="lineNum">     445 </span>                :<span class="lineCov">          1 :    table-&gt;GetMapiv = gl_GetMapiv;</span>
+<span class="lineNum">     446 </span>                :<span class="lineCov">          1 :    table-&gt;GetMaterialfv = gl_GetMaterialfv;</span>
+<span class="lineNum">     447 </span>                :<span class="lineCov">          1 :    table-&gt;GetMaterialiv = gl_GetMaterialiv;</span>
+<span class="lineNum">     448 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapfv = gl_GetPixelMapfv;</span>
+<span class="lineNum">     449 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapuiv = gl_GetPixelMapuiv;</span>
+<span class="lineNum">     450 </span>                :<span class="lineCov">          1 :    table-&gt;GetPixelMapusv = gl_GetPixelMapusv;</span>
+<span class="lineNum">     451 </span>                :<span class="lineCov">          1 :    table-&gt;GetPointerv = gl_GetPointerv;</span>
+<span class="lineNum">     452 </span>                :<span class="lineCov">          1 :    table-&gt;GetPolygonStipple = gl_GetPolygonStipple;</span>
+<span class="lineNum">     453 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexEnvfv = gl_GetTexEnvfv;</span>
+<span class="lineNum">     454 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexEnviv = gl_GetTexEnviv;</span>
+<span class="lineNum">     455 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGendv = gl_GetTexGendv;</span>
+<span class="lineNum">     456 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGenfv = gl_GetTexGenfv;</span>
+<span class="lineNum">     457 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexGeniv = gl_GetTexGeniv;</span>
+<span class="lineNum">     458 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexImage = gl_GetTexImage;</span>
+<span class="lineNum">     459 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexLevelParameterfv = gl_GetTexLevelParameterfv;</span>
+<span class="lineNum">     460 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexLevelParameteriv = gl_GetTexLevelParameteriv;</span>
+<span class="lineNum">     461 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexParameterfv = gl_GetTexParameterfv;</span>
+<span class="lineNum">     462 </span>                :<span class="lineCov">          1 :    table-&gt;GetTexParameteriv = gl_GetTexParameteriv;</span>
+<span class="lineNum">     463 </span>                :            : 
+<span class="lineNum">     464 </span>                :<span class="lineCov">          1 :    table-&gt;Hint = gl_save_Hint;</span>
+<span class="lineNum">     465 </span>                :<span class="lineCov">          1 :    table-&gt;IndexMask = gl_save_IndexMask;</span>
+<span class="lineNum">     466 </span>                :<span class="lineCov">          1 :    table-&gt;Indexf = gl_save_Indexf;</span>
+<span class="lineNum">     467 </span>                :<span class="lineCov">          1 :    table-&gt;Indexi = gl_save_Indexi;</span>
+<span class="lineNum">     468 </span>                :<span class="lineCov">          1 :    table-&gt;IndexPointer = gl_IndexPointer;</span>
+<span class="lineNum">     469 </span>                :<span class="lineCov">          1 :    table-&gt;InitNames = gl_save_InitNames;</span>
+<span class="lineNum">     470 </span>                :<span class="lineCov">          1 :    table-&gt;InterleavedArrays = gl_save_InterleavedArrays;</span>
+<span class="lineNum">     471 </span>                :<span class="lineCov">          1 :    table-&gt;IsEnabled = gl_IsEnabled;   /* NOT SAVED */</span>
+<span class="lineNum">     472 </span>                :<span class="lineCov">          1 :    table-&gt;IsTexture = gl_IsTexture;   /* NOT SAVED */</span>
+<span class="lineNum">     473 </span>                :<span class="lineCov">          1 :    table-&gt;IsList = gl_IsList;   /* NOT SAVED */</span>
+<span class="lineNum">     474 </span>                :<span class="lineCov">          1 :    table-&gt;LightModelfv = gl_save_LightModelfv;</span>
+<span class="lineNum">     475 </span>                :<span class="lineCov">          1 :    table-&gt;Lightfv = gl_save_Lightfv;</span>
+<span class="lineNum">     476 </span>                :<span class="lineCov">          1 :    table-&gt;LineStipple = gl_save_LineStipple;</span>
+<span class="lineNum">     477 </span>                :<span class="lineCov">          1 :    table-&gt;LineWidth = gl_save_LineWidth;</span>
+<span class="lineNum">     478 </span>                :<span class="lineCov">          1 :    table-&gt;ListBase = gl_save_ListBase;</span>
+<span class="lineNum">     479 </span>                :<span class="lineCov">          1 :    table-&gt;LoadIdentity = gl_save_LoadIdentity;</span>
+<span class="lineNum">     480 </span>                :<span class="lineCov">          1 :    table-&gt;LoadMatrixf = gl_save_LoadMatrixf;</span>
+<span class="lineNum">     481 </span>                :<span class="lineCov">          1 :    table-&gt;LoadName = gl_save_LoadName;</span>
+<span class="lineNum">     482 </span>                :<span class="lineCov">          1 :    table-&gt;LogicOp = gl_save_LogicOp;</span>
+<span class="lineNum">     483 </span>                :<span class="lineCov">          1 :    table-&gt;Map1f = gl_save_Map1f;</span>
+<span class="lineNum">     484 </span>                :<span class="lineCov">          1 :    table-&gt;Map2f = gl_save_Map2f;</span>
+<span class="lineNum">     485 </span>                :<span class="lineCov">          1 :    table-&gt;MapGrid1f = gl_save_MapGrid1f;</span>
+<span class="lineNum">     486 </span>                :<span class="lineCov">          1 :    table-&gt;MapGrid2f = gl_save_MapGrid2f;</span>
+<span class="lineNum">     487 </span>                :<span class="lineCov">          1 :    table-&gt;Materialfv = gl_save_Materialfv;</span>
+<span class="lineNum">     488 </span>                :<span class="lineCov">          1 :    table-&gt;MatrixMode = gl_save_MatrixMode;</span>
+<span class="lineNum">     489 </span>                :<span class="lineCov">          1 :    table-&gt;MultMatrixf = gl_save_MultMatrixf;</span>
+<span class="lineNum">     490 </span>                :<span class="lineCov">          1 :    table-&gt;NewList = gl_save_NewList;</span>
+<span class="lineNum">     491 </span>                :<span class="lineCov">          1 :    table-&gt;Normal3f = gl_save_Normal3f;</span>
+<span class="lineNum">     492 </span>                :<span class="lineCov">          1 :    table-&gt;Normal3fv = gl_save_Normal3fv;</span>
+<span class="lineNum">     493 </span>                :<span class="lineCov">          1 :    table-&gt;NormalPointer = gl_NormalPointer;  /* NOT SAVED */</span>
+<span class="lineNum">     494 </span>                :<span class="lineCov">          1 :    table-&gt;Ortho = gl_save_Ortho;</span>
+<span class="lineNum">     495 </span>                :<span class="lineCov">          1 :    table-&gt;PointParameterfvEXT = gl_save_PointParameterfvEXT;</span>
+<span class="lineNum">     496 </span>                :<span class="lineCov">          1 :    table-&gt;PassThrough = gl_save_PassThrough;</span>
+<span class="lineNum">     497 </span>                :<span class="lineCov">          1 :    table-&gt;PixelMapfv = gl_save_PixelMapfv;</span>
+<span class="lineNum">     498 </span>                :<span class="lineCov">          1 :    table-&gt;PixelStorei = gl_PixelStorei;   /* NOT SAVED */</span>
+<span class="lineNum">     499 </span>                :<span class="lineCov">          1 :    table-&gt;PixelTransferf = gl_save_PixelTransferf;</span>
+<span class="lineNum">     500 </span>                :<span class="lineCov">          1 :    table-&gt;PixelZoom = gl_save_PixelZoom;</span>
+<span class="lineNum">     501 </span>                :<span class="lineCov">          1 :    table-&gt;PointSize = gl_save_PointSize;</span>
+<span class="lineNum">     502 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonMode = gl_save_PolygonMode;</span>
+<span class="lineNum">     503 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonOffset = gl_save_PolygonOffset;</span>
+<span class="lineNum">     504 </span>                :<span class="lineCov">          1 :    table-&gt;PolygonStipple = gl_save_PolygonStipple;</span>
+<span class="lineNum">     505 </span>                :<span class="lineCov">          1 :    table-&gt;PopAttrib = gl_save_PopAttrib;</span>
+<span class="lineNum">     506 </span>                :<span class="lineCov">          1 :    table-&gt;PopClientAttrib = gl_PopClientAttrib;  /* NOT SAVED */</span>
+<span class="lineNum">     507 </span>                :<span class="lineCov">          1 :    table-&gt;PopMatrix = gl_save_PopMatrix;</span>
+<span class="lineNum">     508 </span>                :<span class="lineCov">          1 :    table-&gt;PopName = gl_save_PopName;</span>
+<span class="lineNum">     509 </span>                :<span class="lineCov">          1 :    table-&gt;PrioritizeTextures = gl_save_PrioritizeTextures;</span>
+<span class="lineNum">     510 </span>                :<span class="lineCov">          1 :    table-&gt;PushAttrib = gl_save_PushAttrib;</span>
+<span class="lineNum">     511 </span>                :<span class="lineCov">          1 :    table-&gt;PushClientAttrib = gl_PushClientAttrib;  /* NOT SAVED */</span>
+<span class="lineNum">     512 </span>                :<span class="lineCov">          1 :    table-&gt;PushMatrix = gl_save_PushMatrix;</span>
+<span class="lineNum">     513 </span>                :<span class="lineCov">          1 :    table-&gt;PushName = gl_save_PushName;</span>
+<span class="lineNum">     514 </span>                :<span class="lineCov">          1 :    table-&gt;RasterPos4f = gl_save_RasterPos4f;</span>
+<span class="lineNum">     515 </span>                :<span class="lineCov">          1 :    table-&gt;ReadBuffer = gl_save_ReadBuffer;</span>
+<span class="lineNum">     516 </span>                :<span class="lineCov">          1 :    table-&gt;ReadPixels = gl_ReadPixels;   /* NOT SAVED */</span>
+<span class="lineNum">     517 </span>                :<span class="lineCov">          1 :    table-&gt;Rectf = gl_save_Rectf;</span>
+<span class="lineNum">     518 </span>                :<span class="lineCov">          1 :    table-&gt;RenderMode = gl_RenderMode;   /* NOT SAVED */</span>
+<span class="lineNum">     519 </span>                :<span class="lineCov">          1 :    table-&gt;Rotatef = gl_save_Rotatef;</span>
+<span class="lineNum">     520 </span>                :<span class="lineCov">          1 :    table-&gt;Scalef = gl_save_Scalef;</span>
+<span class="lineNum">     521 </span>                :<span class="lineCov">          1 :    table-&gt;Scissor = gl_save_Scissor;</span>
+<span class="lineNum">     522 </span>                :<span class="lineCov">          1 :    table-&gt;SelectBuffer = gl_SelectBuffer;   /* NOT SAVED */</span>
+<span class="lineNum">     523 </span>                :<span class="lineCov">          1 :    table-&gt;ShadeModel = gl_save_ShadeModel;</span>
+<span class="lineNum">     524 </span>                :<span class="lineCov">          1 :    table-&gt;StencilFunc = gl_save_StencilFunc;</span>
+<span class="lineNum">     525 </span>                :<span class="lineCov">          1 :    table-&gt;StencilMask = gl_save_StencilMask;</span>
+<span class="lineNum">     526 </span>                :<span class="lineCov">          1 :    table-&gt;StencilOp = gl_save_StencilOp;</span>
+<span class="lineNum">     527 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoord2f = gl_save_TexCoord2f;</span>
+<span class="lineNum">     528 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoord4f = gl_save_TexCoord4f;</span>
+<span class="lineNum">     529 </span>                :<span class="lineCov">          1 :    table-&gt;TexCoordPointer = gl_TexCoordPointer;  /* NOT SAVED */</span>
+<span class="lineNum">     530 </span>                :<span class="lineCov">          1 :    table-&gt;TexEnvfv = gl_save_TexEnvfv;</span>
+<span class="lineNum">     531 </span>                :<span class="lineCov">          1 :    table-&gt;TexGenfv = gl_save_TexGenfv;</span>
+<span class="lineNum">     532 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage1D = gl_save_TexImage1D;</span>
+<span class="lineNum">     533 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage2D = gl_save_TexImage2D;</span>
+<span class="lineNum">     534 </span>                :<span class="lineCov">          1 :    table-&gt;TexImage3DEXT = gl_save_TexImage3DEXT;</span>
+<span class="lineNum">     535 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage1D = gl_save_TexSubImage1D;</span>
+<span class="lineNum">     536 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage2D = gl_save_TexSubImage2D;</span>
+<span class="lineNum">     537 </span>                :<span class="lineCov">          1 :    table-&gt;TexSubImage3DEXT = gl_save_TexSubImage3DEXT;</span>
+<span class="lineNum">     538 </span>                :<span class="lineCov">          1 :    table-&gt;TexParameterfv = gl_save_TexParameterfv;</span>
+<span class="lineNum">     539 </span>                :<span class="lineCov">          1 :    table-&gt;Translatef = gl_save_Translatef;</span>
+<span class="lineNum">     540 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex2f = gl_save_Vertex2f;</span>
+<span class="lineNum">     541 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex3f = gl_save_Vertex3f;</span>
+<span class="lineNum">     542 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex4f = gl_save_Vertex4f;</span>
+<span class="lineNum">     543 </span>                :<span class="lineCov">          1 :    table-&gt;Vertex3fv = gl_save_Vertex3fv;</span>
+<span class="lineNum">     544 </span>                :<span class="lineCov">          1 :    table-&gt;VertexPointer = gl_VertexPointer;  /* NOT SAVED */</span>
+<span class="lineNum">     545 </span>                :<span class="lineCov">          1 :    table-&gt;Viewport = gl_save_Viewport;</span>
+<span class="lineNum">     546 </span>                :            : 
+<span class="lineNum">     547 </span>                :            :    /* GL_SAVE_MESA_window_pos extension */
+<span class="lineNum">     548 </span>                :<span class="lineCov">          1 :    table-&gt;WindowPos4fMESA = gl_save_WindowPos4fMESA;</span>
+<span class="lineNum">     549 </span>                :            : 
+<span class="lineNum">     550 </span>                :            :    /* GL_MESA_resize_buffers extension */
+<span class="lineNum">     551 </span>                :<span class="lineCov">          1 :    table-&gt;ResizeBuffersMESA = gl_ResizeBuffersMESA;</span>
+<span class="lineNum">     552 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     553 </span>                :            : 
+<a name="554"><span class="lineNum">     554 </span>                :            : </a>
+<span class="lineNum">     555 </span>                :            : 
+<span class="lineNum">     556 </span>                :<span class="lineCov">          1 : void gl_init_api_function_pointers( GLcontext *ctx )</span>
+<span class="lineNum">     557 </span>                :            : {
+<span class="lineNum">     558 </span>                :<span class="lineCov">          1 :    init_exec_pointers( &amp;ctx-&gt;Exec );</span>
+<span class="lineNum">     559 </span>                :            : 
+<span class="lineNum">     560 </span>                :<span class="lineCov">          1 :    init_dlist_pointers( &amp;ctx-&gt;Save );</span>
+<span class="lineNum">     561 </span>                :            : 
+<span class="lineNum">     562 </span>                :            :    /* make sure there's no NULL pointers */
+<span class="lineNum">     563 </span>                :<span class="lineCov">          1 :    check_pointers( &amp;ctx-&gt;Exec );</span>
+<span class="lineNum">     564 </span>                :<span class="lineCov">          1 :    check_pointers( &amp;ctx-&gt;Save );</span>
+<span class="lineNum">     565 </span>                :<span class="lineCov">          1 : }</span>
+<span class="lineNum">     566 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

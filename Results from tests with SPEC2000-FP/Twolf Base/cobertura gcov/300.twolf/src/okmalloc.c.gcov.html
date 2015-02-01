@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/okmalloc.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - okmalloc.c<span style="font-size: 80%;"> (source / <a href="okmalloc.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryLo">71.4 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include        &lt;stdio.h&gt;</a>
+<span class="lineNum">       2 </span>                :            : #include        &lt;signal.h&gt;
+<span class="lineNum">       3 </span>                :            : 
+<span class="lineNum">       4 </span>                :            : /* memory errors */
+<span class="lineNum">       5 </span>                :            : #define  heap_error_base   0x40060000
+<span class="lineNum">       6 </span>                :            : #define  heap_bad_block    (heap_error_base + 1)
+<span class="lineNum">       7 </span>                :            : #define  heap_no_mem       (heap_error_base + 2)
+<span class="lineNum">       8 </span>                :            : 
+<span class="lineNum">       9 </span>                :            : /* conditional compile for the memory manager */
+<span class="lineNum">      10 </span>                :            : /* if MEMORYMAN is not defined use system malloc calloc etc. */
+<span class="lineNum">      11 </span>                :            : 
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :            : /*
+<span class="lineNum">      14 </span>                :            :   *--------------------------------------------------------------
+<span class="lineNum">      15 </span>                :            :   * BEGIN NORMAL C MEMORY MANAGEMENT SYSTEM
+<span class="lineNum">      16 </span>                :            :   *--------------------------------------------------------------
+<span class="lineNum">      17 </span>                :            : */
+<span class="lineNum">      18 </span>                :            : 
+<a name="19"><span class="lineNum">      19 </span>                :            : /* use standard calls to malloc, calloc, etc */</a>
+<span class="lineNum">      20 </span>                :            : 
+<span class="lineNum">      21 </span>                :<span class="lineCov">     561487 : char *safe_malloc(size)</span>
+<span class="lineNum">      22 </span>                :            : unsigned size;
+<span class="lineNum">      23 </span>                :            : {
+<span class="lineNum">      24 </span>                :            :     char *p;
+<span class="lineNum">      25 </span>                :            : 
+<span class="lineNum">      26 </span>                :            :     extern char *malloc() ;
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 561487 times"> + </span>]:<span class="lineCov">     561487 :     if ((p = malloc(size)) == (char *) 0) {</span>
+<span class="lineNum">      29 </span>                :            :         cleanupHandler(heap_no_mem,&quot;safe_malloc&quot;);
+<span class="lineNum">      30 </span>                :            :     }
+<span class="lineNum">      31 </span>                :<span class="lineCov">     561487 :     return p;</span>
+<span class="lineNum">      32 </span>                :            : }
+<a name="33"><span class="lineNum">      33 </span>                :            : </a>
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :<span class="lineCov">          4 : char *safe_realloc(obj, size)</span>
+<span class="lineNum">      36 </span>                :            : char *obj;
+<span class="lineNum">      37 </span>                :            : unsigned size;
+<span class="lineNum">      38 </span>                :            : {
+<span class="lineNum">      39 </span>                :            :     char *p;
+<span class="lineNum">      40 </span>                :            : 
+<span class="lineNum">      41 </span>                :            :     extern char *realloc() ;
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 4 times"> + </span>]:<span class="lineCov">          4 :     if ((p = realloc(obj, size)) == (char *) 0) {</span>
+<span class="lineNum">      44 </span>                :            :         cleanupHandler(heap_no_mem,&quot;safe_realloc&quot;);
+<span class="lineNum">      45 </span>                :            :     }
+<span class="lineNum">      46 </span>                :<span class="lineCov">          4 :     return p;</span>
+<span class="lineNum">      47 </span>                :            : }
+<a name="48"><span class="lineNum">      48 </span>                :            : </a>
+<span class="lineNum">      49 </span>                :            : 
+<span class="lineNum">      50 </span>                :<span class="lineCov">      13062 : char *safe_calloc(size, num)</span>
+<span class="lineNum">      51 </span>                :            : unsigned size, num;
+<span class="lineNum">      52 </span>                :            : {
+<span class="lineNum">      53 </span>                :            :     char *p;
+<span class="lineNum">      54 </span>                :            : 
+<span class="lineNum">      55 </span>                :            :     extern char *calloc() ;
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>        [<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 13062 times"> + </span>]:<span class="lineCov">      13062 :     if ((p = calloc(size, num)) == (char *) 0) {</span>
+<span class="lineNum">      58 </span>                :            :         cleanupHandler(heap_no_mem,&quot;safe_calloc&quot;);
+<span class="lineNum">      59 </span>                :            :     }
+<span class="lineNum">      60 </span>                :<span class="lineCov">      13062 :     return p;</span>
+<a name="61"><span class="lineNum">      61 </span>                :            : }</a>
+<span class="lineNum">      62 </span>                :            : /* when not testing memory just call system free */
+<span class="lineNum">      63 </span>                :<span class="lineCov">     492709 : safe_free(ptr)</span>
+<span class="lineNum">      64 </span>                :            : char *ptr;
+<span class="lineNum">      65 </span>                :            : {
+<span class="lineNum">      66 </span>                :<span class="lineCov">     492709 :     free(ptr);</span>
+<span class="lineNum">      67 </span>                :            :     return;
+<a name="68"><span class="lineNum">      68 </span>                :            : }</a>
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :<span class="lineCov">      12976 : safe_cfree(ptr)</span>
+<span class="lineNum">      71 </span>                :            : char *ptr;
+<span class="lineNum">      72 </span>                :            : {
+<span class="lineNum">      73 </span>                :            : #ifndef SPEC_CPU2000
+<span class="lineNum">      74 </span>                :            :     cfree(ptr);
+<span class="lineNum">      75 </span>                :            : #endif
+<span class="lineNum">      76 </span>                :            :     return;
+<span class="lineNum">      77 </span>                :            : }
+<span class="lineNum">      78 </span>                :            : /*
+<span class="lineNum">      79 </span>                :            :   *--------------------------------------------------------------
+<span class="lineNum">      80 </span>                :            :   * END NORMAL C MEMORY MANAGEMENT SYSTEM
+<span class="lineNum">      81 </span>                :            :   *--------------------------------------------------------------
+<a name="82"><span class="lineNum">      82 </span>                :            : */</a>
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :<span class="lineNoCov">          0 : int cleanup(sigNum)</span>
+<span class="lineNum">      85 </span>                :            : int sigNum ;
+<span class="lineNum">      86 </span>                :            : {
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 :     cleanupHandler(-sigNum,NULL) ;</span>
+<span class="lineNum">      89 </span>                :            : 
+<a name="90"><span class="lineNum">      90 </span>                :            : }</a>
+<span class="lineNum">      91 </span>                :            : 
+<span class="lineNum">      92 </span>                :<span class="lineNoCov">          0 : int cleanupHandler(status,function)</span>
+<span class="lineNum">      93 </span>                :            : int status ;
+<span class="lineNum">      94 </span>                :            : char *function ;
+<span class="lineNum">      95 </span>                :            : {
+<span class="lineNum">      96 </span>                :            : 
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :     exit(1) ;</span>
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

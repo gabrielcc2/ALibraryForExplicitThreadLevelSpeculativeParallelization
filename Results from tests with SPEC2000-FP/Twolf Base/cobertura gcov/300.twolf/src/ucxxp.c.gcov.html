@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/ucxxp.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - ucxxp.c<span style="font-size: 80%;"> (source / <a href="ucxxp.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;ucxxglb.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :<span class="lineCov">      40861 : ucxxp( a , b , anxcenter , bnxcenter )</span>
+<span class="lineNum">       4 </span>                :            : int a , b , anxcenter , bnxcenter ;
+<span class="lineNum">       5 </span>                :            : {
+<span class="lineNum">       6 </span>                :            : 
+<span class="lineNum">       7 </span>                :            : CBOXPTR acellptr , bcellptr ;
+<span class="lineNum">       8 </span>                :            : TIBOXPTR atileptr , btileptr ;
+<span class="lineNum">       9 </span>                :            : TEBOXPTR atermptr , btermptr ;
+<span class="lineNum">      10 </span>                :            : 
+<span class="lineNum">      11 </span>                :            : int cost ;
+<span class="lineNum">      12 </span>                :            : int aorient , borient ;
+<span class="lineNum">      13 </span>                :            : int aycenter , bycenter ;
+<span class="lineNum">      14 </span>                :            : int truth ;
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :<span class="lineCov">      40861 : acellptr = carray[ a ]    ; </span>
+<span class="lineNum">      17 </span>                :<span class="lineCov">      40861 : aycenter = acellptr-&gt;cycenter ; </span>
+<span class="lineNum">      18 </span>                :<span class="lineCov">      40861 : aorient  = acellptr-&gt;corient  ; </span>
+<span class="lineNum">      19 </span>                :<span class="lineCov">      40861 : atileptr = acellptr-&gt;tileptr ;</span>
+<span class="lineNum">      20 </span>                :<span class="lineCov">      40861 : atermptr = atileptr-&gt;termsptr ; </span>
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :<span class="lineCov">      40861 : bcellptr = carray[ b ]    ; </span>
+<span class="lineNum">      23 </span>                :<span class="lineCov">      40861 : bycenter = bcellptr-&gt;cycenter ; </span>
+<span class="lineNum">      24 </span>                :<span class="lineCov">      40861 : borient  = bcellptr-&gt;corient  ; </span>
+<span class="lineNum">      25 </span>                :<span class="lineCov">      40861 : btileptr = bcellptr-&gt;tileptr ;</span>
+<span class="lineNum">      26 </span>                :<span class="lineCov">      40861 : btermptr = btileptr-&gt;termsptr ; </span>
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :<span class="lineCov">      40861 : term_newpos( atermptr , anxcenter , bycenter , aorient ) ; </span>
+<span class="lineNum">      29 </span>                :<span class="lineCov">      40861 : term_newpos( btermptr , bnxcenter , aycenter , borient ) ; </span>
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>                :<span class="lineCov">      40861 : cost = funccost ; </span>
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :<span class="lineCov">      40861 : new_dbox( atermptr , &amp;cost ) ;</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">      40861 : new_dbox( btermptr , &amp;cost ) ;</span>
+<span class="lineNum">      35 </span>                :            : 
+<span class="lineNum">      36 </span>                :<span class="lineCov">      40861 : truth = acceptt( funccost - cost ) ;</span>
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>        [<span class="branchCov" title="Branch 0 was taken 9479 times"> + </span><span class="branchCov" title="Branch 1 was taken 31382 times"> + </span>]:<span class="lineCov">      40861 : if( truth == 1 ) {</span>
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :<span class="lineCov">       9479 :     dbox_pos( atermptr ) ;</span>
+<span class="lineNum">      41 </span>                :<span class="lineCov">       9479 :     dbox_pos( btermptr ) ;</span>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineCov">       9479 :     acellptr-&gt;cxcenter = anxcenter ; </span>
+<span class="lineNum">      44 </span>                :<span class="lineCov">       9479 :     acellptr-&gt;cycenter = bycenter ; </span>
+<span class="lineNum">      45 </span>                :<span class="lineCov">       9479 :     bcellptr-&gt;cxcenter = bnxcenter ; </span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">       9479 :     bcellptr-&gt;cycenter = aycenter ; </span>
+<span class="lineNum">      47 </span>                :            : 
+<span class="lineNum">      48 </span>                :<span class="lineCov">       9479 :     funccost = cost ; </span>
+<span class="lineNum">      49 </span>                :<span class="lineCov">       9479 :     return( 1 ) ;</span>
+<span class="lineNum">      50 </span>                :            : } else {
+<span class="lineNum">      51 </span>                :<span class="lineCov">      40861 :     return( 0 ) ;</span>
+<span class="lineNum">      52 </span>                :            : }
+<span class="lineNum">      53 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

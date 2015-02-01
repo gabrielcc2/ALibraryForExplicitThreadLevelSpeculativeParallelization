@@ -1,0 +1,142 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/analyze.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* analyze.c
+        -:    2:*
+        -:    3:*  routine to analyze energy and force for AMMP.
+        -:    4:*
+        -:    5:*  analyzes the potential due to each kind of potential used
+        -:    6:*
+        -:    7:*/
+        -:    8:/*
+        -:    9:*  copyright 1992 Robert W. Harrison
+        -:   10:*  
+        -:   11:*  This notice may not be removed
+        -:   12:*  This program may be copied for scientific use
+        -:   13:*  It may not be sold for profit without explicit
+        -:   14:*  permission of the author(s) who retain any
+        -:   15:*  commercial rights including the right to modify 
+        -:   16:*  this notice
+        -:   17:*/
+        -:   18:
+        -:   19:#define ANSI 1
+        -:   20:/* misc includes - ANSI and some are just to be safe */
+        -:   21:#include <stdio.h>
+        -:   22:#include <ctype.h>
+        -:   23:#include <math.h>
+        -:   24:#ifdef ANSI
+        -:   25:#include <stdlib.h>
+        -:   26:#endif
+        -:   27://#include "ammp.h"
+        -:   28:/* ATOM structure contains a serial number for indexing into
+        -:   29:* arrays and the like (a Hessian)
+        -:   30:* but otherwise is self-contained. Note the hooks for Non-bonded potentials
+        -:   31:*/
+        -:   32:
+function _Z7analyzePPFiPffEiiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:   33:void analyze(int (*vfs[])(float*, float), int nfs, int ilow, int ihigh, FILE *op)
+        -:   34:{
+        -:   35:/* block of function used in eval()
+        -:   36:*   only the v_stuff are needed
+        -:   37:*/
+        -:   38:int v_bond(float*, float),f_bond(float),v_angle(float*, float),f_angle(float);
+        -:   39:int v_mmbond(float*, float),f_mmbond(float),v_mmangle(float*, float),f_mmangle(float);
+        -:   40:int v_nonbon(float*, float),f_nonbon(float),v_torsion(float*, float),f_torsion(float);
+        -:   41:int atom(),bond(),angle(),torsion();
+        -:   42:int v_hybrid(float*, float),f_hybrid(float);
+        -:   43:int restrain(),v_restrain(float*, float),f_restrain(float);
+        -:   44:int tether(),v_tether(float*, float),f_tether(float);
+        -:   45:int u_v_nonbon(float*, float), u_f_nonbon(float);
+        -:   46:int v_noel(float*, float),a_noel(float*, float, int, int, FILE*);
+        -:   47:int v_ho_noel(float*, float);
+        -:   48:int a_bond(float*, float, int, int, FILE*),a_mmbond(float*, float, int, int, FILE*),a_angle(float*, float, int, int, FILE*),a_mmangle(float*, float, int, int, FILE*);
+        -:   49:int a_nonbon(float*, float, int, int, FILE*),a_torsion(float*, float, int, int, FILE*),a_hybrid(float*, float, int, int, FILE*),a_restrain(float*, float, int, int, FILE*);
+        -:   50:int a_tether(float*, float, int, int, FILE*);
+        -:   51:
+        -:   52:
+        -:   53:float V,T,vt;
+        -:   54:int ifs;
+        -:   55:int i,j;
+    #####:   56:i = ilow;
+    #####:   57:j = ihigh;
+    #####:   58:if( ihigh < ilow ) j = ilow;
+branch  0 never executed
+branch  1 never executed
+    #####:   59: V = 0.;
+    #####:   60:for( ifs = 0; ifs < nfs; ifs++ )
+branch  0 never executed
+branch  1 never executed
+        -:   61:{
+    #####:   62:	vt = 0.; 
+        -:   63:/*	(*vfs[ifs])(&vt,0.); */
+    #####:   64:	if( vfs[ifs] == v_bond)
+branch  0 never executed
+branch  1 never executed
+    #####:   65:	{ a_bond(&vt,0.,i,j,op);fprintf( op," %f bond energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   66:	if( vfs[ifs] == v_mmbond)
+branch  0 never executed
+branch  1 never executed
+    #####:   67:	{a_mmbond(&vt,0.,i,j,op); fprintf( op," %f mm bond energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   68:	if( vfs[ifs] == v_mmangle)
+branch  0 never executed
+branch  1 never executed
+    #####:   69:	{a_mmangle(&vt,0.,i,j,op); fprintf( op," %f mm angle energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   70:	if( vfs[ifs] == v_angle)
+branch  0 never executed
+branch  1 never executed
+    #####:   71:	{a_angle(&vt,0.,i,j,op); fprintf( op," %f angle energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   72:	if( vfs[ifs] == v_noel)
+branch  0 never executed
+branch  1 never executed
+    #####:   73:	{a_noel(&vt,0.,i,j,op); fprintf( op," %f noel energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   74:	if( vfs[ifs] == v_ho_noel)
+branch  0 never executed
+branch  1 never executed
+    #####:   75:	{a_noel(&vt,0.,i,j,op); fprintf( op," %f noel energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   76:	if( vfs[ifs] == u_v_nonbon)
+branch  0 never executed
+branch  1 never executed
+    #####:   77:	{a_nonbon(&vt,0.,i,j,op); fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   78:	if( vfs[ifs] == v_nonbon)
+branch  0 never executed
+branch  1 never executed
+    #####:   79:	{a_nonbon(&vt,0.,i,j,op); fprintf( op," %f non-bonded energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   80:	if( vfs[ifs] == v_torsion)
+branch  0 never executed
+branch  1 never executed
+    #####:   81:	{a_torsion(&vt,0.,i,j,op); fprintf( op," %f torsion energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   82:	if( vfs[ifs] == v_hybrid)
+branch  0 never executed
+branch  1 never executed
+    #####:   83:	{a_hybrid(&vt,0.,i,j,op); fprintf( op," %f hybrid energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   84:	if( vfs[ifs] == v_tether)
+branch  0 never executed
+branch  1 never executed
+    #####:   85:	{a_tether(&vt,0.,i,j,op); fprintf( op," %f tether restraint energy\n",vt); goto DONE;}
+call    0 never executed
+    #####:   86:	if( vfs[ifs] == v_restrain)
+branch  0 never executed
+branch  1 never executed
+    #####:   87:	{a_restrain(&vt,0.,i,j,op); fprintf( op," %f restraint bond energy\n",vt); goto DONE;}
+call    0 never executed
+        -:   88:DONE:  
+        -:   89:/* next statement is needed because cannot have a label at an end loop */
+    #####:   90:	V += vt;
+    #####:   91:	vt = 0.;
+        -:   92:}
+    #####:   93:	fprintf( op," %f total potential energy\n",V);
+        -:   94:/* end of routine */
+    #####:   95:}
+        -:   96:

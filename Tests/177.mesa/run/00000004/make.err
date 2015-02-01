@@ -1,0 +1,5 @@
+mesa4.c: In function ‘ReadMesh’:
+mesa4.c:127:10: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+mesa4.c:149:13: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+mesa4.c: In function ‘SPECWriteIntermediateImage’:
+mesa4.c:199:10: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result

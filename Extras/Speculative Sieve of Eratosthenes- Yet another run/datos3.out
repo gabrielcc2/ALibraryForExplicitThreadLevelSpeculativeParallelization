@@ -1,0 +1,773 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+ no time accumulated
+
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+  0.00      0.00     0.00      374     0.00     0.00  std::ceil(float)
+  0.00      0.00     0.00       10     0.00     0.00  std::_Iter_base<void* (**)(void*), false>::_S_base(void* (**)(void*))
+  0.00      0.00     0.00       10     0.00     0.00  std::_Iter_base<void**, false>::_S_base(void**)
+  0.00      0.00     0.00        6     0.00     0.00  std::_Niter_base<void* (**)(void*)>::iterator_type std::__niter_base<void* (**)(void*)>(void* (**)(void*))
+  0.00      0.00     0.00        6     0.00     0.00  std::_Niter_base<void**>::iterator_type std::__niter_base<void**>(void**)
+  0.00      0.00     0.00        5     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator()
+  0.00      0.00     0.00        5     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator()
+  0.00      0.00     0.00        4     0.00     0.00  __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::base() const
+  0.00      0.00     0.00        4     0.00     0.00  __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::base() const
+  0.00      0.00     0.00        4     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::size() const
+  0.00      0.00     0.00        4     0.00     0.00  std::vector<void*, std::allocator<void*> >::size() const
+  0.00      0.00     0.00        4     0.00     0.00  std::_Miter_base<void* (**)(void*)>::iterator_type std::__miter_base<void* (**)(void*)>(void* (**)(void*))
+  0.00      0.00     0.00        4     0.00     0.00  std::_Miter_base<void**>::iterator_type std::__miter_base<void**>(void**)
+  0.00      0.00     0.00        4     0.00     0.00  operator new(unsigned int, void*)
+  0.00      0.00     0.00        3     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::max_size() const
+  0.00      0.00     0.00        3     0.00     0.00  __gnu_cxx::new_allocator<void*>::max_size() const
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy_aux<true>::__destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*))
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy_aux<true>::__destroy<void**>(void**, void**)
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*))
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&)
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy<void**>(void**, void**)
+  0.00      0.00     0.00        3     0.00     0.00  void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&)
+  0.00      0.00     0.00        2     0.00     0.00  loop_speculator::loop_speculator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<_loop_spec_thread>::new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<_loop_spec_thread>::~new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*))
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<void*>::construct(void**, void* const&)
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~new_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::__normal_iterator(void* (** const&)(void*))
+  0.00      0.00     0.00        2     0.00     0.00  __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::__normal_iterator(void** const&)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() const
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() const
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<void*, std::allocator<void*> >::max_size() const
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<_loop_spec_thread>::allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<_loop_spec_thread>::~allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~allocator()
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void* (*)(void*)>(void* (* const*)(void*), void* (* const*)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void*>(void* const*, void* const*, void**)
+  0.00      0.00     0.00        2     0.00     0.00  void std::_Destroy_aux<false>::__destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::_Vector_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::~_Vector_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_deallocate(_loop_spec_thread*, unsigned int)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_get_Tp_allocator()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_base()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__uninitialized_copy<true>::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__uninitialized_copy<true>::uninitialized_copy<void**, void**>(void**, void**, void**)
+  0.00      0.00     0.00        2     0.00     0.00  std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::map()
+  0.00      0.00     0.00        2     0.00     0.00  std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~map()
+  0.00      0.00     0.00        2     0.00     0.00  std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::map()
+  0.00      0.00     0.00        2     0.00     0.00  std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~map()
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::vector()
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector()
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*))
+  0.00      0.00     0.00        2     0.00     0.00  std::vector<void*, std::allocator<void*> >::push_back(void* const&)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_M_initialize()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::~_Rb_tree_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_begin()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_erase(std::_Rb_tree_node<std::pair<void* const, _data_access_log> >*)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_M_initialize()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::~_Rb_tree_impl()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_begin()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned long const, int> >*)
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree()
+  0.00      0.00     0.00        2     0.00     0.00  std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree()
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__copy_move_a<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__copy_move_a<false, void**, void**>(void**, void**, void**)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::uninitialized_copy<void**, void**>(void**, void**, void**)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__uninitialized_copy_a<void* (**)(void*), void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__uninitialized_copy_a<void**, void**, void*>(void**, void**, void**, std::allocator<void*>&)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::__uninitialized_move_a<void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)> >(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::__uninitialized_move_a<void**, void**, std::allocator<void*> >(void**, void**, void**, std::allocator<void*>&)
+  0.00      0.00     0.00        2     0.00     0.00  unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&)
+  0.00      0.00     0.00        2     0.00     0.00  void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  0.00      0.00     0.00        2     0.00     0.00  void** std::copy<void**, void**>(void**, void**, void**)
+  0.00      0.00     0.00        2     0.00     0.00  void std::_Destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*)
+  0.00      0.00     0.00        2     0.00     0.00  void std::_Destroy<_loop_spec_thread*, _loop_spec_thread>(_loop_spec_thread*, _loop_spec_thread*, std::allocator<_loop_spec_thread>&)
+  0.00      0.00     0.00        1     0.00     0.00  global constructors keyed to my_difftime(timeval*, timeval*)
+  0.00      0.00     0.00        1     0.00     0.00  my_difftime(timeval*, timeval*)
+  0.00      0.00     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::deallocate(void* (**)(void*), unsigned int)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::allocate(unsigned int, void const*)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::new_allocator()
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void* (*)(void*)>::~new_allocator()
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void*>::deallocate(void**, unsigned int)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void*>::allocate(unsigned int, void const*)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void*>::new_allocator()
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<void*>::~new_allocator()
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::difference_type __gnu_cxx::operator-<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&, __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&)
+  0.00      0.00     0.00        1     0.00     0.00  __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::difference_type __gnu_cxx::operator-<void**, std::vector<void*, std::allocator<void*> > >(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&, __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&)
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const
+  0.00      0.00     0.00        1     0.00     0.00  std::allocator<void* (*)(void*)>::allocator()
+  0.00      0.00     0.00        1     0.00     0.00  std::allocator<void* (*)(void*)>::~allocator()
+  0.00      0.00     0.00        1     0.00     0.00  std::allocator<void*>::allocator()
+  0.00      0.00     0.00        1     0.00     0.00  std::allocator<void*>::~allocator()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_allocate(unsigned int)
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::_Vector_impl()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::~_Vector_impl()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_base()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_M_allocate(unsigned int)
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::_Vector_impl()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::~_Vector_impl()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::_Vector_base()
+  0.00      0.00     0.00        1     0.00     0.00  std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*))
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*))
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::end()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::begin()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::clear()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::vector()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&)
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**)
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::end()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::begin()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::clear()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::vector()
+  0.00      0.00     0.00        1     0.00     0.00  std::vector<void*, std::allocator<void*> >::~vector()
+
+			Call graph
+
+
+granularity: each sample hit covers 4 byte(s) no time propagated
+
+index % time    self  children    called     name
+                0.00    0.00     374/374         main [4]
+[5]      0.0    0.00    0.00     374         std::ceil(float) [5]
+-----------------------------------------------
+                0.00    0.00       4/10          std::_Miter_base<void* (**)(void*)>::iterator_type std::__miter_base<void* (**)(void*)>(void* (**)(void*)) [16]
+                0.00    0.00       6/10          std::_Niter_base<void* (**)(void*)>::iterator_type std::__niter_base<void* (**)(void*)>(void* (**)(void*)) [8]
+[6]      0.0    0.00    0.00      10         std::_Iter_base<void* (**)(void*), false>::_S_base(void* (**)(void*)) [6]
+-----------------------------------------------
+                0.00    0.00       4/10          std::_Miter_base<void**>::iterator_type std::__miter_base<void**>(void**) [17]
+                0.00    0.00       6/10          std::_Niter_base<void**>::iterator_type std::__niter_base<void**>(void**) [9]
+[7]      0.0    0.00    0.00      10         std::_Iter_base<void**, false>::_S_base(void**) [7]
+-----------------------------------------------
+                0.00    0.00       6/6           void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [85]
+[8]      0.0    0.00    0.00       6         std::_Niter_base<void* (**)(void*)>::iterator_type std::__niter_base<void* (**)(void*)>(void* (**)(void*)) [8]
+                0.00    0.00       6/10          std::_Iter_base<void* (**)(void*), false>::_S_base(void* (**)(void*)) [6]
+-----------------------------------------------
+                0.00    0.00       6/6           void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**) [86]
+[9]      0.0    0.00    0.00       6         std::_Niter_base<void**>::iterator_type std::__niter_base<void**>(void**) [9]
+                0.00    0.00       6/10          std::_Iter_base<void**, false>::_S_base(void**) [7]
+-----------------------------------------------
+                0.00    0.00       1/5           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector() [133]
+                0.00    0.00       1/5           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*)) [128]
+                0.00    0.00       3/5           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[10]     0.0    0.00    0.00       5         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() [10]
+-----------------------------------------------
+                0.00    0.00       1/5           std::vector<void*, std::allocator<void*> >::~vector() [140]
+                0.00    0.00       1/5           std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**) [135]
+                0.00    0.00       3/5           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[11]     0.0    0.00    0.00       5         std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() [11]
+-----------------------------------------------
+                0.00    0.00       2/4           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::difference_type __gnu_cxx::operator-<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&, __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&) [109]
+[12]     0.0    0.00    0.00       4         __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::base() const [12]
+-----------------------------------------------
+                0.00    0.00       2/4           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::difference_type __gnu_cxx::operator-<void**, std::vector<void*, std::allocator<void*> > >(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&, __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&) [110]
+[13]     0.0    0.00    0.00       4         __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::base() const [13]
+-----------------------------------------------
+                0.00    0.00       4/4           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [111]
+[14]     0.0    0.00    0.00       4         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::size() const [14]
+-----------------------------------------------
+                0.00    0.00       4/4           std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [112]
+[15]     0.0    0.00    0.00       4         std::vector<void*, std::allocator<void*> >::size() const [15]
+-----------------------------------------------
+                0.00    0.00       4/4           void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [94]
+[16]     0.0    0.00    0.00       4         std::_Miter_base<void* (**)(void*)>::iterator_type std::__miter_base<void* (**)(void*)>(void* (**)(void*)) [16]
+                0.00    0.00       4/10          std::_Iter_base<void* (**)(void*), false>::_S_base(void* (**)(void*)) [6]
+-----------------------------------------------
+                0.00    0.00       4/4           void** std::copy<void**, void**>(void**, void**, void**) [95]
+[17]     0.0    0.00    0.00       4         std::_Miter_base<void**>::iterator_type std::__miter_base<void**>(void**) [17]
+                0.00    0.00       4/10          std::_Iter_base<void**, false>::_S_base(void**) [7]
+-----------------------------------------------
+                0.00    0.00       2/4           __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*)) [30]
+                0.00    0.00       2/4           __gnu_cxx::new_allocator<void*>::construct(void**, void* const&) [31]
+[18]     0.0    0.00    0.00       4         operator new(unsigned int, void*) [18]
+-----------------------------------------------
+                0.00    0.00       1/3           __gnu_cxx::new_allocator<void* (*)(void*)>::allocate(unsigned int, void const*) [102]
+                0.00    0.00       2/3           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const [40]
+[19]     0.0    0.00    0.00       3         __gnu_cxx::new_allocator<void* (*)(void*)>::max_size() const [19]
+-----------------------------------------------
+                0.00    0.00       1/3           __gnu_cxx::new_allocator<void*>::allocate(unsigned int, void const*) [106]
+                0.00    0.00       2/3           std::vector<void*, std::allocator<void*> >::max_size() const [41]
+[20]     0.0    0.00    0.00       3         __gnu_cxx::new_allocator<void*>::max_size() const [20]
+-----------------------------------------------
+                0.00    0.00       3/3           void std::_Destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [23]
+[21]     0.0    0.00    0.00       3         void std::_Destroy_aux<true>::__destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [21]
+-----------------------------------------------
+                0.00    0.00       3/3           void std::_Destroy<void**>(void**, void**) [25]
+[22]     0.0    0.00    0.00       3         void std::_Destroy_aux<true>::__destroy<void**>(void**, void**) [22]
+-----------------------------------------------
+                0.00    0.00       3/3           void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&) [24]
+[23]     0.0    0.00    0.00       3         void std::_Destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [23]
+                0.00    0.00       3/3           void std::_Destroy_aux<true>::__destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [21]
+-----------------------------------------------
+                0.00    0.00       1/3           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector() [133]
+                0.00    0.00       1/3           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+                0.00    0.00       1/3           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*)) [128]
+[24]     0.0    0.00    0.00       3         void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&) [24]
+                0.00    0.00       3/3           void std::_Destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [23]
+-----------------------------------------------
+                0.00    0.00       3/3           void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&) [26]
+[25]     0.0    0.00    0.00       3         void std::_Destroy<void**>(void**, void**) [25]
+                0.00    0.00       3/3           void std::_Destroy_aux<true>::__destroy<void**>(void**, void**) [22]
+-----------------------------------------------
+                0.00    0.00       1/3           std::vector<void*, std::allocator<void*> >::~vector() [140]
+                0.00    0.00       1/3           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+                0.00    0.00       1/3           std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**) [135]
+[26]     0.0    0.00    0.00       3         void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&) [26]
+                0.00    0.00       3/3           void std::_Destroy<void**>(void**, void**) [25]
+-----------------------------------------------
+                0.00    0.00       2/2           __static_initialization_and_destruction_0(int, int) [100]
+[27]     0.0    0.00    0.00       2         loop_speculator::loop_speculator() [27]
+                0.00    0.00       2/2           std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::vector() [65]
+                0.00    0.00       2/2           std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::map() [63]
+                0.00    0.00       2/2           std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::map() [61]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<_loop_spec_thread>::allocator() [42]
+[28]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<_loop_spec_thread>::new_allocator() [28]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<_loop_spec_thread>::~allocator() [43]
+[29]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<_loop_spec_thread>::~new_allocator() [29]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*)) [67]
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[30]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*)) [30]
+                0.00    0.00       2/4           operator new(unsigned int, void*) [18]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::push_back(void* const&) [68]
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[31]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<void*>::construct(void**, void* const&) [31]
+                0.00    0.00       2/4           operator new(unsigned int, void*) [18]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::allocator() [44]
+[32]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::new_allocator() [32]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~allocator() [45]
+[33]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~new_allocator() [33]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::allocator() [46]
+[34]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::new_allocator() [34]
+-----------------------------------------------
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~allocator() [47]
+[35]     0.0    0.00    0.00       2         __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~new_allocator() [35]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::end() [129]
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::begin() [130]
+[36]     0.0    0.00    0.00       2         __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::__normal_iterator(void* (** const&)(void*)) [36]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::begin() [137]
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::end() [136]
+[37]     0.0    0.00    0.00       2         __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::__normal_iterator(void** const&) [37]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const [40]
+[38]     0.0    0.00    0.00       2         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() const [38]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void*, std::allocator<void*> >::max_size() const [41]
+[39]     0.0    0.00    0.00       2         std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() const [39]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [111]
+[40]     0.0    0.00    0.00       2         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const [40]
+                0.00    0.00       2/2           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() const [38]
+                0.00    0.00       2/3           __gnu_cxx::new_allocator<void* (*)(void*)>::max_size() const [19]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [112]
+[41]     0.0    0.00    0.00       2         std::vector<void*, std::allocator<void*> >::max_size() const [41]
+                0.00    0.00       2/2           std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() const [39]
+                0.00    0.00       2/3           __gnu_cxx::new_allocator<void*>::max_size() const [20]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::_Vector_impl() [51]
+[42]     0.0    0.00    0.00       2         std::allocator<_loop_spec_thread>::allocator() [42]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<_loop_spec_thread>::new_allocator() [28]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::~_Vector_impl() [52]
+[43]     0.0    0.00    0.00       2         std::allocator<_loop_spec_thread>::~allocator() [43]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<_loop_spec_thread>::~new_allocator() [29]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl() [70]
+[44]     0.0    0.00    0.00       2         std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::allocator() [44]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::new_allocator() [32]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::~_Rb_tree_impl() [71]
+[45]     0.0    0.00    0.00       2         std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~allocator() [45]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~new_allocator() [33]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl() [77]
+[46]     0.0    0.00    0.00       2         std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::allocator() [46]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::new_allocator() [34]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::~_Rb_tree_impl() [78]
+[47]     0.0    0.00    0.00       2         std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~allocator() [47]
+                0.00    0.00       2/2           __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~new_allocator() [35]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::__copy_move_a<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [83]
+[48]     0.0    0.00    0.00       2         void* (**std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void* (*)(void*)>(void* (* const*)(void*), void* (* const*)(void*), void* (**)(void*)))(void*) [48]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::__copy_move_a<false, void**, void**>(void**, void**, void**) [84]
+[49]     0.0    0.00    0.00       2         void** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void*>(void* const*, void* const*, void**) [49]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::_Destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [96]
+[50]     0.0    0.00    0.00       2         void std::_Destroy_aux<false>::__destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [50]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_base() [55]
+[51]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::_Vector_impl() [51]
+                0.00    0.00       2/2           std::allocator<_loop_spec_thread>::allocator() [42]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base() [56]
+[52]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::~_Vector_impl() [52]
+                0.00    0.00       2/2           std::allocator<_loop_spec_thread>::~allocator() [43]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base() [56]
+[53]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_deallocate(_loop_spec_thread*, unsigned int) [53]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector() [66]
+[54]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_get_Tp_allocator() [54]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::vector() [65]
+[55]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_base() [55]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::_Vector_impl() [51]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector() [66]
+[56]     0.0    0.00    0.00       2         std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base() [56]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_deallocate(_loop_spec_thread*, unsigned int) [53]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::~_Vector_impl() [52]
+-----------------------------------------------
+                0.00    0.00       1/2           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base() [121]
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[57]     0.0    0.00    0.00       2         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int) [57]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void* (*)(void*)>::deallocate(void* (**)(void*), unsigned int) [101]
+-----------------------------------------------
+                0.00    0.00       1/2           std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base() [126]
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[58]     0.0    0.00    0.00       2         std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int) [58]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void*>::deallocate(void**, unsigned int) [105]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [87]
+[59]     0.0    0.00    0.00       2         void* (**std::__uninitialized_copy<true>::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [59]
+                0.00    0.00       2/2           void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [94]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::uninitialized_copy<void**, void**>(void**, void**, void**) [88]
+[60]     0.0    0.00    0.00       2         void** std::__uninitialized_copy<true>::uninitialized_copy<void**, void**>(void**, void**, void**) [60]
+                0.00    0.00       2/2           void** std::copy<void**, void**>(void**, void**, void**) [95]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::loop_speculator() [27]
+[61]     0.0    0.00    0.00       2         std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::map() [61]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree() [74]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::~loop_speculator() [149]
+[62]     0.0    0.00    0.00       2         std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~map() [62]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree() [75]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::loop_speculator() [27]
+[63]     0.0    0.00    0.00       2         std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::map() [63]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree() [81]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::~loop_speculator() [149]
+[64]     0.0    0.00    0.00       2         std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~map() [64]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree() [82]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::loop_speculator() [27]
+[65]     0.0    0.00    0.00       2         std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::vector() [65]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_base() [55]
+-----------------------------------------------
+                0.00    0.00       2/2           loop_speculator::~loop_speculator() [149]
+[66]     0.0    0.00    0.00       2         std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector() [66]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_get_Tp_allocator() [54]
+                0.00    0.00       2/2           void std::_Destroy<_loop_spec_thread*, _loop_spec_thread>(_loop_spec_thread*, _loop_spec_thread*, std::allocator<_loop_spec_thread>&) [97]
+                0.00    0.00       2/2           std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base() [56]
+-----------------------------------------------
+                0.00    0.00       2/2           main [4]
+[67]     0.0    0.00    0.00       2         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*)) [67]
+                0.00    0.00       1/2           __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*)) [30]
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::end() [129]
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+-----------------------------------------------
+                0.00    0.00       2/2           main [4]
+[68]     0.0    0.00    0.00       2         std::vector<void*, std::allocator<void*> >::push_back(void* const&) [68]
+                0.00    0.00       1/2           __gnu_cxx::new_allocator<void*>::construct(void**, void* const&) [31]
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::end() [136]
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl() [70]
+[69]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_M_initialize() [69]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree() [74]
+[70]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl() [70]
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::allocator() [44]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_M_initialize() [69]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree() [75]
+[71]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::~_Rb_tree_impl() [71]
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~allocator() [45]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree() [75]
+[72]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_begin() [72]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree() [75]
+[73]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_erase(std::_Rb_tree_node<std::pair<void* const, _data_access_log> >*) [73]
+-----------------------------------------------
+                0.00    0.00       2/2           std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::map() [61]
+[74]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree() [74]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl() [70]
+-----------------------------------------------
+                0.00    0.00       2/2           std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~map() [62]
+[75]     0.0    0.00    0.00       2         std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree() [75]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_begin() [72]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_erase(std::_Rb_tree_node<std::pair<void* const, _data_access_log> >*) [73]
+                0.00    0.00       2/2           std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::~_Rb_tree_impl() [71]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl() [77]
+[76]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_M_initialize() [76]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree() [81]
+[77]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl() [77]
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::allocator() [46]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_M_initialize() [76]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree() [82]
+[78]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::~_Rb_tree_impl() [78]
+                0.00    0.00       2/2           std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~allocator() [47]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree() [82]
+[79]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_begin() [79]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree() [82]
+[80]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned long const, int> >*) [80]
+-----------------------------------------------
+                0.00    0.00       2/2           std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::map() [63]
+[81]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree() [81]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl() [77]
+-----------------------------------------------
+                0.00    0.00       2/2           std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~map() [64]
+[82]     0.0    0.00    0.00       2         std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree() [82]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_begin() [79]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned long const, int> >*) [80]
+                0.00    0.00       2/2           std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::~_Rb_tree_impl() [78]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [85]
+[83]     0.0    0.00    0.00       2         void* (**std::__copy_move_a<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [83]
+                0.00    0.00       2/2           void* (**std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void* (*)(void*)>(void* (* const*)(void*), void* (* const*)(void*), void* (**)(void*)))(void*) [48]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**) [86]
+[84]     0.0    0.00    0.00       2         void** std::__copy_move_a<false, void**, void**>(void**, void**, void**) [84]
+                0.00    0.00       2/2           void** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void*>(void* const*, void* const*, void**) [49]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [94]
+[85]     0.0    0.00    0.00       2         void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [85]
+                0.00    0.00       6/6           std::_Niter_base<void* (**)(void*)>::iterator_type std::__niter_base<void* (**)(void*)>(void* (**)(void*)) [8]
+                0.00    0.00       2/2           void* (**std::__copy_move_a<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [83]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::copy<void**, void**>(void**, void**, void**) [95]
+[86]     0.0    0.00    0.00       2         void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**) [86]
+                0.00    0.00       6/6           std::_Niter_base<void**>::iterator_type std::__niter_base<void**>(void**) [9]
+                0.00    0.00       2/2           void** std::__copy_move_a<false, void**, void**>(void**, void**, void**) [84]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::__uninitialized_copy_a<void* (**)(void*), void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [89]
+[87]     0.0    0.00    0.00       2         void* (**std::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [87]
+                0.00    0.00       2/2           void* (**std::__uninitialized_copy<true>::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [59]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::__uninitialized_copy_a<void**, void**, void*>(void**, void**, void**, std::allocator<void*>&) [90]
+[88]     0.0    0.00    0.00       2         void** std::uninitialized_copy<void**, void**>(void**, void**, void**) [88]
+                0.00    0.00       2/2           void** std::__uninitialized_copy<true>::uninitialized_copy<void**, void**>(void**, void**, void**) [60]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::__uninitialized_move_a<void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)> >(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [91]
+[89]     0.0    0.00    0.00       2         void* (**std::__uninitialized_copy_a<void* (**)(void*), void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [89]
+                0.00    0.00       2/2           void* (**std::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [87]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::__uninitialized_move_a<void**, void**, std::allocator<void*> >(void**, void**, void**, std::allocator<void*>&) [92]
+[90]     0.0    0.00    0.00       2         void** std::__uninitialized_copy_a<void**, void**, void*>(void**, void**, void**, std::allocator<void*>&) [90]
+                0.00    0.00       2/2           void** std::uninitialized_copy<void**, void**>(void**, void**, void**) [88]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[91]     0.0    0.00    0.00       2         void* (**std::__uninitialized_move_a<void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)> >(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [91]
+                0.00    0.00       2/2           void* (**std::__uninitialized_copy_a<void* (**)(void*), void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [89]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[92]     0.0    0.00    0.00       2         void** std::__uninitialized_move_a<void**, void**, std::allocator<void*> >(void**, void**, void**, std::allocator<void*>&) [92]
+                0.00    0.00       2/2           void** std::__uninitialized_copy_a<void**, void**, void*>(void**, void**, void**, std::allocator<void*>&) [90]
+-----------------------------------------------
+                0.00    0.00       1/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [111]
+                0.00    0.00       1/2           std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [112]
+[93]     0.0    0.00    0.00       2         unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&) [93]
+-----------------------------------------------
+                0.00    0.00       2/2           void* (**std::__uninitialized_copy<true>::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [59]
+[94]     0.0    0.00    0.00       2         void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [94]
+                0.00    0.00       4/4           std::_Miter_base<void* (**)(void*)>::iterator_type std::__miter_base<void* (**)(void*)>(void* (**)(void*)) [16]
+                0.00    0.00       2/2           void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [85]
+-----------------------------------------------
+                0.00    0.00       2/2           void** std::__uninitialized_copy<true>::uninitialized_copy<void**, void**>(void**, void**, void**) [60]
+[95]     0.0    0.00    0.00       2         void** std::copy<void**, void**>(void**, void**, void**) [95]
+                0.00    0.00       4/4           std::_Miter_base<void**>::iterator_type std::__miter_base<void**>(void**) [17]
+                0.00    0.00       2/2           void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**) [86]
+-----------------------------------------------
+                0.00    0.00       2/2           void std::_Destroy<_loop_spec_thread*, _loop_spec_thread>(_loop_spec_thread*, _loop_spec_thread*, std::allocator<_loop_spec_thread>&) [97]
+[96]     0.0    0.00    0.00       2         void std::_Destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [96]
+                0.00    0.00       2/2           void std::_Destroy_aux<false>::__destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [50]
+-----------------------------------------------
+                0.00    0.00       2/2           std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector() [66]
+[97]     0.0    0.00    0.00       2         void std::_Destroy<_loop_spec_thread*, _loop_spec_thread>(_loop_spec_thread*, _loop_spec_thread*, std::allocator<_loop_spec_thread>&) [97]
+                0.00    0.00       2/2           void std::_Destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [96]
+-----------------------------------------------
+                0.00    0.00       1/1           __do_global_ctors_aux [579]
+[98]     0.0    0.00    0.00       1         global constructors keyed to my_difftime(timeval*, timeval*) [98]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [100]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[99]     0.0    0.00    0.00       1         my_difftime(timeval*, timeval*) [99]
+-----------------------------------------------
+                0.00    0.00       1/1           global constructors keyed to my_difftime(timeval*, timeval*) [98]
+[100]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [100]
+                0.00    0.00       2/2           loop_speculator::loop_speculator() [27]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int) [57]
+[101]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void* (*)(void*)>::deallocate(void* (**)(void*), unsigned int) [101]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_allocate(unsigned int) [117]
+[102]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void* (*)(void*)>::allocate(unsigned int, void const*) [102]
+                0.00    0.00       1/3           __gnu_cxx::new_allocator<void* (*)(void*)>::max_size() const [19]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<void* (*)(void*)>::allocator() [113]
+[103]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void* (*)(void*)>::new_allocator() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<void* (*)(void*)>::~allocator() [114]
+[104]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void* (*)(void*)>::~new_allocator() [104]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int) [58]
+[105]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void*>::deallocate(void**, unsigned int) [105]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_M_allocate(unsigned int) [122]
+[106]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void*>::allocate(unsigned int, void const*) [106]
+                0.00    0.00       1/3           __gnu_cxx::new_allocator<void*>::max_size() const [20]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<void*>::allocator() [115]
+[107]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void*>::new_allocator() [107]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<void*>::~allocator() [116]
+[108]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<void*>::~new_allocator() [108]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[109]    0.0    0.00    0.00       1         __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::difference_type __gnu_cxx::operator-<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&, __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&) [109]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::base() const [12]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[110]    0.0    0.00    0.00       1         __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::difference_type __gnu_cxx::operator-<void**, std::vector<void*, std::allocator<void*> > >(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&, __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&) [110]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::base() const [13]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[111]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [111]
+                0.00    0.00       4/4           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::size() const [14]
+                0.00    0.00       2/2           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const [40]
+                0.00    0.00       1/2           unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&) [93]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[112]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [112]
+                0.00    0.00       4/4           std::vector<void*, std::allocator<void*> >::size() const [15]
+                0.00    0.00       2/2           std::vector<void*, std::allocator<void*> >::max_size() const [41]
+                0.00    0.00       1/2           unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&) [93]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::_Vector_impl() [118]
+[113]    0.0    0.00    0.00       1         std::allocator<void* (*)(void*)>::allocator() [113]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void* (*)(void*)>::new_allocator() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::~_Vector_impl() [119]
+[114]    0.0    0.00    0.00       1         std::allocator<void* (*)(void*)>::~allocator() [114]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void* (*)(void*)>::~new_allocator() [104]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::_Vector_impl() [123]
+[115]    0.0    0.00    0.00       1         std::allocator<void*>::allocator() [115]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void*>::new_allocator() [107]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::~_Vector_impl() [124]
+[116]    0.0    0.00    0.00       1         std::allocator<void*>::~allocator() [116]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void*>::~new_allocator() [108]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[117]    0.0    0.00    0.00       1         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_allocate(unsigned int) [117]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void* (*)(void*)>::allocate(unsigned int, void const*) [102]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_base() [120]
+[118]    0.0    0.00    0.00       1         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::_Vector_impl() [118]
+                0.00    0.00       1/1           std::allocator<void* (*)(void*)>::allocator() [113]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base() [121]
+[119]    0.0    0.00    0.00       1         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::~_Vector_impl() [119]
+                0.00    0.00       1/1           std::allocator<void* (*)(void*)>::~allocator() [114]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::vector() [132]
+[120]    0.0    0.00    0.00       1         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_base() [120]
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::_Vector_impl() [118]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector() [133]
+[121]    0.0    0.00    0.00       1         std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base() [121]
+                0.00    0.00       1/2           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int) [57]
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::~_Vector_impl() [119]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[122]    0.0    0.00    0.00       1         std::_Vector_base<void*, std::allocator<void*> >::_M_allocate(unsigned int) [122]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<void*>::allocate(unsigned int, void const*) [106]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_base() [125]
+[123]    0.0    0.00    0.00       1         std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::_Vector_impl() [123]
+                0.00    0.00       1/1           std::allocator<void*>::allocator() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base() [126]
+[124]    0.0    0.00    0.00       1         std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::~_Vector_impl() [124]
+                0.00    0.00       1/1           std::allocator<void*>::~allocator() [116]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::vector() [139]
+[125]    0.0    0.00    0.00       1         std::_Vector_base<void*, std::allocator<void*> >::_Vector_base() [125]
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::_Vector_impl() [123]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::~vector() [140]
+[126]    0.0    0.00    0.00       1         std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base() [126]
+                0.00    0.00       1/2           std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int) [58]
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::~_Vector_impl() [124]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*)) [67]
+[127]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+                0.00    0.00       3/5           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() [10]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::base() const [12]
+                0.00    0.00       2/2           void* (**std::__uninitialized_move_a<void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)> >(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*) [91]
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [111]
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::begin() [130]
+                0.00    0.00       1/1           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::difference_type __gnu_cxx::operator-<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&, __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&) [109]
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_allocate(unsigned int) [117]
+                0.00    0.00       1/2           __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*)) [30]
+                0.00    0.00       1/3           void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&) [24]
+                0.00    0.00       1/2           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int) [57]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::clear() [131]
+[128]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*)) [128]
+                0.00    0.00       1/5           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() [10]
+                0.00    0.00       1/3           void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&) [24]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*)) [67]
+[129]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::end() [129]
+                0.00    0.00       1/2           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::__normal_iterator(void* (** const&)(void*)) [36]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [127]
+[130]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::begin() [130]
+                0.00    0.00       1/2           __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::__normal_iterator(void* (** const&)(void*)) [36]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[131]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::clear() [131]
+                0.00    0.00       1/1           std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*)) [128]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[132]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::vector() [132]
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_base() [120]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[133]    0.0    0.00    0.00       1         std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector() [133]
+                0.00    0.00       1/5           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() [10]
+                0.00    0.00       1/3           void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&) [24]
+                0.00    0.00       1/1           std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base() [121]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::push_back(void* const&) [68]
+[134]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+                0.00    0.00       3/5           std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() [11]
+                0.00    0.00       2/4           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::base() const [13]
+                0.00    0.00       2/2           void** std::__uninitialized_move_a<void**, void**, std::allocator<void*> >(void**, void**, void**, std::allocator<void*>&) [92]
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [112]
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::begin() [137]
+                0.00    0.00       1/1           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::difference_type __gnu_cxx::operator-<void**, std::vector<void*, std::allocator<void*> > >(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&, __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&) [110]
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_M_allocate(unsigned int) [122]
+                0.00    0.00       1/2           __gnu_cxx::new_allocator<void*>::construct(void**, void* const&) [31]
+                0.00    0.00       1/3           void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&) [26]
+                0.00    0.00       1/2           std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int) [58]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::clear() [138]
+[135]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**) [135]
+                0.00    0.00       1/5           std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() [11]
+                0.00    0.00       1/3           void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&) [26]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::push_back(void* const&) [68]
+[136]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::end() [136]
+                0.00    0.00       1/2           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::__normal_iterator(void** const&) [37]
+-----------------------------------------------
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [134]
+[137]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::begin() [137]
+                0.00    0.00       1/2           __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::__normal_iterator(void** const&) [37]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[138]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::clear() [138]
+                0.00    0.00       1/1           std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**) [135]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[139]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::vector() [139]
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::_Vector_base() [125]
+-----------------------------------------------
+                0.00    0.00       1/1           main [4]
+[140]    0.0    0.00    0.00       1         std::vector<void*, std::allocator<void*> >::~vector() [140]
+                0.00    0.00       1/5           std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() [11]
+                0.00    0.00       1/3           void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&) [26]
+                0.00    0.00       1/1           std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base() [126]
+-----------------------------------------------
+
+Index by function name
+
+  [98] global constructors keyed to my_difftime(timeval*, timeval*) [6] std::_Iter_base<void* (**)(void*), false>::_S_base(void* (**)(void*)) [137] std::vector<void*, std::allocator<void*> >::begin()
+  [99] my_difftime(timeval*, timeval*) [7] std::_Iter_base<void**, false>::_S_base(void**) [138] std::vector<void*, std::allocator<void*> >::clear()
+ [100] __static_initialization_and_destruction_0(int, int) [48] void* (**std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void* (*)(void*)>(void* (* const*)(void*), void* (* const*)(void*), void* (**)(void*)))(void*) [68] std::vector<void*, std::allocator<void*> >::push_back(void* const&)
+  [27] loop_speculator::loop_speculator() [49] void** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<void*>(void* const*, void* const*, void**) [139] std::vector<void*, std::allocator<void*> >::vector()
+  [28] __gnu_cxx::new_allocator<_loop_spec_thread>::new_allocator() [50] void std::_Destroy_aux<false>::__destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*) [140] std::vector<void*, std::allocator<void*> >::~vector()
+  [29] __gnu_cxx::new_allocator<_loop_spec_thread>::~new_allocator() [21] void std::_Destroy_aux<true>::__destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*)) [69] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_M_initialize()
+ [101] __gnu_cxx::new_allocator<void* (*)(void*)>::deallocate(void* (**)(void*), unsigned int) [22] void std::_Destroy_aux<true>::__destroy<void**>(void**, void**) [70] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::_Rb_tree_impl()
+ [102] __gnu_cxx::new_allocator<void* (*)(void*)>::allocate(unsigned int, void const*) [51] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::_Vector_impl() [71] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree_impl<std::less<void*>, false>::~_Rb_tree_impl()
+  [30] __gnu_cxx::new_allocator<void* (*)(void*)>::construct(void* (**)(void*), void* (* const&)(void*)) [52] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_impl::~_Vector_impl() [72] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_begin()
+ [103] __gnu_cxx::new_allocator<void* (*)(void*)>::new_allocator() [53] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_deallocate(_loop_spec_thread*, unsigned int) [73] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_M_erase(std::_Rb_tree_node<std::pair<void* const, _data_access_log> >*)
+ [104] __gnu_cxx::new_allocator<void* (*)(void*)>::~new_allocator() [54] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_M_get_Tp_allocator() [74] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::_Rb_tree()
+ [105] __gnu_cxx::new_allocator<void*>::deallocate(void**, unsigned int) [55] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::_Vector_base() [75] std::_Rb_tree<void*, std::pair<void* const, _data_access_log>, std::_Select1st<std::pair<void* const, _data_access_log> >, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~_Rb_tree()
+ [106] __gnu_cxx::new_allocator<void*>::allocate(unsigned int, void const*) [56] std::_Vector_base<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~_Vector_base() [76] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_M_initialize()
+  [31] __gnu_cxx::new_allocator<void*>::construct(void**, void* const&) [117] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_allocate(unsigned int) [77] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::_Rb_tree_impl()
+ [107] __gnu_cxx::new_allocator<void*>::new_allocator() [118] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::_Vector_impl() [78] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree_impl<std::less<unsigned long>, false>::~_Rb_tree_impl()
+ [108] __gnu_cxx::new_allocator<void*>::~new_allocator() [119] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_impl::~_Vector_impl() [79] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_begin()
+  [32] __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::new_allocator() [57] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_deallocate(void* (**)(void*), unsigned int) [80] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned long const, int> >*)
+  [33] __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~new_allocator() [10] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() [81] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::_Rb_tree()
+  [34] __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::new_allocator() [120] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_Vector_base() [82] std::_Rb_tree<unsigned long, std::pair<unsigned long const, int>, std::_Select1st<std::pair<unsigned long const, int> >, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~_Rb_tree()
+  [35] __gnu_cxx::new_allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~new_allocator() [121] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::~_Vector_base() [16] std::_Miter_base<void* (**)(void*)>::iterator_type std::__miter_base<void* (**)(void*)>(void* (**)(void*))
+  [36] __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::__normal_iterator(void* (** const&)(void*)) [122] std::_Vector_base<void*, std::allocator<void*> >::_M_allocate(unsigned int) [17] std::_Miter_base<void**>::iterator_type std::__miter_base<void**>(void**)
+  [37] __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::__normal_iterator(void** const&) [123] std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::_Vector_impl() [8] std::_Niter_base<void* (**)(void*)>::iterator_type std::__niter_base<void* (**)(void*)>(void* (**)(void*))
+ [109] __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::difference_type __gnu_cxx::operator-<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&, __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > > const&) [124] std::_Vector_base<void*, std::allocator<void*> >::_Vector_impl::~_Vector_impl() [9] std::_Niter_base<void**>::iterator_type std::__niter_base<void**>(void**)
+ [110] __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::difference_type __gnu_cxx::operator-<void**, std::vector<void*, std::allocator<void*> > >(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&, __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > > const&) [58] std::_Vector_base<void*, std::allocator<void*> >::_M_deallocate(void**, unsigned int) [83] void* (**std::__copy_move_a<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  [19] __gnu_cxx::new_allocator<void* (*)(void*)>::max_size() const [11] std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() [84] void** std::__copy_move_a<false, void**, void**>(void**, void**, void**)
+  [20] __gnu_cxx::new_allocator<void*>::max_size() const [125] std::_Vector_base<void*, std::allocator<void*> >::_Vector_base() [85] void* (**std::__copy_move_a2<false, void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  [12] __gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >::base() const [126] std::_Vector_base<void*, std::allocator<void*> >::~_Vector_base() [86] void** std::__copy_move_a2<false, void**, void**>(void**, void**, void**)
+  [13] __gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >::base() const [59] void* (**std::__uninitialized_copy<true>::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*) [87] void* (**std::uninitialized_copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  [38] std::_Vector_base<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_get_Tp_allocator() const [60] void** std::__uninitialized_copy<true>::uninitialized_copy<void**, void**>(void**, void**, void**) [88] void** std::uninitialized_copy<void**, void**>(void**, void**, void**)
+  [39] std::_Vector_base<void*, std::allocator<void*> >::_M_get_Tp_allocator() const [61] std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::map() [89] void* (**std::__uninitialized_copy_a<void* (**)(void*), void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*)
+ [111] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_check_len(unsigned int, char const*) const [62] std::map<void*, _data_access_log, std::less<void*>, std::allocator<std::pair<void* const, _data_access_log> > >::~map() [90] void** std::__uninitialized_copy_a<void**, void**, void*>(void**, void**, void**, std::allocator<void*>&)
+  [14] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::size() const [63] std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::map() [91] void* (**std::__uninitialized_move_a<void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)> >(void* (**)(void*), void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&))(void*)
+  [40] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::max_size() const [64] std::map<unsigned long, int, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, int> > >::~map() [92] void** std::__uninitialized_move_a<void**, void**, std::allocator<void*> >(void**, void**, void**, std::allocator<void*>&)
+ [112] std::vector<void*, std::allocator<void*> >::_M_check_len(unsigned int, char const*) const [65] std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::vector() [93] unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&)
+  [15] std::vector<void*, std::allocator<void*> >::size() const [66] std::vector<_loop_spec_thread, std::allocator<_loop_spec_thread> >::~vector() [5] std::ceil(float)
+  [41] std::vector<void*, std::allocator<void*> >::max_size() const [127] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void* (**)(void*), std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> > >, void* (* const&)(void*)) [94] void* (**std::copy<void* (**)(void*), void* (**)(void*)>(void* (**)(void*), void* (**)(void*), void* (**)(void*)))(void*)
+  [42] std::allocator<_loop_spec_thread>::allocator() [128] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::_M_erase_at_end(void* (**)(void*)) [95] void** std::copy<void**, void**>(void**, void**, void**)
+  [43] std::allocator<_loop_spec_thread>::~allocator() [129] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::end() [96] void std::_Destroy<_loop_spec_thread*>(_loop_spec_thread*, _loop_spec_thread*)
+ [113] std::allocator<void* (*)(void*)>::allocator() [130] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::begin() [97] void std::_Destroy<_loop_spec_thread*, _loop_spec_thread>(_loop_spec_thread*, _loop_spec_thread*, std::allocator<_loop_spec_thread>&)
+ [114] std::allocator<void* (*)(void*)>::~allocator() [131] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::clear() [23] void std::_Destroy<void* (**)(void*)>(void* (**)(void*), void* (**)(void*))
+ [115] std::allocator<void*>::allocator() [67] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::push_back(void* (* const&)(void*)) [24] void std::_Destroy<void* (**)(void*), void* (*)(void*)>(void* (**)(void*), void* (**)(void*), std::allocator<void* (*)(void*)>&)
+ [116] std::allocator<void*>::~allocator() [132] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::vector() [25] void std::_Destroy<void**>(void**, void**)
+  [44] std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::allocator() [133] std::vector<void* (*)(void*), std::allocator<void* (*)(void*)> >::~vector() [26] void std::_Destroy<void**, void*>(void**, void**, std::allocator<void*>&)
+  [45] std::allocator<std::_Rb_tree_node<std::pair<void* const, _data_access_log> > >::~allocator() [134] std::vector<void*, std::allocator<void*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, void* const&) [18] operator new(unsigned int, void*)
+  [46] std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::allocator() [135] std::vector<void*, std::allocator<void*> >::_M_erase_at_end(void**)
+  [47] std::allocator<std::_Rb_tree_node<std::pair<unsigned long const, int> > >::~allocator() [136] std::vector<void*, std::allocator<void*> >::end()

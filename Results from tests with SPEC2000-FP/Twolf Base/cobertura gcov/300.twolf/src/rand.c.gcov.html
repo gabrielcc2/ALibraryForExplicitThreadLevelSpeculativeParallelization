@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/rand.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - rand.c<span style="font-size: 80%;"> (source / <a href="rand.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntryHi">91.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* ----------------------------------------------------------------- </a>
+<span class="lineNum">       2 </span>                :            : FILE:       rand.c                                       
+<span class="lineNum">       3 </span>                :            : DESCRIPTION:mimimum standard random number generator function.  This
+<span class="lineNum">       4 </span>                :            :             random generator replaces the poor Berkeley 4.2 random
+<span class="lineNum">       5 </span>                :            :             generator using generators discussed in the Communications
+<span class="lineNum">       6 </span>                :            :             of the ACM.  See articles by L'Ecuyer and Park/Miller in
+<span class="lineNum">       7 </span>                :            :             June 1988 and October 1988 resp.
+<span class="lineNum">       8 </span>                :            : CONTENTS:   
+<span class="lineNum">       9 </span>                :            :             int Yacm_random()
+<span class="lineNum">      10 </span>                :            :             Yset_random_seed(int)
+<span class="lineNum">      11 </span>                :            : DATE:       Oct 27, 1988 
+<span class="lineNum">      12 </span>                :            : REVISIONS:  
+<span class="lineNum">      13 </span>                :            : ----------------------------------------------------------------- */
+<span class="lineNum">      14 </span>                :            : #ifndef VMS
+<span class="lineNum">      15 </span>                :            : #ifndef lint
+<span class="lineNum">      16 </span>                :            : static char SccsId[] = &quot;@(#) rand.c (Yale) version 3.1 3/21/90&quot; ;
+<span class="lineNum">      17 </span>                :            : #endif
+<span class="lineNum">      18 </span>                :            : #endif
+<span class="lineNum">      19 </span>                :            : 
+<span class="lineNum">      20 </span>                :            : static int randVarS ;               /* random number */
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            : #define A_RAND 16807L               /* good generator multiplier */
+<span class="lineNum">      23 </span>                :            : #define M_RAND 2147483647L                /* 2 ** 31 - 1 */
+<span class="lineNum">      24 </span>                :            : #define Q_RAND 127773L                    /* m / a */
+<span class="lineNum">      25 </span>                :            : #define R_RAND 2836L                      /* m mod a */
+<span class="lineNum">      26 </span>                :            : #define ABS(value)   ( (value)&gt;=0 ? (value) : -(value) ) 
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : /*  
+<span class="lineNum">      29 </span>                :            :   M_RANDD may have to be changed on different systems. On ultrix
+<span class="lineNum">      30 </span>                :            :   it is as below.
+<span class="lineNum">      31 </span>                :            :   #define M_RANDD (double) 1.0 / 2147483647.0  
+<span class="lineNum">      32 </span>                :            : */
+<span class="lineNum">      33 </span>                :            : #define M_RANDD 4.65661287524579690000000000000000e-10
+<a name="34"><span class="lineNum">      34 </span>                :            : </a>
+<span class="lineNum">      35 </span>                :            : /* returns a random number in [0..2**31 - 1] */
+<span class="lineNum">      36 </span>                :<span class="lineCov">  446826298 : int Yacm_random() </span>
+<span class="lineNum">      37 </span>                :            : {
+<span class="lineNum">      38 </span>                :            :     register int k_rand ;
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :<span class="lineCov">  446826298 :     k_rand = randVarS / Q_RAND ;</span>
+<span class="lineNum">      41 </span>                :<span class="lineCov">  446826298 :     randVarS = A_RAND * (randVarS - k_rand * Q_RAND) - (k_rand * R_RAND) ;</span>
+<span class="lineNum">      42 </span>        [<span class="branchCov" title="Branch 0 was taken 4958597 times"> + </span><span class="branchCov" title="Branch 1 was taken 441867701 times"> + </span>]:<span class="lineCov">  446826298 :     if( randVarS &lt; 0 ){</span>
+<span class="lineNum">      43 </span>                :<span class="lineCov">    4958597 :         randVarS += M_RAND ;</span>
+<span class="lineNum">      44 </span>                :            :     } 
+<span class="lineNum">      45 </span>                :<span class="lineCov">  446826298 :     return( randVarS ) ;</span>
+<span class="lineNum">      46 </span>                :            : 
+<a name="47"><span class="lineNum">      47 </span>                :            : } /* end acm_random */</a>
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :<span class="lineCov">          1 : Yset_random_seed( seed )</span>
+<span class="lineNum">      50 </span>                :            : int seed ;
+<span class="lineNum">      51 </span>                :            : {
+<span class="lineNum">      52 </span>                :<span class="lineCov">          1 :     seed = ABS(seed) ;</span>
+<span class="lineNum">      53 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :     if( seed == 0 ){</span>
+<span class="lineNum">      54 </span>                :<span class="lineNoCov">          0 :         seed++ ;</span>
+<span class="lineNum">      55 </span>                :            :     }
+<span class="lineNum">      56 </span>                :<span class="lineCov">          1 :     randVarS = seed ;</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">          1 : } /* end set_random_seed */</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

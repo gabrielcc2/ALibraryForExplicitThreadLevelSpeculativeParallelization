@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/xform.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - xform.c<span style="font-size: 80%;"> (source / <a href="xform.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">74</td>
+            <td class="headerCovTableEntryLo">14.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">25.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">42</td>
+            <td class="headerCovTableEntryLo">7.1 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: xform.c,v 1.10 1997/10/30 06:00:06 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: xform.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.10  1997/10/30 06:00:06  brianp
+<span class="lineNum">      27 </span>                :            :  * added Intel X86 assembly optimzations (Josh Vanderhoof)
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.9  1997/07/24 01:25:54  brianp
+<span class="lineNum">      30 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.8  1997/05/28 03:27:03  brianp
+<span class="lineNum">      33 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.7  1997/05/01 01:40:51  brianp
+<span class="lineNum">      36 </span>                :            :  * replaced sqrt() with GL_SQRT()
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.6  1997/04/02 03:15:02  brianp
+<span class="lineNum">      39 </span>                :            :  * removed gl_xform_texcoords_4fv()
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.5  1997/01/03 23:54:17  brianp
+<span class="lineNum">      42 </span>                :            :  * changed length threshold in gl_xform_normals_3fv() to 1E-30 per Jeroen
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.4  1996/11/09 01:50:49  brianp
+<span class="lineNum">      45 </span>                :            :  * relaxed the minimum normal threshold in gl_xform_normals_3fv()
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.3  1996/11/08 02:20:39  brianp
+<span class="lineNum">      48 </span>                :            :  * added gl_xform_texcoords_4fv()
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  * Revision 1.2  1996/11/05 01:38:50  brianp
+<span class="lineNum">      51 </span>                :            :  * fixed some comments
+<span class="lineNum">      52 </span>                :            :  *
+<span class="lineNum">      53 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      54 </span>                :            :  * Initial revision
+<span class="lineNum">      55 </span>                :            :  *
+<span class="lineNum">      56 </span>                :            :  */
+<span class="lineNum">      57 </span>                :            : 
+<span class="lineNum">      58 </span>                :            : 
+<span class="lineNum">      59 </span>                :            : /*
+<span class="lineNum">      60 </span>                :            :  * Matrix/vertex/vector transformation stuff
+<span class="lineNum">      61 </span>                :            :  *
+<span class="lineNum">      62 </span>                :            :  *
+<span class="lineNum">      63 </span>                :            :  * NOTES:
+<span class="lineNum">      64 </span>                :            :  * 1. 4x4 transformation matrices are stored in memory in column major order.
+<span class="lineNum">      65 </span>                :            :  * 2. Points/vertices are to be thought of as column vectors.
+<span class="lineNum">      66 </span>                :            :  * 3. Transformation of a point p by a matrix M is: p' = M * p
+<span class="lineNum">      67 </span>                :            :  *
+<span class="lineNum">      68 </span>                :            :  */
+<span class="lineNum">      69 </span>                :            : 
+<span class="lineNum">      70 </span>                :            : 
+<span class="lineNum">      71 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      72 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      73 </span>                :            : #else
+<span class="lineNum">      74 </span>                :            : #include &lt;math.h&gt;
+<span class="lineNum">      75 </span>                :            : #include &quot;mmath.h&quot;
+<span class="lineNum">      76 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      77 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">      78 </span>                :            : #endif
+<span class="lineNum">      79 </span>                :            : 
+<span class="lineNum">      80 </span>                :            : 
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>                :            : /*
+<span class="lineNum">      83 </span>                :            :  * Apply a transformation matrix to an array of [X Y Z W] coordinates:
+<span class="lineNum">      84 </span>                :            :  *   for i in 0 to n-1 do   q[i] = m * p[i]
+<span class="lineNum">      85 </span>                :            :  * where p[i] and q[i] are 4-element column vectors and m is a 16-element
+<a name="86"><span class="lineNum">      86 </span>                :            :  * transformation matrix.</a>
+<span class="lineNum">      87 </span>                :            :  */
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 : void gl_xform_points_4fv( GLuint n, GLfloat q[][4], const GLfloat m[16],</span>
+<span class="lineNum">      89 </span>                :            :                           GLfloat p[][4] )
+<span class="lineNum">      90 </span>                :            : {
+<span class="lineNum">      91 </span>                :            :    /* This function has been carefully crafted to maximize register usage
+<span class="lineNum">      92 </span>                :            :     * and use loop unrolling with IRIX 5.3's cc.  Hopefully other compilers
+<span class="lineNum">      93 </span>                :            :     * will like this code too.
+<span class="lineNum">      94 </span>                :            :     */
+<span class="lineNum">      95 </span>                :            :    {
+<span class="lineNum">      96 </span>                :            :       GLuint i;
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :       GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">      98 </span>                :<span class="lineNoCov">          0 :       GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">      99 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (m12==0.0F &amp;&amp; m13==0.0F) {</span>
+<span class="lineNum">     100 </span>                :            :          /* common case */
+<span class="lineNum">     101 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     102 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2];</span>
+<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :             q[i][0] = m0 * p0 + m4  * p1 + m8 * p2;</span>
+<span class="lineNum">     104 </span>                :<span class="lineNoCov">          0 :             q[i][1] = m1 * p0 + m5  * p1 + m9 * p2;</span>
+<span class="lineNum">     105 </span>                :            :          }
+<span class="lineNum">     106 </span>                :            :       }
+<span class="lineNum">     107 </span>                :            :       else {
+<span class="lineNum">     108 </span>                :            :          /* general case */
+<span class="lineNum">     109 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2], p3 = p[i][3];</span>
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :             q[i][0] = m0 * p0 + m4  * p1 + m8 * p2 + m12 * p3;</span>
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :             q[i][1] = m1 * p0 + m5  * p1 + m9 * p2 + m13 * p3;</span>
+<span class="lineNum">     113 </span>                :            :          }
+<span class="lineNum">     114 </span>                :            :       }
+<span class="lineNum">     115 </span>                :            :    }
+<span class="lineNum">     116 </span>                :            :    {
+<span class="lineNum">     117 </span>                :            :       GLuint i;
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :       GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :       GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     120 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (m3==0.0F &amp;&amp; m7==0.0F &amp;&amp; m11==0.0F &amp;&amp; m15==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     121 </span>                :            :          /* common case */
+<span class="lineNum">     122 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     123 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2], p3 = p[i][3];</span>
+<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :             q[i][2] = m2 * p0 + m6 * p1 + m10 * p2 + m14 * p3;</span>
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :             q[i][3] = p3;</span>
+<span class="lineNum">     126 </span>                :            :          }
+<span class="lineNum">     127 </span>                :            :       }
+<span class="lineNum">     128 </span>                :            :       else {
+<span class="lineNum">     129 </span>                :            :          /* general case */
+<span class="lineNum">     130 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2], p3 = p[i][3];</span>
+<span class="lineNum">     132 </span>                :<span class="lineNoCov">          0 :             q[i][2] = m2 * p0 + m6 * p1 + m10 * p2 + m14 * p3;</span>
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :             q[i][3] = m3 * p0 + m7 * p1 + m11 * p2 + m15 * p3;</span>
+<span class="lineNum">     134 </span>                :            :          }
+<span class="lineNum">     135 </span>                :            :       }
+<span class="lineNum">     136 </span>                :            :    }
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     138 </span>                :            : 
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :            : /*
+<span class="lineNum">     142 </span>                :            :  * Apply a transformation matrix to an array of [X Y Z] coordinates:
+<a name="143"><span class="lineNum">     143 </span>                :            :  *   for i in 0 to n-1 do   q[i] = m * p[i]</a>
+<span class="lineNum">     144 </span>                :            :  */
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 : void gl_xform_points_3fv( GLuint n, GLfloat q[][4], const GLfloat m[16],</span>
+<span class="lineNum">     146 </span>                :            :                           GLfloat p[][3] )
+<span class="lineNum">     147 </span>                :            : {
+<span class="lineNum">     148 </span>                :            :    /* This function has been carefully crafted to maximize register usage
+<span class="lineNum">     149 </span>                :            :     * and use loop unrolling with IRIX 5.3's cc.  Hopefully other compilers
+<span class="lineNum">     150 </span>                :            :     * will like this code too.
+<span class="lineNum">     151 </span>                :            :     */
+<span class="lineNum">     152 </span>                :            :    {
+<span class="lineNum">     153 </span>                :            :       GLuint i;
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :       GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8],  m12 = m[12];</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :       GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9],  m13 = m[13];</span>
+<span class="lineNum">     156 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :          GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2];</span>
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :          q[i][0] = m0 * p0 + m4  * p1 + m8 * p2 + m12;</span>
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :          q[i][1] = m1 * p0 + m5  * p1 + m9 * p2 + m13;</span>
+<span class="lineNum">     160 </span>                :            :       }
+<span class="lineNum">     161 </span>                :            :    }
+<span class="lineNum">     162 </span>                :            :    {
+<span class="lineNum">     163 </span>                :            :       GLuint i;
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :       GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10],  m14 = m[14];</span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :       GLfloat m3 = m[3],  m7 = m[7],  m11 = m[11],  m15 = m[15];</span>
+<span class="lineNum">     166 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (m3==0.0F &amp;&amp; m7==0.0F &amp;&amp; m11==0.0F &amp;&amp; m15==1.0F) {</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     167 </span>                :            :          /* common case */
+<span class="lineNum">     168 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2];</span>
+<span class="lineNum">     170 </span>                :<span class="lineNoCov">          0 :             q[i][2] = m2 * p0 + m6 * p1 + m10 * p2 + m14;</span>
+<span class="lineNum">     171 </span>                :<span class="lineNoCov">          0 :             q[i][3] = 1.0F;</span>
+<span class="lineNum">     172 </span>                :            :          }
+<span class="lineNum">     173 </span>                :            :       }
+<span class="lineNum">     174 </span>                :            :       else {
+<span class="lineNum">     175 </span>                :            :          /* general case */
+<span class="lineNum">     176 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     177 </span>                :<span class="lineNoCov">          0 :             GLfloat p0 = p[i][0], p1 = p[i][1], p2 = p[i][2];</span>
+<span class="lineNum">     178 </span>                :<span class="lineNoCov">          0 :             q[i][2] = m2 * p0 + m6 * p1 + m10 * p2 + m14;</span>
+<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :             q[i][3] = m3 * p0 + m7 * p1 + m11 * p2 + m15;</span>
+<span class="lineNum">     180 </span>                :            :          }
+<span class="lineNum">     181 </span>                :            :       }
+<span class="lineNum">     182 </span>                :            :    }
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>                :            : 
+<span class="lineNum">     187 </span>                :            : #ifndef USE_ASM
+<span class="lineNum">     188 </span>                :            : /*
+<span class="lineNum">     189 </span>                :            :  * Apply a transformation matrix to an array of normal vectors:
+<span class="lineNum">     190 </span>                :            :  *   for i in 0 to n-1 do  v[i] = u[i] * m
+<span class="lineNum">     191 </span>                :            :  * where u[i] and v[i] are 3-element row vectors and m is a 16-element
+<span class="lineNum">     192 </span>                :            :  * transformation matrix.
+<a name="193"><span class="lineNum">     193 </span>                :            :  * If the normalize flag is true the normals will be scaled to length 1.</a>
+<span class="lineNum">     194 </span>                :            :  */
+<span class="lineNum">     195 </span>                :<span class="lineCov">     149000 : void gl_xform_normals_3fv( GLuint n, GLfloat v[][3], const GLfloat m[16],</span>
+<span class="lineNum">     196 </span>                :            :                            GLfloat u[][3], GLboolean normalize )
+<span class="lineNum">     197 </span>                :            : {
+<span class="lineNum">     198 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">     149000 :    if (normalize) {</span>
+<span class="lineNum">     199 </span>                :            :       /* Transform normals and scale to unit length */
+<span class="lineNum">     200 </span>                :            :       GLuint i;
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :       GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8];</span>
+<span class="lineNum">     202 </span>                :<span class="lineNoCov">          0 :       GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9];</span>
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :       GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10];</span>
+<span class="lineNum">     204 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     205 </span>                :            :          GLdouble tx, ty, tz;
+<span class="lineNum">     206 </span>                :            :          {
+<span class="lineNum">     207 </span>                :<span class="lineNoCov">          0 :             GLfloat ux = u[i][0],  uy = u[i][1],  uz = u[i][2];</span>
+<span class="lineNum">     208 </span>                :<span class="lineNoCov">          0 :             tx = ux * m0 + uy * m1 + uz * m2;</span>
+<span class="lineNum">     209 </span>                :<span class="lineNoCov">          0 :             ty = ux * m4 + uy * m5 + uz * m6;</span>
+<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :             tz = ux * m8 + uy * m9 + uz * m10;</span>
+<span class="lineNum">     211 </span>                :            :          }
+<span class="lineNum">     212 </span>                :            :          {
+<span class="lineNum">     213 </span>                :            :             GLdouble len, scale;
+<span class="lineNum">     214 </span>                :<span class="lineNoCov">          0 :             len = GL_SQRT( tx*tx + ty*ty + tz*tz );</span>
+<span class="lineNum">     215 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             scale = (len&gt;1E-30) ? (1.0 / len) : 1.0;</span>
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :             v[i][0] = tx * scale;</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :             v[i][1] = ty * scale;</span>
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :             v[i][2] = tz * scale;</span>
+<span class="lineNum">     219 </span>                :            :          }
+<span class="lineNum">     220 </span>                :            :       }
+<span class="lineNum">     221 </span>                :            :    }
+<span class="lineNum">     222 </span>                :            :    else {
+<span class="lineNum">     223 </span>                :            :       /* Just transform normals, don't scale */
+<span class="lineNum">     224 </span>                :            :       GLuint i;
+<span class="lineNum">     225 </span>                :<span class="lineCov">     149000 :       GLfloat m0 = m[0],  m4 = m[4],  m8 = m[8];</span>
+<span class="lineNum">     226 </span>                :<span class="lineCov">     149000 :       GLfloat m1 = m[1],  m5 = m[5],  m9 = m[9];</span>
+<span class="lineNum">     227 </span>                :<span class="lineCov">     149000 :       GLfloat m2 = m[2],  m6 = m[6],  m10 = m[10];</span>
+<span class="lineNum">     228 </span>        [<span class="branchCov" title="Branch 0 was taken 44700000 times"> + </span><span class="branchCov" title="Branch 1 was taken 149000 times"> + </span>]:<span class="lineCov">   44849000 :       for (i=0;i&lt;n;i++) {</span>
+<span class="lineNum">     229 </span>                :<span class="lineCov">   44700000 :          GLfloat ux = u[i][0],  uy = u[i][1],  uz = u[i][2];</span>
+<span class="lineNum">     230 </span>                :<span class="lineCov">   44700000 :          v[i][0] = ux * m0 + uy * m1 + uz * m2;</span>
+<span class="lineNum">     231 </span>                :<span class="lineCov">   44700000 :          v[i][1] = ux * m4 + uy * m5 + uz * m6;</span>
+<span class="lineNum">     232 </span>                :<span class="lineCov">   44700000 :          v[i][2] = ux * m8 + uy * m9 + uz * m10;</span>
+<span class="lineNum">     233 </span>                :            :       }
+<span class="lineNum">     234 </span>                :            :    }
+<span class="lineNum">     235 </span>                :<span class="lineCov">     149000 : }</span>
+<span class="lineNum">     236 </span>                :            : #endif
+<span class="lineNum">     237 </span>                :            : 
+<span class="lineNum">     238 </span>                :            : 
+<span class="lineNum">     239 </span>                :            : /*
+<span class="lineNum">     240 </span>                :            :  * Transform a 4-element row vector (1x4 matrix) by a 4x4 matrix.  This
+<span class="lineNum">     241 </span>                :            :  * function is used for transforming clipping plane equations and spotlight
+<span class="lineNum">     242 </span>                :            :  * directions.
+<span class="lineNum">     243 </span>                :            :  * Mathematically,  u = v * m.
+<span class="lineNum">     244 </span>                :            :  * Input:  v - input vector
+<span class="lineNum">     245 </span>                :            :  *         m - transformation matrix
+<a name="246"><span class="lineNum">     246 </span>                :            :  * Output:  u - transformed vector</a>
+<span class="lineNum">     247 </span>                :            :  */
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 : void gl_transform_vector( GLfloat u[4], const GLfloat v[4], const GLfloat m[16] )</span>
+<span class="lineNum">     249 </span>                :            : {
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :    GLfloat v0=v[0], v1=v[1], v2=v[2], v3=v[3];</span>
+<span class="lineNum">     251 </span>                :            : #define M(row,col)  m[col*4+row]
+<span class="lineNum">     252 </span>                :<span class="lineNoCov">          0 :    u[0] = v0 * M(0,0) + v1 * M(1,0) + v2 * M(2,0) + v3 * M(3,0);</span>
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :    u[1] = v0 * M(0,1) + v1 * M(1,1) + v2 * M(2,1) + v3 * M(3,1);</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :    u[2] = v0 * M(0,2) + v1 * M(1,2) + v2 * M(2,2) + v3 * M(3,2);</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :    u[3] = v0 * M(0,3) + v1 * M(1,3) + v2 * M(2,3) + v3 * M(3,3);</span>
+<span class="lineNum">     256 </span>                :            : #undef M
+<span class="lineNum">     257 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     258 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

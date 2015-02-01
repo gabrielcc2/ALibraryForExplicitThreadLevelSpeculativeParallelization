@@ -1,0 +1,211 @@
+        -:    0:Source:/usr/include/c++/4.5/bits/allocator.h
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:// Allocators -*- C++ -*-
+        -:    2:
+        -:    3:// Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+        -:    4:// Free Software Foundation, Inc.
+        -:    5://
+        -:    6:// This file is part of the GNU ISO C++ Library.  This library is free
+        -:    7:// software; you can redistribute it and/or modify it under the
+        -:    8:// terms of the GNU General Public License as published by the
+        -:    9:// Free Software Foundation; either version 3, or (at your option)
+        -:   10:// any later version.
+        -:   11:
+        -:   12:// This library is distributed in the hope that it will be useful,
+        -:   13:// but WITHOUT ANY WARRANTY; without even the implied warranty of
+        -:   14:// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        -:   15:// GNU General Public License for more details.
+        -:   16:
+        -:   17:// Under Section 7 of GPL version 3, you are granted additional
+        -:   18:// permissions described in the GCC Runtime Library Exception, version
+        -:   19:// 3.1, as published by the Free Software Foundation.
+        -:   20:
+        -:   21:// You should have received a copy of the GNU General Public License and
+        -:   22:// a copy of the GCC Runtime Library Exception along with this program;
+        -:   23:// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+        -:   24:// <http://www.gnu.org/licenses/>.
+        -:   25:
+        -:   26:/*
+        -:   27: * Copyright (c) 1996-1997
+        -:   28: * Silicon Graphics Computer Systems, Inc.
+        -:   29: *
+        -:   30: * Permission to use, copy, modify, distribute and sell this software
+        -:   31: * and its documentation for any purpose is hereby granted without fee,
+        -:   32: * provided that the above copyright notice appear in all copies and
+        -:   33: * that both that copyright notice and this permission notice appear
+        -:   34: * in supporting documentation.  Silicon Graphics makes no
+        -:   35: * representations about the suitability of this software for any
+        -:   36: * purpose.  It is provided "as is" without express or implied warranty.
+        -:   37: */
+        -:   38:
+        -:   39:/** @file allocator.h
+        -:   40: *  This is an internal header file, included by other library headers.
+        -:   41: *  You should not attempt to use it directly.
+        -:   42: */
+        -:   43:
+        -:   44:#ifndef _ALLOCATOR_H
+        -:   45:#define _ALLOCATOR_H 1
+        -:   46:
+        -:   47:// Define the base class to std::allocator.
+        -:   48:#include <bits/c++allocator.h>
+        -:   49:
+        -:   50:_GLIBCXX_BEGIN_NAMESPACE(std)
+        -:   51:
+        -:   52:  /**
+        -:   53:   * @defgroup allocators Allocators
+        -:   54:   * @ingroup memory
+        -:   55:   *
+        -:   56:   * Classes encapsulating memory operations.
+        -:   57:   */
+        -:   58:
+        -:   59:  template<typename _Tp>
+        -:   60:    class allocator;
+        -:   61:
+        -:   62:  /// allocator<void> specialization.
+        -:   63:  template<>
+        -:   64:    class allocator<void>
+        -:   65:    {
+        -:   66:    public:
+        -:   67:      typedef size_t      size_type;
+        -:   68:      typedef ptrdiff_t   difference_type;
+        -:   69:      typedef void*       pointer;
+        -:   70:      typedef const void* const_pointer;
+        -:   71:      typedef void        value_type;
+        -:   72:
+        -:   73:      template<typename _Tp1>
+        -:   74:        struct rebind
+        -:   75:        { typedef allocator<_Tp1> other; };
+        -:   76:    };
+        -:   77:
+        -:   78:  /**
+        -:   79:   * @brief  The @a standard allocator, as per [20.4].
+        -:   80:   * @ingroup allocators
+        -:   81:   *
+        -:   82:   *  Further details:
+        -:   83:   *  http://gcc.gnu.org/onlinedocs/libstdc++/manual/bk01pt04ch11.html
+        -:   84:   */
+        -:   85:  template<typename _Tp>
+        -:   86:    class allocator: public __glibcxx_base_allocator<_Tp>
+        -:   87:    {
+        -:   88:   public:
+        -:   89:      typedef size_t     size_type;
+        -:   90:      typedef ptrdiff_t  difference_type;
+        -:   91:      typedef _Tp*       pointer;
+        -:   92:      typedef const _Tp* const_pointer;
+        -:   93:      typedef _Tp&       reference;
+        -:   94:      typedef const _Tp& const_reference;
+        -:   95:      typedef _Tp        value_type;
+        -:   96:
+        -:   97:      template<typename _Tp1>
+        -:   98:        struct rebind
+        -:   99:        { typedef allocator<_Tp1> other; };
+        -:  100:
+        2:  101:      allocator() throw() { }
+        -:  102:
+        -:  103:      allocator(const allocator& __a) throw()
+        -:  104:      : __glibcxx_base_allocator<_Tp>(__a) { }
+        -:  105:
+        -:  106:      template<typename _Tp1>
+    #####:  107:        allocator(const allocator<_Tp1>&) throw() { }
+        -:  108:
+        2:  109:      ~allocator() throw() { }
+        -:  110:
+        -:  111:      // Inherit everything else.
+        -:  112:    };
+        -:  113:
+        -:  114:  template<typename _T1, typename _T2>
+        -:  115:    inline bool
+        -:  116:    operator==(const allocator<_T1>&, const allocator<_T2>&)
+        -:  117:    { return true; }
+        -:  118:
+        -:  119:  template<typename _Tp>
+        -:  120:    inline bool
+        -:  121:    operator==(const allocator<_Tp>&, const allocator<_Tp>&)
+        -:  122:    { return true; }
+        -:  123:
+        -:  124:  template<typename _T1, typename _T2>
+        -:  125:    inline bool
+        -:  126:    operator!=(const allocator<_T1>&, const allocator<_T2>&)
+        -:  127:    { return false; }
+        -:  128:
+        -:  129:  template<typename _Tp>
+        -:  130:    inline bool
+        -:  131:    operator!=(const allocator<_Tp>&, const allocator<_Tp>&)
+        -:  132:    { return false; }
+        -:  133:
+        -:  134:  // Inhibit implicit instantiations for required instantiations,
+        -:  135:  // which are defined via explicit instantiations elsewhere.
+        -:  136:  // NB: This syntax is a GNU extension.
+        -:  137:#if _GLIBCXX_EXTERN_TEMPLATE
+        -:  138:  extern template class allocator<char>;
+        -:  139:  extern template class allocator<wchar_t>;
+        -:  140:#endif
+        -:  141:
+        -:  142:  // Undefine.
+        -:  143:#undef __glibcxx_base_allocator
+        -:  144:
+        -:  145:  // To implement Option 3 of DR 431.
+        -:  146:  template<typename _Alloc, bool = __is_empty(_Alloc)>
+        -:  147:    struct __alloc_swap
+        -:  148:    { static void _S_do_it(_Alloc&, _Alloc&) { } };
+        -:  149:
+        -:  150:  template<typename _Alloc>
+        -:  151:    struct __alloc_swap<_Alloc, false>
+        -:  152:    {
+        -:  153:      static void
+        -:  154:      _S_do_it(_Alloc& __one, _Alloc& __two)
+        -:  155:      {
+        -:  156:	// Precondition: swappable allocators.
+        -:  157:	if (__one != __two)
+        -:  158:	  swap(__one, __two);
+        -:  159:      }
+        -:  160:    };
+        -:  161:
+        -:  162:  // Optimize for stateless allocators.
+        -:  163:  template<typename _Alloc, bool = __is_empty(_Alloc)>
+        -:  164:    struct __alloc_neq
+        -:  165:    {
+        -:  166:      static bool
+        -:  167:      _S_do_it(const _Alloc&, const _Alloc&)
+        -:  168:      { return false; }
+        -:  169:    };
+        -:  170:
+        -:  171:  template<typename _Alloc>
+        -:  172:    struct __alloc_neq<_Alloc, false>
+        -:  173:    {
+        -:  174:      static bool
+        -:  175:      _S_do_it(const _Alloc& __one, const _Alloc& __two)
+        -:  176:      { return __one != __two; }
+        -:  177:    };
+        -:  178:
+        -:  179:#ifdef __GXX_EXPERIMENTAL_CXX0X__
+        -:  180:   // A very basic implementation for now.  In general we have to wait for
+        -:  181:   // the availability of the infrastructure described in N2983:  we should
+        -:  182:   // try when either T has a move constructor which cannot throw or T is
+        -:  183:   // CopyContructible.
+        -:  184:   // NB: This code doesn't properly belong here, we should find a more
+        -:  185:   // suited place common to std::vector and std::deque.
+        -:  186:   template<typename _Tp,
+        -:  187:	    bool = __has_trivial_copy(typename _Tp::value_type)>
+        -:  188:     struct __shrink_to_fit
+        -:  189:     { static void _S_do_it(_Tp&) { } };
+        -:  190:
+        -:  191:   template<typename _Tp>
+        -:  192:     struct __shrink_to_fit<_Tp, true>
+        -:  193:     {
+        -:  194:       static void
+        -:  195:       _S_do_it(_Tp& __v)
+        -:  196:       {
+        -:  197:	 __try
+        -:  198:	   { _Tp(__v).swap(__v); }
+        -:  199:	 __catch(...) { }
+        -:  200:       }
+        -:  201:     };
+        -:  202:#endif
+        -:  203:
+        -:  204:_GLIBCXX_END_NAMESPACE
+        -:  205:
+        -:  206:#endif

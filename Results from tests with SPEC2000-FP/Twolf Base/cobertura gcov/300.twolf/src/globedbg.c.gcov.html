@@ -1,0 +1,735 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/globedbg.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - globedbg.c<span style="font-size: 80%;"> (source / <a href="globedbg.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">337</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">122</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : #include &quot;route.h&quot;
+<span class="lineNum">       3 </span>                :            : #include &quot;groute.h&quot;
+<span class="lineNum">       4 </span>                :            : extern int **pairArray ;
+<span class="lineNum">       5 </span>                :            : extern double rowSep ;
+<span class="lineNum">       6 </span>                :            : extern int rowHeight ;
+<span class="lineNum">       7 </span>                :            : 
+<span class="lineNum">       8 </span>                :            : #define NEWPOS 1
+<span class="lineNum">       9 </span>                :            : #define OLDPOS 0
+<span class="lineNum">      10 </span>                :            :  
+<span class="lineNum">      11 </span>                :            : #define ROWCOLOR &quot;aquamarine&quot;
+<span class="lineNum">      12 </span>                :            : #define NEWNETCOLOR &quot;red&quot;
+<span class="lineNum">      13 </span>                :            : #define PADCOLOR &quot;aquamarine&quot;
+<span class="lineNum">      14 </span>                :            : #define OLDNETCOLOR &quot;green&quot;
+<span class="lineNum">      15 </span>                :            : #define NEWPINCOLOR &quot;white&quot;
+<span class="lineNum">      16 </span>                :            : #define OLDPINCOLOR &quot;black&quot;
+<span class="lineNum">      17 </span>                :            : #define EQUIVCOLOR  &quot;orange&quot;
+<span class="lineNum">      18 </span>                :            : #define UNEQUIVCOLOR &quot;blue&quot;    
+<span class="lineNum">      19 </span>                :            : #define OLDGROUPCOLOR &quot;blue&quot;
+<span class="lineNum">      20 </span>                :            : #define NEWGROUPCOLOR &quot;red&quot;
+<a name="21"><span class="lineNum">      21 </span>                :            : </a>
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :<span class="lineNoCov">          0 : globedbg(lowerNet,upperNet)</span>
+<span class="lineNum">      24 </span>                :            : int lowerNet ;
+<span class="lineNum">      25 </span>                :            : int upperNet ;
+<span class="lineNum">      26 </span>                :            : {
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :            : int block, left, rite, bot, top , cell , b , e , pin1 , pin2 ;
+<span class="lineNum">      29 </span>                :            : int net , seg, term1, curExtint, separation, factor ;
+<span class="lineNum">      30 </span>                :            : int llx, lly, urx, ury ;
+<span class="lineNum">      31 </span>                :            : void checkPos();
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :            : SEGBOXPTR sptr ;
+<span class="lineNum">      34 </span>                :            : CBOXPTR cellptr ;
+<span class="lineNum">      35 </span>                :            : NBOXPTR curTerm;
+<span class="lineNum">      36 </span>                :            : FILE *fp , *fpp ;
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :<span class="lineNoCov">          0 : fp = twopen( &quot;cell.file&quot;,&quot;w&quot;, ABORT ) ;</span>
+<span class="lineNum">      39 </span>                :            : 
+<span class="lineNum">      40 </span>                :            : 
+<span class="lineNum">      41 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( block = 1 ; block &lt;= numblock ; block++ ) {</span>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineNoCov">          0 :     left = barray[block]-&gt;bxcenter + barray[block]-&gt;bleft ;</span>
+<span class="lineNum">      44 </span>                :<span class="lineNoCov">          0 :     bot  = barray[block]-&gt;bycenter + barray[block]-&gt;bbottom ;</span>
+<span class="lineNum">      45 </span>                :<span class="lineNoCov">          0 :     top  = barray[block]-&gt;bycenter + barray[block]-&gt;btop ;</span>
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pairArray[block][0] &gt; 0 ) {</span>
+<span class="lineNum">      48 </span>                :<span class="lineNoCov">          0 :         cell = pairArray[block][ pairArray[block][0] ] ;</span>
+<span class="lineNum">      49 </span>                :<span class="lineNoCov">          0 :         rite = carray[cell]-&gt;cxcenter + carray[cell]-&gt;tileptr-&gt;right;</span>
+<span class="lineNum">      50 </span>                :            :     } else {
+<span class="lineNum">      51 </span>                :<span class="lineNoCov">          0 :         rite = barray[block]-&gt;bxcenter + barray[block]-&gt;bright ;</span>
+<span class="lineNum">      52 </span>                :            :     }
+<span class="lineNum">      53 </span>                :            : 
+<span class="lineNum">      54 </span>                :<span class="lineNoCov">          0 :     fprintf(fp,&quot;%d, %d, %d, %d, color: %s, label: row:%d\n&quot;,</span>
+<span class="lineNum">      55 </span>                :            :                 left,bot,rite,top, ROWCOLOR, block ) ;
+<span class="lineNum">      56 </span>                :            : }
+<span class="lineNum">      57 </span>                :            : /* initialize variables */
+<span class="lineNum">      58 </span>                :<span class="lineNoCov">          0 : llx = INT_MAX ;</span>
+<span class="lineNum">      59 </span>                :<span class="lineNoCov">          0 : lly = INT_MAX ;</span>
+<span class="lineNum">      60 </span>                :<span class="lineNoCov">          0 : urx = INT_MIN ;</span>
+<span class="lineNum">      61 </span>                :<span class="lineNoCov">          0 : ury = INT_MIN ;</span>
+<span class="lineNum">      62 </span>                :            : 
+<span class="lineNum">      63 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( cell = numcells + 1 ; cell &lt;= numcells + numterms ; cell++ ) { </span>
+<span class="lineNum">      64 </span>                :<span class="lineNoCov">          0 :     cellptr = carray[cell] ;</span>
+<span class="lineNum">      65 </span>                :<span class="lineNoCov">          0 :     left = cellptr-&gt;cxcenter + cellptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">      66 </span>                :<span class="lineNoCov">          0 :     rite = cellptr-&gt;cxcenter + cellptr-&gt;tileptr-&gt;right ;</span>
+<span class="lineNum">      67 </span>                :<span class="lineNoCov">          0 :     bot  = cellptr-&gt;cycenter + cellptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">      68 </span>                :<span class="lineNoCov">          0 :     top  = cellptr-&gt;cycenter + cellptr-&gt;tileptr-&gt;top ;</span>
+<span class="lineNum">      69 </span>                :<span class="lineNoCov">          0 :     fprintf(fp,&quot;%d, %d, %d, %d, color: %s, label: pad:%s\n&quot;,</span>
+<span class="lineNum">      70 </span>                :            :         left,bot,rite,top, PADCOLOR, cellptr-&gt;cname ) ;
+<span class="lineNum">      71 </span>                :            :     /* find bounding box of pads */
+<span class="lineNum">      72 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( left &lt; llx ){</span>
+<span class="lineNum">      73 </span>                :<span class="lineNoCov">          0 :         llx = left ;</span>
+<span class="lineNum">      74 </span>                :            :     }
+<span class="lineNum">      75 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( rite &gt; urx ){</span>
+<span class="lineNum">      76 </span>                :<span class="lineNoCov">          0 :         urx = rite ;</span>
+<span class="lineNum">      77 </span>                :            :     }
+<span class="lineNum">      78 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( bot &lt;  lly ){</span>
+<span class="lineNum">      79 </span>                :<span class="lineNoCov">          0 :         lly = bot  ;</span>
+<span class="lineNum">      80 </span>                :            :     }
+<span class="lineNum">      81 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( top  &gt; ury ){</span>
+<span class="lineNum">      82 </span>                :<span class="lineNoCov">          0 :         ury = top  ;</span>
+<span class="lineNum">      83 </span>                :            :     }
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :            : }
+<span class="lineNum">      86 </span>                :<span class="lineNoCov">          0 : twclose(fp);</span>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 : fp  = twopen( &quot;net.file&quot;,&quot;w&quot;, ABORT ) ;</span>
+<span class="lineNum">      89 </span>                :<span class="lineNoCov">          0 : fpp = twopen(&quot;pin.file&quot;,&quot;w&quot;, ABORT );</span>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>                :            : /* calculate channel separation for bending lines */
+<span class="lineNum">      92 </span>                :<span class="lineNoCov">          0 : separation = (int) rowSep * rowHeight / 3;</span>
+<span class="lineNum">      93 </span>                :            : 
+<span class="lineNum">      94 </span>                :            : /* process all nets */
+<span class="lineNum">      95 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( net = lowerNet ; net &lt;= upperNet ; net++ ) {</span>
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :     b = anet[net] ;</span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :     e = anet[net + 1] - 1 ;</span>
+<span class="lineNum">      98 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( seg = b ; seg &lt;= e ; seg++ ) {</span>
+<span class="lineNum">      99 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :         if( aNetSeg[seg].nflag == 0 ) {</span>
+<span class="lineNum">     100 </span>                :            :             /* we have not moved pin to a new pin position */
+<span class="lineNum">     101 </span>                :            :             /* but use new colors anyway */
+<span class="lineNum">     102 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( aNetSeg[seg].current == 0 ) {</span>
+<span class="lineNum">     103 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].top ;</span>
+<span class="lineNum">     104 </span>                :            :             } else {
+<span class="lineNum">     105 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].bot ;</span>
+<span class="lineNum">     106 </span>                :            :             }
+<span class="lineNum">     107 </span>                :<span class="lineNoCov">          0 :             pin1 = sptr-&gt;pin1 ;</span>
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 :             pin2 = sptr-&gt;pin2 ;</span>
+<span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin1],NEWPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     110 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin2],NEWPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     111 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (tearray[pin1]-&gt;ypos != tearray[pin2]-&gt;ypos){  /* no need to bend */</span>
+<span class="lineNum">     112 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     113 </span>                :            :                         net,
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos ,</span>
+<span class="lineNum">     115 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos ,</span>
+<span class="lineNum">     116 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos ,</span>
+<span class="lineNum">     117 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos ,</span>
+<span class="lineNum">     118 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     119 </span>                :            :             } else { /* we need to bend the net */
+<span class="lineNum">     120 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if ( (int) tearray[pin1]-&gt;pinloc == -1){ </span>
+<span class="lineNum">     121 </span>                :<span class="lineNoCov">          0 :                     factor = -1;  /* bend downwards */</span>
+<span class="lineNum">     122 </span>                :            :                 } else {
+<span class="lineNum">     123 </span>                :<span class="lineNoCov">          0 :                     factor = 1;   /* bend upwards */</span>
+<span class="lineNum">     124 </span>                :            :                 }
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     126 </span>                :            :                         net,
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos ,</span>
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos ,</span>
+<span class="lineNum">     129 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;xpos + tearray[pin2]-&gt;xpos)/2 ,</span>
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + factor * separation ,</span>
+<span class="lineNum">     131 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     132 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     133 </span>                :            :                         net,
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;xpos + tearray[pin2]-&gt;xpos)/2 ,</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + factor * separation ,</span>
+<span class="lineNum">     136 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos ,</span>
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos ,</span>
+<span class="lineNum">     138 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     139 </span>                :            :             }
+<span class="lineNum">     140 </span>                :            : 
+<span class="lineNum">     141 </span>                :            :             /* now process the equiv / unequivs */  
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin1]-&gt;terminal ;</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin1]-&gt;extint ;  </span>
+<span class="lineNum">     144 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     145 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     146 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     148 </span>                :            :                             net,
+<span class="lineNum">     149 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;xpos,</span>
+<span class="lineNum">     150 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;ypos,</span>
+<span class="lineNum">     151 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     152 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     153 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     154 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     155 </span>                :            : 
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     157 </span>                :            :                             net,
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;xpos,</span>
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;ypos,</span>
+<span class="lineNum">     160 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     161 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     162 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     163 </span>                :            :                     }
+<span class="lineNum">     164 </span>                :            :                 }
+<span class="lineNum">     165 </span>                :            :             }
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :            :             /* now output pin2 equivs */
+<span class="lineNum">     168 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin2]-&gt;terminal ;</span>
+<span class="lineNum">     169 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin2]-&gt;extint ;  </span>
+<span class="lineNum">     170 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     171 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     172 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     173 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     174 </span>                :            :                             net,
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;xpos,</span>
+<span class="lineNum">     176 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;ypos,</span>
+<span class="lineNum">     177 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     178 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     179 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     180 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     181 </span>                :            : 
+<span class="lineNum">     182 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     183 </span>                :            :                             net,
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;xpos,</span>
+<span class="lineNum">     185 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;ypos,</span>
+<span class="lineNum">     186 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     187 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     188 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     189 </span>                :            :                     }
+<span class="lineNum">     190 </span>                :            :                 }
+<span class="lineNum">     191 </span>                :            :             }
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;, </span>
+<span class="lineNum">     194 </span>                :            :                         net,
+<span class="lineNum">     195 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos - 1,</span>
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos - 1,</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos + 1,</span>
+<span class="lineNum">     198 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos + 1,</span>
+<span class="lineNum">     199 </span>                :            :                         NEWPINCOLOR,
+<span class="lineNum">     200 </span>                :            :                         pin1 ) ;
+<span class="lineNum">     201 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;, </span>
+<span class="lineNum">     202 </span>                :            :                         net,
+<span class="lineNum">     203 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos - 1,</span>
+<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos - 1,</span>
+<span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos + 1,</span>
+<span class="lineNum">     206 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + 1, </span>
+<span class="lineNum">     207 </span>                :            :                         NEWPINCOLOR,
+<span class="lineNum">     208 </span>                :            :                         pin2 ) ;
+<span class="lineNum">     209 </span>                :            :         } else {  /* we moved a pin output old and new positions */
+<span class="lineNum">     210 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( aNetSeg[seg].current == 0 ) {</span>
+<span class="lineNum">     211 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].top ;</span>
+<span class="lineNum">     212 </span>                :            :             } else {
+<span class="lineNum">     213 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].bot ;</span>
+<span class="lineNum">     214 </span>                :            :             }
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :             pin1 = sptr-&gt;pin1 ;</span>
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :             pin2 = sptr-&gt;pin2 ;</span>
+<span class="lineNum">     217 </span>                :            :              
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin1],NEWPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     219 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin2],NEWPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin1],OLDPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     221 </span>                :<span class="lineNoCov">          0 :             checkPos(tearray[pin2],OLDPOS,llx,lly,urx,ury) ;</span>
+<span class="lineNum">     222 </span>                :            : 
+<span class="lineNum">     223 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (tearray[pin1]-&gt;newy != tearray[pin2]-&gt;newy){  /* bend so you can see */</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     225 </span>                :            :                         net,
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx ,</span>
+<span class="lineNum">     227 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newy ,</span>
+<span class="lineNum">     228 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx  - 2 ,</span>
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;newy + tearray[pin2]-&gt;newy) / 2,</span>
+<span class="lineNum">     230 </span>                :            :                         OLDNETCOLOR) ;
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     232 </span>                :            :                         net,
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx  - 2,</span>
+<span class="lineNum">     234 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;newy + tearray[pin2]-&gt;newy) /2 ,</span>
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newx ,</span>
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy ,</span>
+<span class="lineNum">     237 </span>                :            :                         OLDNETCOLOR) ;
+<span class="lineNum">     238 </span>                :            :             } else { /* we need to bend the net */
+<span class="lineNum">     239 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if ( (int) tearray[pin1]-&gt;pinloc == -1 ){ /* if current then bottom seg */</span>
+<span class="lineNum">     240 </span>                :<span class="lineNoCov">          0 :                     factor = -1;  /* bend downwards */</span>
+<span class="lineNum">     241 </span>                :            :                 } else {
+<span class="lineNum">     242 </span>                :<span class="lineNoCov">          0 :                     factor = 1;   /* bend upwards */</span>
+<span class="lineNum">     243 </span>                :            :                 }
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     245 </span>                :            :                         net,
+<span class="lineNum">     246 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx ,</span>
+<span class="lineNum">     247 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newy ,</span>
+<span class="lineNum">     248 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;newx + tearray[pin2]-&gt;newx)/2 ,</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy + factor * separation * 3 / 4 ,</span>
+<span class="lineNum">     250 </span>                :            :                         OLDNETCOLOR) ;
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     252 </span>                :            :                         net,
+<span class="lineNum">     253 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;newx + tearray[pin2]-&gt;newx)/2 ,</span>
+<span class="lineNum">     254 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy + factor * separation * 3 / 4,</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newx ,</span>
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy ,</span>
+<span class="lineNum">     257 </span>                :            :                         OLDNETCOLOR) ;
+<span class="lineNum">     258 </span>                :            :             }
+<span class="lineNum">     259 </span>                :            : 
+<span class="lineNum">     260 </span>                :            :             /* now process the equiv / unequivs */  
+<span class="lineNum">     261 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin1]-&gt;terminal ;</span>
+<span class="lineNum">     262 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin1]-&gt;extint ;  </span>
+<span class="lineNum">     263 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     264 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     265 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     266 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     267 </span>                :            :                             net,
+<span class="lineNum">     268 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;newx ,</span>
+<span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;newy ,</span>
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin1]-&gt;newy)/2,</span>
+<span class="lineNum">     272 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     273 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     274 </span>                :            :                             net,
+<span class="lineNum">     275 </span>                :            :                             curTerm-&gt;newx ,
+<span class="lineNum">     276 </span>                :            :                             curTerm-&gt;newy ,
+<span class="lineNum">     277 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin1]-&gt;newy)/2,</span>
+<span class="lineNum">     279 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     280 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     281 </span>                :            : 
+<span class="lineNum">     282 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     283 </span>                :            :                             net,
+<span class="lineNum">     284 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;newx ,</span>
+<span class="lineNum">     285 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;newy ,</span>
+<span class="lineNum">     286 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin1]-&gt;newy)/2,</span>
+<span class="lineNum">     288 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     289 </span>                :            : 
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     291 </span>                :            :                             net,
+<span class="lineNum">     292 </span>                :            :                             curTerm-&gt;newx ,
+<span class="lineNum">     293 </span>                :            :                             curTerm-&gt;newy ,
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     295 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin1]-&gt;newy)/2,</span>
+<span class="lineNum">     296 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     297 </span>                :            :                     }
+<span class="lineNum">     298 </span>                :            :                 }
+<span class="lineNum">     299 </span>                :            :             }
+<span class="lineNum">     300 </span>                :            : 
+<span class="lineNum">     301 </span>                :            :             /* now output pin2 equivs */
+<span class="lineNum">     302 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin2]-&gt;terminal ;</span>
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin2]-&gt;extint ;  </span>
+<span class="lineNum">     304 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     305 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     306 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     308 </span>                :            :                             net,
+<span class="lineNum">     309 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;newx ,</span>
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;newy ,</span>
+<span class="lineNum">     311 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     312 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin2]-&gt;newy)/2,</span>
+<span class="lineNum">     313 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     314 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     315 </span>                :            :                             net,
+<span class="lineNum">     316 </span>                :            :                             curTerm-&gt;newx ,
+<span class="lineNum">     317 </span>                :            :                             curTerm-&gt;newy ,
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     319 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin2]-&gt;newy)/2,</span>
+<span class="lineNum">     320 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     321 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     322 </span>                :            : 
+<span class="lineNum">     323 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     324 </span>                :            :                             net,
+<span class="lineNum">     325 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;newx ,</span>
+<span class="lineNum">     326 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;newy ,</span>
+<span class="lineNum">     327 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin2]-&gt;newy)/2,</span>
+<span class="lineNum">     329 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     330 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     331 </span>                :            :                             net,
+<span class="lineNum">     332 </span>                :            :                             curTerm-&gt;newx ,
+<span class="lineNum">     333 </span>                :            :                             curTerm-&gt;newy ,
+<span class="lineNum">     334 </span>                :<span class="lineNoCov">          0 :                             curTerm-&gt;newx - 2,</span>
+<span class="lineNum">     335 </span>                :<span class="lineNoCov">          0 :                             (curTerm-&gt;newy + tearray[pin2]-&gt;newy)/2,</span>
+<span class="lineNum">     336 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     337 </span>                :            :                     }
+<span class="lineNum">     338 </span>                :            :                 }
+<span class="lineNum">     339 </span>                :            :             }
+<span class="lineNum">     340 </span>                :            : 
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;,</span>
+<span class="lineNum">     342 </span>                :            :                         net,
+<span class="lineNum">     343 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx - 2,</span>
+<span class="lineNum">     344 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newy - 2,</span>
+<span class="lineNum">     345 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newx + 2,</span>
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;newy + 2, </span>
+<span class="lineNum">     347 </span>                :            :                         OLDPINCOLOR,
+<span class="lineNum">     348 </span>                :            :                         pin1 ) ;
+<span class="lineNum">     349 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;,</span>
+<span class="lineNum">     350 </span>                :            :                         net,
+<span class="lineNum">     351 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newx - 2,</span>
+<span class="lineNum">     352 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy - 2,</span>
+<span class="lineNum">     353 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newx + 2,</span>
+<span class="lineNum">     354 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;newy + 2, </span>
+<span class="lineNum">     355 </span>                :            :                         OLDPINCOLOR,
+<span class="lineNum">     356 </span>                :            :                         pin2 ) ;
+<span class="lineNum">     357 </span>                :            : 
+<span class="lineNum">     358 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if( aNetSeg[seg].ncurrent == 0 ) {</span>
+<span class="lineNum">     359 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].ntop ;</span>
+<span class="lineNum">     360 </span>                :            :             } else {
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :                 sptr = aNetSeg[seg].nbot ;</span>
+<span class="lineNum">     362 </span>                :            :             }
+<span class="lineNum">     363 </span>                :<span class="lineNoCov">          0 :             pin1 = sptr-&gt;pin1 ;</span>
+<span class="lineNum">     364 </span>                :<span class="lineNoCov">          0 :             pin2 = sptr-&gt;pin2 ;</span>
+<span class="lineNum">     365 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (tearray[pin1]-&gt;ypos != tearray[pin2]-&gt;ypos){  /* no need to bend */</span>
+<span class="lineNum">     366 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     367 </span>                :            :                         net,
+<span class="lineNum">     368 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos ,</span>
+<span class="lineNum">     369 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos ,</span>
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos ,</span>
+<span class="lineNum">     371 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos ,</span>
+<span class="lineNum">     372 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     373 </span>                :            :             } else { /* we need to bend the net */
+<span class="lineNum">     374 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if( (int) tearray[pin1]-&gt;pinloc == -1 ){</span>
+<span class="lineNum">     375 </span>                :<span class="lineNoCov">          0 :                     factor = -1;  /* bend downwards */</span>
+<span class="lineNum">     376 </span>                :            :                 } else {
+<span class="lineNum">     377 </span>                :<span class="lineNoCov">          0 :                     factor = 1;   /* bend upwards */</span>
+<span class="lineNum">     378 </span>                :            :                 }
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     380 </span>                :            :                         net,
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos ,</span>
+<span class="lineNum">     382 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos ,</span>
+<span class="lineNum">     383 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;xpos + tearray[pin2]-&gt;xpos)/2 ,</span>
+<span class="lineNum">     384 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + factor * separation ,</span>
+<span class="lineNum">     385 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     386 </span>                :<span class="lineNoCov">          0 :                 fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;, </span>
+<span class="lineNum">     387 </span>                :            :                         net,
+<span class="lineNum">     388 </span>                :<span class="lineNoCov">          0 :                         (tearray[pin1]-&gt;xpos + tearray[pin2]-&gt;xpos)/2 ,</span>
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + factor * separation ,</span>
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos ,</span>
+<span class="lineNum">     391 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos ,</span>
+<span class="lineNum">     392 </span>                :            :                         NEWNETCOLOR) ;
+<span class="lineNum">     393 </span>                :            :             }
+<span class="lineNum">     394 </span>                :            : 
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin1]-&gt;terminal ;</span>
+<span class="lineNum">     396 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin1]-&gt;extint ;  </span>
+<span class="lineNum">     397 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     398 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     399 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     400 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     401 </span>                :            :                             net,
+<span class="lineNum">     402 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;xpos,</span>
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;ypos,</span>
+<span class="lineNum">     404 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     405 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     406 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     407 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     408 </span>                :            : 
+<span class="lineNum">     409 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     410 </span>                :            :                             net,
+<span class="lineNum">     411 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;xpos,</span>
+<span class="lineNum">     412 </span>                :<span class="lineNoCov">          0 :                             tearray[pin1]-&gt;ypos,</span>
+<span class="lineNum">     413 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     414 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     415 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     416 </span>                :            :                     }
+<span class="lineNum">     417 </span>                :            :                 }
+<span class="lineNum">     418 </span>                :            :             }
+<span class="lineNum">     419 </span>                :            : 
+<span class="lineNum">     420 </span>                :            :             /* now output pin2 equivs */
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :             term1 = tearray[pin2]-&gt;terminal ;</span>
+<span class="lineNum">     422 </span>                :<span class="lineNoCov">          0 :             curExtint = tearray[pin2]-&gt;extint ;  </span>
+<span class="lineNum">     423 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (curTerm=netarray[net]-&gt;netptr;curTerm;curTerm= curTerm-&gt;nterm){ </span>
+<span class="lineNum">     424 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 if (curTerm-&gt;extint == curExtint &amp;&amp; curTerm-&gt;terminal != term1){</span>
+<span class="lineNum">     425 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                     if (curTerm-&gt;unequiv){ /* its an unequiv */</span>
+<span class="lineNum">     426 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     427 </span>                :            :                             net,
+<span class="lineNum">     428 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;xpos,</span>
+<span class="lineNum">     429 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;ypos,</span>
+<span class="lineNum">     430 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     431 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     432 </span>                :            :                             UNEQUIVCOLOR) ;
+<span class="lineNum">     433 </span>                :            :                     } else {  /* its an equiv */
+<span class="lineNum">     434 </span>                :            : 
+<span class="lineNum">     435 </span>                :<span class="lineNoCov">          0 :                         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s\n&quot;,</span>
+<span class="lineNum">     436 </span>                :            :                             net,
+<span class="lineNum">     437 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;xpos,</span>
+<span class="lineNum">     438 </span>                :<span class="lineNoCov">          0 :                             tearray[pin2]-&gt;ypos,</span>
+<span class="lineNum">     439 </span>                :            :                             curTerm-&gt;xpos,
+<span class="lineNum">     440 </span>                :            :                             curTerm-&gt;ypos,
+<span class="lineNum">     441 </span>                :            :                             EQUIVCOLOR) ;
+<span class="lineNum">     442 </span>                :            :                     }
+<span class="lineNum">     443 </span>                :            :                 }
+<span class="lineNum">     444 </span>                :            :             }
+<span class="lineNum">     445 </span>                :            : 
+<span class="lineNum">     446 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;, </span>
+<span class="lineNum">     447 </span>                :            :                         net,
+<span class="lineNum">     448 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos - 1,</span>
+<span class="lineNum">     449 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos - 1,</span>
+<span class="lineNum">     450 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;xpos + 1,</span>
+<span class="lineNum">     451 </span>                :<span class="lineNoCov">          0 :                         tearray[pin1]-&gt;ypos + 1, </span>
+<span class="lineNum">     452 </span>                :            :                         NEWPINCOLOR ,
+<span class="lineNum">     453 </span>                :            :                         pin1) ;
+<span class="lineNum">     454 </span>                :<span class="lineNoCov">          0 :             fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label: %d\n&quot;, </span>
+<span class="lineNum">     455 </span>                :            :                         net,
+<span class="lineNum">     456 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos - 1,</span>
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos - 1,</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;xpos + 1,</span>
+<span class="lineNum">     459 </span>                :<span class="lineNoCov">          0 :                         tearray[pin2]-&gt;ypos + 1, </span>
+<span class="lineNum">     460 </span>                :            :                         NEWPINCOLOR,
+<span class="lineNum">     461 </span>                :            :                         pin2) ;
+<span class="lineNum">     462 </span>                :            :         }
+<span class="lineNum">     463 </span>                :            :     }
+<span class="lineNum">     464 </span>                :            : }
+<span class="lineNum">     465 </span>                :<span class="lineNoCov">          0 : twclose(fp);</span>
+<span class="lineNum">     466 </span>                :<span class="lineNoCov">          0 : twclose(fpp);</span>
+<span class="lineNum">     467 </span>                :            : return ;
+<a name="468"><span class="lineNum">     468 </span>                :            : }</a>
+<span class="lineNum">     469 </span>                :            : 
+<span class="lineNum">     470 </span>                :<span class="lineNoCov">          0 : void   checkPos(pin,pos,llx,lly,urx,ury) </span>
+<span class="lineNum">     471 </span>                :            : NBOXPTR pin ;
+<span class="lineNum">     472 </span>                :            : int pos ;
+<span class="lineNum">     473 </span>                :            : int llx ;
+<span class="lineNum">     474 </span>                :            : int lly ;
+<span class="lineNum">     475 </span>                :            : int urx ;
+<span class="lineNum">     476 </span>                :            : int ury ;
+<span class="lineNum">     477 </span>                :            : {
+<span class="lineNum">     478 </span>                :            : 
+<span class="lineNum">     479 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : if( pos == NEWPOS){</span>
+<span class="lineNum">     480 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;xpos &gt; urx ){</span>
+<span class="lineNum">     481 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin xpos &gt; urx ; set to urx ;&quot;);</span>
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :         pin-&gt;xpos = urx ;</span>
+<span class="lineNum">     483 </span>                :            :     }
+<span class="lineNum">     484 </span>                :            : 
+<span class="lineNum">     485 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;xpos &lt; llx ){</span>
+<span class="lineNum">     486 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin xpos &lt; llx ; set to llx ;&quot;);</span>
+<span class="lineNum">     487 </span>                :<span class="lineNoCov">          0 :         pin-&gt;xpos = llx ;</span>
+<span class="lineNum">     488 </span>                :            :     }
+<span class="lineNum">     489 </span>                :            : 
+<span class="lineNum">     490 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;ypos &gt; ury ){</span>
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin ypos &gt; ury ; set to ury ;&quot;);</span>
+<span class="lineNum">     492 </span>                :<span class="lineNoCov">          0 :         pin-&gt;ypos =ury ;</span>
+<span class="lineNum">     493 </span>                :            :     }
+<span class="lineNum">     494 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;ypos &lt; lly ){</span>
+<span class="lineNum">     495 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin ypos &lt; lly ; set to lly ;&quot;);</span>
+<span class="lineNum">     496 </span>                :<span class="lineNoCov">          0 :         pin-&gt;ypos =ury ;</span>
+<span class="lineNum">     497 </span>                :            :     }
+<span class="lineNum">     498 </span>                :            : } else {
+<span class="lineNum">     499 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;newx &gt; urx ){</span>
+<span class="lineNum">     500 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin newx &gt; urx ; set to urx ;&quot;);</span>
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :         pin-&gt;newx = urx ;</span>
+<span class="lineNum">     502 </span>                :            :     }
+<span class="lineNum">     503 </span>                :            : 
+<span class="lineNum">     504 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;newx &lt; llx ){</span>
+<span class="lineNum">     505 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin newx &lt; llx ; set to llx ;&quot;);</span>
+<span class="lineNum">     506 </span>                :<span class="lineNoCov">          0 :         pin-&gt;newx = llx ;</span>
+<span class="lineNum">     507 </span>                :            :     }
+<span class="lineNum">     508 </span>                :            : 
+<span class="lineNum">     509 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;newy &gt; ury ){</span>
+<span class="lineNum">     510 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin newy &gt; ury ; set to ury ;&quot;);</span>
+<span class="lineNum">     511 </span>                :<span class="lineNoCov">          0 :         pin-&gt;newy =ury ;</span>
+<span class="lineNum">     512 </span>                :            :     }
+<span class="lineNum">     513 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pin-&gt;newy &lt; lly ){</span>
+<span class="lineNum">     514 </span>                :<span class="lineNoCov">          0 :         printf(&quot;ERROR:pin newy &lt; lly ; set to lly ;&quot;);</span>
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :         pin-&gt;newy =ury ;</span>
+<span class="lineNum">     516 </span>                :            :     }
+<span class="lineNum">     517 </span>                :            : }
+<span class="lineNum">     518 </span>                :            : 
+<span class="lineNum">     519 </span>                :<span class="lineNoCov">          0 : } </span>
+<a name="520"><span class="lineNum">     520 </span>                :            : </a>
+<span class="lineNum">     521 </span>                :            : 
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 : void dumpEdgeArray(net)</span>
+<span class="lineNum">     523 </span>                :            : int net ;
+<span class="lineNum">     524 </span>                :            :   
+<span class="lineNum">     525 </span>                :            : {
+<span class="lineNum">     526 </span>                :            : int edge ;
+<span class="lineNum">     527 </span>                :            : FILE *fp , *fpp ;
+<span class="lineNum">     528 </span>                :            : int block, left, rite, bot, top , cell , g1 , g2 ;
+<span class="lineNum">     529 </span>                :            : int llx, lly, urx, ury ;
+<span class="lineNum">     530 </span>                :            : CBOXPTR cellptr ;
+<span class="lineNum">     531 </span>                :            : extern int numEdges ;
+<span class="lineNum">     532 </span>                :            : 
+<span class="lineNum">     533 </span>                :<span class="lineNoCov">          0 : fp = twopen(&quot;cell.file&quot;,&quot;w&quot;,ABORT);</span>
+<span class="lineNum">     534 </span>                :            : 
+<span class="lineNum">     535 </span>                :            : 
+<span class="lineNum">     536 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( block = 1 ; block &lt;= numblock ; block++ ) {</span>
+<span class="lineNum">     537 </span>                :            : 
+<span class="lineNum">     538 </span>                :<span class="lineNoCov">          0 :     left = barray[block]-&gt;bxcenter + barray[block]-&gt;bleft ;</span>
+<span class="lineNum">     539 </span>                :<span class="lineNoCov">          0 :     bot  = barray[block]-&gt;bycenter + barray[block]-&gt;bbottom ;</span>
+<span class="lineNum">     540 </span>                :<span class="lineNoCov">          0 :     top  = barray[block]-&gt;bycenter + barray[block]-&gt;btop ;</span>
+<span class="lineNum">     541 </span>                :            : 
+<span class="lineNum">     542 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( pairArray[block][0] &gt; 0 ) {</span>
+<span class="lineNum">     543 </span>                :<span class="lineNoCov">          0 :         cell = pairArray[block][ pairArray[block][0] ] ;</span>
+<span class="lineNum">     544 </span>                :<span class="lineNoCov">          0 :         rite = carray[cell]-&gt;cxcenter + carray[cell]-&gt;tileptr-&gt;right;</span>
+<span class="lineNum">     545 </span>                :            :     } else {
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 :         rite = barray[block]-&gt;bxcenter + barray[block]-&gt;bright ;</span>
+<span class="lineNum">     547 </span>                :            :     }
+<span class="lineNum">     548 </span>                :            : 
+<span class="lineNum">     549 </span>                :<span class="lineNoCov">          0 :     fprintf(fp,&quot;%d, %d, %d, %d, color: %s, label: row:%d\n&quot;,</span>
+<span class="lineNum">     550 </span>                :            :                 left,bot,rite,top, ROWCOLOR, block ) ;
+<span class="lineNum">     551 </span>                :            : }
+<span class="lineNum">     552 </span>                :            : /* initialize variables */
+<span class="lineNum">     553 </span>                :<span class="lineNoCov">          0 : llx = INT_MAX ;</span>
+<span class="lineNum">     554 </span>                :<span class="lineNoCov">          0 : lly = INT_MAX ;</span>
+<span class="lineNum">     555 </span>                :<span class="lineNoCov">          0 : urx = INT_MIN ;</span>
+<span class="lineNum">     556 </span>                :<span class="lineNoCov">          0 : ury = INT_MIN ;</span>
+<span class="lineNum">     557 </span>                :            : 
+<span class="lineNum">     558 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( cell = numcells + 1 ; cell &lt;= numcells + numterms ; cell++ ) { </span>
+<span class="lineNum">     559 </span>                :<span class="lineNoCov">          0 :     cellptr = carray[cell] ;</span>
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :     left = cellptr-&gt;cxcenter + cellptr-&gt;tileptr-&gt;left ;</span>
+<span class="lineNum">     561 </span>                :<span class="lineNoCov">          0 :     rite = cellptr-&gt;cxcenter + cellptr-&gt;tileptr-&gt;right ;</span>
+<span class="lineNum">     562 </span>                :<span class="lineNoCov">          0 :     bot  = cellptr-&gt;cycenter + cellptr-&gt;tileptr-&gt;bottom ;</span>
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 :     top  = cellptr-&gt;cycenter + cellptr-&gt;tileptr-&gt;top ;</span>
+<span class="lineNum">     564 </span>                :<span class="lineNoCov">          0 :     fprintf(fp,&quot;%d, %d, %d, %d, color: %s, label: pad:%s\n&quot;,</span>
+<span class="lineNum">     565 </span>                :            :         left,bot,rite,top, PADCOLOR, cellptr-&gt;cname ) ;
+<span class="lineNum">     566 </span>                :            :     /* find bounding box of pads */
+<span class="lineNum">     567 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( left &lt; llx ){</span>
+<span class="lineNum">     568 </span>                :<span class="lineNoCov">          0 :         llx = left ;</span>
+<span class="lineNum">     569 </span>                :            :     }
+<span class="lineNum">     570 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( rite &gt; urx ){</span>
+<span class="lineNum">     571 </span>                :<span class="lineNoCov">          0 :         urx = rite ;</span>
+<span class="lineNum">     572 </span>                :            :     }
+<span class="lineNum">     573 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( bot &lt;  lly ){</span>
+<span class="lineNum">     574 </span>                :<span class="lineNoCov">          0 :         lly = bot  ;</span>
+<span class="lineNum">     575 </span>                :            :     }
+<span class="lineNum">     576 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( top  &gt; ury ){</span>
+<span class="lineNum">     577 </span>                :<span class="lineNoCov">          0 :         ury = top  ;</span>
+<span class="lineNum">     578 </span>                :            :     }
+<span class="lineNum">     579 </span>                :            : 
+<span class="lineNum">     580 </span>                :            : }
+<span class="lineNum">     581 </span>                :<span class="lineNoCov">          0 : twclose(fp);</span>
+<span class="lineNum">     582 </span>                :            : 
+<span class="lineNum">     583 </span>                :<span class="lineNoCov">          0 : fp  = twopen(&quot;net.file&quot;,&quot;w&quot;,ABORT);</span>
+<span class="lineNum">     584 </span>                :<span class="lineNoCov">          0 : fpp = twopen(&quot;pin.file&quot;,&quot;w&quot;,ABORT);</span>
+<span class="lineNum">     585 </span>                :            : 
+<span class="lineNum">     586 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 : for( edge = 1 ; edge &lt;= numEdges  ; edge++ ) {</span>
+<span class="lineNum">     587 </span>                :            :         
+<span class="lineNum">     588 </span>                :<span class="lineNoCov">          0 :     g1 = edgeArray[edge].group1 ;</span>
+<span class="lineNum">     589 </span>                :<span class="lineNoCov">          0 :     g2 = edgeArray[edge].group2 ;</span>
+<span class="lineNum">     590 </span>                :            : 
+<span class="lineNum">     591 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     if( edgeArray[edge].marked == YES ) { /* output in red */</span>
+<span class="lineNum">     592 </span>                :            : 
+<span class="lineNum">     593 </span>                :<span class="lineNoCov">          0 :         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s, label:%d\n&quot;, </span>
+<span class="lineNum">     594 </span>                :            :                 net,
+<span class="lineNum">     595 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX,</span>
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY,</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX,</span>
+<span class="lineNum">     598 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY,</span>
+<span class="lineNum">     599 </span>                :            :                 NEWGROUPCOLOR,
+<span class="lineNum">     600 </span>                :            :                 edge) ;
+<span class="lineNum">     601 </span>                :            :     
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :         fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label:G%d\n&quot;, </span>
+<span class="lineNum">     603 </span>                :            :                 net,
+<span class="lineNum">     604 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX - 1,</span>
+<span class="lineNum">     605 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY - 1,</span>
+<span class="lineNum">     606 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX + 1,</span>
+<span class="lineNum">     607 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY + 1,</span>
+<span class="lineNum">     608 </span>                :            :                 NEWPINCOLOR,
+<span class="lineNum">     609 </span>                :            :                 g1) ;
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 :         fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label:G%d\n&quot;, </span>
+<span class="lineNum">     611 </span>                :            :                 net,
+<span class="lineNum">     612 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX - 1,</span>
+<span class="lineNum">     613 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY - 1,</span>
+<span class="lineNum">     614 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX + 1,</span>
+<span class="lineNum">     615 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY + 1,</span>
+<span class="lineNum">     616 </span>                :            :                 NEWPINCOLOR,
+<span class="lineNum">     617 </span>                :            :                 g2) ;
+<span class="lineNum">     618 </span>                :            :     } else {
+<span class="lineNum">     619 </span>                :            : 
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :         fprintf(fp,&quot;%d, %d, %d, %d, %d, color: %s, label:%d\n&quot;, </span>
+<span class="lineNum">     621 </span>                :            :                 net,
+<span class="lineNum">     622 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX,</span>
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY,</span>
+<span class="lineNum">     624 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX,</span>
+<span class="lineNum">     625 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY,</span>
+<span class="lineNum">     626 </span>                :            :                 OLDGROUPCOLOR,
+<span class="lineNum">     627 </span>                :            :                 edge) ;
+<span class="lineNum">     628 </span>                :<span class="lineNoCov">          0 :         fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label:G%d\n&quot;, </span>
+<span class="lineNum">     629 </span>                :            :                 net,
+<span class="lineNum">     630 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX - 1,</span>
+<span class="lineNum">     631 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY - 1,</span>
+<span class="lineNum">     632 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveX + 1,</span>
+<span class="lineNum">     633 </span>                :<span class="lineNoCov">          0 :                 groupArray[g1].aveY + 1,</span>
+<span class="lineNum">     634 </span>                :            :                 OLDPINCOLOR,
+<span class="lineNum">     635 </span>                :            :                 g1) ;
+<span class="lineNum">     636 </span>                :<span class="lineNoCov">          0 :         fprintf(fpp,&quot;%d, %d, %d, %d, %d, color: %s, label:G%d\n&quot;, </span>
+<span class="lineNum">     637 </span>                :            :                 net,
+<span class="lineNum">     638 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX - 1,</span>
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY - 1,</span>
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveX + 1,</span>
+<span class="lineNum">     641 </span>                :<span class="lineNoCov">          0 :                 groupArray[g2].aveY + 1,</span>
+<span class="lineNum">     642 </span>                :            :                 OLDPINCOLOR,
+<span class="lineNum">     643 </span>                :            :                 g2) ;
+<span class="lineNum">     644 </span>                :            :    }
+<span class="lineNum">     645 </span>                :            : 
+<span class="lineNum">     646 </span>                :            : }
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 : twclose(fp);</span>
+<span class="lineNum">     648 </span>                :<span class="lineNoCov">          0 : twclose(fpp);</span>
+<span class="lineNum">     649 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     650 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

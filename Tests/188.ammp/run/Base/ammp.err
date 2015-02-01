@@ -1,0 +1,57 @@
+==5865== exp-bbv, a SimPoint basic block vector generator
+==5865== NOTE: This is an Experimental-Class Valgrind Tool
+==5865== Copyright (C) 2006-2010 Vince Weaver
+==5865== Using Valgrind-3.6.1 and LibVEX; rerun with -h for copyright info
+==5865== Command: ../Base/ammp_parallel
+==5865== 
+==5865== 
+==5865== 
+==5865== 
+==5865== # Thread 1
+==5865== #   Total intervals: 213 (Interval Size 100000000)
+==5865== #   Total instructions: 21352591536
+==5865== #   Total reps: 15117655
+==5865== #   Unique reps: 13596678
+==5865== #   Total fldcw instructions: 7594698
+==5865== 
+==5865== 
+==5865== 
+==5865== 
+==5865== # Thread 2
+==5865== #   Total intervals: 1458 (Interval Size 100000000)
+==5865== #   Total instructions: 145817223080
+==5865== #   Total reps: 0
+==5865== #   Unique reps: 0
+==5865== #   Total fldcw instructions: 1667384
+==5865== 
+==5865== 
+==5865== 
+==5865== 
+==5865== # Thread 3
+==5865== #   Total intervals: 930 (Interval Size 100000000)
+==5865== #   Total instructions: 93031008883
+==5865== #   Total reps: 0
+==5865== #   Unique reps: 0
+==5865== #   Total fldcw instructions: 1667384
+==5865== 
+==5865== 
+==5865== 
+==5865== 
+==5865== # Thread 4
+==5865== #   Total intervals: 653 (Interval Size 100000000)
+==5865== #   Total instructions: 65345628072
+==5865== #   Total reps: 0
+==5865== #   Unique reps: 0
+==5865== #   Total fldcw instructions: 1667616
+==5865== 
+==5865== 
+==5865== 
+==5865== 
+==5865== # Thread 5
+==5865== #   Total intervals: 472 (Interval Size 100000000)
+==5865== #   Total instructions: 47218679589
+==5865== #   Total reps: 0
+==5865== #   Unique reps: 0
+==5865== #   Total fldcw instructions: 1668776
+==5865== 
+==5865== 

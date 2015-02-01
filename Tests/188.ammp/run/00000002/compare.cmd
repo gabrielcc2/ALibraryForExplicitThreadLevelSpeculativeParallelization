@@ -1,0 +1,1 @@
+-c /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/run/00000002 -o ammp.out.cmp /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/bin/specdiff -m -l 10  -a 0.0001  -r 0.003 /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/data/test/output/ammp.out ammp.out

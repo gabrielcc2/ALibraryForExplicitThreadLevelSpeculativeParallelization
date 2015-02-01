@@ -1,0 +1,475 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test2.info - /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/src/parallel_loop_in_batches.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../../index.html">top level</a> - <a href="index.html">home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/src</a> - parallel_loop_in_batches.h<span style="font-size: 80%;"> (source / <a href="parallel_loop_in_batches.h.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test2.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">87</td>
+            <td class="headerCovTableEntry">121</td>
+            <td class="headerCovTableEntryLo">71.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-07-29</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">38</td>
+            <td class="headerCovTableEntry">110</td>
+            <td class="headerCovTableEntryLo">34.5 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &lt;pthread.h&gt;</a>
+<span class="lineNum">       2 </span>                :            : #include &lt;map&gt;
+<span class="lineNum">       3 </span>                :            : #include &lt;vector&gt;
+<span class="lineNum">       4 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">       5 </span>                :            : #include &lt;signal.h&gt;
+<span class="lineNum">       6 </span>                :            : #include &lt;set&gt;
+<span class="lineNum">       7 </span>                :            : 
+<span class="lineNum">       8 </span>                :            : using namespace std;
+<span class="lineNum">       9 </span>                :            : 
+<span class="lineNum">      10 </span>                :            : // Definition of type script_function, that masks a void* (*)(void*
+<span class="lineNum">      11 </span>                :            : typedef void* (*script_function)(void*); 
+<span class="lineNum">      12 </span>                :            : // Definition of type script_vector, a std::vector of type script_function
+<span class="lineNum">      13 </span>                :            : typedef std::vector&lt;script_function&gt; script_vector;
+<span class="lineNum">      14 </span>                :            : 
+<span class="lineNum">      15 </span>                :            : 
+<span class="lineNum">      16 </span>                :            : //
+<span class="lineNum">      17 </span>                :            : // structure: _parallel_loop_thread, used to encapsulate a pthread, 
+<span class="lineNum">      18 </span>                :            : //           which will run a thread for parallel loop execution in batches, 
+<span class="lineNum">      19 </span>                :            : //           keeping as well some related data. 
+<span class="lineNum">      20 </span>                :            : //
+<span class="lineNum">      21 </span>                :            : struct _parallel_loop_thread{ 
+<span class="lineNum">      22 </span>                :            :         pthread_mutex_t _thread_mutex;
+<span class="lineNum">      23 </span>                :            :         pthread_t _thread;
+<span class="lineNum">      24 </span>                :            :         
+<span class="lineNum">      25 </span>                :            :         bool _commit;//helps to determine if the loop iteration 
+<a name="26"><span class="lineNum">      26 </span>                :            :         //that the _loop_spec_thread represents has commited or not.</a>
+<span class="lineNum">      27 </span>                :            : 
+<span class="lineNum">      28 </span>                :<span class="lineCov">         62 :         _parallel_loop_thread(){</span>
+<span class="lineNum">      29 </span>                :<span class="lineCov">         62 :                 pthread_mutex_init (&amp;_thread_mutex, NULL);</span>
+<span class="lineNum">      30 </span>                :<span class="lineCov">         62 :                 _commit=false;</span>
+<span class="lineNum">      31 </span>                :<span class="lineCov">         62 :         };</span>
+<span class="lineNum">      32 </span>                :            :         
+<span class="lineNum">      33 </span>                :            : };
+<span class="lineNum">      34 </span>                :            : 
+<span class="lineNum">      35 </span>                :            : //!
+<span class="lineNum">      36 </span>                :            : //! \class  parallel_loop_in_batches
+<span class="lineNum">      37 </span>                :            : //!
+<span class="lineNum">      38 </span>                :            : //! \brief  implements a class that takes a window of n ordered interations from a loop and 
+<span class="lineNum">      39 </span>                :            : //!         executes them in parallel without consistency checking. To ensure that all the
+<span class="lineNum">      40 </span>                :            : //!         iterations are completed, the class relies on a commit function.
+<span class="lineNum">      41 </span>                :            : //!         
+<span class="lineNum">      42 </span>                :            : //!         Additional functionality is provided with an append function.
+<span class="lineNum">      43 </span>                :            : //!
+<a name="44"><span class="lineNum">      44 </span>                :            : //!         This class is the same as loop_speculator, but without the dependency tracking.</a>
+<span class="lineNum">      45 </span>                :            : //!
+<span class="lineNum">      46 </span>                :<span class="lineCov">          6 : class parallel_loop_in_batches {</span>
+<span class="lineNum">      47 </span>                :            : private: 
+<span class="lineNum">      48 </span>                :            : 
+<span class="lineNum">      49 </span>                :            :         //bool values to set if the object is active, or has control
+<span class="lineNum">      50 </span>                :            :         //of the pre-loop section 
+<span class="lineNum">      51 </span>                :            :         bool _is_active, _has_pre_loop; 
+<span class="lineNum">      52 </span>                :            : 
+<span class="lineNum">      53 </span>                :            :         //mutex for synchronized use of the previous group of variables
+<span class="lineNum">      54 </span>                :            :         pthread_mutex_t _is_active_mutex; 
+<span class="lineNum">      55 </span>                :            : 
+<span class="lineNum">      56 </span>                :            :         //thread to manage the pre-loop section, boolean value to check if
+<span class="lineNum">      57 </span>                :            :         //it has ended it's execution &amp; related mutex
+<span class="lineNum">      58 </span>                :            :         pthread_t _pl; 
+<span class="lineNum">      59 </span>                :            :         bool _pl_commit; 
+<span class="lineNum">      60 </span>                :            :         pthread_mutex_t _pl_mutex; 
+<span class="lineNum">      61 </span>                :            : 
+<span class="lineNum">      62 </span>                :            :         //the parallel loop threads and it's data
+<span class="lineNum">      63 </span>                :            :         vector &lt;_parallel_loop_thread&gt; _loop_threads;
+<span class="lineNum">      64 </span>                :            : 
+<span class="lineNum">      65 </span>                :            :         //red-black tree, used as a thread index to relate a pthread_id with 
+<span class="lineNum">      66 </span>                :            :         //it's model id, i.e. it's position in _loop_threads
+<span class="lineNum">      67 </span>                :            :         map &lt;pthread_t, int&gt; _thread_index; 
+<span class="lineNum">      68 </span>                :            : 
+<span class="lineNum">      69 </span>                :            :         //mutex for a synchronized access to both of the former
+<span class="lineNum">      70 </span>                :            :         pthread_mutex_t _loop_threads_mutex;
+<span class="lineNum">      71 </span>                :            : 
+<span class="lineNum">      72 </span>                :            :         
+<span class="lineNum">      73 </span>                :            :         //! private method that allows to cancel threads whose
+<span class="lineNum">      74 </span>                :            :         //! positions are passed as an argument. It is used if there is a 
+<span class="lineNum">      75 </span>                :            :         //! error on starting the execution, and also for resetting the object.
+<span class="lineNum">      76 </span>                :            :         //!
+<span class="lineNum">      77 </span>                :            :         //! TO BE NOTED:
+<span class="lineNum">      78 </span>                :            :         //! * this method takes all class mutexes. On invocation
+<span class="lineNum">      79 </span>                :            :         //!   _loop_threads_mutex should be on hold and no other class mutex, 
+<span class="lineNum">      80 </span>                :            :         //!   save those related to a thread that is not about to be canceled or restarted.
+<span class="lineNum">      81 </span>                :            :         //! 
+<span class="lineNum">      82 </span>                :            :         //! * if called with an empty vector, it will reset all logs and
+<span class="lineNum">      83 </span>                :            :         //! wait for the threads in deferred cancel to finish.
+<span class="lineNum">      84 </span>                :            :         //! 
+<span class="lineNum">      85 </span>                :            :         //! 
+<span class="lineNum">      86 </span>                :<span class="lineCov">          4 :         void _cancel_loop_threads_and_reset_logs (vector &lt;int&gt; threads_to_delete){</span>
+<span class="lineNum">      87 </span>                :            : 
+<span class="lineNum">      88 </span>                :            :                 int i;
+<span class="lineNum">      89 </span>                :<span class="lineCov">          4 :                 bool valid_arguments=true;</span>
+<span class="lineNum">      90 </span>                :            : 
+<span class="lineNum">      91 </span>[<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 100 times"> + </span>]:<span class="lineCov">          4 :                 if (!threads_to_delete.empty()){</span>
+<span class="lineNum">      92 </span>                :            : 
+<span class="lineNum">      93 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                         for (i=0; i&lt;threads_to_delete.size(); i++){</span>
+<span class="lineNum">      94 </span>                :            : 
+<span class="lineNum">      95 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 if (threads_to_delete[i]&lt;0 || threads_to_delete[i]&gt; static_cast&lt;int&gt;(_loop_threads.size())){</span>
+<span class="lineNum">         </span>[<span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span> 
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span><span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :                                         valid_arguments=false; //one thread has an invalid id.</span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :                                         i=threads_to_delete.size();</span>
+<span class="lineNum">      98 </span>                :            :                                 }
+<span class="lineNum">      99 </span>                :            :                                         
+<span class="lineNum">     100 </span>                :            :                         }
+<span class="lineNum">     101 </span>                :            :                 }
+<span class="lineNum">     102 </span>                :            :                 else{
+<span class="lineNum">     103 </span>                :<span class="lineCov">          4 :                         valid_arguments=false; //no threads to delete</span>
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>                :            :                         /*This option will be used to initialize the object, reseting it's inner arrays*/
+<span class="lineNum">     106 </span>                :            : 
+<span class="lineNum">     107 </span>                :<span class="lineCov">          4 :                         pthread_mutex_lock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     108 </span>                :            : 
+<span class="lineNum">     109 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 102 times"> + </span>]:<span class="lineCov">          4 :                         if (_has_pre_loop)</span>
+<span class="lineNum">     110 </span>                :            :         
+<span class="lineNum">     111 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_lock(&amp;_pl_mutex);</span>
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>[<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchCov" title="Branch 2 was taken 100 times"> + </span>]:<span class="lineCov">          6 :                         if (!_loop_threads.empty()){</span>
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 :                                 _loop_threads.clear(); </span>
+<span class="lineNum">     115 </span>                :            :                         }                               
+<span class="lineNum">     116 </span>                :            : 
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          6 :                         if (!_thread_index.empty()){ </span>
+<span class="lineNum">     119 </span>                :            : 
+<span class="lineNum">     120 </span>                :            :                                 /*in order to clear the _thread_index, it will be necessary to guarantee that all the threads in deferred
+<span class="lineNum">     121 </span>                :            :                                 cancel have finished, and thus will not use the object*/
+<span class="lineNum">     122 </span>                :            : 
+<span class="lineNum">     123 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 if (_has_pre_loop)</span>
+<span class="lineNum">     124 </span>                :<span class="lineNoCov">          0 :                                         pthread_mutex_unlock(&amp;_pl_mutex);</span>
+<span class="lineNum">     125 </span>                :            :                 
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_unlock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     127 </span>                :            : 
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_unlock(&amp;_loop_threads_mutex);</span>
+<span class="lineNum">     129 </span>                :            :                                         
+<span class="lineNum">     130 </span>                :            :                                 map &lt;pthread_t, int&gt;::iterator it;
+<span class="lineNum">     131 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 for (it=_thread_index.begin(); it!=_thread_index.end(); it++){</span>
+<span class="lineNum">     132 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                         if (it-&gt;second==-1){</span>
+<span class="lineNum">     133 </span>                :            :                                                 int a;
+<span class="lineNum">     134 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                                 do {</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :                                                         a= pthread_kill(it-&gt;first, 0);</span>
+<span class="lineNum">     136 </span>                :            :                                                 } while (a==0);
+<span class="lineNum">     137 </span>                :            :                                         }
+<span class="lineNum">     138 </span>                :            :                                 }
+<span class="lineNum">     139 </span>                :            :                                 
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_lock(&amp;_loop_threads_mutex);</span>
+<span class="lineNum">     141 </span>                :            : 
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :                                 _thread_index.clear();</span>
+<span class="lineNum">     143 </span>                :            : 
+<span class="lineNum">     144 </span>                :            :                         }
+<span class="lineNum">     145 </span>                :            :                         else {
+<span class="lineNum">     146 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :                                 if (_has_pre_loop)</span>
+<span class="lineNum">     147 </span>                :            :                         
+<span class="lineNum">     148 </span>                :<span class="lineNoCov">          0 :                                         pthread_mutex_unlock(&amp;_pl_mutex);</span>
+<span class="lineNum">     149 </span>                :            :                 
+<span class="lineNum">     150 </span>                :<span class="lineCov">          4 :                                 pthread_mutex_unlock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :            :                         }                       
+<span class="lineNum">     153 </span>                :            :                         
+<span class="lineNum">     154 </span>                :            :                 }
+<span class="lineNum">     155 </span>                :            : 
+<span class="lineNum">     156 </span>                :            : 
+<span class="lineNum">     157 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :                 if (valid_arguments){</span>
+<span class="lineNum">     158 </span>                :            :         
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :                         for (unsigned int i=threads_to_delete.size()-1; i&gt;=0; i--){</span>
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_lock(&amp;_loop_threads[threads_to_delete[i]]._thread_mutex);</span>
+<span class="lineNum">     161 </span>                :            :                         }
+<span class="lineNum">     162 </span>                :            : 
+<span class="lineNum">     163 </span>                :            :                         pthread_t thrd_id=pthread_self();
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            :                         pthread_mutex_lock(&amp;_is_active_mutex);
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :            :                         if (_has_pre_loop)
+<span class="lineNum">     168 </span>                :            :         
+<span class="lineNum">     169 </span>                :            :                                 pthread_mutex_lock(&amp;_pl_mutex);             
+<span class="lineNum">     170 </span>                :            : 
+<span class="lineNum">     171 </span>                :            :                         for (unsigned int i=0; i&lt;threads_to_delete.size(); i++){
+<span class="lineNum">     172 </span>                :            :                                 if (pthread_equal(_loop_threads[threads_to_delete[i]]._thread, thrd_id)==0){
+<span class="lineNum">     173 </span>                :            :                                         if (pthread_kill(_loop_threads[threads_to_delete[i]]._thread, 0)==0){
+<span class="lineNum">     174 </span>                :            :                                                 pthread_cancel(_loop_threads[threads_to_delete[i]]._thread);
+<span class="lineNum">     175 </span>                :            :                                         }
+<span class="lineNum">     176 </span>                :            :                                         _thread_index[_loop_threads[threads_to_delete[i]]._thread]= -1;
+<span class="lineNum">     177 </span>                :            :                                         pthread_mutex_destroy(&amp;_loop_threads[threads_to_delete[i]]._thread_mutex); 
+<span class="lineNum">     178 </span>                :            :                                 }
+<span class="lineNum">     179 </span>                :            :                                 
+<span class="lineNum">     180 </span>                :            :                         }
+<span class="lineNum">     181 </span>                :            :         
+<span class="lineNum">     182 </span>                :            :                         if (_has_pre_loop)
+<span class="lineNum">     183 </span>                :            :                                 pthread_mutex_unlock(&amp;_pl_mutex);
+<span class="lineNum">     184 </span>                :            : 
+<span class="lineNum">     185 </span>                :            :                         pthread_mutex_unlock(&amp;_is_active_mutex);
+<span class="lineNum">     186 </span>                :            : 
+<span class="lineNum">     187 </span>                :            :                 }
+<span class="lineNum">     188 </span>                :<span class="lineCov">          4 :         };</span>
+<span class="lineNum">     189 </span>                :            :         
+<span class="lineNum">     190 </span>                :            : public: 
+<span class="lineNum">     191 </span>                :            : 
+<span class="lineNum">     192 </span>                :            :         //!
+<span class="lineNum">     193 </span>                :            :         //! default constructor
+<span class="lineNum">     194 </span>                :            :         //!
+<span class="lineNum">     195 </span>                :<span class="lineCov">          8 :         parallel_loop_in_batches(){</span>
+<span class="lineNum">     196 </span>                :            : 
+<span class="lineNum">     197 </span>                :<span class="lineCov">          4 :                 _is_active=false;</span>
+<span class="lineNum">     198 </span>                :<span class="lineCov">          4 :                 _pl_commit=false;</span>
+<span class="lineNum">     199 </span>                :<span class="lineCov">          4 :                 _has_pre_loop=false;</span>
+<span class="lineNum">     200 </span>                :<span class="lineCov">          4 :                 pthread_mutex_init (&amp;_is_active_mutex, NULL); </span>
+<span class="lineNum">     201 </span>                :<span class="lineCov">          4 :                 pthread_mutex_init (&amp;_pl_mutex, NULL); </span>
+<span class="lineNum">     202 </span>                :<span class="lineCov">          4 :                 pthread_mutex_init (&amp;_loop_threads_mutex, NULL);    </span>
+<span class="lineNum">     203 </span>                :<span class="lineCov">          4 :         };</span>
+<span class="lineNum">     204 </span>                :            : 
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>                :            :         //!
+<span class="lineNum">     207 </span>                :            :         //! required function that signals that a given thread has ended
+<span class="lineNum">     208 </span>                :            :         //! it's execution, it is assumed to be called from a valid 
+<span class="lineNum">     209 </span>                :            :         //! thread
+<span class="lineNum">     210 </span>                :            :         //!
+<span class="lineNum">     211 </span>                :<span class="lineCov">         66 :         void commit (){ </span>
+<span class="lineNum">     212 </span>                :<span class="lineCov">         66 :                 pthread_t thread_id=pthread_self();</span>
+<span class="lineNum">     213 </span>        [<span class="branchCov" title="Branch 0 was taken 125 times"> + </span><span class="branchCov" title="Branch 1 was taken 8 times"> + </span>]:<span class="lineCov">        132 :                 if (_thread_index.find(thread_id)!=_thread_index.end()){</span>
+<span class="lineNum">     214 </span>                :<span class="lineCov">        124 :                         int pos=_thread_index.find(thread_id)-&gt;second;</span>
+<span class="lineNum">     215 </span>        [<span class="branchCov" title="Branch 0 was taken 131 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">         62 :                         if (pos&gt;=0){ //valid thread</span>
+<span class="lineNum">     216 </span>                :<span class="lineCov">         93 :                                 _loop_threads[pos]._commit=true;</span>
+<span class="lineNum">     217 </span>                :            :                         }
+<span class="lineNum">     218 </span>                :            :                 }
+<span class="lineNum">     219 </span>                :            :                 else {  //unmanaged pre-loop                            
+<span class="lineNum">     220 </span>                :<span class="lineCov">          4 :                         _pl_commit=true;                                        </span>
+<span class="lineNum">     221 </span>                :            :                 }
+<span class="lineNum">     222 </span>                :<span class="lineCov">         66 :         };</span>
+<span class="lineNum">     223 </span>                :            : 
+<span class="lineNum">     224 </span>                :            :         
+<span class="lineNum">     225 </span>                :            :         //!
+<span class="lineNum">     226 </span>                :            :         //! function that permits the pre_loop section to dynamically append
+<span class="lineNum">     227 </span>                :            :         //! a new thread at the end of the array in an on-going
+<span class="lineNum">     228 </span>                :            :         //! execution.
+<span class="lineNum">     229 </span>                :            :         //! no checks are made, in order to keep performance.
+<span class="lineNum">     230 </span>                :            :         //! 
+<span class="lineNum">     231 </span>                :<span class="lineCov">         58 :         int append(void* (f)(void*), void* consts){</span>
+<span class="lineNum">     232 </span>                :            :                 pthread_attr_t attr;
+<span class="lineNum">     233 </span>                :<span class="lineCov">         58 :                 pthread_attr_init (&amp;attr);</span>
+<span class="lineNum">     234 </span>                :<span class="lineCov">         58 :                 pthread_attr_setschedpolicy(&amp;attr, SCHED_FIFO);</span>
+<span class="lineNum">     235 </span>                :            : //                pthread_attr_setstacksize(&amp;attr, 16384);
+<span class="lineNum">     236 </span>                :            :                 int success;
+<span class="lineNum">     237 </span>                :            :         
+<span class="lineNum">     238 </span>                :<span class="lineCov">        116 :                 int i=_loop_threads.size();</span>
+<span class="lineNum">     239 </span>                :            :                         
+<span class="lineNum">     240 </span>                :<span class="lineCov">         58 :                 _loop_threads.resize(i+1);</span>
+<span class="lineNum">     241 </span>                :<span class="lineCov">        116 :                 _loop_threads[i]._commit=false;</span>
+<span class="lineNum">     242 </span>                :<span class="lineCov">         87 :                 success=pthread_create(&amp;_loop_threads[i]._thread, &amp;attr, f, consts);</span>
+<span class="lineNum">     243 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 129 times"> + </span>]:<span class="lineCov">         58 :                 if (success!=0){</span>
+<span class="lineNum">     244 </span>                :<span class="lineNoCov">          0 :                         _thread_index.insert(pair&lt;pthread_t, int&gt;(_loop_threads[i]._thread, -1));</span>
+<span class="lineNum">     245 </span>                :<span class="lineNoCov">          0 :                         return -1;</span>
+<span class="lineNum">     246 </span>                :            :                 }
+<span class="lineNum">     247 </span>                :<span class="lineCov">        174 :                 _thread_index.insert(pair&lt;pthread_t, int&gt;(_loop_threads[i]._thread, i));</span>
+<span class="lineNum">     248 </span>                :<span class="lineCov">         58 :                 return 0;</span>
+<span class="lineNum">     249 </span>                :            :         };      
+<span class="lineNum">     250 </span>                :            : 
+<span class="lineNum">     251 </span>                :            : 
+<span class="lineNum">     252 </span>                :            : 
+<span class="lineNum">     253 </span>                :            :         //!
+<span class="lineNum">     254 </span>                :            :         //! run: a complete function that takes orderly the instructions and arguments
+<span class="lineNum">     255 </span>                :            :         //! of n loop iterations from a window; and starts their parallel execution, while 
+<span class="lineNum">     256 </span>                :            :         //! maintaining the sequential consistency with an un-managed pre-loop section.
+<span class="lineNum">     257 </span>                :            :         //! This function will return in the shared data, the results of the computation, when
+<span class="lineNum">     258 </span>                :            :         //! get_results is called.
+<span class="lineNum">     259 </span>                :            :         //!
+<span class="lineNum">     260 </span>                :            :         //! TO BE NOTED:
+<span class="lineNum">     261 </span>                :            :         //!    * In this version of the function, the object is not in control of the pre-
+<span class="lineNum">     262 </span>                :            :         //!    loop section. This means that on invocation, the caller only blocks for the creation
+<span class="lineNum">     263 </span>                :            :         //!    of the threads, and can resume it's execution as a possible pre-loop, until
+<span class="lineNum">     264 </span>                :            :         //!    calling get_results(), when the caller blocks until all valid loop iterations/threads return.
+<span class="lineNum">     265 </span>                :            :         //!
+<span class="lineNum">     266 </span>                :<span class="lineCov">          4 :         int run (script_vector thread_instructions, vector &lt;void*&gt; const_args){</span>
+<span class="lineNum">     267 </span>                :            : 
+<span class="lineNum">     268 </span>                :<span class="lineCov">          4 :                 _is_active=true; </span>
+<span class="lineNum">     269 </span>                :            :         
+<span class="lineNum">     270 </span>                :<span class="lineCov">          4 :                 pthread_mutex_lock(&amp;_loop_threads_mutex);</span>
+<span class="lineNum">     271 </span>                :            :         
+<span class="lineNum">     272 </span>                :<span class="lineCov">          4 :                 vector &lt;int&gt; threads_to_cancel;//a selective reset is performed, waiting for the threads in</span>
+<span class="lineNum">     273 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :                 _cancel_loop_threads_and_reset_logs(threads_to_cancel);//deferred cancel to finish, and reseting the</span>
+<span class="lineNum">     274 </span>                :            :                 //arrays that the execution uses.
+<span class="lineNum">     275 </span>                :            : 
+<span class="lineNum">     276 </span>                :<span class="lineCov">          4 :                 _has_pre_loop=false; </span>
+<span class="lineNum">     277 </span>                :            : 
+<span class="lineNum">     278 </span>                :<span class="lineCov">          4 :                 pthread_mutex_lock(&amp;_pl_mutex);</span>
+<span class="lineNum">     279 </span>                :<span class="lineCov">          4 :                 _pl_commit=false;</span>
+<span class="lineNum">     280 </span>                :<span class="lineCov">          4 :                 pthread_mutex_unlock(&amp;_pl_mutex);</span>
+<span class="lineNum">     281 </span>                :            :         
+<span class="lineNum">     282 </span>                :            :                 pthread_attr_t attr;
+<span class="lineNum">     283 </span>                :<span class="lineCov">          4 :                 pthread_attr_init (&amp;attr);</span>
+<span class="lineNum">     284 </span>                :<span class="lineCov">          4 :                 pthread_attr_setschedpolicy(&amp;attr, SCHED_FIFO);</span>
+<span class="lineNum">     285 </span>                :            : //                pthread_attr_setstacksize(&amp;attr, 16384);
+<span class="lineNum">     286 </span>                :            : 
+<span class="lineNum">     287 </span>                :            :                 //the threads are created
+<span class="lineNum">     288 </span>                :            :                 int success;
+<span class="lineNum">     289 </span>        [<span class="branchCov" title="Branch 1 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          6 :                 _loop_threads.resize(thread_instructions.size());               </span>
+<span class="lineNum">     290 </span>                :            :                 
+<span class="lineNum">     291 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">         12 :                 for (unsigned int i=0; i&lt;thread_instructions.size(); i++){</span>
+<span class="lineNum">     292 </span>                :<span class="lineCov">          6 :                         pthread_mutex_lock(&amp;_loop_threads[i]._thread_mutex);</span>
+<span class="lineNum">     293 </span>                :            :                 }
+<span class="lineNum">     294 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 50 times"> + </span><span class="branchCov" title="Branch 1 was taken 50 times"> + </span>]:<span class="lineCov">         12 :                 for (unsigned int i=0; i&lt;thread_instructions.size(); i++){</span>
+<span class="lineNum">     295 </span>                :            : 
+<span class="lineNum">     296 </span>                :<span class="lineCov">          8 :                         success=pthread_create (&amp;_loop_threads[i]._thread, &amp;attr, thread_instructions[i], const_args[i]);</span>
+<span class="lineNum">     297 </span>                :            :                         
+<span class="lineNum">     298 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :                         if (success==0){</span>
+<span class="lineNum">     299 </span>                :<span class="lineCov">         12 :                                 _thread_index.insert(pair&lt;pthread_t, int&gt;(_loop_threads[i]._thread, i));</span>
+<span class="lineNum">     300 </span>                :            :                         }
+<span class="lineNum">     301 </span>                :            : 
+<span class="lineNum">     302 </span>                :<span class="lineCov">          6 :                         pthread_mutex_unlock(&amp;_loop_threads[i]._thread_mutex);</span>
+<span class="lineNum">     303 </span>                :            : 
+<span class="lineNum">     304 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 102 times"> + </span>]:<span class="lineCov">          4 :                         if (success!=0){</span>
+<span class="lineNum">     305 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 for (unsigned int j=i+1; j&lt;thread_instructions.size(); j++){</span>
+<span class="lineNum">     306 </span>                :<span class="lineNoCov">          0 :                                         pthread_mutex_unlock(&amp;_loop_threads[j]._thread_mutex);</span>
+<span class="lineNum">     307 </span>                :            :                                 }
+<span class="lineNum">     308 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 for (unsigned int j=0; j&lt;i; j++){</span>
+<span class="lineNum">     309 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                         threads_to_cancel.push_back(j);</span>
+<span class="lineNum">     310 </span>                :            :                                 }
+<span class="lineNum">     311 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                 _cancel_loop_threads_and_reset_logs(threads_to_cancel);</span>
+<span class="lineNum">     312 </span>                :            :                                         
+<span class="lineNum">     313 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_unlock(&amp;_loop_threads_mutex);</span>
+<span class="lineNum">     314 </span>                :            : 
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_lock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     316 </span>                :<span class="lineNoCov">          0 :                                 _is_active=false;</span>
+<span class="lineNum">     317 </span>                :<span class="lineNoCov">          0 :                                 pthread_mutex_unlock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :                                 return -1;// a thread could not be created.</span>
+<span class="lineNum">     319 </span>                :            :                         }
+<span class="lineNum">     320 </span>                :            :                 }
+<span class="lineNum">     321 </span>                :<span class="lineCov">          4 :                 pthread_mutex_unlock(&amp;_loop_threads_mutex);</span>
+<span class="lineNum">     322 </span>                :<span class="lineCov">          4 :                 return 0;</span>
+<span class="lineNum">     323 </span>                :            :         };
+<span class="lineNum">     324 </span>                :            : 
+<span class="lineNum">     325 </span>                :            :         //!
+<span class="lineNum">     326 </span>                :            :         //! function to get the results of the execution once the un-managed pre-
+<span class="lineNum">     327 </span>                :            :         //! loop section has ended it's execution. 
+<span class="lineNum">     328 </span>                :            :         //! 
+<span class="lineNum">     329 </span>                :            :         //! TO BE NOTED: If some join is not possible, no check is made.
+<span class="lineNum">     330 </span>                :            :         //! 
+<span class="lineNum">     331 </span>                :<span class="lineCov">          4 :         int get_results(){</span>
+<span class="lineNum">     332 </span>                :<span class="lineCov">          4 :                 bool commit_made=false;</span>
+<span class="lineNum">     333 </span>                :<span class="lineCov">          4 :                 unsigned int joined_but_didnt_commit=0;</span>
+<span class="lineNum">     334 </span>                :            :                 int success;
+<span class="lineNum">     335 </span>[<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 100 times"> + </span>]:<span class="lineCov">          4 :                 do{</span>
+<span class="lineNum">     336 </span>                :<span class="lineCov">          4 :                         success=-1;</span>
+<span class="lineNum">     337 </span>[<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :                         if (success!=0){</span>
+<span class="lineNum">     338 </span>                :<span class="lineCov">          4 :                                 pthread_mutex_lock(&amp;_pl_mutex);</span>
+<span class="lineNum">     339 </span>        [<span class="branchCov" title="Branch 0 was taken 102 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          4 :                                 if (_pl_commit){</span>
+<span class="lineNum">     340 </span>                :<span class="lineCov">          4 :                                         commit_made=true;</span>
+<span class="lineNum">     341 </span>                :            :                                 }
+<span class="lineNum">     342 </span>                :            :                                 else{
+<span class="lineNum">     343 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :                                         if (joined_but_didnt_commit&lt;10){ </span>
+<span class="lineNum">     344 </span>                :<span class="lineNoCov">          0 :                                                 success=0;</span>
+<span class="lineNum">     345 </span>                :<span class="lineNoCov">          0 :                                                 joined_but_didnt_commit++;</span>
+<span class="lineNum">     346 </span>                :            :                                         }
+<span class="lineNum">     347 </span>                :            :                                 }
+<span class="lineNum">     348 </span>                :<span class="lineCov">          4 :                                 pthread_mutex_unlock(&amp;_pl_mutex); </span>
+<span class="lineNum">     349 </span>                :            :                         }
+<span class="lineNum">     350 </span>                :            :                         
+<span class="lineNum">     351 </span>                :            :                 } while (success==0);
+<span class="lineNum">     352 </span>                :            : 
+<span class="lineNum">     353 </span>                :<span class="lineCov">          4 :                 int i=0; </span>
+<span class="lineNum">     354 </span>                :            : 
+<span class="lineNum">     355 </span>[<span class="branchCov" title="Branch 0 was taken 31 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>][<span class="branchCov" title="Branch 0 was taken 94 times"> + </span><span class="branchCov" title="Branch 1 was taken 6 times"> + </span>]:<span class="lineCov">        101 :                 while (_loop_threads.size()&gt;i){</span>
+<span class="lineNum">     356 </span>                :            : 
+<span class="lineNum">     357 </span>                :<span class="lineCov">        124 :                         pthread_t thread_to_join=_loop_threads[i]._thread;</span>
+<span class="lineNum">     358 </span>                :            : 
+<span class="lineNum">     359 </span>                :<span class="lineCov">         62 :                         commit_made=false;</span>
+<span class="lineNum">     360 </span>                :<span class="lineCov">         62 :                         joined_but_didnt_commit=0;</span>
+<span class="lineNum">     361 </span>                :            :         
+<span class="lineNum">     362 </span>        [<span class="branchCov" title="Branch 0 was taken 81 times"> + </span><span class="branchCov" title="Branch 1 was taken 81 times"> + </span>]:<span class="lineCov">        124 :                         do{</span>
+<span class="lineNum">     363 </span>                :            :                         
+<span class="lineNum">     364 </span>                :<span class="lineCov">        124 :                                 success=pthread_join (thread_to_join, NULL);</span>
+<span class="lineNum">     365 </span>                :            : 
+<span class="lineNum">     366 </span>                :            : 
+<span class="lineNum">     367 </span>                :            :                         } while (success==0);   
+<span class="lineNum">     368 </span>                :<span class="lineCov">         62 :                         i++;</span>
+<span class="lineNum">     369 </span>                :            :                 }
+<span class="lineNum">     370 </span>                :            : 
+<span class="lineNum">     371 </span>                :<span class="lineCov">          4 :                 pthread_mutex_lock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     372 </span>                :<span class="lineCov">          4 :                 _is_active=false;</span>
+<span class="lineNum">     373 </span>                :<span class="lineCov">          4 :                 pthread_mutex_unlock(&amp;_is_active_mutex);</span>
+<span class="lineNum">     374 </span>                :<span class="lineCov">          4 :                 return 0;</span>
+<span class="lineNum">     375 </span>                :            :         };
+<span class="lineNum">     376 </span>                :            : 
+<span class="lineNum">     377 </span>                :            :         int cancel_iteration (int a){
+<span class="lineNum">     378 </span>                :            :                 if (_loop_threads[a]._commit)
+<span class="lineNum">     379 </span>                :            :                         return 0;
+<span class="lineNum">     380 </span>                :            :                 _loop_threads[a]._commit=true;
+<span class="lineNum">     381 </span>                :            : //              if (pthread_kill(_loop_threads[a]._thread, 0)==0){
+<span class="lineNum">     382 </span>                :            :                         pthread_cancel(_loop_threads[a]._thread);
+<span class="lineNum">     383 </span>                :            :                         _thread_index[_loop_threads[a]._thread]= -1;
+<span class="lineNum">     384 </span>                :            : //              }
+<span class="lineNum">     385 </span>                :            :                 return 0;
+<span class="lineNum">     386 </span>                :            :         }
+<span class="lineNum">     387 </span>                :            :         
+<span class="lineNum">     388 </span>                :            : };
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/copypix.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - copypix.c<span style="font-size: 80%;"> (source / <a href="copypix.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">205</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">172</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: copypix.c,v 1.6 1997/07/24 01:24:45 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.4
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1996  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: copypix.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.6  1997/07/24 01:24:45  brianp
+<span class="lineNum">      27 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.5  1997/06/20 02:20:04  brianp
+<span class="lineNum">      30 </span>                :            :  * replaced Current.IntColor with Current.ByteColor
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.4  1997/05/28 03:23:48  brianp
+<span class="lineNum">      33 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.3  1996/09/15 14:18:10  brianp
+<span class="lineNum">      36 </span>                :            :  * now use GLframebuffer and GLvisual
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.2  1996/09/15 01:48:58  brianp
+<span class="lineNum">      39 </span>                :            :  * removed #define NULL 0
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.1  1996/09/13 01:38:16  brianp
+<span class="lineNum">      42 </span>                :            :  * Initial revision
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  */
+<span class="lineNum">      45 </span>                :            : 
+<span class="lineNum">      46 </span>                :            : 
+<span class="lineNum">      47 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      48 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      49 </span>                :            : #else
+<span class="lineNum">      50 </span>                :            : #include &lt;string.h&gt;
+<span class="lineNum">      51 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">      52 </span>                :            : #include &quot;copypix.h&quot;
+<span class="lineNum">      53 </span>                :            : #include &quot;depth.h&quot;
+<span class="lineNum">      54 </span>                :            : #include &quot;feedback.h&quot;
+<span class="lineNum">      55 </span>                :            : #include &quot;dlist.h&quot;
+<span class="lineNum">      56 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      57 </span>                :            : #include &quot;pixel.h&quot;
+<span class="lineNum">      58 </span>                :            : #include &quot;span.h&quot;
+<span class="lineNum">      59 </span>                :            : #include &quot;stencil.h&quot;
+<span class="lineNum">      60 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      61 </span>                :            : #endif
+<span class="lineNum">      62 </span>                :            : 
+<a name="63"><span class="lineNum">      63 </span>                :            : </a>
+<span class="lineNum">      64 </span>                :            : 
+<span class="lineNum">      65 </span>                :<span class="lineNoCov">          0 : static void copy_rgb_pixels( GLcontext* ctx,</span>
+<span class="lineNum">      66 </span>                :            :                              GLint srcx, GLint srcy, GLint width, GLint height,
+<span class="lineNum">      67 </span>                :            :                              GLint destx, GLint desty )
+<span class="lineNum">      68 </span>                :            : {
+<span class="lineNum">      69 </span>                :            :    DEFARRAY( GLdepth, zspan, MAX_WIDTH );
+<span class="lineNum">      70 </span>                :            :    DEFARRAY( GLubyte, red, MAX_WIDTH );
+<span class="lineNum">      71 </span>                :            :    DEFARRAY( GLubyte, green, MAX_WIDTH );
+<span class="lineNum">      72 </span>                :            :    DEFARRAY( GLubyte, blue, MAX_WIDTH );
+<span class="lineNum">      73 </span>                :            :    DEFARRAY( GLubyte, alpha, MAX_WIDTH );
+<span class="lineNum">      74 </span>                :            :    GLboolean scale_or_bias, quick_draw, zoom;
+<span class="lineNum">      75 </span>                :            :    GLint sy, dy, stepy;
+<span class="lineNum">      76 </span>                :            :    GLint i, j;
+<span class="lineNum">      77 </span>                :            :    GLboolean setbuffer;
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Pixel.ZoomX==1.0F &amp;&amp; ctx-&gt;Pixel.ZoomY==1.0F) {</span>
+<span class="lineNum">      80 </span>                :<span class="lineNoCov">          0 :       zoom = GL_FALSE;</span>
+<span class="lineNum">      81 </span>                :            :    }
+<span class="lineNum">      82 </span>                :            :    else {
+<span class="lineNum">      83 </span>                :<span class="lineNoCov">          0 :       zoom = GL_TRUE;</span>
+<span class="lineNum">      84 </span>                :            :    }
+<span class="lineNum">      85 </span>                :            : 
+<span class="lineNum">      86 </span>                :            :    /* Determine if copy should be done bottom-to-top or top-to-bottom */
+<span class="lineNum">      87 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (srcy&lt;desty) {</span>
+<span class="lineNum">      88 </span>                :            :       /* top-down  max-to-min */
+<span class="lineNum">      89 </span>                :<span class="lineNoCov">          0 :       sy = srcy + height - 1;</span>
+<span class="lineNum">      90 </span>                :<span class="lineNoCov">          0 :       dy = desty + height - 1;</span>
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :       stepy = -1;</span>
+<span class="lineNum">      92 </span>                :            :    }
+<span class="lineNum">      93 </span>                :            :    else {
+<span class="lineNum">      94 </span>                :            :       /* bottom-up  min-to-max */
+<span class="lineNum">      95 </span>                :<span class="lineNoCov">          0 :       sy = srcy;</span>
+<span class="lineNum">      96 </span>                :<span class="lineNoCov">          0 :       dy = desty;</span>
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :       stepy = 1;</span>
+<span class="lineNum">      98 </span>                :            :    }
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    scale_or_bias = ctx-&gt;Pixel.RedScale!=1.0 || ctx-&gt;Pixel.RedBias!=0.0</span>
+<span class="lineNum">     101 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 || ctx-&gt;Pixel.GreenScale!=1.0 || ctx-&gt;Pixel.GreenBias!=0.0</span>
+<span class="lineNum">     102 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 || ctx-&gt;Pixel.BlueScale!=1.0 || ctx-&gt;Pixel.BlueBias!=0.0</span>
+<span class="lineNum">     103 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :                 || ctx-&gt;Pixel.AlphaScale!=1.0 || ctx-&gt;Pixel.AlphaBias!=0.0;</span>
+<span class="lineNum">     104 </span>                :            : 
+<span class="lineNum">     105 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Depth.Test) {</span>
+<span class="lineNum">     106 </span>                :            :       /* fill in array of z values */
+<span class="lineNum">     107 </span>                :<span class="lineNoCov">          0 :       GLint z = (GLint) (ctx-&gt;Current.RasterPos[2] * DEPTH_SCALE);</span>
+<span class="lineNum">     108 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 :          zspan[i] = z;</span>
+<span class="lineNum">     110 </span>                :            :       }
+<span class="lineNum">     111 </span>                :            :    }
+<span class="lineNum">     112 </span>                :            : 
+<span class="lineNum">     113 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;RasterMask==0 &amp;&amp; !zoom</span>
+<span class="lineNum">     114 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :        &amp;&amp; destx&gt;=0 &amp;&amp; destx+width&lt;=ctx-&gt;Buffer-&gt;Width) {</span>
+<span class="lineNum">     115 </span>                :<span class="lineNoCov">          0 :       quick_draw = GL_TRUE;</span>
+<span class="lineNum">     116 </span>                :            :    }
+<span class="lineNum">     117 </span>                :            :    else {
+<span class="lineNum">     118 </span>                :<span class="lineNoCov">          0 :       quick_draw = GL_FALSE;</span>
+<span class="lineNum">     119 </span>                :            :    }
+<span class="lineNum">     120 </span>                :            : 
+<span class="lineNum">     121 </span>                :            :    /* If read and draw buffer are different we must do buffer switching */
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :    setbuffer = ctx-&gt;Pixel.ReadBuffer!=ctx-&gt;Color.DrawBuffer;</span>
+<span class="lineNum">     123 </span>                :            : 
+<span class="lineNum">     124 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0; j&lt;height; j++, sy+=stepy, dy+=stepy) {</span>
+<span class="lineNum">     125 </span>                :            :       /* read */
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (setbuffer) {</span>
+<span class="lineNum">     128 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.SetBuffer)( ctx, ctx-&gt;Pixel.ReadBuffer );</span>
+<span class="lineNum">     129 </span>                :            :       }
+<span class="lineNum">     130 </span>                :<span class="lineNoCov">          0 :       gl_read_color_span( ctx, width, srcx, sy, red, green, blue, alpha );</span>
+<span class="lineNum">     131 </span>                :            : 
+<span class="lineNum">     132 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (scale_or_bias) {</span>
+<span class="lineNum">     133 </span>                :<span class="lineNoCov">          0 :          GLfloat rbias = ctx-&gt;Pixel.RedBias   * ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :          GLfloat gbias = ctx-&gt;Pixel.GreenBias * ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :          GLfloat bbias = ctx-&gt;Pixel.BlueBias  * ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     136 </span>                :<span class="lineNoCov">          0 :          GLfloat abias = ctx-&gt;Pixel.AlphaBias * ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :          GLint rmax = (GLint) ctx-&gt;Visual-&gt;RedScale;</span>
+<span class="lineNum">     138 </span>                :<span class="lineNoCov">          0 :          GLint gmax = (GLint) ctx-&gt;Visual-&gt;GreenScale;</span>
+<span class="lineNum">     139 </span>                :<span class="lineNoCov">          0 :          GLint bmax = (GLint) ctx-&gt;Visual-&gt;BlueScale;</span>
+<span class="lineNum">     140 </span>                :<span class="lineNoCov">          0 :          GLint amax = (GLint) ctx-&gt;Visual-&gt;AlphaScale;</span>
+<span class="lineNum">     141 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 :             GLint r = red[i]   * ctx-&gt;Pixel.RedScale   + rbias;</span>
+<span class="lineNum">     143 </span>                :<span class="lineNoCov">          0 :             GLint g = green[i] * ctx-&gt;Pixel.GreenScale + gbias;</span>
+<span class="lineNum">     144 </span>                :<span class="lineNoCov">          0 :             GLint b = blue[i]  * ctx-&gt;Pixel.BlueScale  + bbias;</span>
+<span class="lineNum">     145 </span>                :<span class="lineNoCov">          0 :             GLint a = alpha[i] * ctx-&gt;Pixel.AlphaScale + abias;</span>
+<span class="lineNum">     146 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             red[i]   = CLAMP( r, 0, rmax );</span>
+<span class="lineNum">     147 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             green[i] = CLAMP( g, 0, gmax );</span>
+<span class="lineNum">     148 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             blue[i]  = CLAMP( b, 0, bmax );</span>
+<span class="lineNum">     149 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             alpha[i] = CLAMP( a, 0, amax );</span>
+<span class="lineNum">     150 </span>                :            :          }
+<span class="lineNum">     151 </span>                :            :       }
+<span class="lineNum">     152 </span>                :            : 
+<span class="lineNum">     153 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Pixel.MapColorFlag) {</span>
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :          GLfloat r = (ctx-&gt;Pixel.MapRtoRsize-1) * ctx-&gt;Visual-&gt;InvRedScale;</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :          GLfloat g = (ctx-&gt;Pixel.MapGtoGsize-1) * ctx-&gt;Visual-&gt;InvGreenScale;</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :          GLfloat b = (ctx-&gt;Pixel.MapBtoBsize-1) * ctx-&gt;Visual-&gt;InvBlueScale;</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :          GLfloat a = (ctx-&gt;Pixel.MapAtoAsize-1) * ctx-&gt;Visual-&gt;InvAlphaScale;</span>
+<span class="lineNum">     158 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     159 </span>                :<span class="lineNoCov">          0 :             GLint ir = red[i] * r;</span>
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :             GLint ig = green[i] * g;</span>
+<span class="lineNum">     161 </span>                :<span class="lineNoCov">          0 :             GLint ib = blue[i] * b;</span>
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :             GLint ia = alpha[i] * a;</span>
+<span class="lineNum">     163 </span>                :<span class="lineNoCov">          0 :             red[i]   = (GLint) (ctx-&gt;Pixel.MapRtoR[ir]*ctx-&gt;Visual-&gt;RedScale);</span>
+<span class="lineNum">     164 </span>                :<span class="lineNoCov">          0 :             green[i] = (GLint) (ctx-&gt;Pixel.MapGtoG[ig]*ctx-&gt;Visual-&gt;GreenScale);</span>
+<span class="lineNum">     165 </span>                :<span class="lineNoCov">          0 :             blue[i]  = (GLint) (ctx-&gt;Pixel.MapBtoB[ib]*ctx-&gt;Visual-&gt;BlueScale);</span>
+<span class="lineNum">     166 </span>                :<span class="lineNoCov">          0 :             alpha[i] = (GLint) (ctx-&gt;Pixel.MapAtoA[ia]*ctx-&gt;Visual-&gt;AlphaScale);</span>
+<span class="lineNum">     167 </span>                :            :          }
+<span class="lineNum">     168 </span>                :            :       }
+<span class="lineNum">     169 </span>                :            : 
+<span class="lineNum">     170 </span>                :            :       /* write */
+<span class="lineNum">     171 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (setbuffer) {</span>
+<span class="lineNum">     172 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.SetBuffer)( ctx, ctx-&gt;Color.DrawBuffer );</span>
+<span class="lineNum">     173 </span>                :            :       }
+<span class="lineNum">     174 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (quick_draw &amp;&amp; dy&gt;=0 &amp;&amp; dy&lt;ctx-&gt;Buffer-&gt;Height) {</span>
+<span class="lineNum">     175 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.WriteColorSpan)( ctx, width, destx, dy,</span>
+<span class="lineNum">     176 </span>                :            :                                  red, green, blue, alpha, NULL);
+<span class="lineNum">     177 </span>                :            :       }
+<span class="lineNum">     178 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       else if (zoom) {</span>
+<span class="lineNum">     179 </span>                :<span class="lineNoCov">          0 :          gl_write_zoomed_color_span( ctx, width, destx, dy, zspan,</span>
+<span class="lineNum">     180 </span>                :            :                                      red, green, blue, alpha, desty );
+<span class="lineNum">     181 </span>                :            :       }
+<span class="lineNum">     182 </span>                :            :       else {
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :          gl_write_color_span( ctx, width, destx, dy, zspan,</span>
+<span class="lineNum">     184 </span>                :            :                               red, green, blue, alpha, GL_BITMAP );
+<span class="lineNum">     185 </span>                :            :       }
+<span class="lineNum">     186 </span>                :            :    }
+<span class="lineNum">     187 </span>                :            :    UNDEFARRAY( zspan );
+<span class="lineNum">     188 </span>                :            :    UNDEFARRAY( red );
+<span class="lineNum">     189 </span>                :            :    UNDEFARRAY( green );
+<span class="lineNum">     190 </span>                :            :    UNDEFARRAY( blue );
+<span class="lineNum">     191 </span>                :            :    UNDEFARRAY( alpha );
+<span class="lineNum">     192 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     193 </span>                :            : 
+<a name="194"><span class="lineNum">     194 </span>                :            : </a>
+<span class="lineNum">     195 </span>                :            : 
+<span class="lineNum">     196 </span>                :<span class="lineNoCov">          0 : static void copy_ci_pixels( GLcontext* ctx,</span>
+<span class="lineNum">     197 </span>                :            :                             GLint srcx, GLint srcy, GLint width, GLint height,
+<span class="lineNum">     198 </span>                :            :                             GLint destx, GLint desty )
+<span class="lineNum">     199 </span>                :            : {
+<span class="lineNum">     200 </span>                :            :    GLdepth zspan[MAX_WIDTH];
+<span class="lineNum">     201 </span>                :            :    GLuint indx[MAX_WIDTH];
+<span class="lineNum">     202 </span>                :            :    GLint sy, dy, stepy;
+<span class="lineNum">     203 </span>                :            :    GLint i, j;
+<span class="lineNum">     204 </span>                :            :    GLboolean setbuffer, zoom;
+<span class="lineNum">     205 </span>                :            : 
+<span class="lineNum">     206 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Pixel.ZoomX==1.0F &amp;&amp; ctx-&gt;Pixel.ZoomY==1.0F) {</span>
+<span class="lineNum">     207 </span>                :<span class="lineNoCov">          0 :       zoom = GL_FALSE;</span>
+<span class="lineNum">     208 </span>                :            :    }
+<span class="lineNum">     209 </span>                :            :    else {
+<span class="lineNum">     210 </span>                :<span class="lineNoCov">          0 :       zoom = GL_TRUE;</span>
+<span class="lineNum">     211 </span>                :            :    }
+<span class="lineNum">     212 </span>                :            : 
+<span class="lineNum">     213 </span>                :            :    /* Determine if copy should be bottom-to-top or top-to-bottom */
+<span class="lineNum">     214 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (srcy&lt;desty) {</span>
+<span class="lineNum">     215 </span>                :            :       /* top-down  max-to-min */
+<span class="lineNum">     216 </span>                :<span class="lineNoCov">          0 :       sy = srcy + height - 1;</span>
+<span class="lineNum">     217 </span>                :<span class="lineNoCov">          0 :       dy = desty + height - 1;</span>
+<span class="lineNum">     218 </span>                :<span class="lineNoCov">          0 :       stepy = -1;</span>
+<span class="lineNum">     219 </span>                :            :    }
+<span class="lineNum">     220 </span>                :            :    else {
+<span class="lineNum">     221 </span>                :            :       /* bottom-up  min-to-max */
+<span class="lineNum">     222 </span>                :<span class="lineNoCov">          0 :       sy = srcy;</span>
+<span class="lineNum">     223 </span>                :<span class="lineNoCov">          0 :       dy = desty;</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :       stepy = 1;</span>
+<span class="lineNum">     225 </span>                :            :    }
+<span class="lineNum">     226 </span>                :            : 
+<span class="lineNum">     227 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Depth.Test) {</span>
+<span class="lineNum">     228 </span>                :            :       /* fill in array of z values */
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :       GLint z = (GLint) (ctx-&gt;Current.RasterPos[2] * DEPTH_SCALE);</span>
+<span class="lineNum">     230 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     231 </span>                :<span class="lineNoCov">          0 :          zspan[i] = z;</span>
+<span class="lineNum">     232 </span>                :            :       }
+<span class="lineNum">     233 </span>                :            :    }
+<span class="lineNum">     234 </span>                :            : 
+<span class="lineNum">     235 </span>                :            :    /* If read and draw buffer are different we must do buffer switching */
+<span class="lineNum">     236 </span>                :<span class="lineNoCov">          0 :    setbuffer = ctx-&gt;Pixel.ReadBuffer!=ctx-&gt;Color.DrawBuffer;</span>
+<span class="lineNum">     237 </span>                :            : 
+<span class="lineNum">     238 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0; j&lt;height; j++, sy+=stepy, dy+=stepy) {</span>
+<span class="lineNum">     239 </span>                :            :       /* read */
+<span class="lineNum">     240 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (setbuffer) {</span>
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.SetBuffer)( ctx, ctx-&gt;Pixel.ReadBuffer );</span>
+<span class="lineNum">     242 </span>                :            :       }
+<span class="lineNum">     243 </span>                :<span class="lineNoCov">          0 :       gl_read_index_span( ctx, width, srcx, sy, indx );</span>
+<span class="lineNum">     244 </span>                :            : 
+<span class="lineNum">     245 </span>                :            :       /* shift, offset */
+<span class="lineNum">     246 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Pixel.IndexShift || ctx-&gt;Pixel.IndexOffset) {</span>
+<span class="lineNum">     247 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (ctx-&gt;Pixel.IndexShift&lt;0) {</span>
+<span class="lineNum">     248 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :                indx[i] = (indx[i] &gt;&gt; -ctx-&gt;Pixel.IndexShift)</span>
+<span class="lineNum">     250 </span>                :<span class="lineNoCov">          0 :                          + ctx-&gt;Pixel.IndexOffset;</span>
+<span class="lineNum">     251 </span>                :            :             }
+<span class="lineNum">     252 </span>                :            :          }
+<span class="lineNum">     253 </span>                :            :          else {
+<span class="lineNum">     254 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     255 </span>                :<span class="lineNoCov">          0 :                indx[i] = (indx[i] &lt;&lt; ctx-&gt;Pixel.IndexShift)</span>
+<span class="lineNum">     256 </span>                :<span class="lineNoCov">          0 :                          + ctx-&gt;Pixel.IndexOffset;</span>
+<span class="lineNum">     257 </span>                :            :             }
+<span class="lineNum">     258 </span>                :            :          }
+<span class="lineNum">     259 </span>                :            :       }
+<span class="lineNum">     260 </span>                :            : 
+<span class="lineNum">     261 </span>                :            :       /* mapping */
+<span class="lineNum">     262 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Pixel.MapColorFlag) {</span>
+<span class="lineNum">     263 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     264 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (indx[i] &lt; ctx-&gt;Pixel.MapItoIsize) {</span>
+<span class="lineNum">     265 </span>                :<span class="lineNoCov">          0 :                indx[i] = ctx-&gt;Pixel.MapItoI[ indx[i] ];</span>
+<span class="lineNum">     266 </span>                :            :             }
+<span class="lineNum">     267 </span>                :            :          }
+<span class="lineNum">     268 </span>                :            :       }
+<span class="lineNum">     269 </span>                :            : 
+<span class="lineNum">     270 </span>                :            :       /* write */
+<span class="lineNum">     271 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (setbuffer) {</span>
+<span class="lineNum">     272 </span>                :<span class="lineNoCov">          0 :          (*ctx-&gt;Driver.SetBuffer)( ctx, ctx-&gt;Color.DrawBuffer );</span>
+<span class="lineNum">     273 </span>                :            :       }
+<span class="lineNum">     274 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (zoom) {</span>
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 :          gl_write_zoomed_index_span( ctx, width, destx, dy, zspan, indx, desty );</span>
+<span class="lineNum">     276 </span>                :            :       }
+<span class="lineNum">     277 </span>                :            :       else {
+<span class="lineNum">     278 </span>                :<span class="lineNoCov">          0 :          gl_write_index_span( ctx, width, destx, dy, zspan, indx, GL_BITMAP );</span>
+<span class="lineNum">     279 </span>                :            :       }
+<span class="lineNum">     280 </span>                :            :    }
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     282 </span>                :            : 
+<span class="lineNum">     283 </span>                :            : 
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>                :            : /*
+<a name="286"><span class="lineNum">     286 </span>                :            :  * TODO: Optimize!!!!</a>
+<span class="lineNum">     287 </span>                :            :  */
+<span class="lineNum">     288 </span>                :<span class="lineNoCov">          0 : static void copy_depth_pixels( GLcontext* ctx, GLint srcx, GLint srcy,</span>
+<span class="lineNum">     289 </span>                :            :                                GLint width, GLint height,
+<span class="lineNum">     290 </span>                :            :                                GLint destx, GLint desty )
+<span class="lineNum">     291 </span>                :            : {
+<span class="lineNum">     292 </span>                :            :    GLfloat depth[MAX_WIDTH];
+<span class="lineNum">     293 </span>                :            :    GLdepth zspan[MAX_WIDTH];
+<span class="lineNum">     294 </span>                :            :    GLuint indx[MAX_WIDTH];
+<span class="lineNum">     295 </span>                :            :    GLubyte red[MAX_WIDTH], green[MAX_WIDTH];
+<span class="lineNum">     296 </span>                :            :    GLubyte blue[MAX_WIDTH], alpha[MAX_WIDTH];
+<span class="lineNum">     297 </span>                :            :    GLint sy, dy, stepy;
+<span class="lineNum">     298 </span>                :            :    GLint i, j;
+<span class="lineNum">     299 </span>                :            :    GLboolean zoom;
+<span class="lineNum">     300 </span>                :            : 
+<span class="lineNum">     301 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (!ctx-&gt;Buffer-&gt;Depth) {</span>
+<span class="lineNum">     302 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glCopyPixels&quot; );</span>
+<span class="lineNum">     303 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     304 </span>                :            :    }
+<span class="lineNum">     305 </span>                :            : 
+<span class="lineNum">     306 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Pixel.ZoomX==1.0F &amp;&amp; ctx-&gt;Pixel.ZoomY==1.0F) {</span>
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :       zoom = GL_FALSE;</span>
+<span class="lineNum">     308 </span>                :            :    }
+<span class="lineNum">     309 </span>                :            :    else {
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :       zoom = GL_TRUE;</span>
+<span class="lineNum">     311 </span>                :            :    }
+<span class="lineNum">     312 </span>                :            : 
+<span class="lineNum">     313 </span>                :            :    /* Determine if copy should be bottom-to-top or top-to-bottom */
+<span class="lineNum">     314 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (srcy&lt;desty) {</span>
+<span class="lineNum">     315 </span>                :            :       /* top-down  max-to-min */
+<span class="lineNum">     316 </span>                :<span class="lineNoCov">          0 :       sy = srcy + height - 1;</span>
+<span class="lineNum">     317 </span>                :<span class="lineNoCov">          0 :       dy = desty + height - 1;</span>
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :       stepy = -1;</span>
+<span class="lineNum">     319 </span>                :            :    }
+<span class="lineNum">     320 </span>                :            :    else {
+<span class="lineNum">     321 </span>                :            :       /* bottom-up  min-to-max */
+<span class="lineNum">     322 </span>                :<span class="lineNoCov">          0 :       sy = srcy;</span>
+<span class="lineNum">     323 </span>                :<span class="lineNoCov">          0 :       dy = desty;</span>
+<span class="lineNum">     324 </span>                :<span class="lineNoCov">          0 :       stepy = 1;</span>
+<span class="lineNum">     325 </span>                :            :    }
+<span class="lineNum">     326 </span>                :            : 
+<span class="lineNum">     327 </span>                :            :    /* setup colors or indexes */
+<span class="lineNum">     328 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     329 </span>                :            :       GLubyte r, g, b, a;
+<span class="lineNum">     330 </span>                :<span class="lineNoCov">          0 :       r = ctx-&gt;Current.ByteColor[0];</span>
+<span class="lineNum">     331 </span>                :<span class="lineNoCov">          0 :       g = ctx-&gt;Current.ByteColor[1];</span>
+<span class="lineNum">     332 </span>                :<span class="lineNoCov">          0 :       b = ctx-&gt;Current.ByteColor[2];</span>
+<span class="lineNum">     333 </span>                :<span class="lineNoCov">          0 :       a = ctx-&gt;Current.ByteColor[3];</span>
+<span class="lineNum">     334 </span>                :<span class="lineNoCov">          0 :       MEMSET( red,   (int) r, width );</span>
+<span class="lineNum">     335 </span>                :<span class="lineNoCov">          0 :       MEMSET( green, (int) g, width );</span>
+<span class="lineNum">     336 </span>                :<span class="lineNoCov">          0 :       MEMSET( blue,  (int) b, width );</span>
+<span class="lineNum">     337 </span>                :<span class="lineNoCov">          0 :       MEMSET( alpha, (int) a, width );</span>
+<span class="lineNum">     338 </span>                :            :    }
+<span class="lineNum">     339 </span>                :            :    else {
+<span class="lineNum">     340 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 :          indx[i] = ctx-&gt;Current.Index;</span>
+<span class="lineNum">     342 </span>                :            :       }
+<span class="lineNum">     343 </span>                :            :    }
+<span class="lineNum">     344 </span>                :            : 
+<span class="lineNum">     345 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0; j&lt;height; j++, sy+=stepy, dy+=stepy) {</span>
+<span class="lineNum">     346 </span>                :            :       /* read */
+<span class="lineNum">     347 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.ReadDepthSpanFloat)( ctx, width, srcx, sy, depth );</span>
+<span class="lineNum">     348 </span>                :            :       /* scale, bias, clamp */
+<span class="lineNum">     349 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :          GLfloat d = depth[i] * ctx-&gt;Pixel.DepthScale + ctx-&gt;Pixel.DepthBias;</span>
+<span class="lineNum">     351 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :          zspan[i] = (GLint) (CLAMP( d, 0.0, 1.0 ) * DEPTH_SCALE);</span>
+<span class="lineNum">     352 </span>                :            :       }
+<span class="lineNum">     353 </span>                :            :       /* write */
+<span class="lineNum">     354 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     355 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (zoom) {</span>
+<span class="lineNum">     356 </span>                :<span class="lineNoCov">          0 :             gl_write_zoomed_color_span( ctx, width, destx, dy, zspan,</span>
+<span class="lineNum">     357 </span>                :            :                                         red, green, blue, alpha, desty );
+<span class="lineNum">     358 </span>                :            :          }
+<span class="lineNum">     359 </span>                :            :          else {
+<span class="lineNum">     360 </span>                :<span class="lineNoCov">          0 :             gl_write_color_span( ctx, width, destx, dy, zspan,</span>
+<span class="lineNum">     361 </span>                :            :                                  red, green, blue, alpha, GL_BITMAP );
+<span class="lineNum">     362 </span>                :            :          }
+<span class="lineNum">     363 </span>                :            :       }
+<span class="lineNum">     364 </span>                :            :       else {
+<span class="lineNum">     365 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (zoom) {</span>
+<span class="lineNum">     366 </span>                :<span class="lineNoCov">          0 :             gl_write_zoomed_index_span( ctx, width, destx, dy,</span>
+<span class="lineNum">     367 </span>                :            :                                         zspan, indx, desty);
+<span class="lineNum">     368 </span>                :            :          }
+<span class="lineNum">     369 </span>                :            :          else {
+<span class="lineNum">     370 </span>                :<span class="lineNoCov">          0 :             gl_write_index_span( ctx, width, destx, dy,</span>
+<span class="lineNum">     371 </span>                :            :                                  zspan, indx, GL_BITMAP );
+<span class="lineNum">     372 </span>                :            :          }
+<span class="lineNum">     373 </span>                :            :       }
+<span class="lineNum">     374 </span>                :            :    }
+<span class="lineNum">     375 </span>                :            : }
+<span class="lineNum">     376 </span>                :            : 
+<a name="377"><span class="lineNum">     377 </span>                :            : </a>
+<span class="lineNum">     378 </span>                :            : 
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 : static void copy_stencil_pixels( GLcontext* ctx, GLint srcx, GLint srcy,</span>
+<span class="lineNum">     380 </span>                :            :                                  GLint width, GLint height,
+<span class="lineNum">     381 </span>                :            :                                  GLint destx, GLint desty )
+<span class="lineNum">     382 </span>                :            : {
+<span class="lineNum">     383 </span>                :            :    GLubyte stencil[MAX_WIDTH];
+<span class="lineNum">     384 </span>                :            :    GLint sy, dy, stepy;
+<span class="lineNum">     385 </span>                :            :    GLint i, j;
+<span class="lineNum">     386 </span>                :            :    GLboolean zoom;
+<span class="lineNum">     387 </span>                :            : 
+<span class="lineNum">     388 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (!ctx-&gt;Buffer-&gt;Stencil) {</span>
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glCopyPixels&quot; );</span>
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     391 </span>                :            :    }
+<span class="lineNum">     392 </span>                :            : 
+<span class="lineNum">     393 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Pixel.ZoomX==1.0F &amp;&amp; ctx-&gt;Pixel.ZoomY==1.0F) {</span>
+<span class="lineNum">     394 </span>                :<span class="lineNoCov">          0 :       zoom = GL_FALSE;</span>
+<span class="lineNum">     395 </span>                :            :    }
+<span class="lineNum">     396 </span>                :            :    else {
+<span class="lineNum">     397 </span>                :<span class="lineNoCov">          0 :       zoom = GL_TRUE;</span>
+<span class="lineNum">     398 </span>                :            :    }
+<span class="lineNum">     399 </span>                :            : 
+<span class="lineNum">     400 </span>                :            :    /* Determine if copy should be bottom-to-top or top-to-bottom */
+<span class="lineNum">     401 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (srcy&lt;desty) {</span>
+<span class="lineNum">     402 </span>                :            :       /* top-down  max-to-min */
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :       sy = srcy + height - 1;</span>
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :       dy = desty + height - 1;</span>
+<span class="lineNum">     405 </span>                :<span class="lineNoCov">          0 :       stepy = -1;</span>
+<span class="lineNum">     406 </span>                :            :    }
+<span class="lineNum">     407 </span>                :            :    else {
+<span class="lineNum">     408 </span>                :            :       /* bottom-up  min-to-max */
+<span class="lineNum">     409 </span>                :<span class="lineNoCov">          0 :       sy = srcy;</span>
+<span class="lineNum">     410 </span>                :<span class="lineNoCov">          0 :       dy = desty;</span>
+<span class="lineNum">     411 </span>                :<span class="lineNoCov">          0 :       stepy = 1;</span>
+<span class="lineNum">     412 </span>                :            :    }
+<span class="lineNum">     413 </span>                :            : 
+<span class="lineNum">     414 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    for (j=0; j&lt;height; j++, sy+=stepy, dy+=stepy) {</span>
+<span class="lineNum">     415 </span>                :            :       /* read */
+<span class="lineNum">     416 </span>                :<span class="lineNoCov">          0 :       gl_read_stencil_span( ctx, width, srcx, sy, stencil );</span>
+<span class="lineNum">     417 </span>                :            :       /* shift, offset */
+<span class="lineNum">     418 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Pixel.IndexShift&lt;0) {</span>
+<span class="lineNum">     419 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 :             stencil[i] = (stencil[i] &gt;&gt; -ctx-&gt;Pixel.IndexShift)</span>
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :                          + ctx-&gt;Pixel.IndexOffset;</span>
+<span class="lineNum">     422 </span>                :            :          }
+<span class="lineNum">     423 </span>                :            :       }
+<span class="lineNum">     424 </span>                :            :       else {
+<span class="lineNum">     425 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     426 </span>                :<span class="lineNoCov">          0 :             stencil[i] = (stencil[i] &lt;&lt; ctx-&gt;Pixel.IndexShift)</span>
+<span class="lineNum">     427 </span>                :<span class="lineNoCov">          0 :                          + ctx-&gt;Pixel.IndexOffset;</span>
+<span class="lineNum">     428 </span>                :            :          }
+<span class="lineNum">     429 </span>                :            :       }
+<span class="lineNum">     430 </span>                :            :       /* mapping */
+<span class="lineNum">     431 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (ctx-&gt;Pixel.MapStencilFlag) {</span>
+<span class="lineNum">     432 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          for (i=0;i&lt;width;i++) {</span>
+<span class="lineNum">     433 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if ((GLint) stencil[i] &lt; ctx-&gt;Pixel.MapStoSsize) {</span>
+<span class="lineNum">     434 </span>                :<span class="lineNoCov">          0 :                stencil[i] = ctx-&gt;Pixel.MapStoS[ stencil[i] ];</span>
+<span class="lineNum">     435 </span>                :            :             }
+<span class="lineNum">     436 </span>                :            :          }
+<span class="lineNum">     437 </span>                :            :       }
+<span class="lineNum">     438 </span>                :            :       /* write */
+<span class="lineNum">     439 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (zoom) {</span>
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :          gl_write_zoomed_stencil_span( ctx, width, destx, dy, stencil, desty );</span>
+<span class="lineNum">     441 </span>                :            :       }
+<span class="lineNum">     442 </span>                :            :       else {
+<span class="lineNum">     443 </span>                :<span class="lineNoCov">          0 :          gl_write_stencil_span( ctx, width, destx, dy, stencil );</span>
+<span class="lineNum">     444 </span>                :            :       }
+<span class="lineNum">     445 </span>                :            :    }
+<span class="lineNum">     446 </span>                :            : }
+<span class="lineNum">     447 </span>                :            : 
+<span class="lineNum">     448 </span>                :            : 
+<a name="449"><span class="lineNum">     449 </span>                :            : </a>
+<span class="lineNum">     450 </span>                :            : 
+<span class="lineNum">     451 </span>                :<span class="lineNoCov">          0 : void gl_CopyPixels( GLcontext* ctx, GLint srcx, GLint srcy, GLsizei width, GLsizei height,</span>
+<span class="lineNum">     452 </span>                :            :                     GLenum type )
+<span class="lineNum">     453 </span>                :            : {
+<span class="lineNum">     454 </span>                :            :    GLint destx, desty;
+<span class="lineNum">     455 </span>                :            : 
+<span class="lineNum">     456 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glCopyPixels&quot; );</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     459 </span>                :            :    }
+<span class="lineNum">     460 </span>                :            : 
+<span class="lineNum">     461 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (width&lt;0 || height&lt;0) {</span>
+<span class="lineNum">     462 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_VALUE, &quot;glCopyPixels&quot; );</span>
+<span class="lineNum">     463 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     464 </span>                :            :    }
+<span class="lineNum">     465 </span>                :            : 
+<span class="lineNum">     466 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;NewState) {</span>
+<span class="lineNum">     467 </span>                :<span class="lineNoCov">          0 :       gl_update_state(ctx);</span>
+<span class="lineNum">     468 </span>                :            :    }
+<span class="lineNum">     469 </span>                :            : 
+<span class="lineNum">     470 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;RenderMode==GL_RENDER) {</span>
+<span class="lineNum">     471 </span>                :            :       /* Destination of copy: */
+<span class="lineNum">     472 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (!ctx-&gt;Current.RasterPosValid) {</span>
+<span class="lineNum">     473 </span>                :            :          return;
+<span class="lineNum">     474 </span>                :            :       }
+<span class="lineNum">     475 </span>                :<span class="lineNoCov">          0 :       destx = (GLint) (ctx-&gt;Current.RasterPos[0] + 0.5F);</span>
+<span class="lineNum">     476 </span>                :<span class="lineNoCov">          0 :       desty = (GLint) (ctx-&gt;Current.RasterPos[1] + 0.5F);</span>
+<span class="lineNum">     477 </span>                :            : 
+<span class="lineNum">     478 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       if (type==GL_COLOR &amp;&amp; ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :          copy_rgb_pixels( ctx, srcx, srcy, width, height, destx, desty );</span>
+<span class="lineNum">     480 </span>                :            :       }
+<span class="lineNum">     481 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       else if (type==GL_COLOR &amp;&amp; !ctx-&gt;Visual-&gt;RGBAflag) {</span>
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :          copy_ci_pixels( ctx, srcx, srcy, width, height, destx, desty );</span>
+<span class="lineNum">     483 </span>                :            :       }
+<span class="lineNum">     484 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       else if (type==GL_DEPTH) {</span>
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 :          copy_depth_pixels( ctx, srcx, srcy, width, height, destx, desty );</span>
+<span class="lineNum">     486 </span>                :            :       }
+<span class="lineNum">     487 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       else if (type==GL_STENCIL) {</span>
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :          copy_stencil_pixels( ctx, srcx, srcy, width, height, destx, desty );</span>
+<span class="lineNum">     489 </span>                :            :       }
+<span class="lineNum">     490 </span>                :            :       else {
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glCopyPixels&quot; );</span>
+<span class="lineNum">     492 </span>                :            :       }
+<span class="lineNum">     493 </span>                :            :    }
+<span class="lineNum">     494 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (ctx-&gt;RenderMode==GL_FEEDBACK) {</span>
+<span class="lineNum">     495 </span>                :            :       GLfloat color[4];
+<span class="lineNum">     496 </span>                :<span class="lineNoCov">          0 :       color[0] = ctx-&gt;Current.ByteColor[0] * ctx-&gt;Visual-&gt;InvRedScale;</span>
+<span class="lineNum">     497 </span>                :<span class="lineNoCov">          0 :       color[1] = ctx-&gt;Current.ByteColor[1] * ctx-&gt;Visual-&gt;InvGreenScale;</span>
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :       color[2] = ctx-&gt;Current.ByteColor[2] * ctx-&gt;Visual-&gt;InvBlueScale;</span>
+<span class="lineNum">     499 </span>                :<span class="lineNoCov">          0 :       color[3] = ctx-&gt;Current.ByteColor[3] * ctx-&gt;Visual-&gt;InvAlphaScale;</span>
+<span class="lineNum">     500 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       FEEDBACK_TOKEN( ctx, (GLfloat) GL_COPY_PIXEL_TOKEN );</span>
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :       gl_feedback_vertex( ctx, ctx-&gt;Current.RasterPos[0],</span>
+<span class="lineNum">     502 </span>                :            :                           ctx-&gt;Current.RasterPos[1],
+<span class="lineNum">     503 </span>                :            :                           ctx-&gt;Current.RasterPos[2],
+<span class="lineNum">     504 </span>                :            :                           ctx-&gt;Current.RasterPos[3],
+<span class="lineNum">     505 </span>                :<span class="lineNoCov">          0 :                           color, ctx-&gt;Current.Index,</span>
+<span class="lineNum">     506 </span>                :            :                           ctx-&gt;Current.TexCoord );
+<span class="lineNum">     507 </span>                :            :    }
+<span class="lineNum">     508 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (ctx-&gt;RenderMode==GL_SELECT) {</span>
+<span class="lineNum">     509 </span>                :<span class="lineNoCov">          0 :       gl_update_hitflag( ctx, ctx-&gt;Current.RasterPos[2] );</span>
+<span class="lineNum">     510 </span>                :            :    }
+<span class="lineNum">     511 </span>                :            : 
+<span class="lineNum">     512 </span>                :            : }
+<span class="lineNum">     513 </span>                :            : 
+<span class="lineNum">     514 </span>                :            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

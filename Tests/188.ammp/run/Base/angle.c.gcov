@@ -1,0 +1,1272 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/angle.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* angle.c
+        -:    2:*
+        -:    3:* collection of routines to service bond angle  potentials
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:* these routines hold a data base (in terms of array indeces)
+        -:    8:* of angle, with the associated length and force constant
+        -:    9:*
+        -:   10:* (this could be table driven but what the hell memories cheap)
+        -:   11:*
+        -:   12:* the routines for potential value, force and (eventually) second
+        -:   13:* derivatives are here also
+        -:   14:*
+        -:   15:* force and 2nd derivative routines assume zero'd arrays for output
+        -:   16:* this allows for parralellization if needed (on a PC?)
+        -:   17:*
+        -:   18:* forces are angle wise symmetric - so we don't have to mess around with
+        -:   19:* s matrices and the like.
+        -:   20:*/
+        -:   21:/*
+        -:   22:*  copyright 1992 Robert W. Harrison
+        -:   23:*  
+        -:   24:*  This notice may not be removed
+        -:   25:*  This program may be copied for scientific use
+        -:   26:*  It may not be sold for profit without explicit
+        -:   27:*  permission of the author(s) who retain any
+        -:   28:*  commercial rights including the right to modify 
+        -:   29:*  this notice
+        -:   30:*/
+        -:   31:
+        -:   32:#define ANSI 1
+        -:   33:/* misc includes - ANSI and some are just to be safe */
+        -:   34:#include <stdio.h>
+        -:   35:#include <ctype.h>
+        -:   36:#include <math.h>
+        -:   37:#ifdef ANSI
+        -:   38:#include <stdlib.h>
+        -:   39:#endif
+        -:   40:
+        -:   41://#include "ammp.h"
+        -:   42:/* ATOM structure contains a serial number for indexing into
+        -:   43:* arrays and the like (a Hessian)
+        -:   44:* but otherwise is self-contained. Note the hooks for Non-angleed potentials
+        -:   45:*/
+        -:   46:typedef struct{
+        -:   47:	ATOM *atom1,*atom2,*atom3;
+        -:   48:	float target,k;
+        -:   49:	void *next;
+        -:   50:	}  ANGLE;
+        -:   51:#define ALONG_angle sizeof(ANGLE)
+        -:   52:
+        -:   53:ANGLE *angle_first = NULL;
+        -:   54:ANGLE *angle_last = NULL;
+        -:   55:/* function angle adds a angle to the angle list
+        -:   56:* returns 1 if ok
+        -:   57:* returns 0 if not
+        -:   58:*  is passed the array pointers, length and constant
+        -:   59:* allocates the new memory, initializes it and
+        -:   60:* returns
+        -:   61:*/
+function _Z5angleiiiff called 8063 returned 100% blocks executed 77%
+     8063:   62:int angle(int p1, int p2, int p3, float fk, float bl)
+        -:   63:	{
+        -:   64:	ANGLE *new_p;
+        -:   65:	ATOM *ap1,*ap2,*ap3,*a_m_serial(int);
+        -:   66:	char line[80];
+        -:   67:	int i;
+        -:   68:/* get the atom pointers for the two serial numbers */
+     8063:   69:	ap1 = a_m_serial( p1 );
+call    0 returned 100%
+     8063:   70:	ap2 = a_m_serial( p2 );
+call    0 returned 100%
+     8063:   71:	ap3 = a_m_serial( p3 );
+call    0 returned 100%
+     8063:   72:	if( (ap1 == NULL) || (ap2 == NULL) || (ap3==NULL) ) 
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+        -:   73:	{
+        -:   74:	sprintf( line,"undefined atom in angle %d %d %d \0",p1,p2,p3);
+    #####:   75:	aaerror( line );
+call    0 never executed
+    #####:   76:	return 0;
+        -:   77:	}
+        -:   78:
+     8063:   79:	if( ( new_p = (ANGLE*) malloc( ALONG_angle ) ) == NULL)
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:   80:	{
+    #####:   81:	return 0;
+        -:   82:	}
+        -:   83:	/* initialize the pointers */
+     8063:   84:	if( angle_first == NULL) angle_first = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     8063:   85:	if( angle_last == NULL) angle_last = new_p;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+     8063:   86:	new_p -> atom1 = ap1;
+     8063:   87:	new_p -> atom2 = ap2;
+     8063:   88:	new_p -> atom3 = ap3;
+     8063:   89:	new_p -> target = bl;
+     8063:   90:	new_p -> k = fk;
+     8063:   91:	new_p -> next = new_p;
+        -:   92:/* update the exclude list in the atoms structure */
+     8063:   93:        if( ap1->dontuse < NEXCLUDE)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   94:        {
+    50821:   95:		for( i=0; i< ap1->dontuse; i++)
+branch  0 taken 84%
+branch  1 taken 16% (fallthrough)
+        -:   96:		{
+    42758:   97:		if( ap1->excluded[i] == ap3) goto excluded1;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   98:		}
+     8063:   99:                ap1->excluded[ap1->dontuse] = ap3; (ap1->dontuse)++;
+        -:  100:        }else{
+    #####:  101:        aaerror(" too many bonds to an atom increase NEXCLUDE in ammp.h");
+call    0 never executed
+    #####:  102:        exit(0);
+call    0 never executed
+        -:  103:        }
+        -:  104:excluded1: 
+     8063:  105:        if( ap3->dontuse < NEXCLUDE)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  106:        {
+    35352:  107:		for( i=0; i< ap3->dontuse; i++)
+branch  0 taken 77%
+branch  1 taken 23% (fallthrough)
+        -:  108:		{
+    27289:  109:		if( ap3->excluded[i] == ap1) goto excluded3;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  110:		}
+     8063:  111:                ap3->excluded[ap3->dontuse] = ap1; (ap3->dontuse)++;
+        -:  112:        }else{
+    #####:  113:        aaerror(" too many bonds to an atom increase NEXCLUDE in ammp.h");
+call    0 never executed
+    #####:  114:        exit(0);
+call    0 never executed
+        -:  115:        }
+        -:  116:excluded3: 
+     8063:  117:	angle_last -> next = new_p;
+     8063:  118:	angle_last = new_p;
+     8063:  119:	return 1;
+        -:  120:	}
+        -:  121:
+        -:  122:
+        -:  123:/* v_angle()
+        -:  124:* this function sums up the potentials
+        -:  125:* for the atoms defined in the angle data structure.
+        -:  126:*/
+        -:  127:/* standard returns 0 if error (any) 1 if ok
+        -:  128:* V is the potential */
+function _Z7v_anglePff called 3 returned 100% blocks executed 65%
+        3:  129:int v_angle(float *V, float lambda)
+        -:  130:{
+        -:  131:	ANGLE *bp;
+        -:  132:	float r,x1,y1,z1,x2,y2,z2;
+        -:  133:	float dp;
+        -:  134:	ATOM *a1,*a2,*a3;
+        -:  135:
+        3:  136:	bp = angle_first;
+        3:  137:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    24186:  138:       while(1)
+        -:  139:       {
+    24189:  140:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    24189:  141:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    24189:  142:	if( a1->active || a2->active || a3->active )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  143:	{
+    24189:  144:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    24189:  145:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    24189:  146:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    24189:  147:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    24189:  148:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    24189:  149:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    24189:  150:	dp = x1*x2+y1*y2+z1*z2;
+    24189:  151:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    24189:  152:	if( r > 1.e-8){ 
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+    24189:  153:	r = sqrt(r);
+    24189:  154:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    24189:  155:	dp = acos(dp);
+    24189:  156:	*V += bp->k * (bp->target-dp)*(bp->target-dp);
+        -:  157:	}
+        -:  158:	}
+    24189:  159:	if( bp == bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+    24186:  160:	bp = (ANGLE*) bp->next;
+        -:  161:       }
+        -:  162:}
+        -:  163:/* f_angle()
+        -:  164:*
+        -:  165:* f_angle increments the forces in the atom structures by the force
+        -:  166:* due to the angle components.  NOTE THE WORD increment.
+        -:  167:* the forces should first be zero'd.
+        -:  168:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  169:* on bigger (and better?) machines the different potential terms
+        -:  170:* may be updated at random or in parrellel, if we assume that this routine
+        -:  171:* will initialize the forces then we can't do this.
+        -:  172:*/
+function _Z7f_anglef called 1002 returned 100% blocks executed 73%
+     1002:  173:int f_angle(float lambda)
+        -:  174:/*  returns 0 if error, 1 if OK */
+        -:  175:{
+        -:  176:	ANGLE *bp;
+        -:  177:	float r,k,ux1,uy1,uz1,ux2,uy2,uz2;
+        -:  178:	ATOM *a1,*a2,*a3;
+        -:  179:	float x1,y1,z1,x2,y2,z2;
+        -:  180:	float r1,r2,dtheta,dp;
+        -:  181:	float r11,r22,sdth;
+        -:  182:
+     1002:  183:	bp = angle_first;
+     1002:  184:       if( bp == NULL ) return 1;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  8078124:  185:       while(1)
+        -:  186:       {
+  8079126:  187:	if( bp == NULL) return 0;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  8079126:  188:	k = bp->k;
+  8079126:  189:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+  8079126:  190:	if( a1->active|| a2->active || a3->active )
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  191:	{
+  8079126:  192:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+  8079126:  193:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+  8079126:  194:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+  8079126:  195:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+  8079126:  196:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+  8079126:  197:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+  8079126:  198:	dp = x1*x2+y1*y2+z1*z2;
+  8079126:  199:	r1 = sqrt(x1*x1+y1*y1+z1*z1);
+  8079126:  200:	r2 = sqrt(x2*x2+y2*y2+z2*z2);
+  8079126:  201:	if( r1 < 1.e-5 || r2 < 1.e-5) goto SKIP;
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+  8079126:  202:	r = r1*r2;
+  8079126:  203:	if( r > 1.e-8){
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  204:
+  8079126:  205:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+  8079126:  206:	dtheta = acos(dp);
+  8079126:  207:	sdth = sin(dtheta); if( sdth < 1.e-3) sdth = 1.e-3;
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+  8079126:  208:	r11 = r1*sdth; r22 = r2*sdth;
+  8079126:  209:	ux1 = x2/r2 - dp*x1/r1;
+  8079126:  210:	uy1 = y2/r2 - dp*y1/r1;
+  8079126:  211:	uz1 = z2/r2 - dp*z1/r1;
+  8079126:  212:	ux2 = x1/r1 - dp*x2/r2;
+  8079126:  213:	uy2 = y1/r1 - dp*y2/r2;
+  8079126:  214:	uz2 = z1/r1 - dp*z2/r2;
+  8079126:  215:	dtheta = -2.*k*(bp->target - dtheta);
+  8079126:  216:	ux1 = ux1*dtheta/r11;
+  8079126:  217:	uy1 = uy1*dtheta/r11;
+  8079126:  218:	uz1 = uz1*dtheta/r11;
+  8079126:  219:	ux2 = ux2*dtheta/r22;
+  8079126:  220:	uy2 = uy2*dtheta/r22;
+  8079126:  221:	uz2 = uz2*dtheta/r22;
+  8079126:  222:	if( a1->active)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  223:	{
+  8079126:  224:	a1->fx += ux1;
+  8079126:  225:	a1->fy += uy1;
+  8079126:  226:	a1->fz += uz1;
+        -:  227:	}
+        -:  228:
+  8079126:  229:	if( a2->active)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  230:	{
+  8079126:  231:	a2->fx += -ux1 - ux2;
+  8079126:  232:	a2->fy += -uy1 - uy2;
+  8079126:  233:	a2->fz += -uz1 - uz2;
+        -:  234:	}
+        -:  235:
+  8079126:  236:	if( a3->active)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  237:	{
+  8079126:  238:	a3->fx += ux2;
+  8079126:  239:	a3->fy += uy2;
+  8079126:  240:	a3->fz += uz2;
+        -:  241:	}
+        -:  242:
+        -:  243:	}	
+        -:  244:	}	
+        -:  245:SKIP:
+  8079126:  246:	if( bp == bp->next ) return 1;
+branch  0 taken 1% (fallthrough)
+branch  1 taken 99%
+  8078124:  247:	bp = (ANGLE*) bp->next;
+        -:  248:       }
+        -:  249:}
+        -:  250:/* function get_angle( a1,bonded,10,inbond);
+        -:  251:* check the ANGLE list for atoms 1-3 ed to a1
+        -:  252:*/
+function _Z9get_angleP4ATOMPS0_iPi called 0 returned 0% blocks executed 0%
+    #####:  253:void get_angle(ATOM *a1, ATOM *bonded[], int mbond, int *inbond)
+        -:  254:{
+        -:  255:	ANGLE *mine;
+    #####:  256:	mine = angle_first;
+    #####:  257:	*inbond = 0;
+        -:  258:	while(1)
+        -:  259:	{
+    #####:  260:	if( (mine == NULL) )
+branch  0 never executed
+branch  1 never executed
+        -:  261:	{
+        -:  262:		return;
+        -:  263:	}
+    #####:  264:	if( mine->atom1 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  265:	{
+    #####:  266:		bonded[(*inbond)++] = mine->atom3;
+        -:  267:	}
+    #####:  268:	if( mine->atom3 == a1)
+branch  0 never executed
+branch  1 never executed
+        -:  269:	{
+    #####:  270:		bonded[(*inbond)++] = mine->atom1;
+        -:  271:	}
+    #####:  272:	if( mine == mine->next) return; 
+branch  0 never executed
+branch  1 never executed
+    #####:  273:	mine = (ANGLE*) mine->next;
+    #####:  274:	if( *inbond == mbond ) return;
+branch  0 never executed
+branch  1 never executed
+        -:  275:	}		
+        -:  276:}
+        -:  277:/* routine dump_angles
+        -:  278:* this function outputs the angle parameters
+        -:  279:* and does it in a simple form
+        -:  280:* angle ser1,ser2,ser3,k,theta (in degrees )
+        -:  281:* the rest is just free format
+        -:  282:*/
+        -:  283:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z11dump_anglesP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  284:void dump_angles( FILE *where )
+        -:  285:{
+        -:  286:	ANGLE *b;
+        -:  287:	ATOM *a1,*a2,*a3;
+        -:  288:	float rtodeg;
+    #####:  289:	b = angle_first;
+    #####:  290:	if( b == NULL ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  291:	rtodeg = 180./acos(-1.);
+    #####:  292:	while( (b->next != b) )
+branch  0 never executed
+branch  1 never executed
+        -:  293:	{
+    #####:  294:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  295:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3;
+        -:  296:	fprintf( where,"angle %d %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  297:		a3-> serial,b->k,b->target*rtodeg);
+    #####:  298:	b = (ANGLE*) b->next;
+        -:  299:	}
+    #####:  300:	if( b->next == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  301:	a1 = b->atom1; a2 = b->atom2;a3 = b->atom3;
+        -:  302:	fprintf( where,"angle %d %d %d %f %f ;\n",a1->serial,a2->serial,
+    #####:  303:		a3-> serial,b->k,b->target*rtodeg);
+        -:  304:}	
+        -:  305:
+        -:  306:/* MM3 angle function  */
+        -:  307:
+        -:  308:/* v_mmangle()
+        -:  309:* this function sums up the potentials
+        -:  310:* for the atoms defined in the angle data structure.
+        -:  311:*/
+        -:  312:/* standard returns 0 if error (any) 1 if ok
+        -:  313:* V is the potential */
+function _Z9v_mmanglePff called 0 returned 0% blocks executed 0%
+    #####:  314:int v_mmangle(float *V, float lambda)
+        -:  315:{
+        -:  316:	ANGLE *bp;
+        -:  317:	float r,x1,y1,z1,x2,y2,z2;
+        -:  318:	float dp;
+        -:  319:	ATOM *a1,*a2,*a3;
+        -:  320:
+        -:  321:
+    #####:  322:	bp = angle_first;
+    #####:  323:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  324:       while(1)
+        -:  325:       {
+    #####:  326:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  327:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  328:	if( a1->active || a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  329:	{
+    #####:  330:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  331:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  332:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  333:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  334:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  335:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  336:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  337:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  338:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  339:	r = sqrt(r);
+    #####:  340:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  341:	dp = acos(dp);
+        -:  342:/*	*V += bp->k * (bp->target-dp)*(bp->target-dp);
+        -:  343:*/
+    #####:  344:	dp = dp - bp->target;
+        -:  345:	*V += bp->k*dp*dp*(1.-.014*dp+5.6e-5*dp*dp
+    #####:  346:	-7.e-7*dp*dp*dp +9e-10*dp*dp*dp*dp);
+        -:  347:	}
+        -:  348:	}
+    #####:  349:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  350:	bp = (ANGLE*)bp->next;
+        -:  351:       }
+        -:  352:}
+        -:  353:/* f_mmangle()
+        -:  354:*
+        -:  355:* f_mmangle increments the forces in the atom structures by the force
+        -:  356:* due to the angle components.  NOTE THE WORD increment.
+        -:  357:* the forces should first be zero'd.
+        -:  358:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  359:* on bigger (and better?) machines the different potential terms
+        -:  360:* may be updated at random or in parrellel, if we assume that this routine
+        -:  361:* will initialize the forces then we can't do this.
+        -:  362:*/
+function _Z9f_mmanglef called 0 returned 0% blocks executed 0%
+    #####:  363:int f_mmangle(float lambda)
+        -:  364:/*  returns 0 if error, 1 if OK */
+        -:  365:{
+        -:  366:	ANGLE *bp;
+        -:  367:	float r,k,ux1,uy1,uz1,ux2,uy2,uz2;
+        -:  368:	ATOM *a1,*a2,*a3;
+        -:  369:	float x1,y1,z1,x2,y2,z2;
+        -:  370:	float r1,r2,dtheta,dp;
+        -:  371:	float r11,r22,sdth;
+        -:  372:
+    #####:  373:	bp = angle_first;
+    #####:  374:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  375:       while(1)
+        -:  376:       {
+    #####:  377:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  378:	k = bp->k;
+    #####:  379:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  380:	if( a1->active|| a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  381:	{
+    #####:  382:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  383:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  384:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  385:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  386:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  387:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  388:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  389:	r1 = sqrt(x1*x1+y1*y1+z1*z1);
+    #####:  390:	r2 = sqrt(x2*x2+y2*y2+z2*z2);
+    #####:  391:	if( r1 < 1.e-5 || r2 < 1.e-5) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  392:	r = r1*r2;
+    #####:  393:	if( r > 1.e-8){
+branch  0 never executed
+branch  1 never executed
+        -:  394:
+    #####:  395:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  396:	dtheta = acos(dp);
+    #####:  397:	sdth = sin(dtheta); if( sdth < 1.e-3) sdth = 1.e-3;
+branch  0 never executed
+branch  1 never executed
+    #####:  398:	r11 = r1*sdth; r22 = r2*sdth;
+    #####:  399:	ux1 = x2/r2 - dp*x1/r1;
+    #####:  400:	uy1 = y2/r2 - dp*y1/r1;
+    #####:  401:	uz1 = z2/r2 - dp*z1/r1;
+    #####:  402:	ux2 = x1/r1 - dp*x2/r2;
+    #####:  403:	uy2 = y1/r1 - dp*y2/r2;
+    #####:  404:	uz2 = z1/r1 - dp*z2/r2;
+        -:  405:/*	*V += bp->k*dp*dp*(1.-.014*dp+5.6e-5*dp*dp
+        -:  406:	-7.e-7*dp*dp*dp +9e-10*dp*dp*dp*dp);
+        -:  407:*/
+    #####:  408:	dp = dtheta - bp->target;
+        -:  409:	dtheta = k*dp*(2.-.014*3*dp+4*(5.6e-5)*dp*dp
+    #####:  410:	-5*(7.e-7)*dp*dp*dp +6*(9.e-10)*dp*dp*dp*dp);
+    #####:  411:	ux1 = ux1*dtheta/r11;
+    #####:  412:	uy1 = uy1*dtheta/r11;
+    #####:  413:	uz1 = uz1*dtheta/r11;
+    #####:  414:	ux2 = ux2*dtheta/r22;
+    #####:  415:	uy2 = uy2*dtheta/r22;
+    #####:  416:	uz2 = uz2*dtheta/r22;
+    #####:  417:	if( a1->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  418:	a1->fx += ux1;
+    #####:  419:	a1->fy += uy1;
+    #####:  420:	a1->fz += uz1;
+        -:  421:	}
+        -:  422:
+    #####:  423:	if( a2->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  424:	a2->fx += -ux1 - ux2;
+    #####:  425:	a2->fy += -uy1 - uy2;
+    #####:  426:	a2->fz += -uz1 - uz2;
+        -:  427:	}
+        -:  428:
+    #####:  429:	if( a3->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  430:	a3->fx += ux2;
+    #####:  431:	a3->fy += uy2;
+    #####:  432:	a3->fz += uz2;
+        -:  433:	}
+        -:  434:
+        -:  435:	}	
+        -:  436:	}	
+        -:  437:SKIP:
+    #####:  438:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  439:	bp = (ANGLE*) bp->next;
+        -:  440:       }
+        -:  441:}
+        -:  442:/* a_angle()
+        -:  443:* this function sums up the potentials
+        -:  444:* for the atoms defined in the angle data structure.
+        -:  445:*/
+        -:  446:/* standard returns 0 if error (any) 1 if ok
+        -:  447:* V is the potential */
+function _Z7a_anglePffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  448:int a_angle( float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  449:{
+        -:  450:	ANGLE *bp;
+        -:  451:	float r,x1,y1,z1,x2,y2,z2;
+        -:  452:	float dp;
+        -:  453:	ATOM *a1,*a2,*a3;
+        -:  454:
+        -:  455:
+    #####:  456:	bp = angle_first;
+    #####:  457:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  458:       while(1)
+        -:  459:       {
+    #####:  460:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  461:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  462:	if( (a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+        -:  463:	||  (a2->serial >= ilow && a2->serial <= ihigh)
+        -:  464:	||  (a3->serial >= ilow && a3->serial <= ihigh) )
+        -:  465:	{
+    #####:  466:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  467:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  468:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  469:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  470:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  471:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  472:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  473:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  474:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  475:	r = sqrt(r);
+    #####:  476:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  477:	dp = acos(dp);
+    #####:  478:	z2  = bp->k * (bp->target-dp)*(bp->target-dp);
+    #####:  479:	*V += z2;
+        -:  480:	fprintf(op,"Angle %s %d %s %d %s %d E %f value %f error %f\n",
+        -:  481:		a1->name,a1->serial,a2->name,a2->serial,a3->name,a3->serial
+        -:  482:		,z2,dp*180./3.14159265,
+    #####:  483:		(dp-bp->target)*180./3.14159265);
+        -:  484:	}
+        -:  485:	}
+    #####:  486:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  487:	bp = (ANGLE*)bp->next;
+        -:  488:       }
+        -:  489:}
+        -:  490:/* MM3 angle function  */
+        -:  491:
+        -:  492:/* a_mmangle()
+        -:  493:* this function sums up the potentials
+        -:  494:* for the atoms defined in the angle data structure.
+        -:  495:*/
+        -:  496:/* standard returns 0 if error (any) 1 if ok
+        -:  497:* V is the potential */
+function _Z9a_mmanglePffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  498:int a_mmangle(float *V, float lambda, int ilow,int ihigh, FILE *op)
+        -:  499:{
+        -:  500:	ANGLE *bp;
+        -:  501:	float r,x1,y1,z1,x2,y2,z2;
+        -:  502:	float dp;
+        -:  503:	ATOM *a1,*a2,*a3;
+        -:  504:
+        -:  505:
+    #####:  506:	bp = angle_first;
+    #####:  507:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  508:       while(1)
+        -:  509:       {
+    #####:  510:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  511:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  512:	if( (a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+        -:  513:	||  (a2->serial >= ilow && a2->serial <= ihigh)
+        -:  514:	||  (a3->serial >= ilow && a3->serial <= ihigh) )
+        -:  515:	{
+    #####:  516:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  517:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  518:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  519:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  520:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  521:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  522:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  523:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  524:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  525:	r = sqrt(r);
+    #####:  526:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  527:	dp = acos(dp);
+        -:  528:/*	*V += bp->k * (bp->target-dp)*(bp->target-dp);
+        -:  529:*/
+    #####:  530:	dp = dp - bp->target;
+        -:  531:	z2 = bp->k*dp*dp*(1.-.014*dp+5.6e-5*dp*dp
+    #####:  532:	-7.e-7*dp*dp*dp +9e-10*dp*dp*dp*dp);
+    #####:  533:	*V += z2;
+    #####:  534:	dp = dp + bp->target;
+        -:  535:	fprintf(op,"mmAngle %s %d %s %d %s %d E %f value %f error %f\n",
+        -:  536:		a1->name,a1->serial,a2->name,a2->serial,a3->name,a3->serial
+        -:  537:		,z2,dp*180./3.14159265,
+    #####:  538:		(dp-bp->target)*180./3.14159265);
+        -:  539:/*
+        -:  540:	fprintf(op,"mm Angle %d %d %d E %f value %f error %f\n",
+        -:  541:		a1->serial,a2->serial,a3->serial,z2,dp*180./3.14159265,
+        -:  542:		(dp-bp->target)*180./3.14159265);
+        -:  543:*/
+        -:  544:/*	fprintf(op,"mm Angle %d %d %d  E %f error %f\n",
+        -:  545:		a1->serial,a2->serial,a3->serial,z2,dp*180./3.14159265);
+        -:  546:*/
+        -:  547:	}
+        -:  548:	}
+    #####:  549:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  550:	bp = (ANGLE*) bp->next;
+        -:  551:       }
+        -:  552:}
+        -:  553:/* UFF cos angle types */
+        -:  554:/* v_angle()
+        -:  555:* this function sums up the potentials
+        -:  556:* for the atoms defined in the angle data structure.
+        -:  557:*/
+        -:  558:/* standard returns 0 if error (any) 1 if ok
+        -:  559:* V is the potential */
+function _Z9v_c_anglePff called 0 returned 0% blocks executed 0%
+    #####:  560:int v_c_angle(float *V, float lambda)
+        -:  561:{
+        -:  562:	ANGLE *bp;
+        -:  563:	float r,x1,y1,z1,x2,y2,z2;
+        -:  564:	float dp;
+        -:  565:	ATOM *a1,*a2,*a3;
+        -:  566:	float C0,C1,C2;
+        -:  567:
+        -:  568:
+    #####:  569:	bp = angle_first;
+    #####:  570:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  571:       while(1)
+        -:  572:       {
+    #####:  573:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  574:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  575:	if( a1->active || a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  576:	{
+    #####:  577:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  578:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  579:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  580:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  581:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  582:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  583:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  584:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  585:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  586:	r = sqrt(r);
+    #####:  587:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  588:	r = dp;
+    #####:  589:	dp = acos(dp);
+        -:  590:/*	*V += bp->k * (bp->target-dp)*(bp->target-dp); */
+    #####:  591:	C0 = cos( bp->target);
+    #####:  592:	C2 = 1./(4. - 4*C0*C0);
+    #####:  593:	C1 = -4.*C2*C0;
+    #####:  594:	C0 = C2*(2*C0*C0 + 1);
+        -:  595:/* the 2* is extra because of unit differences between my quadratic and uff*/
+    #####:  596:	*V += 2*bp->k *( C0 + C1*r + C2*cos(dp*2));
+        -:  597:	}
+        -:  598:	}
+    #####:  599:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  600:	bp = (ANGLE*) bp->next;
+        -:  601:       }
+        -:  602:}
+        -:  603:/* f_angle()
+        -:  604:*
+        -:  605:* f_angle increments the forces in the atom structures by the force
+        -:  606:* due to the angle components.  NOTE THE WORD increment.
+        -:  607:* the forces should first be zero'd.
+        -:  608:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  609:* on bigger (and better?) machines the different potential terms
+        -:  610:* may be updated at random or in parrellel, if we assume that this routine
+        -:  611:* will initialize the forces then we can't do this.
+        -:  612:*/
+function _Z9f_c_anglef called 0 returned 0% blocks executed 0%
+    #####:  613:int f_c_angle(float lambda)
+        -:  614:/*  returns 0 if error, 1 if OK */
+        -:  615:{
+        -:  616:	ANGLE *bp;
+        -:  617:	float r,k,ux1,uy1,uz1,ux2,uy2,uz2;
+        -:  618:	ATOM *a1,*a2,*a3;
+        -:  619:	float x1,y1,z1,x2,y2,z2;
+        -:  620:	float r1,r2,dtheta,dp;
+        -:  621:	float r11,r22,sdth;
+        -:  622:	float C0,C1,C2;
+        -:  623:
+    #####:  624:	bp = angle_first;
+    #####:  625:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  626:       while(1)
+        -:  627:       {
+    #####:  628:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  629:	k = bp->k;
+    #####:  630:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  631:	if( a1->active|| a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  632:	{
+    #####:  633:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  634:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  635:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  636:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  637:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  638:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  639:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  640:	r1 = sqrt(x1*x1+y1*y1+z1*z1);
+    #####:  641:	r2 = sqrt(x2*x2+y2*y2+z2*z2);
+    #####:  642:	if( r1 < 1.e-5 || r2 < 1.e-5) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  643:	r = r1*r2;
+    #####:  644:	if( r > 1.e-8){
+branch  0 never executed
+branch  1 never executed
+        -:  645:
+    #####:  646:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  647:	dtheta = acos(dp);
+    #####:  648:	sdth = sin(dtheta); if( sdth < 1.e-3) sdth = 1.e-3;
+branch  0 never executed
+branch  1 never executed
+    #####:  649:	r11 = r1*sdth; r22 = r2*sdth;
+    #####:  650:	ux1 = x2/r2 - dp*x1/r1;
+    #####:  651:	uy1 = y2/r2 - dp*y1/r1;
+    #####:  652:	uz1 = z2/r2 - dp*z1/r1;
+    #####:  653:	ux2 = x1/r1 - dp*x2/r2;
+    #####:  654:	uy2 = y1/r1 - dp*y2/r2;
+    #####:  655:	uz2 = z1/r1 - dp*z2/r2;
+    #####:  656:	C0 = cos( bp->target);
+    #####:  657:	C2 = 1./(4. - 4*C0*C0);
+    #####:  658:	C1 = -4.*C2*C0;
+    #####:  659:	C0 = C2*(2*C0*C0 + 1);
+        -:  660:/*	*V += bp->k *( C0 + C1*r + C2*cos(dp*2)); */
+    #####:  661:	dtheta = -2.*bp->k*(C1*sdth + 2*C2*sin(dtheta*2) );
+        -:  662:/*	dtheta = -2.*k*(bp->target - dtheta); */
+    #####:  663:	ux1 = ux1*dtheta/r11;
+    #####:  664:	uy1 = uy1*dtheta/r11;
+    #####:  665:	uz1 = uz1*dtheta/r11;
+    #####:  666:	ux2 = ux2*dtheta/r22;
+    #####:  667:	uy2 = uy2*dtheta/r22;
+    #####:  668:	uz2 = uz2*dtheta/r22;
+    #####:  669:	if( a1->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  670:	a1->fx += ux1;
+    #####:  671:	a1->fy += uy1;
+    #####:  672:	a1->fz += uz1;
+        -:  673:	}
+        -:  674:
+    #####:  675:	if( a2->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  676:	a2->fx += -ux1 - ux2;
+    #####:  677:	a2->fy += -uy1 - uy2;
+    #####:  678:	a2->fz += -uz1 - uz2;
+        -:  679:	}
+        -:  680:
+    #####:  681:	if( a3->active){
+branch  0 never executed
+branch  1 never executed
+    #####:  682:	a3->fx += ux2;
+    #####:  683:	a3->fy += uy2;
+    #####:  684:	a3->fz += uz2;
+        -:  685:	}
+        -:  686:
+        -:  687:	}	
+        -:  688:	}	
+        -:  689:SKIP:
+    #####:  690:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  691:	bp = (ANGLE*) bp->next;
+        -:  692:       }
+        -:  693:}
+function _Z9a_c_anglePffiiP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  694:int a_c_angle(float *V, float lambda, int ilow, int ihigh, FILE *op)
+        -:  695:{
+        -:  696:	ANGLE *bp;
+        -:  697:	float r,x1,y1,z1,x2,y2,z2;
+        -:  698:	float dp;
+        -:  699:	ATOM *a1,*a2,*a3;
+        -:  700:	float C0,C1,C2;
+        -:  701:
+        -:  702:
+    #####:  703:	bp = angle_first;
+    #####:  704:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  705:       while(1)
+        -:  706:       {
+    #####:  707:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  708:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  709:	if( (a1->serial >= ilow && a1->serial <= ihigh)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+branch  8 never executed
+branch  9 never executed
+branch 10 never executed
+branch 11 never executed
+        -:  710:	||  (a2->serial >= ilow && a2->serial <= ihigh)
+        -:  711:	||  (a3->serial >= ilow && a3->serial <= ihigh) )
+        -:  712:	{
+    #####:  713:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  714:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  715:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  716:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  717:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  718:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  719:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  720:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  721:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  722:	r = sqrt(r);
+    #####:  723:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  724:	r = dp;
+    #####:  725:	dp = acos(dp);
+        -:  726:/*	z2  = bp->k * (bp->target-dp)*(bp->target-dp);
+        -:  727:	*V += z2;
+        -:  728:*/
+    #####:  729:	C0 = cos( bp->target);
+    #####:  730:	C2 = 1./(4. - 4*C0*C0);
+    #####:  731:	C1 = -4.*C2*C0;
+    #####:  732:	C0 = C2*(2*C0*C0 + 1);
+        -:  733:/* the 2* is extra because of unit differences between my quadratic and uff*/
+    #####:  734:	*V += 2*bp->k *( C0 + C1*r + C2*cos(dp*2));
+        -:  735:	fprintf(op,"c Angle %s %d %s %d %s %d E %f value %f error %f\n",
+        -:  736:		a1->name,a1->serial,a2->name,a2->serial,a3->name,a3->serial
+        -:  737:		,z2,dp*180./3.14159265,
+    #####:  738:		(dp-bp->target)*180./3.14159265);
+        -:  739:/*
+        -:  740:	fprintf(op,"Angle %d %d %d E %f value %f error %f\n",
+        -:  741:		a1->serial,a2->serial,a3->serial,z2,dp*180./3.14159265,
+        -:  742:		(dp-bp->target)*180./3.14159265);
+        -:  743:*/
+        -:  744:	}
+        -:  745:	}
+    #####:  746:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  747:	bp = (ANGLE*) bp->next;
+        -:  748:       }
+        -:  749:}
+function _Z10gsdg_angleP4ATOM called 0 returned 0% blocks executed 0%
+    #####:  750:int gsdg_angle(ATOM *who)
+        -:  751:{
+        -:  752:ANGLE *bp; 
+        -:  753:ATOM *ap,*ap1;
+        -:  754:float r,r1,theta;
+        -:  755:float bond_length(ATOM*, ATOM*);
+        -:  756:
+    #####:  757:bp = angle_first;
+        -:  758:
+    #####:  759:while( 1)
+    #####:  760:{ if( bp == NULL ) return 0 ;
+branch  0 never executed
+branch  1 never executed
+    #####:  761:	if( bp->atom1 == who ){
+branch  0 never executed
+branch  1 never executed
+    #####:  762:	ap1 = bp->atom2;
+    #####:  763:	ap = bp->atom3;
+    #####:  764:	r = bond_length(who,ap1); r1 = bond_length(ap1,ap);
+call    0 never executed
+call    1 never executed
+    #####:  765:	theta = r*r + r1*r1 -2*cos( bp->target) *r*r1;
+    #####:  766:	ap->vx = theta;
+    #####:  767:	ap->vy = bp->k;
+        -:  768:	}
+    #####:  769:	if( bp->atom3 == who ){
+branch  0 never executed
+branch  1 never executed
+    #####:  770:	ap1 = bp->atom2;
+    #####:  771:	ap = bp->atom1;
+    #####:  772:	r = bond_length(who,ap1); r1 = bond_length(ap1,ap);
+call    0 never executed
+call    1 never executed
+    #####:  773:	theta = r*r + r1*r1 -2*cos( bp->target) *r*r1;
+    #####:  774:	ap->vx = theta;
+    #####:  775:	ap->vy = bp->k;
+        -:  776:	}
+    #####:  777:if( bp == bp->next) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  778:bp = (ANGLE*)bp->next;
+        -:  779:}
+        -:  780:}
+        -:  781:/* v_ho_angle()
+        -:  782:* this function sums up the potentials
+        -:  783:* for the atoms defined in the angle data structure.
+        -:  784:*/
+        -:  785:/* standard returns 0 if error (any) 1 if ok
+        -:  786:* V is the potential */
+function _Z10v_ho_anglePff called 0 returned 0% blocks executed 0%
+    #####:  787:int v_ho_angle(float *V, float lambda)
+        -:  788:{
+        -:  789:	ANGLE *bp;
+        -:  790:	float r,x1,y1,z1,x2,y2,z2;
+        -:  791:	float dp;
+        -:  792:	ATOM *a1,*a2,*a3;
+        -:  793:	float hol,get_f_variable(char*),target;
+        -:  794:
+    #####:  795:	hol = get_f_variable("lambda");
+call    0 never executed
+    #####:  796:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  797:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+        -:  798:
+    #####:  799:	bp = angle_first;
+    #####:  800:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  801:       while(1)
+        -:  802:       {
+    #####:  803:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  804:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  805:	if( a1->active || a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  806:	{
+    #####:  807:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  808:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  809:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  810:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  811:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  812:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  813:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  814:	r = (( x1*x1+y1*y1+z1*z1)*(x2*x2+y2*y2+z2*z2));
+    #####:  815:	if( r > 1.e-8){ 
+branch  0 never executed
+branch  1 never executed
+    #####:  816:	r = sqrt(r);
+    #####:  817:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  818:	dp = acos(dp);
+    #####:  819:	target = hol*dp + (1.-hol)*bp->target;
+    #####:  820:	*V += bp->k * (target-dp)*(target-dp);
+        -:  821:	}
+        -:  822:	}
+    #####:  823:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  824:	bp = (ANGLE*)bp->next;
+        -:  825:       }
+        -:  826:}
+        -:  827:/* f_ho_angle()
+        -:  828:*
+        -:  829:* f_ho_angle increments the forces in the atom structures by the force
+        -:  830:* due to the angle components.  NOTE THE WORD increment.
+        -:  831:* the forces should first be zero'd.
+        -:  832:* if not then this code will be invalid.  THIS IS DELIBERATE.
+        -:  833:* on bigger (and better?) machines the different potential terms
+        -:  834:* may be updated at random or in parrellel, if we assume that this routine
+        -:  835:* will initialize the forces then we can't do this.
+        -:  836:*/
+function _Z10f_ho_anglef called 0 returned 0% blocks executed 0%
+    #####:  837:int f_ho_angle(float lambda)
+        -:  838:/*  returns 0 if error, 1 if OK */
+        -:  839:{
+        -:  840:	ANGLE *bp;
+        -:  841:	float r,k,ux1,uy1,uz1,ux2,uy2,uz2;
+        -:  842:	ATOM *a1,*a2,*a3;
+        -:  843:	float x1,y1,z1,x2,y2,z2;
+        -:  844:	float r1,r2,dtheta,dp;
+        -:  845:	float r11,r22,sdth;
+        -:  846:	float hol,get_f_variable(char*),target;
+        -:  847:
+    #####:  848:	hol = get_f_variable("lambda");
+call    0 never executed
+    #####:  849:	if( hol < 0. ) hol = 0.;
+branch  0 never executed
+branch  1 never executed
+    #####:  850:	if( hol > 1. ) hol = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  851:	bp = angle_first;
+    #####:  852:       if( bp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  853:       while(1)
+        -:  854:       {
+    #####:  855:	if( bp == NULL) return 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  856:	k = bp->k;
+    #####:  857:	a1 = bp->atom1; a2 = bp->atom2; a3 = bp->atom3;
+    #####:  858:	if( a1->active|| a2->active || a3->active )
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+        -:  859:	{
+    #####:  860:	x1 = (a1->x -a2->x +lambda*(a1->dx-a2->dx));
+    #####:  861:	y1 = (a1->y -a2->y +lambda*(a1->dy-a2->dy));
+    #####:  862:	z1 = (a1->z -a2->z +lambda*(a1->dz-a2->dz));
+    #####:  863:	x2 = (a3->x -a2->x +lambda*(a3->dx-a2->dx));
+    #####:  864:	y2 = (a3->y -a2->y +lambda*(a3->dy-a2->dy));
+    #####:  865:	z2 = (a3->z -a2->z +lambda*(a3->dz-a2->dz));
+    #####:  866:	dp = x1*x2+y1*y2+z1*z2;
+    #####:  867:	r1 = sqrt(x1*x1+y1*y1+z1*z1);
+    #####:  868:	r2 = sqrt(x2*x2+y2*y2+z2*z2);
+    #####:  869:	if( r1 < 1.e-5 || r2 < 1.e-5) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  870:	r = r1*r2;
+    #####:  871:	if( r > 1.e-8){
+branch  0 never executed
+branch  1 never executed
+        -:  872:
+    #####:  873:	dp = dp/r;  if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  874:	dtheta = acos(dp);
+    #####:  875:	target = hol*dtheta + (1.-hol)*bp->target;
+    #####:  876:	sdth = sin(dtheta); if( sdth < 1.e-3) sdth = 1.e-3;
+branch  0 never executed
+branch  1 never executed
+    #####:  877:	r11 = r1*sdth; r22 = r2*sdth;
+    #####:  878:	ux1 = x2/r2 - dp*x1/r1;
+    #####:  879:	uy1 = y2/r2 - dp*y1/r1;
+    #####:  880:	uz1 = z2/r2 - dp*z1/r1;
+    #####:  881:	ux2 = x1/r1 - dp*x2/r2;
+    #####:  882:	uy2 = y1/r1 - dp*y2/r2;
+    #####:  883:	uz2 = z1/r1 - dp*z2/r2;
+    #####:  884:	dtheta = -2.*k*(target - dtheta)*(1.-hol);
+    #####:  885:	ux1 = ux1*dtheta/r11;
+    #####:  886:	uy1 = uy1*dtheta/r11;
+    #####:  887:	uz1 = uz1*dtheta/r11;
+    #####:  888:	ux2 = ux2*dtheta/r22;
+    #####:  889:	uy2 = uy2*dtheta/r22;
+    #####:  890:	uz2 = uz2*dtheta/r22;
+    #####:  891:	if( a1->active)
+branch  0 never executed
+branch  1 never executed
+        -:  892:	{
+    #####:  893:	a1->fx += ux1;
+    #####:  894:	a1->fy += uy1;
+    #####:  895:	a1->fz += uz1;
+        -:  896:	}
+        -:  897:
+    #####:  898:	if( a2->active)
+branch  0 never executed
+branch  1 never executed
+        -:  899:	{
+    #####:  900:	a2->fx += -ux1 - ux2;
+    #####:  901:	a2->fy += -uy1 - uy2;
+    #####:  902:	a2->fz += -uz1 - uz2;
+        -:  903:	}
+        -:  904:
+    #####:  905:	if( a3->active)
+branch  0 never executed
+branch  1 never executed
+        -:  906:	{
+    #####:  907:	a3->fx += ux2;
+    #####:  908:	a3->fy += uy2;
+    #####:  909:	a3->fz += uz2;
+        -:  910:	}
+        -:  911:
+        -:  912:	}	
+        -:  913:	}	
+        -:  914:SKIP:
+    #####:  915:	if( bp == bp->next ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  916:	bp = (ANGLE*) bp->next;
+        -:  917:       }
+        -:  918:}

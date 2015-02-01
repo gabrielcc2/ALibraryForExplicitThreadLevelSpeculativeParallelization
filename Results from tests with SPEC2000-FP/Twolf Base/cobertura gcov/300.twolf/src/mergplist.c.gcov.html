@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/mergplist.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - mergplist.c<span style="font-size: 80%;"> (source / <a href="mergplist.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">77</td>
+            <td class="headerCovTableEntry">87</td>
+            <td class="headerCovTableEntryMed">88.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">38</td>
+            <td class="headerCovTableEntry">46</td>
+            <td class="headerCovTableEntryMed">82.6 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &quot;standard.h&quot;</a>
+<span class="lineNum">       2 </span>                :            : #include &quot;groute.h&quot;
+<span class="lineNum">       3 </span>                :            : extern FILE *fpo ;
+<span class="lineNum">       4 </span>                :            : 
+<span class="lineNum">       5 </span>                :            : typedef struct tmpmerg {
+<span class="lineNum">       6 </span>                :            :     int value ;
+<span class="lineNum">       7 </span>                :            :     int next  ;
+<span class="lineNum">       8 </span>                :            :     int first ;
+<span class="lineNum">       9 </span>                :            : } 
+<span class="lineNum">      10 </span>                :            : TEMPMERG ;
+<span class="lineNum">      11 </span>                :            : TEMPMERG *tmp_pinlist ;
+<span class="lineNum">      12 </span>                :            : 
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :            : extern int maxterm ;
+<span class="lineNum">      15 </span>                :            : extern int numnets ;
+<span class="lineNum">      16 </span>                :            : extern int numRows ;
+<span class="lineNum">      17 </span>                :            : int *pinlist ;
+<span class="lineNum">      18 </span>                :            : int pinGroup ;
+<span class="lineNum">      19 </span>                :            : int *merge_array ;
+<span class="lineNum">      20 </span>                :            : int array_length ;
+<span class="lineNum">      21 </span>                :            : 
+<a name="22"><span class="lineNum">      22 </span>                :            : </a>
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :<span class="lineCov">          1 : mergplist()</span>
+<span class="lineNum">      25 </span>                :            : {
+<span class="lineNum">      26 </span>                :            : 
+<span class="lineNum">      27 </span>                :            : int segment , i , current_net ;
+<span class="lineNum">      28 </span>                :            : int chan , track , terminal ;
+<span class="lineNum">      29 </span>                :            : DENSITYPTR denptr , temptr ;
+<span class="lineNum">      30 </span>                :            : 
+<span class="lineNum">      31 </span>        [<span class="branchCov" title="Branch 0 was taken 17 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         18 : for( chan = 1 ; chan &lt;= numChans ; chan++ ) {</span>
+<span class="lineNum">      32 </span>        [<span class="branchCov" title="Branch 0 was taken 2108 times"> + </span><span class="branchCov" title="Branch 1 was taken 17 times"> + </span>]:<span class="lineCov">       2125 :     for( track = 0 ; track &lt;= max_tdensity+100 ; track++ ) {</span>
+<span class="lineNum">      33 </span>                :<span class="lineCov">       2108 :         denptr = DboxHead[ chan ][ track ]-&gt;next ;</span>
+<span class="lineNum">      34 </span>        [<span class="branchCov" title="Branch 0 was taken 10848 times"> + </span><span class="branchCov" title="Branch 1 was taken 2108 times"> + </span>]:<span class="lineCov">      12956 :         while( denptr != DENSENULL ) {</span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">      10848 :             temptr = denptr-&gt;next ;</span>
+<span class="lineNum">      36 </span>                :<span class="lineCov">      10848 :             safe_free( denptr-&gt;grdptr ) ;</span>
+<span class="lineNum">      37 </span>                :<span class="lineCov">      10848 :             safe_cfree( denptr ) ;</span>
+<span class="lineNum">      38 </span>                :<span class="lineCov">      10848 :             denptr = temptr ;</span>
+<span class="lineNum">      39 </span>                :            :         }
+<span class="lineNum">      40 </span>                :<span class="lineCov">       2108 :         safe_cfree( DboxHead[ chan ][ track ] ) ;</span>
+<span class="lineNum">      41 </span>                :            :     }
+<span class="lineNum">      42 </span>                :<span class="lineCov">         17 :     safe_cfree( DboxHead[ chan ] ) ;</span>
+<span class="lineNum">      43 </span>                :            : }
+<span class="lineNum">      44 </span>                :<span class="lineCov">          1 : safe_cfree( DboxHead ) ;</span>
+<span class="lineNum">      45 </span>        [<span class="branchCov" title="Branch 0 was taken 12520 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      12521 : for( terminal = 1 ; terminal &lt;= maxterm + 2*numChans ; terminal++ ) {</span>
+<span class="lineNum">      46 </span>                :<span class="lineCov">      12520 :     safe_free( Tgrid[ terminal ] ) ;</span>
+<span class="lineNum">      47 </span>                :            : }
+<span class="lineNum">      48 </span>                :<span class="lineCov">          1 : safe_free( Tgrid ) ;</span>
+<span class="lineNum">      49 </span>                :            : 
+<span class="lineNum">      50 </span>                :<span class="lineCov">          1 : pinGroup = 0 ;</span>
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :<span class="lineCov">          1 : pinlist = (int *) safe_malloc( (maxterm + 1) * sizeof(int) );</span>
+<span class="lineNum">      53 </span>        [<span class="branchCov" title="Branch 0 was taken 12486 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">      12487 : for( i = 1 ; i &lt;= maxterm ; i++ ) {</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">      12486 :     pinlist[i] = 0 ;</span>
+<span class="lineNum">      55 </span>                :            : }
+<span class="lineNum">      56 </span>                :            : 
+<span class="lineNum">      57 </span>                :<span class="lineCov">          1 : merge_array = (int *) safe_malloc( 100 * sizeof(int) );</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">          1 : merge_array[0] = 0 ;</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">          1 : tmp_pinlist = (TEMPMERG *) safe_malloc( 100 * sizeof(TEMPMERG) );</span>
+<span class="lineNum">      60 </span>        [<span class="branchCov" title="Branch 0 was taken 100 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">        101 : for( i = 0 ; i &lt; 100 ; i++ ) {</span>
+<span class="lineNum">      61 </span>                :<span class="lineCov">        100 :     tmp_pinlist[i].value = 0 ;</span>
+<span class="lineNum">      62 </span>                :<span class="lineCov">        100 :     tmp_pinlist[i].next  = 0 ;</span>
+<span class="lineNum">      63 </span>                :<span class="lineCov">        100 :     tmp_pinlist[i].first = i ;</span>
+<span class="lineNum">      64 </span>                :            : }
+<span class="lineNum">      65 </span>                :<span class="lineCov">          1 : array_length = 100 ;</span>
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :<span class="lineCov">          1 : current_net = aNetSeg[1].net ;</span>
+<span class="lineNum">      69 </span>        [<span class="branchCov" title="Branch 0 was taken 3331 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       3332 : for( segment = 1 ; segment &lt;= numSegs + 1 ; segment++ ) {</span>
+<span class="lineNum">      70 </span>        [<span class="branchCov" title="Branch 0 was taken 3330 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">       3331 :     if( segment &lt;= numSegs ) {</span>
+<span class="lineNum">      71 </span>        [<span class="branchCov" title="Branch 0 was taken 1857 times"> + </span><span class="branchCov" title="Branch 1 was taken 1473 times"> + </span>]:<span class="lineCov">       3330 :         if( aNetSeg[segment].net != current_net ) {</span>
+<span class="lineNum">      72 </span>                :<span class="lineCov">       1857 :             assign_group_values() ;</span>
+<span class="lineNum">      73 </span>                :<span class="lineCov">       1857 :             initialize_pins() ;</span>
+<span class="lineNum">      74 </span>                :<span class="lineCov">       1857 :             current_net = aNetSeg[segment].net ;</span>
+<span class="lineNum">      75 </span>                :            :         }
+<span class="lineNum">      76 </span>                :<span class="lineCov">       3330 :         merge_pins( segment ) ;</span>
+<span class="lineNum">      77 </span>                :            :     } else {
+<span class="lineNum">      78 </span>                :<span class="lineCov">          1 :         assign_group_values() ;</span>
+<span class="lineNum">      79 </span>                :            :     }
+<span class="lineNum">      80 </span>                :            : }
+<span class="lineNum">      81 </span>                :            : return ;
+<span class="lineNum">      82 </span>                :            : }
+<span class="lineNum">      83 </span>                :            : 
+<span class="lineNum">      84 </span>                :            : 
+<a name="85"><span class="lineNum">      85 </span>                :            : </a>
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>                :<span class="lineCov">       1857 : initialize_pins()</span>
+<span class="lineNum">      88 </span>                :            : {
+<span class="lineNum">      89 </span>                :            : 
+<span class="lineNum">      90 </span>                :            : int i ;
+<span class="lineNum">      91 </span>                :            : 
+<span class="lineNum">      92 </span>        [<span class="branchCov" title="Branch 0 was taken 6485 times"> + </span><span class="branchCov" title="Branch 1 was taken 1857 times"> + </span>]:<span class="lineCov">       8342 : for( i = 1 ; i &lt;= merge_array[0] ; i++ ) {</span>
+<span class="lineNum">      93 </span>                :<span class="lineCov">       6485 :     tmp_pinlist[i].value = 0 ;</span>
+<span class="lineNum">      94 </span>                :<span class="lineCov">       6485 :     tmp_pinlist[i].next  = 0 ;</span>
+<span class="lineNum">      95 </span>                :<span class="lineCov">       6485 :     tmp_pinlist[i].first = i ;</span>
+<span class="lineNum">      96 </span>                :            : }
+<span class="lineNum">      97 </span>                :<span class="lineCov">       1857 : merge_array[0] = 0 ;</span>
+<span class="lineNum">      98 </span>                :            : 
+<span class="lineNum">      99 </span>                :            : return ;
+<span class="lineNum">     100 </span>                :            : }
+<span class="lineNum">     101 </span>                :            : 
+<span class="lineNum">     102 </span>                :            : 
+<span class="lineNum">     103 </span>                :            : 
+<a name="104"><span class="lineNum">     104 </span>                :            : </a>
+<span class="lineNum">     105 </span>                :            : 
+<span class="lineNum">     106 </span>                :<span class="lineCov">       6660 : add_pins( pin )</span>
+<span class="lineNum">     107 </span>                :            : int pin ;
+<span class="lineNum">     108 </span>                :            : {
+<span class="lineNum">     109 </span>                :            : 
+<span class="lineNum">     110 </span>                :            : int i ;
+<span class="lineNum">     111 </span>                :            : 
+<span class="lineNum">     112 </span>        [<span class="branchCov" title="Branch 0 was taken 18831 times"> + </span><span class="branchCov" title="Branch 1 was taken 6487 times"> + </span>]:<span class="lineCov">      25318 : for( i = 1 ; i &lt;= merge_array[0] ; i++ ) {</span>
+<span class="lineNum">     113 </span>        [<span class="branchCov" title="Branch 0 was taken 173 times"> + </span><span class="branchCov" title="Branch 1 was taken 18658 times"> + </span>]:<span class="lineCov">      18831 :     if( pin == merge_array[i] ) {</span>
+<span class="lineNum">     114 </span>                :<span class="lineCov">        173 :         return(i) ;</span>
+<span class="lineNum">     115 </span>                :            :     }
+<span class="lineNum">     116 </span>                :            : }
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 6487 times"> + </span>]:<span class="lineCov">       6487 : if( ++merge_array[0] &gt;= array_length ) {</span>
+<span class="lineNum">     119 </span>                :<span class="lineNoCov">          0 :     array_length += 100 ;</span>
+<span class="lineNum">     120 </span>                :<span class="lineNoCov">          0 :     merge_array = (int *) safe_realloc( merge_array ,</span>
+<span class="lineNum">     121 </span>                :<span class="lineNoCov">          0 :                                 (array_length) * sizeof(int) );</span>
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :     tmp_pinlist = (TEMPMERG *) safe_realloc( tmp_pinlist ,</span>
+<span class="lineNum">     123 </span>                :<span class="lineNoCov">          0 :                                 (array_length) * sizeof(TEMPMERG) );</span>
+<span class="lineNum">     124 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :     for( i = merge_array[0] ; i &lt; merge_array[0] + 100 ; i++ ) {</span>
+<span class="lineNum">     125 </span>                :<span class="lineNoCov">          0 :         tmp_pinlist[i].value = 0 ;</span>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :         tmp_pinlist[i].next  = 0 ;</span>
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :         tmp_pinlist[i].first = i ;</span>
+<span class="lineNum">     128 </span>                :            :     }
+<span class="lineNum">     129 </span>                :            : }
+<span class="lineNum">     130 </span>                :            : 
+<span class="lineNum">     131 </span>                :<span class="lineCov">       6487 : merge_array[ merge_array[0] ] = pin ;</span>
+<span class="lineNum">     132 </span>                :            : 
+<span class="lineNum">     133 </span>                :<span class="lineCov">       6660 : return( merge_array[0] ) ;</span>
+<span class="lineNum">     134 </span>                :            : }
+<span class="lineNum">     135 </span>                :            : 
+<span class="lineNum">     136 </span>                :            : 
+<span class="lineNum">     137 </span>                :            : 
+<a name="138"><span class="lineNum">     138 </span>                :            : </a>
+<span class="lineNum">     139 </span>                :            : 
+<span class="lineNum">     140 </span>                :<span class="lineCov">       1858 : assign_group_values()</span>
+<span class="lineNum">     141 </span>                :            : {
+<span class="lineNum">     142 </span>                :            : 
+<span class="lineNum">     143 </span>                :            : int i ;
+<span class="lineNum">     144 </span>                :            : 
+<span class="lineNum">     145 </span>        [<span class="branchCov" title="Branch 0 was taken 6487 times"> + </span><span class="branchCov" title="Branch 1 was taken 1858 times"> + </span>]:<span class="lineCov">       8345 : for( i = 1 ; i &lt;= merge_array[0] ; i++ ) {</span>
+<span class="lineNum">     146 </span>                :<span class="lineCov">       6487 :     pinlist[ merge_array[i] ] = tmp_pinlist[i].value ;</span>
+<span class="lineNum">     147 </span>                :            : }
+<span class="lineNum">     148 </span>                :            : 
+<span class="lineNum">     149 </span>                :            : return ;
+<span class="lineNum">     150 </span>                :            : }
+<span class="lineNum">     151 </span>                :            : 
+<span class="lineNum">     152 </span>                :            : 
+<a name="153"><span class="lineNum">     153 </span>                :            : </a>
+<span class="lineNum">     154 </span>                :            : 
+<span class="lineNum">     155 </span>                :<span class="lineCov">       3330 : merge_pins( segment )</span>
+<span class="lineNum">     156 </span>                :            : int segment ;
+<span class="lineNum">     157 </span>                :            : {
+<span class="lineNum">     158 </span>                :            : 
+<span class="lineNum">     159 </span>                :            : SEGBOXPTR boxptr ;
+<span class="lineNum">     160 </span>                :            : 
+<span class="lineNum">     161 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 3330 times"> + </span>]:<span class="lineCov">       3330 : if( aNetSeg[segment].key != 0 ) {</span>
+<span class="lineNum">     162 </span>                :<span class="lineNoCov">          0 :     aNetSeg[segment].current = aNetSeg[ aNetSeg[segment].key ].current ;</span>
+<span class="lineNum">     163 </span>                :            : }
+<span class="lineNum">     164 </span>        [<span class="branchCov" title="Branch 0 was taken 3290 times"> + </span><span class="branchCov" title="Branch 1 was taken 40 times"> + </span>]:<span class="lineCov">       3330 : if( aNetSeg[segment].current == 0 ) {</span>
+<span class="lineNum">     165 </span>                :<span class="lineCov">       3290 :     boxptr = aNetSeg[segment].top ;</span>
+<span class="lineNum">     166 </span>                :            : } else {
+<span class="lineNum">     167 </span>                :<span class="lineCov">         40 :     boxptr = aNetSeg[segment].bot ;</span>
+<span class="lineNum">     168 </span>                :            : }
+<span class="lineNum">     169 </span>[<span class="branchCov" title="Branch 0 was taken 3330 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>][<span class="branchCov" title="Branch 2 was taken 3330 times"> + </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">       3330 : if( (boxptr-&gt;pin1 != boxptr-&gt;pin2) &amp;&amp;</span>
+<span class="lineNum">     170 </span>        [<span class="branchCov" title="Branch 0 was taken 3330 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       3330 :     ((pinlist[boxptr-&gt;pin1] != pinlist[boxptr-&gt;pin2]) ||</span>
+<span class="lineNum">     171 </span>        [<span class="branchCov" title="Branch 0 was taken 3330 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">       3330 :                             ((pinlist[boxptr-&gt;pin1] == 0) &amp;&amp; </span>
+<span class="lineNum">     172 </span>                :<span class="lineCov">       3330 :                             (pinlist[boxptr-&gt;pin2] == 0)))) { </span>
+<span class="lineNum">     173 </span>                :<span class="lineCov">       3330 :     merge( add_pins(boxptr-&gt;pin1) , add_pins(boxptr-&gt;pin2) ) ;</span>
+<span class="lineNum">     174 </span>                :            : }
+<span class="lineNum">     175 </span>                :            : 
+<span class="lineNum">     176 </span>                :            : return ;
+<span class="lineNum">     177 </span>                :            : }
+<span class="lineNum">     178 </span>                :            : 
+<span class="lineNum">     179 </span>                :            : 
+<a name="180"><span class="lineNum">     180 </span>                :            : </a>
+<span class="lineNum">     181 </span>                :            : 
+<span class="lineNum">     182 </span>                :<span class="lineCov">       3330 : merge( i , j ) </span>
+<span class="lineNum">     183 </span>                :            : int i , j ;
+<span class="lineNum">     184 </span>                :            : {
+<span class="lineNum">     185 </span>                :            : 
+<span class="lineNum">     186 </span>                :            : int newval , next , first , secfirst ;
+<span class="lineNum">     187 </span>                :            : 
+<span class="lineNum">     188 </span>                :<span class="lineCov">       3330 : newval = ++pinGroup ;</span>
+<span class="lineNum">     189 </span>                :            : 
+<span class="lineNum">     190 </span>                :<span class="lineCov">       3330 : secfirst = tmp_pinlist[j].first ;</span>
+<span class="lineNum">     191 </span>                :<span class="lineCov">       3330 : first = tmp_pinlist[i].first ;</span>
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>                :<span class="lineCov">       3330 : next = secfirst ;</span>
+<span class="lineNum">     194 </span>                :            : do {
+<span class="lineNum">     195 </span>                :<span class="lineCov">       3438 :     tmp_pinlist[next].value = newval ;</span>
+<span class="lineNum">     196 </span>                :<span class="lineCov">       3438 :     tmp_pinlist[next].first = first  ;</span>
+<span class="lineNum">     197 </span>                :<span class="lineCov">       3438 :     next = tmp_pinlist[next].next ;</span>
+<span class="lineNum">     198 </span>        [<span class="branchCov" title="Branch 0 was taken 108 times"> + </span><span class="branchCov" title="Branch 1 was taken 3330 times"> + </span>]:<span class="lineCov">       3438 : } while( next != 0 ) ;</span>
+<span class="lineNum">     199 </span>                :            : 
+<span class="lineNum">     200 </span>                :<span class="lineCov">       3330 : next = first ;</span>
+<span class="lineNum">     201 </span>                :            : for( ; ; ) {
+<span class="lineNum">     202 </span>                :<span class="lineCov">       3414 :     tmp_pinlist[next].value = newval ;</span>
+<span class="lineNum">     203 </span>        [<span class="branchCov" title="Branch 0 was taken 84 times"> + </span><span class="branchCov" title="Branch 1 was taken 3330 times"> + </span>]:<span class="lineCov">       3414 :     if( tmp_pinlist[next].next != 0 ) {</span>
+<span class="lineNum">     204 </span>                :<span class="lineCov">         84 :         next = tmp_pinlist[next].next ;</span>
+<span class="lineNum">     205 </span>                :            :     } else {
+<span class="lineNum">     206 </span>                :<span class="lineCov">       3330 :         tmp_pinlist[next].next = secfirst ;</span>
+<span class="lineNum">     207 </span>                :            :         break ;
+<span class="lineNum">     208 </span>                :            :     }
+<span class="lineNum">     209 </span>                :<span class="lineCov">         84 : }</span>
+<span class="lineNum">     210 </span>                :            : return ;
+<span class="lineNum">     211 </span>                :            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

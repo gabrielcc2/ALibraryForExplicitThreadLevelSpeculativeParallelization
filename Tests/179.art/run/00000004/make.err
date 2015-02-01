@@ -1,0 +1,13 @@
+scanner.c: In function ‘analog_conv’:
+scanner.c:287:4: warning: format ‘%f’ expects type ‘float *’, but argument 4 has type ‘double *’
+scanner.c:287:4: warning: format ‘%f’ expects type ‘float *’, but argument 6 has type ‘double *’
+scanner.c: In function ‘get_pat’:
+scanner.c:299:6: warning: format ‘%f’ expects type ‘float *’, but argument 3 has type ‘double *’
+scanner.c: In function ‘load_weights’:
+scanner.c:780:11: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+scanner.c:788:14: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+scanner.c: In function ‘get_pat’:
+scanner.c:299:12: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+scanner.c: In function ‘analog_conv’:
+scanner.c:285:10: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result
+scanner.c:287:14: warning: ignoring return value of ‘fscanf’, declared with attribute warn_unused_result

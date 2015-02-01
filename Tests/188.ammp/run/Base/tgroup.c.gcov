@@ -1,0 +1,977 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/tgroup.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* tgroup.c
+        -:    2:*
+        -:    3:* collection of routines to service  torsion searching
+        -:    4:*
+        -:    5:* POOP (Poor-mans Object Oriented Programming) using scope rules
+        -:    6:*
+        -:    7:*/
+        -:    8:/*
+        -:    9:*  copyright 1993 Robert W. Harrison
+        -:   10:*  
+        -:   11:*  This notice may not be removed
+        -:   12:*  This program may be copied for scientific use
+        -:   13:*  It may not be sold for profit without explicit
+        -:   14:*  permission of the author(s) who retain any
+        -:   15:*  commercial rights including the right to modify 
+        -:   16:*  this notice
+        -:   17:*/
+        -:   18:
+        -:   19:#define ANSI 1
+        -:   20:/* misc includes - ANSI and some are just to be safe */
+        -:   21:#include <stdio.h>
+        -:   22:#include <ctype.h>
+        -:   23:#include <math.h>
+        -:   24:#ifdef ANSI
+        -:   25:#include <stdlib.h>
+        -:   26:#endif
+        -:   27://#include "ammp.h"
+        -:   28:/* ATOM structure contains a serial number for indexing into
+        -:   29:* arrays and the like (a Hessian)
+        -:   30:* but otherwise is self-contained. Note the hooks for Non-torsioned potentials
+        -:   31:*/
+        -:   32:#define MAXTGROUP 100
+        -:   33:#define MAXTGSTEP 24
+        -:   34:typedef struct { ATOM *context,*b1,*b2,*b3 ;
+        -:   35:		int which ,ntry, ingroup ; 
+        -:   36:		float base;
+        -:   37:		ATOM *group[MAXTGROUP];
+        -:   38:		void *next;
+        -:   39:		}  TGROUP ;
+        -:   40:TGROUP *tg_first = NULL;
+        -:   41:#define tg_long sizeof(TGROUP) 
+        -:   42:
+        -:   43:
+function _Z6tgroupiiiiiif called 0 returned 0% blocks executed 0%
+    #####:   44:int tgroup(int which, int context, int b1, int b2, int b3, int ntry, float base)
+        -:   45:{
+        -:   46: /* context b1 b2 b3 are atom serial numbers */
+        -:   47:
+        -:   48:TGROUP *tgp,*tgo;
+        -:   49:ATOM *bonded[20],*a_m_serial(int);
+        -:   50:ATOM *newest[MAXTGROUP];
+        -:   51:ATOM *newer[MAXTGROUP];
+        -:   52:int in_newest,in_newer;
+        -:   53:int  i,j,k,l,ll;
+        -:   54:char line[80];
+        -:   55:void get_bond(ATOM*, ATOM*[], int, int*);
+    #####:   56:	if( ntry == 0 ) 
+branch  0 never executed
+branch  1 never executed
+    #####:   57:	{ base = 0. ; ntry = 6 ;}
+        -:   58:
+    #####:   59:	tgp = tg_first;
+    #####:   60:	tgo = tgp;
+    #####:   61:	if( which == 0)
+branch  0 never executed
+branch  1 never executed
+    #####:   62:	{ aaerror("warning tg_group 0 will never be accessed\n"); return 0;}
+call    0 never executed
+    #####:   63:	while(tgp != NULL)
+branch  0 never executed
+branch  1 never executed
+        -:   64:	{
+    #####:   65:	if( tgp->which == which) goto found;
+branch  0 never executed
+branch  1 never executed
+    #####:   66:	tgo = tgp;
+    #####:   67:	tgp = (TGROUP*) tgp->next;
+        -:   68:	}
+    #####:   69:	if( (tgp = (TGROUP*) malloc( tg_long)) == NULL)
+branch  0 never executed
+branch  1 never executed
+    #####:   70:	{ aaerror(" cannot allocate memory for a tg_group\n"); exit(0);}	
+call    0 never executed
+call    1 never executed
+    #####:   71:	if( tgo != NULL) tgo->next = tgp;
+branch  0 never executed
+branch  1 never executed
+    #####:   72:	if( tgo == NULL) tg_first = tgp;
+branch  0 never executed
+branch  1 never executed
+    #####:   73:	tgp->next = NULL;
+        -:   74:found:
+    #####:   75:	if( context < 0 || b1 < 0 || b2 < 0 || b3 < 0) /* free the group iff it is not definable */
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:   76:	{
+    #####:   77:	if( tgo != NULL ) tgo->next = tgp->next; /* delete the link if its not the first one */
+branch  0 never executed
+branch  1 never executed
+    #####:   78:	if( tgo == NULL ) tg_first = (TGROUP*) tgp->next;  /* delete the first link */
+branch  0 never executed
+branch  1 never executed
+    #####:   79:	free( tgp );
+    #####:   80:	return 1;
+        -:   81:	} /* else reinitialize the group */
+    #####:   82:	tgp->which = which;
+    #####:   83:	tgp->context = a_m_serial(context);
+call    0 never executed
+    #####:   84:	tgp->b1 = a_m_serial(b1);
+call    0 never executed
+    #####:   85:	tgp->b2 = a_m_serial(b2);
+call    0 never executed
+    #####:   86:	tgp->b3 = a_m_serial(b3);
+call    0 never executed
+    #####:   87:	if( tgp->context == NULL )
+branch  0 never executed
+branch  1 never executed
+        -:   88:	{
+        -:   89:	sprintf(line," tgroup %d  %d atom not defined cannot define tgroup ",which,context);
+    #####:   90:	aaerror( line); 
+call    0 never executed
+    #####:   91:	return 1;}
+    #####:   92:	if( tgp->b1 == NULL )
+branch  0 never executed
+branch  1 never executed
+        -:   93:	{
+        -:   94:	sprintf(line," tgroup %d  %d atom not defined cannot define tgroup ",which,b1);
+    #####:   95:	aaerror( line); 
+call    0 never executed
+    #####:   96:	return 1;}
+    #####:   97:	if( tgp->b2 == NULL )
+branch  0 never executed
+branch  1 never executed
+        -:   98:	{
+        -:   99:	sprintf(line," tgroup %d  %d atom not defined cannot define tgroup ",which,b2);
+    #####:  100:	aaerror( line); 
+call    0 never executed
+    #####:  101:	return 1;}
+    #####:  102:	if( tgp->b3 == NULL )
+branch  0 never executed
+branch  1 never executed
+        -:  103:	{
+        -:  104:	sprintf(line," tgroup %d  %d atom not defined cannot define tgroup ",which,b3);
+    #####:  105:	aaerror( line); 
+call    0 never executed
+    #####:  106:	return 1;}
+    #####:  107:	tgp->base = base *3.1415926589793 /180.;
+    #####:  108:	for( k=0; k< MAXTGROUP; k++)
+branch  0 never executed
+branch  1 never executed
+    #####:  109:		tgp->group[k] = NULL;
+    #####:  110:	if( ntry > MAXTGSTEP) ntry = MAXTGSTEP;
+branch  0 never executed
+branch  1 never executed
+    #####:  111:	tgp->ntry = ntry;
+    #####:  112:	get_bond( tgp->b2, bonded,20,&j);
+call    0 never executed
+    #####:  113:	for( k=0; k< j; k++)
+branch  0 never executed
+branch  1 never executed
+        -:  114:	{
+    #####:  115:	if( bonded[k] != tgp->context
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+    #####:  116:	   && bonded[k] != tgp->b3 
+    #####:  117:	   && bonded[k] != tgp->b1 ) break;
+        -:  118:	}
+    #####:  119:	newest[0] = tgp->b3;
+    #####:  120:	tgp->group[0] = tgp->b3;
+    #####:  121:	tgp->ingroup = 1; 
+    #####:  122:	in_newest = 1;
+    #####:  123:	if( k != j ){
+branch  0 never executed
+branch  1 never executed
+    #####:  124:	newest[1] = bonded[k];
+    #####:  125:	tgp->group[1] = bonded[k];
+    #####:  126:	tgp->ingroup = 2;
+    #####:  127:	in_newest = 2;
+    #####:  128:	for( i = 0; i < j; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  129:	{
+    #####:  130:		l = 1;
+    #####:  131:		for( k=0; k< in_newest; k++)
+branch  0 never executed
+branch  1 never executed
+    #####:  132:		{ if(newest[k] == bonded[i]) { l = 0; break;} }
+branch  0 never executed
+branch  1 never executed
+    #####:  133:		if( bonded[i] == tgp->context) l = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  134:		if( bonded[i] == tgp->b1) l = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  135:		if( bonded[i] == tgp->b2) l = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  136:		if( bonded[i] == tgp->b3) l = 0; 
+branch  0 never executed
+branch  1 never executed
+        -:  137:
+    #####:  138:		if( l == 1) {	
+branch  0 never executed
+branch  1 never executed
+    #####:  139:		tgp->group[tgp->ingroup++ ] = bonded[i];
+    #####:  140:		newest[in_newest++] = bonded[i];
+        -:  141:			}
+        -:  142:	} 
+        -:  143:	}
+    #####:  144:	while( in_newest > 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  145:	{
+    #####:  146:	in_newer = 0;
+    #####:  147:	for( l=0; l < in_newest; l++)
+branch  0 never executed
+branch  1 never executed
+        -:  148:	{
+    #####:  149:	get_bond( newest[l],bonded,20,&j);
+call    0 never executed
+    #####:  150:	for( i =0; i< j; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  151:	{
+    #####:  152:		ll = 1;
+    #####:  153:		for( k=0; k< tgp->ingroup ; k++)
+branch  0 never executed
+branch  1 never executed
+    #####:  154:		{ if( tgp->group[k] == bonded[i])
+branch  0 never executed
+branch  1 never executed
+    #####:  155:			{ ll = 0; break; }
+        -:  156:		}
+    #####:  157:		if( bonded[i] == tgp->context) ll = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  158:		if( bonded[i] == tgp->b1) ll = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  159:		if( bonded[i] == tgp->b2) ll = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  160:		if( bonded[i] == tgp->b3) ll = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  161:		if( ll == 1 )
+branch  0 never executed
+branch  1 never executed
+        -:  162:		{ 
+    #####:  163:		tgp->group[ tgp->ingroup++ ] = bonded[i];
+    #####:  164:		newer[in_newer++] = bonded[i];
+    #####:  165:		if( tgp->ingroup > MAXTGROUP )
+branch  0 never executed
+branch  1 never executed
+    #####:  166:		{aaerror(" too many atoms in a tgroup - must exit\n"); exit(0);}
+call    0 never executed
+call    1 never executed
+        -:  167:		}	
+        -:  168:	} /* end of loop i */
+        -:  169:	}/* end of loop l */
+    #####:  170:	for( i= 0; i< in_newer; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  171:	{ newest[i] = newer[i]; }
+        -:  172:
+    #####:  173:	in_newest = in_newer;
+        -:  174:	}
+    #####:  175:	if( tgp->ingroup > MAXTGROUP )
+branch  0 never executed
+branch  1 never executed
+    #####:  176:		{aaerror(" too many atoms in a tgroup - must exit\n"); exit(0);}
+call    0 never executed
+call    1 never executed
+        -:  177:/*
+        -:  178:	for( i = 0; i < tgp->ingroup; i++)
+        -:  179:	printf(" atom %d in group %d\n",tgp->group[ i ]->serial,which); */
+    #####:  180:	return 1;
+        -:  181:}/* end of routine tgroup */
+        -:  182:
+        -:  183:/* tsearch()
+        -:  184:*  this function performs the search over a bunch of torsion groups
+        -:  185:*
+        -:  186:*  tsearch ( n1 n2 n3 ...n8 )
+        -:  187:* 
+        -:  188:*  recurses n8 ...n3 n2 n1  from the last (deepest) non-zero tgroup 
+        -:  189:*
+        -:  190:*
+        -:  191:* makes use of various registers 
+        -:  192:*  best is returned in xyz registers
+        -:  193:*/
+function _Z7tsearchiiiiiiii called 0 returned 0% blocks executed 0%
+    #####:  194:int tsearch(int t1, int t2, int t3, int t4, int t5, int t6, int t7, int t8)
+        -:  195:{
+        -:  196:
+        -:  197:	TGROUP  *grouplist[8],*match_tgroup(int);
+        -:  198:	int ngroup,i,j;
+        -:  199:	int bestlist[8];
+        -:  200:	float V;
+        -:  201:	void tg_do_search(float*, int, int, int [], TGROUP* []);
+        -:  202:	void tg_gen_con(TGROUP *[],int[], int), tg_init(TGROUP*[], int*,int),tg_apply(TGROUP*, int);
+        -:  203:
+    #####:  204:	ngroup = 8;
+    #####:  205:	for( i=0; i< ngroup ; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  206:		grouplist[i] = NULL;
+        -:  207:
+    #####:  208:	if( t8 <= 0 ) ngroup = 7;
+branch  0 never executed
+branch  1 never executed
+    #####:  209:	if( t7 <= 0 ) ngroup = 6;
+branch  0 never executed
+branch  1 never executed
+    #####:  210:	if( t6 <= 0 ) ngroup = 5;
+branch  0 never executed
+branch  1 never executed
+    #####:  211:	if( t5 <= 0 ) ngroup = 4;
+branch  0 never executed
+branch  1 never executed
+    #####:  212:	if( t4 <= 0 ) ngroup = 3;
+branch  0 never executed
+branch  1 never executed
+    #####:  213:	if( t3 <= 0 ) ngroup = 2;
+branch  0 never executed
+branch  1 never executed
+    #####:  214:	if( t2 <= 0 ) ngroup = 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  215:	if( t1 <= 0 ) ngroup = 0;
+branch  0 never executed
+branch  1 never executed
+    #####:  216:	if( ngroup == 0 ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  217:	grouplist[7] = match_tgroup( t8 );
+call    0 never executed
+    #####:  218:	grouplist[6] = match_tgroup( t7 );
+call    0 never executed
+    #####:  219:	grouplist[5] = match_tgroup( t6 );
+call    0 never executed
+    #####:  220:	grouplist[4] = match_tgroup( t5 );
+call    0 never executed
+    #####:  221:	grouplist[3] = match_tgroup( t4 );
+call    0 never executed
+    #####:  222:	grouplist[2] = match_tgroup( t3 );
+call    0 never executed
+    #####:  223:	grouplist[1] = match_tgroup( t2 );
+call    0 never executed
+    #####:  224:	grouplist[0] = match_tgroup( t1 );
+call    0 never executed
+        -:  225:/* check active atoms
+        -:  226:* if an  movable atom is inactive make the tgroup NULL 
+        -:  227:* movable atoms include >bp4 and everyone in the list 
+        -:  228:*/
+    #####:  229:	for( i=0; i< ngroup; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  230:	{
+    #####:  231:	if( grouplist[i] != NULL)
+branch  0 never executed
+branch  1 never executed
+    #####:  232:	{ for( j=0; j< grouplist[i]->ingroup; j++)
+branch  0 never executed
+branch  1 never executed
+    #####:  233:	  if( !(grouplist[i]->group[j]->active) ) 
+branch  0 never executed
+branch  1 never executed
+    #####:  234:		{grouplist[i] = NULL; break;}
+    #####:  235:	  if( grouplist[i] != NULL )
+branch  0 never executed
+branch  1 never executed
+    #####:  236:		if(!(grouplist[i]->b3->active) ) 
+branch  0 never executed
+branch  1 never executed
+    #####:  237:		{grouplist[i] = NULL; }
+        -:  238:	}
+        -:  239:	}
+        -:  240:/* now check for NULL tgroups */
+    #####:  241:	for( i = 0; i< ngroup; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  242:	{
+    #####:  243:	if( grouplist[i] == NULL)
+branch  0 never executed
+branch  1 never executed
+        -:  244:	{
+    #####:  245:		for( j=i; j< ngroup-1; j++)
+branch  0 never executed
+branch  1 never executed
+    #####:  246:		{ grouplist[j] = grouplist[j+1]; }
+    #####:  247:		ngroup -= 1;
+        -:  248:	}
+        -:  249:	}
+        -:  250:
+        -:  251:
+        -:  252:/* set all the torsions to the ideal values in x,y,z */
+    #####:  253:	tg_init( grouplist,&ngroup,0 ); 
+call    0 never executed
+        -:  254:/* do the search  (recursive) */
+    #####:  255:	tg_do_search(&V, 0,ngroup, bestlist, grouplist);
+call    0 never executed
+        -:  256:/*
+        -:  257:	for( i=0; i< ngroup; i++)
+        -:  258:	printf(" group %d best %d\n",i,bestlist[i]);
+        -:  259:*/
+        -:  260:/* fixup the results */
+        -:  261:/*	tg_init( grouplist,&ngroup ); */
+    #####:  262:	tg_gen_con( grouplist,bestlist,ngroup );
+call    0 never executed
+        -:  263:
+    #####:  264:} /* end of tsearch */
+        -:  265:
+        -:  266:/*	tg_gen_con( grouplist,bestlist,ngroup );
+        -:  267:*
+        -:  268:*  given the list of the best offsets
+        -:  269:*  generate the best coordinates and
+        -:  270:* return them to  xyz from dxdydz
+        -:  271:*/
+function _Z10tg_gen_conPP6TGROUPPii called 0 returned 0% blocks executed 0%
+    #####:  272:void tg_gen_con(TGROUP *gl[], int bl[], int ngl)
+        -:  273:{
+        -:  274:ATOM *a1;
+        -:  275:int i,j;
+        -:  276:void tg_apply(TGROUP*, int);
+    #####:  277:for( i=0 ; i < ngl ; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  278:{
+    #####:  279:	j = ngl -i -1;
+    #####:  280:	tg_apply( gl[j],bl[j]) ;
+call    0 never executed
+        -:  281:}
+    #####:  282:	for( i=ngl-1; i> -1 ; i -- )
+branch  0 never executed
+branch  1 never executed
+        -:  283:	{
+    #####:  284:	for( j=0; j< gl[i]->ingroup ; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  285:	{
+    #####:  286:	a1 = gl[i]->group[j];
+    #####:  287:	a1->x = a1->dx;
+    #####:  288:	a1->y = a1->dy;
+    #####:  289:	a1->z = a1->dz;
+        -:  290:	}
+        -:  291:	}
+    #####:  292:}/* end of tg_gen_con */	
+        -:  293:
+        -:  294:/* tg_init( gl,ngl )
+        -:  295:* go through all of the tgroups specified
+        -:  296:*  find the torsion value and then rotate so
+        -:  297:* that the torsion is  at the base (gl[i]->base)
+        -:  298:* value. this prepares the tgroup set for
+        -:  299:* a recursive search 
+        -:  300:*/
+function _Z7tg_initPP6TGROUPPii called 0 returned 0% blocks executed 0%
+    #####:  301:void tg_init(TGROUP *gl[], int *ng, int deep)
+        -:  302:{
+        -:  303:ATOM *a1,*a2,*a3,*a4;
+        -:  304:float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+        -:  305:float cx1,cy1,cz1,cx2,cy2,cz2;
+        -:  306:float dp,r;
+        -:  307:int i ,j;
+        -:  308:int ngl;
+        -:  309:void tg_d_apply(TGROUP *,float);
+        -:  310:ATOM *a_next(int);
+        -:  311:int  a_number();
+    #####:  312:	if( deep == 0 )
+branch  0 never executed
+branch  1 never executed
+        -:  313:	{
+    #####:  314:	j = a_number();
+call    0 never executed
+    #####:  315:	for( i=0; i< j; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  316:	{ 
+    #####:  317:	a1 = a_next(i);
+call    0 never executed
+    #####:  318:	a1->dx = a1->x;
+    #####:  319:	a1->dy = a1->y;
+    #####:  320:	a1->dz = a1->z;
+        -:  321:	}
+        -:  322:	}
+    #####:  323:	ngl = *ng;
+    #####:  324:	for( i=ngl-1; i> -1 ; i -- )
+branch  0 never executed
+branch  1 never executed
+        -:  325:	{
+    #####:  326:	if( gl[i] == NULL) {if( i == 0) {*ng = 0; return;}
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  327:			 *ng = i; tg_init( gl,ng,deep+1); return ;}
+call    0 never executed
+    #####:  328:	for( j=0; j< gl[i]->ingroup ; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  329:	{
+    #####:  330:	a1 = gl[i]->group[j];
+    #####:  331:	if( a1 == NULL) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  332:	a1->dx = a1->x;
+    #####:  333:	a1->dy = a1->y;
+    #####:  334:	a1->dz = a1->z;
+        -:  335:	}
+    #####:  336:	a1 = gl[i]->context;
+    #####:  337:	a2 = gl[i]->b1;
+    #####:  338:	a3 = gl[i]->b2;
+    #####:  339:	a4 = gl[i]->b3;
+        -:  340:
+    #####:  341:	a1->dx = a1->x;
+    #####:  342:	a1->dy = a1->y;
+    #####:  343:	a1->dz = a1->z;
+    #####:  344:	a2->dx = a2->x;
+    #####:  345:	a2->dy = a2->y;
+    #####:  346:	a2->dz = a2->z;
+    #####:  347:	a3->dx = a3->x;
+    #####:  348:	a3->dy = a3->y;
+    #####:  349:	a3->dz = a3->z;
+    #####:  350:	a4->dx = a4->x;
+    #####:  351:	a4->dy = a4->y;
+    #####:  352:	a4->dz = a4->z;
+        -:  353:
+    #####:  354:        x1 = (a1->x -a2->x );
+    #####:  355:        y1 = (a1->y -a2->y );
+    #####:  356:        z1 = (a1->z -a2->z );
+    #####:  357:        x2 = (a3->x -a2->x );
+    #####:  358:        y2 = (a3->y -a2->y );
+    #####:  359:        z2 = (a3->z -a2->z );
+    #####:  360:        x3 = (a4->x -a3->x );
+    #####:  361:        y3 = (a4->y -a3->y );
+    #####:  362:        z3 = (a4->z -a3->z );
+        -:  363:/* 1 cross 2 */
+    #####:  364:        cx1 = y1*z2 - y2*z1;
+    #####:  365:        cy1 = -x1*z2 + x2*z1;
+    #####:  366:        cz1 = x1*y2 - x2*y1;
+    #####:  367:        r = cx1*cx1 + cy1*cy1 + cz1*cz1;
+    #####:  368:        if( r < 1.e-4) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  369:        r = sqrt(r);
+    #####:  370:        cx1 = cx1/r;
+    #####:  371:        cy1 = cy1/r;
+    #####:  372:        cz1 = cz1/r;
+        -:  373:/* 3 cross 2 */
+    #####:  374:        cx2 = y3*z2 - y2*z3;
+    #####:  375:        cy2 = -x3*z2 + x2*z3;
+    #####:  376:        cz2 = x3*y2 - x2*y3;
+    #####:  377:        r = cx2*cx2 + cy2*cy2 + cz2*cz2;
+    #####:  378:        if( r < 1.e-4) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  379:        r = sqrt(r);
+    #####:  380:        cx2 = cx2/r;
+    #####:  381:        cy2 = cy2/r;
+    #####:  382:        cz2 = cz2/r;
+        -:  383:/* if here everything is well determined */
+    #####:  384:        dp = cx1*cx2 + cy1*cy2 + cz1*cz2; /* cos( abs(theta)) */
+    #####:  385:        if( dp > 1.) dp = 1.; if( dp < -1.) dp = -1.;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  386:
+    #####:  387:        dp = acos(dp);
+        -:  388:/* determine the sign by triple product */
+    #####:  389:        r = cx1*x3 + cy1*y3 + cz1*z3;
+    #####:  390:        if( r > 0 ) dp =  -dp ;
+branch  0 never executed
+branch  1 never executed
+    #####:  391:	r =  gl[i]->base - dp ;
+    #####:  392:	tg_d_apply( gl[i], r );
+call    0 never executed
+    #####:  393:	for( j=0; j< gl[i]->ingroup ; j++)
+branch  0 never executed
+branch  1 never executed
+        -:  394:	{
+    #####:  395:	a1 = gl[i]->group[j];
+    #####:  396:	a1->x = a1->dx;
+    #####:  397:	a1->y = a1->dy;
+    #####:  398:	a1->z = a1->dz;
+        -:  399:	}
+    #####:  400:SKIP:   i = i;
+        -:  401:	} /* end of for( i */
+        -:  402:
+        -:  403:	
+        -:  404:} /* end of tg_init */
+        -:  405:
+        -:  406:/* tg_do_search,
+        -:  407:*
+        -:  408:* recursively, (depth first) evaluate the tgroup tree in
+        -:  409:* grouplist 
+        -:  410:*/
+function _Z12tg_do_searchPfiiPiPP6TGROUP called 0 returned 0% blocks executed 0%
+    #####:  411:void tg_do_search(float *Vp, int igl, int ngl, int bl[], TGROUP *gl[])
+        -:  412:{
+        -:  413:
+        -:  414:	float vl[MAXTGSTEP],vb;
+        -:  415:	int i,ibest;
+        -:  416:	int bestlist[MAXTGSTEP][8];
+        -:  417:	int lbl[8];
+        -:  418:	void tg_apply(TGROUP*, int);
+        -:  419:	int tg_nonbon(float*, TGROUP*);
+        -:  420:
+        -:  421:/* safety first - these  should never happen */
+    #####:  422:if( igl == 8 ) return;
+branch  0 never executed
+branch  1 never executed
+    #####:  423:if( gl[igl] == NULL ) return; 
+branch  0 never executed
+branch  1 never executed
+    #####:  424:if( igl > ngl) return;
+branch  0 never executed
+branch  1 never executed
+        -:  425:	
+    #####:  426:	for( i=0; i < gl[igl]->ntry ; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  427:	{
+    #####:  428:	tg_do_search(&vl[i],igl+1,ngl,lbl, gl);
+call    0 never executed
+        -:  429:/* evaluate my energy */
+        -:  430:/* int tg_nonbon( V,tgp ) */
+    #####:  431:	tg_nonbon( &vl[i], gl[igl]); 
+call    0 never executed
+    #####:  432:	for( ibest=0; ibest<8; ibest++)
+branch  0 never executed
+branch  1 never executed
+    #####:  433:	bestlist[i][ibest] = lbl[ibest];
+        -:  434:/* generate the next step */
+    #####:  435:	if( gl[igl]->ntry > 1)
+branch  0 never executed
+branch  1 never executed
+        -:  436:	{
+    #####:  437:	tg_apply( gl[igl],1);
+call    0 never executed
+        -:  438:	}/* end of if worth generating next try */
+        -:  439:	} /* end of for each step (i) loop */
+    #####:  440:	vb = 10e20;
+    #####:  441:	ibest = 0;
+    #####:  442:	for( i=0; i< gl[igl]->ntry; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  443:	{ 
+        -:  444:/*	printf(" tg_do_search: %d %f\n",i,vl[i]); */
+    #####:  445:	if( vl[i] < vb ) { vb = vl[i]; ibest = i ;}
+branch  0 never executed
+branch  1 never executed
+        -:  446:	}
+    #####:  447:	bestlist[ibest][igl] = ibest;
+    #####:  448:	for( i=0; i<8; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  449:	{ bl[i] = bestlist[ibest][i]; }
+    #####:  450:	*Vp = vl[ibest];
+        -:  451:
+        -:  452:}/* end of tg_do_search */
+        -:  453:
+        -:  454:/* tg_apply 
+        -:  455:*  apply the torsion to the torsion group
+        -:  456:* tg_apply( TGROUP *tgp, int num )
+        -:  457:*  pointer and how many steps to use
+        -:  458:*/
+function _Z8tg_applyP6TGROUPi called 0 returned 0% blocks executed 0%
+    #####:  459:void tg_apply(TGROUP *tgp, int num)
+        -:  460:{
+        -:  461:
+        -:  462:float nx,ny,nz;
+        -:  463:float phi,cphi,sphi;
+        -:  464:float rx,ry,rz, nnrx,nnry,nnrz, rnx,rny,rnz;
+        -:  465:ATOM *b1,*b2;
+        -:  466:int i;
+        -:  467:
+    #####:  468:	b1 = tgp->b1;
+    #####:  469:	b2 = tgp->b2;
+    #####:  470:	nx = b2->dx - b1->dx;
+    #####:  471:	ny = b2->dy - b1->dy;
+    #####:  472:	nz = b2->dz - b1->dz;
+    #####:  473:	rx = sqrt(nx*nx + ny*ny + nz*nz);
+    #####:  474:	if( rx < 1.e-6) 
+branch  0 never executed
+branch  1 never executed
+    #####:  475:	{aaerror(" bad torsion radius in tg_apply \n"); return ;}
+call    0 never executed
+    #####:  476:	nx = nx/rx;
+    #####:  477:	ny = ny/rx;
+    #####:  478:	nz = nz/rx;
+    #####:  479:	phi = 2.*3.141592653589793 /(float)tgp->ntry * (float)num;
+    #####:  480:	cphi = cos(phi); sphi = sin(phi);
+    #####:  481:	for( i=0; i< tgp->ingroup; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  482:	{
+    #####:  483:		rx = (tgp->group[i])->dx - b1->dx;
+    #####:  484:		ry = (tgp->group[i])->dy - b1->dy;
+    #####:  485:		rz = (tgp->group[i])->dz - b1->dz;
+    #####:  486:		phi = nx*rx + ny*ry + nz*rz;
+    #####:  487:		nnrx = phi*nx;
+    #####:  488:		nnry = phi*ny;
+    #####:  489:		nnrz = phi*nz;
+    #####:  490:		rnx = ny*rz - nz*ry;
+    #####:  491:		rny = -nx*rz + nz*rx;
+    #####:  492:		rnz = nx*ry - ny*rx;
+    #####:  493:		phi = (1.-cphi);
+    #####:  494:		rx = cphi*rx + phi*nnrx + sphi*rnx;
+    #####:  495:		ry = cphi*ry + phi*nnry + sphi*rny;
+    #####:  496:		rz = cphi*rz + phi*nnrz + sphi*rnz;
+    #####:  497:		(tgp->group[i])->dx = rx + b1->dx;
+    #####:  498:		(tgp->group[i])->dy = ry + b1->dy;
+    #####:  499:		(tgp->group[i])->dz = rz + b1->dz;
+        -:  500:	}
+        -:  501:}/* end of tg_apply */
+        -:  502:
+        -:  503:/* tg_d_apply 
+        -:  504:*  apply the torsion to the torsion group
+        -:  505:* tg_d_apply( TGROUP *tgp, float off )
+        -:  506:* a pointer and the amount (radians) to rotate 
+        -:  507:*/
+function _Z10tg_d_applyP6TGROUPf called 0 returned 0% blocks executed 0%
+    #####:  508:void tg_d_apply(TGROUP *tgp, float off)
+        -:  509:{
+        -:  510:
+        -:  511:float nx,ny,nz;
+        -:  512:float phi,cphi,sphi;
+        -:  513:float rx,ry,rz, nnrx,nnry,nnrz, rnx,rny,rnz;
+        -:  514:ATOM *b1,*b2;
+        -:  515:int i;
+        -:  516:
+    #####:  517:	b1 = tgp->b1;
+    #####:  518:	b2 = tgp->b2;
+    #####:  519:	nx = b2->dx - b1->dx;
+    #####:  520:	ny = b2->dy - b1->dy;
+    #####:  521:	nz = b2->dz - b1->dz;
+    #####:  522:	rx = sqrt(nx*nx + ny*ny + nz*nz);
+    #####:  523:	if( rx < 1.e-6) 
+branch  0 never executed
+branch  1 never executed
+    #####:  524:	{aaerror(" bad torsion radius in tg_apply \n"); return ;}
+call    0 never executed
+    #####:  525:	nx = nx/rx;
+    #####:  526:	ny = ny/rx;
+    #####:  527:	nz = nz/rx;
+        -:  528:/*	phi = 2.*3.141592653589793 /tgp->ntry * num;
+        -:  529:*/
+    #####:  530:	phi = off;
+    #####:  531:	cphi = cos(phi); sphi = sin(phi);
+    #####:  532:	for( i=0; i< tgp->ingroup; i++)
+branch  0 never executed
+branch  1 never executed
+        -:  533:	{
+    #####:  534:		rx = (tgp->group[i])->dx - b1->dx;
+    #####:  535:		ry = (tgp->group[i])->dy - b1->dy;
+    #####:  536:		rz = (tgp->group[i])->dz - b1->dz;
+    #####:  537:		phi = nx*rx + ny*ry + nz*rz;
+    #####:  538:		nnrx = phi*nx;
+    #####:  539:		nnry = phi*ny;
+    #####:  540:		nnrz = phi*nz;
+    #####:  541:		rnx = ny*rz - nz*ry;
+    #####:  542:		rny = -nx*rz + nz*rx;
+    #####:  543:		rnz = nx*ry - ny*rx;
+    #####:  544:		phi = (1.-cphi);
+    #####:  545:		rx = cphi*rx + phi*nnrx + sphi*rnx;
+    #####:  546:		ry = cphi*ry + phi*nnry + sphi*rny;
+    #####:  547:		rz = cphi*rz + phi*nnrz + sphi*rnz;
+    #####:  548:		(tgp->group[i])->dx = rx + b1->dx;
+    #####:  549:		(tgp->group[i])->dy = ry + b1->dy;
+    #####:  550:		(tgp->group[i])->dz = rz + b1->dz;
+        -:  551:	}
+        -:  552:}/* end of tg_d_apply */
+        -:  553:
+        -:  554:/* dump_tgroup
+        -:  555:*  outputs the tgroup stuff to the supplied output FILE pointer
+        -:  556:*/
+        -:  557:/* SPEC use modern style declaration, to match proto jh/9/22/99 */
+function _Z11dump_tgroupP8_IO_FILE called 0 returned 0% blocks executed 0%
+    #####:  558:void dump_tgroup( FILE *where )
+        -:  559:{
+        -:  560:TGROUP *tgp;
+        -:  561:
+    #####:  562:	tgp = tg_first;
+    #####:  563:	while (tgp != NULL)
+branch  0 never executed
+branch  1 never executed
+        -:  564:	{
+        -:  565:	fprintf( where," tgroup %d %d %d %d %d %f %d ;\n",
+        -:  566:	tgp->which, tgp->context->serial,
+        -:  567:	tgp->b1->serial,
+        -:  568:	tgp->b2->serial,
+        -:  569:	tgp->b3->serial,
+    #####:  570:	tgp->base*180./3.141592653589793, tgp->ntry);
+    #####:  571:	tgp = (TGROUP*) tgp->next;
+        -:  572:	}
+    #####:  573:}
+        -:  574:
+        -:  575:/* match_tgroup finds the tgroup which matches a group id 
+        -:  576:*  returns its address  or NULL 
+        -:  577:*/
+function _Z12match_tgroupi called 0 returned 0% blocks executed 0%
+    #####:  578:TGROUP *match_tgroup(int i)
+        -:  579:{
+        -:  580:	TGROUP *tgp ;
+    #####:  581:	tgp = tg_first;
+    #####:  582:	while( tgp != NULL )
+branch  0 never executed
+branch  1 never executed
+        -:  583:	{
+    #####:  584:	if( tgp ->which == i ) 
+branch  0 never executed
+branch  1 never executed
+        -:  585:	{
+    #####:  586:		if( tgp->context == NULL) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  587:		if( tgp->b1 == NULL) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  588:		if( tgp->b2 == NULL) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  589:		if( tgp->b3 == NULL) return NULL;
+branch  0 never executed
+branch  1 never executed
+    #####:  590:		return tgp;
+        -:  591:	}
+    #####:  592:	tgp = (TGROUP*) tgp->next;
+        -:  593:	}
+    #####:  594:	return NULL;
+        -:  595:}
+        -:  596:
+        -:  597:
+        -:  598:
+        -:  599:/* tg_nonbon()
+        -:  600:* this function sums up the potentials
+        -:  601:* for the atoms defined in the nonbon data structure.
+        -:  602:*/
+        -:  603:/* standard returns 0 if error (any) 1 if ok
+        -:  604:* V is the potential */
+function _Z9tg_nonbonPfP6TGROUP called 0 returned 0% blocks executed 0%
+    #####:  605:int tg_nonbon(float *V, TGROUP *tgp)
+        -:  606:{
+        -:  607:	float r,r0,xt,yt,zt;
+        -:  608:	float lcutoff,cutoff,get_f_variable(char*);
+        -:  609:	int inbond,inangle,i,ii;
+        -:  610:	ATOM *a1,*a2;
+        -:  611:	ATOM *a_next(int); /* returns first ATOM when called with -1 */
+        -:  612:	float dielectric,ve,va,vh;
+        -:  613:	ATOM *a_m_serial();
+        -:  614:
+        -:  615:/* nonbonded potentials 
+        -:  616:* do a double loop starting from the first atom to the 
+        -:  617:* last 
+        -:  618:* then from the second to the last 
+        -:  619:* etc
+        -:  620:*
+        -:  621:* also check to avoid bonded and 1-3 bonded atoms
+        -:  622:*/
+    #####:  623:	dielectric = get_f_variable("dielec");
+call    0 never executed
+    #####:  624:	if( dielectric < 1.) dielectric = 1.;
+branch  0 never executed
+branch  1 never executed
+    #####:  625:	dielectric = 332.17752/dielectric;
+    #####:  626:	cutoff = get_f_variable("cutoff");
+call    0 never executed
+    #####:  627:	if( cutoff < 1.) cutoff = 1.e10;
+branch  0 never executed
+branch  1 never executed
+    #####:  628:	lcutoff = -cutoff;
+    #####:  629:	*V = 0.;
+    #####:  630:	if( tgp == NULL ) return 1;
+branch  0 never executed
+branch  1 never executed
+    #####:  631:	for( ii=0; ii<= tgp->ingroup; ii++)
+branch  0 never executed
+branch  1 never executed
+        -:  632:	{
+    #####:  633:	a1 = tgp->group[ii];
+    #####:  634:	if( a1 == NULL ) goto NOTANATOM;
+branch  0 never executed
+branch  1 never executed
+    #####:  635:	ve = 0.; va = 0.; vh = 0.;
+    #####:  636:	a2 = a_next(-1);
+call    0 never executed
+        -:  637:/*	
+        -:  638:*	for(i = 0; i< a1->dontuse; i++)
+        -:  639:*	printf("%d ",a1->excluded[i]->serial);
+        -:  640:*	printf("\n");
+        -:  641:*/
+        -:  642:/*
+        -:  643:	while(  (a2->next != a2) && (a2->next != NULL))
+        -:  644:	*/
+    #####:  645:	while(  (a2 != NULL) && (a2->next != NULL) && a2->next != a2)
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+branch  4 never executed
+branch  5 never executed
+branch  6 never executed
+branch  7 never executed
+        -:  646:	{
+        -:  647:/* goto SKIP is used because this is one case where it makes sense */
+        -:  648:/*	if( a2 == a1) break;  */
+    #####:  649:	if( a2 == a1) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+    #####:  650:	for(i = 0; i< a1->dontuse; i++)
+branch  0 never executed
+branch  1 never executed
+    #####:  651:		if( a2 == a1->excluded[i]) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+        -:  652:/* non - bonded are only used when the atoms arent bonded */
+        -:  653:
+    #####:  654:	xt = (a1->dx - a2->dx);
+    #####:  655:	if( (xt > cutoff) || (xt < lcutoff) ) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  656:	yt =  (a1->dy - a2->dy);
+    #####:  657:	if( (yt > cutoff) || (yt < lcutoff) ) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  658:	zt =  (a1->dz - a2->dz);
+    #####:  659:	if( (zt > cutoff) || (zt < lcutoff) ) goto SKIP;
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  660:
+    #####:  661:	r = xt*xt+yt*yt+zt*zt;
+    #####:  662:	if( r < 1.) r = 1.;  
+branch  0 never executed
+branch  1 never executed
+        -:  663:
+    #####:  664:	r0 = sqrt(r); r = r*r*r ;
+        -:  665:/* debugging
+        -:  666:*	printf(" %d %d %f %f %f \n", a1->serial,a2->serial,a1->q,a2->q,
+        -:  667:*	332.17752*a1->q*a2->q/r0);
+        -:  668:*/
+    #####:  669:	ve += dielectric*a1->q*a2->q/r0; 
+    #####:  670:	va -= a1->a*a2->a/r;
+    #####:  671:	vh += a1->b*a2->b/r/r; 
+        -:  672:
+        -:  673:SKIP:
+        -:  674:/*	if( a2->next == a1) break; */
+    #####:  675:	if( a2->next == a2) break;  
+branch  0 never executed
+branch  1 never executed
+    #####:  676:	a2 = (ATOM*) a2->next;
+        -:  677:	}
+    #####:  678:	*V += ve + va + vh;
+        -:  679:NOTANATOM:
+    #####:  680:	i = i;
+        -:  681:	}
+    #####:  682:	return 1;
+        -:  683:
+        -:  684:}
+        -:  685:

@@ -1,0 +1,1211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 177.mesa/src/texstate.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">177.mesa/src</a> - texstate.c<span style="font-size: 80%;"> (source / <a href="texstate.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">44</td>
+            <td class="headerCovTableEntry">541</td>
+            <td class="headerCovTableEntryLo">8.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-10</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntryLo">23.1 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">20</td>
+            <td class="headerCovTableEntry">331</td>
+            <td class="headerCovTableEntryLo">6.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : /* $Id: texstate.c,v 1.8 1997/10/13 23:56:01 brianp Exp $ */</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : /*
+<span class="lineNum">       4 </span>                :            :  * Mesa 3-D graphics library
+<span class="lineNum">       5 </span>                :            :  * Version:  2.5
+<span class="lineNum">       6 </span>                :            :  * Copyright (C) 1995-1997  Brian Paul
+<span class="lineNum">       7 </span>                :            :  *
+<span class="lineNum">       8 </span>                :            :  * This library is free software; you can redistribute it and/or
+<span class="lineNum">       9 </span>                :            :  * modify it under the terms of the GNU Library General Public
+<span class="lineNum">      10 </span>                :            :  * License as published by the Free Software Foundation; either
+<span class="lineNum">      11 </span>                :            :  * version 2 of the License, or (at your option) any later version.
+<span class="lineNum">      12 </span>                :            :  *
+<span class="lineNum">      13 </span>                :            :  * This library is distributed in the hope that it will be useful,
+<span class="lineNum">      14 </span>                :            :  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      15 </span>                :            :  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      16 </span>                :            :  * Library General Public License for more details.
+<span class="lineNum">      17 </span>                :            :  *
+<span class="lineNum">      18 </span>                :            :  * You should have received a copy of the GNU Library General Public
+<span class="lineNum">      19 </span>                :            :  * License along with this library; if not, write to the Free
+<span class="lineNum">      20 </span>                :            :  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+<span class="lineNum">      21 </span>                :            :  */
+<span class="lineNum">      22 </span>                :            : 
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :            : /*
+<span class="lineNum">      25 </span>                :            :  * $Log: texstate.c,v $
+<span class="lineNum">      26 </span>                :            :  * Revision 1.8  1997/10/13 23:56:01  brianp
+<span class="lineNum">      27 </span>                :            :  * replaced UpdateTexture() call with TexParameter()
+<span class="lineNum">      28 </span>                :            :  *
+<span class="lineNum">      29 </span>                :            :  * Revision 1.7  1997/09/29 23:28:14  brianp
+<span class="lineNum">      30 </span>                :            :  * updated for new device driver texture functions
+<span class="lineNum">      31 </span>                :            :  *
+<span class="lineNum">      32 </span>                :            :  * Revision 1.6  1997/09/27 00:14:39  brianp
+<span class="lineNum">      33 </span>                :            :  * added GL_EXT_paletted_texture extension
+<span class="lineNum">      34 </span>                :            :  *
+<span class="lineNum">      35 </span>                :            :  * Revision 1.5  1997/07/24 01:25:34  brianp
+<span class="lineNum">      36 </span>                :            :  * changed precompiled header symbol from PCH to PC_HEADER
+<span class="lineNum">      37 </span>                :            :  *
+<span class="lineNum">      38 </span>                :            :  * Revision 1.4  1997/05/28 03:26:49  brianp
+<span class="lineNum">      39 </span>                :            :  * added precompiled header (PCH) support
+<span class="lineNum">      40 </span>                :            :  *
+<span class="lineNum">      41 </span>                :            :  * Revision 1.3  1997/05/03 00:53:28  brianp
+<span class="lineNum">      42 </span>                :            :  * misc changes related to new texture object sampling function pointer
+<span class="lineNum">      43 </span>                :            :  *
+<span class="lineNum">      44 </span>                :            :  * Revision 1.2  1997/04/28 23:34:39  brianp
+<span class="lineNum">      45 </span>                :            :  * simplified gl_update_texture_state()
+<span class="lineNum">      46 </span>                :            :  *
+<span class="lineNum">      47 </span>                :            :  * Revision 1.1  1997/04/14 01:59:54  brianp
+<span class="lineNum">      48 </span>                :            :  * Initial revision
+<span class="lineNum">      49 </span>                :            :  *
+<span class="lineNum">      50 </span>                :            :  */
+<span class="lineNum">      51 </span>                :            : 
+<span class="lineNum">      52 </span>                :            : 
+<span class="lineNum">      53 </span>                :            : #ifdef PC_HEADER
+<span class="lineNum">      54 </span>                :            : #include &quot;all.h&quot;
+<span class="lineNum">      55 </span>                :            : #else
+<span class="lineNum">      56 </span>                :            : #include &quot;context.h&quot;
+<span class="lineNum">      57 </span>                :            : #include &quot;macros.h&quot;
+<span class="lineNum">      58 </span>                :            : #include &quot;matrix.h&quot;
+<span class="lineNum">      59 </span>                :            : #include &quot;texobj.h&quot;
+<span class="lineNum">      60 </span>                :            : #include &quot;texstate.h&quot;
+<span class="lineNum">      61 </span>                :            : #include &quot;texture.h&quot;
+<span class="lineNum">      62 </span>                :            : #include &quot;types.h&quot;
+<span class="lineNum">      63 </span>                :            : #include &quot;xform.h&quot;
+<span class="lineNum">      64 </span>                :            : #endif
+<span class="lineNum">      65 </span>                :            : 
+<span class="lineNum">      66 </span>                :            : 
+<span class="lineNum">      67 </span>                :            : 
+<span class="lineNum">      68 </span>                :            : /**********************************************************************/
+<span class="lineNum">      69 </span>                :            : /*                       Texture Environment                          */
+<span class="lineNum">      70 </span>                :            : /**********************************************************************/
+<span class="lineNum">      71 </span>                :            : 
+<a name="72"><span class="lineNum">      72 </span>                :            : </a>
+<span class="lineNum">      73 </span>                :            : 
+<span class="lineNum">      74 </span>                :<span class="lineNoCov">          0 : void gl_TexEnvfv( GLcontext *ctx,</span>
+<span class="lineNum">      75 </span>                :            :                   GLenum target, GLenum pname, const GLfloat *param )
+<span class="lineNum">      76 </span>                :            : {
+<span class="lineNum">      77 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">      78 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glTexEnv&quot; );</span>
+<span class="lineNum">      79 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">      80 </span>                :            :    }
+<span class="lineNum">      81 </span>                :            : 
+<span class="lineNum">      82 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (target!=GL_TEXTURE_ENV) {</span>
+<span class="lineNum">      83 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glTexEnv(target)&quot; );</span>
+<span class="lineNum">      84 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">      85 </span>                :            :    }
+<span class="lineNum">      86 </span>                :            : 
+<span class="lineNum">      87 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (pname==GL_TEXTURE_ENV_MODE) {</span>
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 :       GLenum mode = (GLenum) (GLint) *param;</span>
+<span class="lineNum">      89 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :       switch (mode) {</span>
+<span class="lineNum">      90 </span>                :            :          case GL_MODULATE:
+<span class="lineNum">      91 </span>                :            :          case GL_BLEND:
+<span class="lineNum">      92 </span>                :            :          case GL_DECAL:
+<span class="lineNum">      93 </span>                :            :          case GL_REPLACE:
+<span class="lineNum">      94 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.EnvMode = mode;</span>
+<span class="lineNum">      95 </span>                :            :             break;
+<span class="lineNum">      96 </span>                :            :          default:
+<span class="lineNum">      97 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glTexEnv(param)&quot; );</span>
+<span class="lineNum">      98 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">      99 </span>                :            :       }
+<span class="lineNum">     100 </span>                :            :    }
+<span class="lineNum">     101 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    else if (pname==GL_TEXTURE_ENV_COLOR) {</span>
+<span class="lineNum">     102 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       ctx-&gt;Texture.EnvColor[0] = CLAMP( param[0], 0.0, 1.0 );</span>
+<span class="lineNum">     103 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       ctx-&gt;Texture.EnvColor[1] = CLAMP( param[1], 0.0, 1.0 );</span>
+<span class="lineNum">     104 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       ctx-&gt;Texture.EnvColor[2] = CLAMP( param[2], 0.0, 1.0 );</span>
+<span class="lineNum">     105 </span>[<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>][<span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :       ctx-&gt;Texture.EnvColor[3] = CLAMP( param[3], 0.0, 1.0 );</span>
+<span class="lineNum">     106 </span>                :            :    }
+<span class="lineNum">     107 </span>                :            :    else {
+<span class="lineNum">     108 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glTexEnv(pname)&quot; );</span>
+<span class="lineNum">     109 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     110 </span>                :            :    }
+<span class="lineNum">     111 </span>                :            : 
+<span class="lineNum">     112 </span>                :            :    /* Tell device driver about the new texture environment */
+<span class="lineNum">     113 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (ctx-&gt;Driver.TexEnv) {</span>
+<span class="lineNum">     114 </span>                :<span class="lineNoCov">          0 :       (*ctx-&gt;Driver.TexEnv)( ctx, pname, param );</span>
+<span class="lineNum">     115 </span>                :            :    }
+<span class="lineNum">     116 </span>                :            : }
+<span class="lineNum">     117 </span>                :            : 
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :            : 
+<a name="120"><span class="lineNum">     120 </span>                :            : </a>
+<span class="lineNum">     121 </span>                :            : 
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 : void gl_GetTexEnvfv( GLcontext *ctx,</span>
+<span class="lineNum">     123 </span>                :            :                      GLenum target, GLenum pname, GLfloat *params )
+<span class="lineNum">     124 </span>                :            : {
+<span class="lineNum">     125 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (target!=GL_TEXTURE_ENV) {</span>
+<span class="lineNum">     126 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexEnvfv(target)&quot; );</span>
+<span class="lineNum">     127 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     128 </span>                :            :    }
+<span class="lineNum">     129 </span>     [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">     130 </span>                :            :       case GL_TEXTURE_ENV_MODE:
+<span class="lineNum">     131 </span>                :<span class="lineNoCov">          0 :          *params = (GLfloat) ctx-&gt;Texture.EnvMode;</span>
+<span class="lineNum">     132 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     133 </span>                :            :       case GL_TEXTURE_ENV_COLOR:
+<span class="lineNum">     134 </span>                :<span class="lineNoCov">          0 :          COPY_4V( params, ctx-&gt;Texture.EnvColor );</span>
+<span class="lineNum">     135 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     136 </span>                :            :       default:
+<span class="lineNum">     137 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexEnvfv(pname)&quot; );</span>
+<span class="lineNum">     138 </span>                :            :    }
+<span class="lineNum">     139 </span>                :            : }
+<a name="140"><span class="lineNum">     140 </span>                :            : </a>
+<span class="lineNum">     141 </span>                :            : 
+<span class="lineNum">     142 </span>                :<span class="lineNoCov">          0 : void gl_GetTexEnviv( GLcontext *ctx,</span>
+<span class="lineNum">     143 </span>                :            :                      GLenum target, GLenum pname, GLint *params )
+<span class="lineNum">     144 </span>                :            : {
+<span class="lineNum">     145 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (target!=GL_TEXTURE_ENV) {</span>
+<span class="lineNum">     146 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexEnvfv(target)&quot; );</span>
+<span class="lineNum">     147 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     148 </span>                :            :    }
+<span class="lineNum">     149 </span>     [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (pname) {</span>
+<span class="lineNum">     150 </span>                :            :       case GL_TEXTURE_ENV_MODE:
+<span class="lineNum">     151 </span>                :<span class="lineNoCov">          0 :          *params = (GLint) ctx-&gt;Texture.EnvMode;</span>
+<span class="lineNum">     152 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     153 </span>                :            :       case GL_TEXTURE_ENV_COLOR:
+<span class="lineNum">     154 </span>                :<span class="lineNoCov">          0 :          params[0] = FLOAT_TO_INT( ctx-&gt;Texture.EnvColor[0] );</span>
+<span class="lineNum">     155 </span>                :<span class="lineNoCov">          0 :          params[1] = FLOAT_TO_INT( ctx-&gt;Texture.EnvColor[1] );</span>
+<span class="lineNum">     156 </span>                :<span class="lineNoCov">          0 :          params[2] = FLOAT_TO_INT( ctx-&gt;Texture.EnvColor[2] );</span>
+<span class="lineNum">     157 </span>                :<span class="lineNoCov">          0 :          params[3] = FLOAT_TO_INT( ctx-&gt;Texture.EnvColor[3] );</span>
+<span class="lineNum">     158 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     159 </span>                :            :       default:
+<span class="lineNum">     160 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexEnvfv(pname)&quot; );</span>
+<span class="lineNum">     161 </span>                :            :    }
+<span class="lineNum">     162 </span>                :            : }
+<span class="lineNum">     163 </span>                :            : 
+<span class="lineNum">     164 </span>                :            : 
+<span class="lineNum">     165 </span>                :            : 
+<span class="lineNum">     166 </span>                :            : 
+<span class="lineNum">     167 </span>                :            : /**********************************************************************/
+<span class="lineNum">     168 </span>                :            : /*                       Texture Parameters                           */
+<span class="lineNum">     169 </span>                :            : /**********************************************************************/
+<a name="170"><span class="lineNum">     170 </span>                :            : </a>
+<span class="lineNum">     171 </span>                :            : 
+<span class="lineNum">     172 </span>                :<span class="lineCov">          2 : void gl_TexParameterfv( GLcontext *ctx,</span>
+<span class="lineNum">     173 </span>                :            :                         GLenum target, GLenum pname, const GLfloat *params )
+<span class="lineNum">     174 </span>                :            : {
+<span class="lineNum">     175 </span>                :<span class="lineCov">          2 :    GLenum eparam = (GLenum) (GLint) params[0];</span>
+<span class="lineNum">     176 </span>                :            :    struct gl_texture_object *texObj;
+<span class="lineNum">     177 </span>                :            : 
+<span class="lineNum">     178 </span>  [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span>]:<span class="lineCov">          2 :    switch (target) {</span>
+<span class="lineNum">     179 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     180 </span>                :<span class="lineCov">          2 :          texObj = ctx-&gt;Texture.Current1D;</span>
+<span class="lineNum">     181 </span>                :<span class="lineCov">          2 :          break;</span>
+<span class="lineNum">     182 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     183 </span>                :<span class="lineNoCov">          0 :          texObj = ctx-&gt;Texture.Current2D;</span>
+<span class="lineNum">     184 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     185 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     186 </span>                :<span class="lineNoCov">          0 :          texObj = ctx-&gt;Texture.Current3D;</span>
+<span class="lineNum">     187 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     188 </span>                :            :       default:
+<span class="lineNum">     189 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glTexParameter(target)&quot; );</span>
+<span class="lineNum">     190 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     191 </span>                :            :    }
+<span class="lineNum">     192 </span>                :            : 
+<span class="lineNum">     193 </span>  [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span> :<span class="lineCov">          2 :    switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoCov" title="Branch 4 was not taken"> - </span><span class="branchNoCov" title="Branch 5 was not taken"> - </span><span class="branchNoCov" title="Branch 6 was not taken"> - </span>]
+<span class="lineNum">     194 </span>                :            :       case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     195 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          1 :          if (eparam==GL_NEAREST || eparam==GL_LINEAR</span>
+<span class="lineNum">     196 </span>                :<span class="lineCov">          1 :              || eparam==GL_NEAREST_MIPMAP_NEAREST</span>
+<span class="lineNum">     197 </span>                :<span class="lineNoCov">          0 :              || eparam==GL_LINEAR_MIPMAP_NEAREST</span>
+<span class="lineNum">     198 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :              || eparam==GL_NEAREST_MIPMAP_LINEAR</span>
+<span class="lineNum">     199 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :              || eparam==GL_LINEAR_MIPMAP_LINEAR) {</span>
+<span class="lineNum">     200 </span>                :<span class="lineCov">          1 :             texObj-&gt;MinFilter = eparam;</span>
+<span class="lineNum">     201 </span>                :<span class="lineCov">          1 :             ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     202 </span>                :            :          }
+<span class="lineNum">     203 </span>                :            :          else {
+<span class="lineNum">     204 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glTexParameter(param)&quot; );</span>
+<span class="lineNum">     205 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     206 </span>                :            :          }
+<span class="lineNum">     207 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     208 </span>                :            :       case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     209 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          if (eparam==GL_NEAREST || eparam==GL_LINEAR) {</span>
+<span class="lineNum">     210 </span>                :<span class="lineCov">          1 :             texObj-&gt;MagFilter = eparam;</span>
+<span class="lineNum">     211 </span>                :<span class="lineCov">          1 :             ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     212 </span>                :            :          }
+<span class="lineNum">     213 </span>                :            :          else {
+<span class="lineNum">     214 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glTexParameter(param)&quot; );</span>
+<span class="lineNum">     215 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     216 </span>                :            :          }
+<span class="lineNum">     217 </span>                :<span class="lineCov">          1 :          break;</span>
+<span class="lineNum">     218 </span>                :            :       case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     219 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (eparam==GL_CLAMP || eparam==GL_REPEAT) {</span>
+<span class="lineNum">     220 </span>                :<span class="lineNoCov">          0 :             texObj-&gt;WrapS = eparam;</span>
+<span class="lineNum">     221 </span>                :            :          }
+<span class="lineNum">     222 </span>                :            :          else {
+<span class="lineNum">     223 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glTexParameter(param)&quot; );</span>
+<span class="lineNum">     224 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     225 </span>                :            :          }
+<span class="lineNum">     226 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     227 </span>                :            :       case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     228 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (eparam==GL_CLAMP || eparam==GL_REPEAT) {</span>
+<span class="lineNum">     229 </span>                :<span class="lineNoCov">          0 :             texObj-&gt;WrapT = eparam;</span>
+<span class="lineNum">     230 </span>                :            :          }
+<span class="lineNum">     231 </span>                :            :          else {
+<span class="lineNum">     232 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glTexParameter(param)&quot; );</span>
+<span class="lineNum">     233 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     234 </span>                :            :          }
+<span class="lineNum">     235 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     236 </span>                :            :       case GL_TEXTURE_WRAP_R_EXT:
+<span class="lineNum">     237 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (eparam==GL_CLAMP || eparam==GL_REPEAT) {</span>
+<span class="lineNum">     238 </span>                :<span class="lineNoCov">          0 :             texObj-&gt;WrapR = eparam;</span>
+<span class="lineNum">     239 </span>                :            :          }
+<span class="lineNum">     240 </span>                :            :          else {
+<span class="lineNum">     241 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_VALUE, &quot;glTexParameter(param)&quot; );</span>
+<span class="lineNum">     242 </span>                :            :          }
+<span class="lineNum">     243 </span>                :            :          break;
+<span class="lineNum">     244 </span>                :            :       case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     245 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          texObj-&gt;BorderColor[0] = CLAMP((GLint)(params[0]*255.0), 0, 255);</span>
+<span class="lineNum">     246 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          texObj-&gt;BorderColor[1] = CLAMP((GLint)(params[1]*255.0), 0, 255);</span>
+<span class="lineNum">     247 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          texObj-&gt;BorderColor[2] = CLAMP((GLint)(params[2]*255.0), 0, 255);</span>
+<span class="lineNum">     248 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          texObj-&gt;BorderColor[3] = CLAMP((GLint)(params[3]*255.0), 0, 255);</span>
+<span class="lineNum">     249 </span>                :<span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     250 </span>                :            :       default:
+<span class="lineNum">     251 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glTexParameter(pname)&quot; );</span>
+<span class="lineNum">     252 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     253 </span>                :            :    }
+<span class="lineNum">     254 </span>                :            : 
+<span class="lineNum">     255 </span>                :<span class="lineCov">          2 :    texObj-&gt;Dirty = GL_TRUE;</span>
+<span class="lineNum">     256 </span>                :            : 
+<span class="lineNum">     257 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (ctx-&gt;Driver.TexParameter) {</span>
+<span class="lineNum">     258 </span>                :<span class="lineCov">          2 :       (*ctx-&gt;Driver.TexParameter)( ctx, target, texObj, pname, params );</span>
+<span class="lineNum">     259 </span>                :            :    }
+<span class="lineNum">     260 </span>                :            : }
+<span class="lineNum">     261 </span>                :            : 
+<a name="262"><span class="lineNum">     262 </span>                :            : </a>
+<span class="lineNum">     263 </span>                :            : 
+<span class="lineNum">     264 </span>                :<span class="lineNoCov">          0 : void gl_GetTexLevelParameterfv( GLcontext *ctx, GLenum target, GLint level,</span>
+<span class="lineNum">     265 </span>                :            :                                 GLenum pname, GLfloat *params )
+<span class="lineNum">     266 </span>                :            : {
+<span class="lineNum">     267 </span>                :            :    GLint iparam;
+<span class="lineNum">     268 </span>                :            : 
+<span class="lineNum">     269 </span>                :<span class="lineNoCov">          0 :    gl_GetTexLevelParameteriv( ctx, target, level, pname, &amp;iparam );</span>
+<span class="lineNum">     270 </span>                :<span class="lineNoCov">          0 :    *params = (GLfloat) iparam;</span>
+<span class="lineNum">     271 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     272 </span>                :            : 
+<a name="273"><span class="lineNum">     273 </span>                :            : </a>
+<span class="lineNum">     274 </span>                :            : 
+<span class="lineNum">     275 </span>                :<span class="lineNoCov">          0 : void gl_GetTexLevelParameteriv( GLcontext *ctx, GLenum target, GLint level,</span>
+<span class="lineNum">     276 </span>                :            :                                 GLenum pname, GLint *params )
+<span class="lineNum">     277 </span>                :            : {
+<span class="lineNum">     278 </span>                :            :    struct gl_texture_image *tex;
+<span class="lineNum">     279 </span>                :            : 
+<span class="lineNum">     280 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (level&lt;0 || level&gt;=MAX_TEXTURE_LEVELS) {</span>
+<span class="lineNum">     281 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_VALUE, &quot;glGetTexLevelParameter[if]v&quot; );</span>
+<span class="lineNum">     282 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     283 </span>                :            :    }
+<span class="lineNum">     284 </span>                :            : 
+<span class="lineNum">     285 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch (target) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     286 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     287 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Current1D-&gt;Image[level];</span>
+<span class="lineNum">     288 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     289 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     290 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     291 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     292 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     293 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     294 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     295 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     296 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     297 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     298 </span>                :            :             case GL_TEXTURE_RED_SIZE:
+<span class="lineNum">     299 </span>                :            :             case GL_TEXTURE_GREEN_SIZE:
+<span class="lineNum">     300 </span>                :            :             case GL_TEXTURE_BLUE_SIZE:
+<span class="lineNum">     301 </span>                :            :             case GL_TEXTURE_ALPHA_SIZE:
+<span class="lineNum">     302 </span>                :            :             case GL_TEXTURE_INTENSITY_SIZE:
+<span class="lineNum">     303 </span>                :            :             case GL_TEXTURE_LUMINANCE_SIZE:
+<span class="lineNum">     304 </span>                :<span class="lineNoCov">          0 :                *params = 8;  /* 8-bits */</span>
+<span class="lineNum">     305 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     306 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     307 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     308 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     309 </span>                :            :             default:
+<span class="lineNum">     310 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     311 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     312 </span>                :            :          }
+<span class="lineNum">     313 </span>                :            :          break;
+<span class="lineNum">     314 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     315 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Current2D-&gt;Image[level];</span>
+<span class="lineNum">     316 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     317 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     318 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     319 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     320 </span>                :            :             case GL_TEXTURE_HEIGHT:
+<span class="lineNum">     321 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Height;</span>
+<span class="lineNum">     322 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     323 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     324 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     325 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     326 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     327 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     328 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     329 </span>                :            :             case GL_TEXTURE_RED_SIZE:
+<span class="lineNum">     330 </span>                :            :             case GL_TEXTURE_GREEN_SIZE:
+<span class="lineNum">     331 </span>                :            :             case GL_TEXTURE_BLUE_SIZE:
+<span class="lineNum">     332 </span>                :            :             case GL_TEXTURE_ALPHA_SIZE:
+<span class="lineNum">     333 </span>                :            :             case GL_TEXTURE_INTENSITY_SIZE:
+<span class="lineNum">     334 </span>                :            :             case GL_TEXTURE_LUMINANCE_SIZE:
+<span class="lineNum">     335 </span>                :<span class="lineNoCov">          0 :                *params = 8;  /* 8-bits */</span>
+<span class="lineNum">     336 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     337 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     338 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     339 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     340 </span>                :            :             default:
+<span class="lineNum">     341 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     342 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     343 </span>                :            :          }
+<span class="lineNum">     344 </span>                :            :          break;
+<span class="lineNum">     345 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     346 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Current3D-&gt;Image[level];</span>
+<span class="lineNum">     347 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     348 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     349 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     350 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     351 </span>                :            :             case GL_TEXTURE_HEIGHT:
+<span class="lineNum">     352 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Height;</span>
+<span class="lineNum">     353 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     354 </span>                :            :             case GL_TEXTURE_DEPTH_EXT:
+<span class="lineNum">     355 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Depth;</span>
+<span class="lineNum">     356 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     357 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     358 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     359 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     360 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     361 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     362 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     363 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     364 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     365 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     366 </span>                :            :             default:
+<span class="lineNum">     367 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     368 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     369 </span>                :            :          }
+<span class="lineNum">     370 </span>                :            :          break;
+<span class="lineNum">     371 </span>                :            :       case GL_PROXY_TEXTURE_1D:
+<span class="lineNum">     372 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Proxy1D-&gt;Image[level];</span>
+<span class="lineNum">     373 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>         <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span>]
+<span class="lineNum">     374 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     375 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     376 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     377 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     378 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     379 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     380 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     381 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     382 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     383 </span>                :            :             case GL_TEXTURE_RED_SIZE:
+<span class="lineNum">     384 </span>                :            :             case GL_TEXTURE_GREEN_SIZE:
+<span class="lineNum">     385 </span>                :            :             case GL_TEXTURE_BLUE_SIZE:
+<span class="lineNum">     386 </span>                :            :             case GL_TEXTURE_ALPHA_SIZE:
+<span class="lineNum">     387 </span>                :            :             case GL_TEXTURE_INTENSITY_SIZE:
+<span class="lineNum">     388 </span>                :            :             case GL_TEXTURE_LUMINANCE_SIZE:
+<span class="lineNum">     389 </span>                :<span class="lineNoCov">          0 :                *params = 8;  /* 8-bits */</span>
+<span class="lineNum">     390 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     391 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     392 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     393 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     394 </span>                :            :             default:
+<span class="lineNum">     395 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     396 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     397 </span>                :            :          }
+<span class="lineNum">     398 </span>                :            :          break;
+<span class="lineNum">     399 </span>                :            :       case GL_PROXY_TEXTURE_2D:
+<span class="lineNum">     400 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Proxy2D-&gt;Image[level];</span>
+<span class="lineNum">     401 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>      <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span>]
+<span class="lineNum">     402 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     403 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     404 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     405 </span>                :            :             case GL_TEXTURE_HEIGHT:
+<span class="lineNum">     406 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Height;</span>
+<span class="lineNum">     407 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     408 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     409 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     410 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     411 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     412 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     413 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     414 </span>                :            :             case GL_TEXTURE_RED_SIZE:
+<span class="lineNum">     415 </span>                :            :             case GL_TEXTURE_GREEN_SIZE:
+<span class="lineNum">     416 </span>                :            :             case GL_TEXTURE_BLUE_SIZE:
+<span class="lineNum">     417 </span>                :            :             case GL_TEXTURE_ALPHA_SIZE:
+<span class="lineNum">     418 </span>                :            :             case GL_TEXTURE_INTENSITY_SIZE:
+<span class="lineNum">     419 </span>                :            :             case GL_TEXTURE_LUMINANCE_SIZE:
+<span class="lineNum">     420 </span>                :<span class="lineNoCov">          0 :                *params = 8;  /* 8-bits */</span>
+<span class="lineNum">     421 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     422 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     423 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     424 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     425 </span>                :            :             default:
+<span class="lineNum">     426 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     427 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     428 </span>                :            :          }
+<span class="lineNum">     429 </span>                :            :          break;
+<span class="lineNum">     430 </span>                :            :       case GL_PROXY_TEXTURE_3D_EXT:
+<span class="lineNum">     431 </span>                :<span class="lineNoCov">          0 :          tex = ctx-&gt;Texture.Proxy3D-&gt;Image[level];</span>
+<span class="lineNum">     432 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     433 </span>                :            :             case GL_TEXTURE_WIDTH:
+<span class="lineNum">     434 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Width;</span>
+<span class="lineNum">     435 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     436 </span>                :            :             case GL_TEXTURE_HEIGHT:
+<span class="lineNum">     437 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Height;</span>
+<span class="lineNum">     438 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     439 </span>                :            :             case GL_TEXTURE_DEPTH_EXT:
+<span class="lineNum">     440 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Depth;</span>
+<span class="lineNum">     441 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     442 </span>                :            :             case GL_TEXTURE_COMPONENTS:
+<span class="lineNum">     443 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Format;</span>
+<span class="lineNum">     444 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     445 </span>                :            :             case GL_TEXTURE_BORDER:
+<span class="lineNum">     446 </span>                :<span class="lineNoCov">          0 :                *params = tex-&gt;Border;</span>
+<span class="lineNum">     447 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     448 </span>                :            :             case GL_TEXTURE_RED_SIZE:
+<span class="lineNum">     449 </span>                :            :             case GL_TEXTURE_GREEN_SIZE:
+<span class="lineNum">     450 </span>                :            :             case GL_TEXTURE_BLUE_SIZE:
+<span class="lineNum">     451 </span>                :            :             case GL_TEXTURE_ALPHA_SIZE:
+<span class="lineNum">     452 </span>                :            :             case GL_TEXTURE_INTENSITY_SIZE:
+<span class="lineNum">     453 </span>                :            :             case GL_TEXTURE_LUMINANCE_SIZE:
+<span class="lineNum">     454 </span>                :<span class="lineNoCov">          0 :                *params = 8;  /* 8-bits */</span>
+<span class="lineNum">     455 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     456 </span>                :            :             case GL_TEXTURE_INDEX_SIZE_EXT:
+<span class="lineNum">     457 </span>                :<span class="lineNoCov">          0 :                *params = 8;</span>
+<span class="lineNum">     458 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     459 </span>                :            :             default:
+<span class="lineNum">     460 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM,</span>
+<span class="lineNum">     461 </span>                :            :                          &quot;glGetTexLevelParameter[if]v(pname)&quot; );
+<span class="lineNum">     462 </span>                :            :          }
+<span class="lineNum">     463 </span>                :            :          break;
+<span class="lineNum">     464 </span>                :            :      default:
+<span class="lineNum">     465 </span>                :<span class="lineNoCov">          0 :          gl_error(ctx, GL_INVALID_ENUM, &quot;glGetTexLevelParameter[if]v(target)&quot;);</span>
+<span class="lineNum">     466 </span>                :            :    }     
+<span class="lineNum">     467 </span>                :            : }
+<span class="lineNum">     468 </span>                :            : 
+<span class="lineNum">     469 </span>                :            : 
+<a name="470"><span class="lineNum">     470 </span>                :            : </a>
+<span class="lineNum">     471 </span>                :            : 
+<span class="lineNum">     472 </span>                :<span class="lineNoCov">          0 : void gl_GetTexParameterfv( GLcontext *ctx,</span>
+<span class="lineNum">     473 </span>                :            :                            GLenum target, GLenum pname, GLfloat *params )
+<span class="lineNum">     474 </span>                :            : {
+<span class="lineNum">     475 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (target) {</span>
+<span class="lineNum">     476 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     477 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     478 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     479 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current1D-&gt;MagFilter;</span>
+<span class="lineNum">     480 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     481 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     482 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current1D-&gt;MinFilter;</span>
+<span class="lineNum">     483 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     484 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     485 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current1D-&gt;WrapS;</span>
+<span class="lineNum">     486 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     487 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     488 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current1D-&gt;WrapT;</span>
+<span class="lineNum">     489 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     490 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     491 </span>                :<span class="lineNoCov">          0 :                params[0] = ctx-&gt;Texture.Current1D-&gt;BorderColor[0] / 255.0f;</span>
+<span class="lineNum">     492 </span>                :<span class="lineNoCov">          0 :                params[1] = ctx-&gt;Texture.Current1D-&gt;BorderColor[1] / 255.0f;</span>
+<span class="lineNum">     493 </span>                :<span class="lineNoCov">          0 :                params[2] = ctx-&gt;Texture.Current1D-&gt;BorderColor[2] / 255.0f;</span>
+<span class="lineNum">     494 </span>                :<span class="lineNoCov">          0 :                params[3] = ctx-&gt;Texture.Current1D-&gt;BorderColor[3] / 255.0f;</span>
+<span class="lineNum">     495 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     496 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     497 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) GL_TRUE;</span>
+<span class="lineNum">     498 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     499 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     500 </span>                :<span class="lineNoCov">          0 :                *params = ctx-&gt;Texture.Current1D-&gt;Priority;</span>
+<span class="lineNum">     501 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     502 </span>                :            :             default:
+<span class="lineNum">     503 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameterfv(pname)&quot; );</span>
+<span class="lineNum">     504 </span>                :            :          }
+<span class="lineNum">     505 </span>                :            :          break;
+<span class="lineNum">     506 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     507 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     508 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     509 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current2D-&gt;MagFilter;</span>
+<span class="lineNum">     510 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     511 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     512 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current2D-&gt;MinFilter;</span>
+<span class="lineNum">     513 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     514 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     515 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current2D-&gt;WrapS;</span>
+<span class="lineNum">     516 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     517 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     518 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current2D-&gt;WrapT;</span>
+<span class="lineNum">     519 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     520 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     521 </span>                :<span class="lineNoCov">          0 :                params[0] = ctx-&gt;Texture.Current2D-&gt;BorderColor[0] / 255.0f;</span>
+<span class="lineNum">     522 </span>                :<span class="lineNoCov">          0 :                params[1] = ctx-&gt;Texture.Current2D-&gt;BorderColor[1] / 255.0f;</span>
+<span class="lineNum">     523 </span>                :<span class="lineNoCov">          0 :                params[2] = ctx-&gt;Texture.Current2D-&gt;BorderColor[2] / 255.0f;</span>
+<span class="lineNum">     524 </span>                :<span class="lineNoCov">          0 :                params[3] = ctx-&gt;Texture.Current2D-&gt;BorderColor[3] / 255.0f;</span>
+<span class="lineNum">     525 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     526 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     527 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) GL_TRUE;</span>
+<span class="lineNum">     528 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     529 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     530 </span>                :<span class="lineNoCov">          0 :                *params = ctx-&gt;Texture.Current2D-&gt;Priority;</span>
+<span class="lineNum">     531 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     532 </span>                :            :             default:
+<span class="lineNum">     533 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameterfv(pname)&quot; );</span>
+<span class="lineNum">     534 </span>                :            :          }
+<span class="lineNum">     535 </span>                :            :          break;
+<span class="lineNum">     536 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     537 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span> 
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     538 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     539 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current3D-&gt;MagFilter;</span>
+<span class="lineNum">     540 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     541 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     542 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current3D-&gt;MinFilter;</span>
+<span class="lineNum">     543 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     544 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     545 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current3D-&gt;WrapS;</span>
+<span class="lineNum">     546 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     547 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     548 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current3D-&gt;WrapT;</span>
+<span class="lineNum">     549 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     550 </span>                :            :             case GL_TEXTURE_WRAP_R_EXT:
+<span class="lineNum">     551 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) ctx-&gt;Texture.Current3D-&gt;WrapR;</span>
+<span class="lineNum">     552 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     553 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     554 </span>                :<span class="lineNoCov">          0 :                params[0] = ctx-&gt;Texture.Current3D-&gt;BorderColor[0] / 255.0f;</span>
+<span class="lineNum">     555 </span>                :<span class="lineNoCov">          0 :                params[1] = ctx-&gt;Texture.Current3D-&gt;BorderColor[1] / 255.0f;</span>
+<span class="lineNum">     556 </span>                :<span class="lineNoCov">          0 :                params[2] = ctx-&gt;Texture.Current3D-&gt;BorderColor[2] / 255.0f;</span>
+<span class="lineNum">     557 </span>                :<span class="lineNoCov">          0 :                params[3] = ctx-&gt;Texture.Current3D-&gt;BorderColor[3] / 255.0f;</span>
+<span class="lineNum">     558 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     559 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     560 </span>                :<span class="lineNoCov">          0 :                *params = (GLfloat) GL_TRUE;</span>
+<span class="lineNum">     561 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     562 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     563 </span>                :<span class="lineNoCov">          0 :                *params = ctx-&gt;Texture.Current3D-&gt;Priority;</span>
+<span class="lineNum">     564 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     565 </span>                :            :             default:
+<span class="lineNum">     566 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameterfv(pname)&quot; );</span>
+<span class="lineNum">     567 </span>                :            :          }
+<span class="lineNum">     568 </span>                :            :          break;
+<span class="lineNum">     569 </span>                :            :       default:
+<span class="lineNum">     570 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameterfv(target)&quot; );</span>
+<span class="lineNum">     571 </span>                :            :    }
+<span class="lineNum">     572 </span>                :<span class="lineNoCov">          0 : }</span>
+<a name="573"><span class="lineNum">     573 </span>                :            : </a>
+<span class="lineNum">     574 </span>                :            : 
+<span class="lineNum">     575 </span>                :<span class="lineNoCov">          0 : void gl_GetTexParameteriv( GLcontext *ctx,</span>
+<span class="lineNum">     576 </span>                :            :                            GLenum target, GLenum pname, GLint *params )
+<span class="lineNum">     577 </span>                :            : {
+<span class="lineNum">     578 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span>]:<span class="lineNoCov">          0 :    switch (target) {</span>
+<span class="lineNum">     579 </span>                :            :       case GL_TEXTURE_1D:
+<span class="lineNum">     580 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     581 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     582 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current1D-&gt;MagFilter;</span>
+<span class="lineNum">     583 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     584 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     585 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current1D-&gt;MinFilter;</span>
+<span class="lineNum">     586 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     587 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     588 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current1D-&gt;WrapS;</span>
+<span class="lineNum">     589 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     590 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     591 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current1D-&gt;WrapT;</span>
+<span class="lineNum">     592 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     593 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     594 </span>                :            :                {
+<span class="lineNum">     595 </span>                :            :                   GLfloat color[4];
+<span class="lineNum">     596 </span>                :<span class="lineNoCov">          0 :                   color[0] = ctx-&gt;Texture.Current1D-&gt;BorderColor[0]/255.0;</span>
+<span class="lineNum">     597 </span>                :<span class="lineNoCov">          0 :                   color[1] = ctx-&gt;Texture.Current1D-&gt;BorderColor[1]/255.0;</span>
+<span class="lineNum">     598 </span>                :<span class="lineNoCov">          0 :                   color[2] = ctx-&gt;Texture.Current1D-&gt;BorderColor[2]/255.0;</span>
+<span class="lineNum">     599 </span>                :<span class="lineNoCov">          0 :                   color[3] = ctx-&gt;Texture.Current1D-&gt;BorderColor[3]/255.0;</span>
+<span class="lineNum">     600 </span>                :<span class="lineNoCov">          0 :                   params[0] = FLOAT_TO_INT( color[0] );</span>
+<span class="lineNum">     601 </span>                :<span class="lineNoCov">          0 :                   params[1] = FLOAT_TO_INT( color[1] );</span>
+<span class="lineNum">     602 </span>                :<span class="lineNoCov">          0 :                   params[2] = FLOAT_TO_INT( color[2] );</span>
+<span class="lineNum">     603 </span>                :<span class="lineNoCov">          0 :                   params[3] = FLOAT_TO_INT( color[3] );</span>
+<span class="lineNum">     604 </span>                :            :                }
+<span class="lineNum">     605 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     606 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     607 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) GL_TRUE;</span>
+<span class="lineNum">     608 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     609 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     610 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current1D-&gt;Priority;</span>
+<span class="lineNum">     611 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     612 </span>                :            :             default:
+<span class="lineNum">     613 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameteriv(pname)&quot; );</span>
+<span class="lineNum">     614 </span>                :            :          }
+<span class="lineNum">     615 </span>                :            :          break;
+<span class="lineNum">     616 </span>                :            :       case GL_TEXTURE_2D:
+<span class="lineNum">     617 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span>]
+<span class="lineNum">     618 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     619 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current2D-&gt;MagFilter;</span>
+<span class="lineNum">     620 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     621 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     622 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current2D-&gt;MinFilter;</span>
+<span class="lineNum">     623 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     624 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     625 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current2D-&gt;WrapS;</span>
+<span class="lineNum">     626 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     627 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     628 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current2D-&gt;WrapT;</span>
+<span class="lineNum">     629 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     630 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     631 </span>                :            :                {
+<span class="lineNum">     632 </span>                :            :                   GLfloat color[4];
+<span class="lineNum">     633 </span>                :<span class="lineNoCov">          0 :                   color[0] = ctx-&gt;Texture.Current2D-&gt;BorderColor[0]/255.0;</span>
+<span class="lineNum">     634 </span>                :<span class="lineNoCov">          0 :                   color[1] = ctx-&gt;Texture.Current2D-&gt;BorderColor[1]/255.0;</span>
+<span class="lineNum">     635 </span>                :<span class="lineNoCov">          0 :                   color[2] = ctx-&gt;Texture.Current2D-&gt;BorderColor[2]/255.0;</span>
+<span class="lineNum">     636 </span>                :<span class="lineNoCov">          0 :                   color[3] = ctx-&gt;Texture.Current2D-&gt;BorderColor[3]/255.0;</span>
+<span class="lineNum">     637 </span>                :<span class="lineNoCov">          0 :                   params[0] = FLOAT_TO_INT( color[0] );</span>
+<span class="lineNum">     638 </span>                :<span class="lineNoCov">          0 :                   params[1] = FLOAT_TO_INT( color[1] );</span>
+<span class="lineNum">     639 </span>                :<span class="lineNoCov">          0 :                   params[2] = FLOAT_TO_INT( color[2] );</span>
+<span class="lineNum">     640 </span>                :<span class="lineNoCov">          0 :                   params[3] = FLOAT_TO_INT( color[3] );</span>
+<span class="lineNum">     641 </span>                :            :                }
+<span class="lineNum">     642 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     643 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     644 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) GL_TRUE;</span>
+<span class="lineNum">     645 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     646 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     647 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current2D-&gt;Priority;</span>
+<span class="lineNum">     648 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     649 </span>                :            :             default:
+<span class="lineNum">     650 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameteriv(pname)&quot; );</span>
+<span class="lineNum">     651 </span>                :            :          }
+<span class="lineNum">     652 </span>                :            :          break;
+<span class="lineNum">     653 </span>                :            :       case GL_TEXTURE_3D_EXT:
+<span class="lineNum">     654 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :          switch (pname) {</span>
+<span class="lineNum">         </span>   <span class="branchNoExec" title="Branch 4 was not executed"> # </span><span class="branchNoExec" title="Branch 5 was not executed"> # </span><span class="branchNoExec" title="Branch 6 was not executed"> # </span><span class="branchNoExec" title="Branch 7 was not executed"> # </span> 
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 8 was not executed"> # </span>]
+<span class="lineNum">     655 </span>                :            :             case GL_TEXTURE_MAG_FILTER:
+<span class="lineNum">     656 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;MagFilter;</span>
+<span class="lineNum">     657 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     658 </span>                :            :             case GL_TEXTURE_MIN_FILTER:
+<span class="lineNum">     659 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;MinFilter;</span>
+<span class="lineNum">     660 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     661 </span>                :            :             case GL_TEXTURE_WRAP_S:
+<span class="lineNum">     662 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;WrapS;</span>
+<span class="lineNum">     663 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     664 </span>                :            :             case GL_TEXTURE_WRAP_T:
+<span class="lineNum">     665 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;WrapT;</span>
+<span class="lineNum">     666 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     667 </span>                :            :             case GL_TEXTURE_WRAP_R_EXT:
+<span class="lineNum">     668 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;WrapR;</span>
+<span class="lineNum">     669 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     670 </span>                :            :             case GL_TEXTURE_BORDER_COLOR:
+<span class="lineNum">     671 </span>                :            :                {
+<span class="lineNum">     672 </span>                :            :                   GLfloat color[4];
+<span class="lineNum">     673 </span>                :<span class="lineNoCov">          0 :                   color[0] = ctx-&gt;Texture.Current3D-&gt;BorderColor[0]/255.0;</span>
+<span class="lineNum">     674 </span>                :<span class="lineNoCov">          0 :                   color[1] = ctx-&gt;Texture.Current3D-&gt;BorderColor[1]/255.0;</span>
+<span class="lineNum">     675 </span>                :<span class="lineNoCov">          0 :                   color[2] = ctx-&gt;Texture.Current3D-&gt;BorderColor[2]/255.0;</span>
+<span class="lineNum">     676 </span>                :<span class="lineNoCov">          0 :                   color[3] = ctx-&gt;Texture.Current3D-&gt;BorderColor[3]/255.0;</span>
+<span class="lineNum">     677 </span>                :<span class="lineNoCov">          0 :                   params[0] = FLOAT_TO_INT( color[0] );</span>
+<span class="lineNum">     678 </span>                :<span class="lineNoCov">          0 :                   params[1] = FLOAT_TO_INT( color[1] );</span>
+<span class="lineNum">     679 </span>                :<span class="lineNoCov">          0 :                   params[2] = FLOAT_TO_INT( color[2] );</span>
+<span class="lineNum">     680 </span>                :<span class="lineNoCov">          0 :                   params[3] = FLOAT_TO_INT( color[3] );</span>
+<span class="lineNum">     681 </span>                :            :                }
+<span class="lineNum">     682 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     683 </span>                :            :             case GL_TEXTURE_RESIDENT:
+<span class="lineNum">     684 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) GL_TRUE;</span>
+<span class="lineNum">     685 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     686 </span>                :            :             case GL_TEXTURE_PRIORITY:
+<span class="lineNum">     687 </span>                :<span class="lineNoCov">          0 :                *params = (GLint) ctx-&gt;Texture.Current3D-&gt;Priority;</span>
+<span class="lineNum">     688 </span>                :<span class="lineNoCov">          0 :                break;</span>
+<span class="lineNum">     689 </span>                :            :             default:
+<span class="lineNum">     690 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameteriv(pname)&quot; );</span>
+<span class="lineNum">     691 </span>                :            :          }
+<span class="lineNum">     692 </span>                :            :          break;
+<span class="lineNum">     693 </span>                :            :       default:
+<span class="lineNum">     694 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexParameteriv(target)&quot; );</span>
+<span class="lineNum">     695 </span>                :            :    }
+<span class="lineNum">     696 </span>                :<span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     697 </span>                :            : 
+<span class="lineNum">     698 </span>                :            : 
+<span class="lineNum">     699 </span>                :            : 
+<span class="lineNum">     700 </span>                :            : 
+<span class="lineNum">     701 </span>                :            : /**********************************************************************/
+<span class="lineNum">     702 </span>                :            : /*                    Texture Coord Generation                        */
+<span class="lineNum">     703 </span>                :            : /**********************************************************************/
+<a name="704"><span class="lineNum">     704 </span>                :            : </a>
+<span class="lineNum">     705 </span>                :            : 
+<span class="lineNum">     706 </span>                :<span class="lineCov">          2 : void gl_TexGenfv( GLcontext *ctx,</span>
+<span class="lineNum">     707 </span>                :            :                   GLenum coord, GLenum pname, const GLfloat *params )
+<span class="lineNum">     708 </span>                :            : {
+<span class="lineNum">     709 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     710 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glTexGenfv&quot; );</span>
+<span class="lineNum">     711 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     712 </span>                :            :    }
+<span class="lineNum">     713 </span>                :            : 
+<span class="lineNum">     714 </span>  [<span class="branchCov" title="Branch 0 was taken 2 times"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span><span class="branchNoCov" title="Branch 3 was not taken"> - </span> :<span class="lineCov">          2 :    switch( coord ) {</span>
+<span class="lineNum">         </span>            <span class="branchNoCov" title="Branch 4 was not taken"> - </span>]
+<span class="lineNum">     715 </span>                :            :       case GL_S:
+<span class="lineNum">     716 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     717 </span>                :<span class="lineCov">          1 :             GLenum mode = (GLenum) (GLint) *params;</span>
+<span class="lineNum">     718 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :             if (mode==GL_OBJECT_LINEAR ||</span>
+<span class="lineNum">     719 </span>                :<span class="lineCov">          1 :                 mode==GL_EYE_LINEAR ||</span>
+<span class="lineNum">     720 </span>                :            :                 mode==GL_SPHERE_MAP) {
+<span class="lineNum">     721 </span>                :<span class="lineCov">          1 :                ctx-&gt;Texture.GenModeS = mode;</span>
+<span class="lineNum">     722 </span>                :            :             }
+<span class="lineNum">     723 </span>                :            :             else {
+<span class="lineNum">     724 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(param)&quot; );</span>
+<span class="lineNum">     725 </span>                :<span class="lineNoCov">          0 :                return;</span>
+<span class="lineNum">     726 </span>                :            :             }
+<span class="lineNum">     727 </span>                :            :          }
+<span class="lineNum">     728 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     729 </span>                :<span class="lineCov">          1 :             ctx-&gt;Texture.ObjectPlaneS[0] = params[0];</span>
+<span class="lineNum">     730 </span>                :<span class="lineCov">          1 :             ctx-&gt;Texture.ObjectPlaneS[1] = params[1];</span>
+<span class="lineNum">     731 </span>                :<span class="lineCov">          1 :             ctx-&gt;Texture.ObjectPlaneS[2] = params[2];</span>
+<span class="lineNum">     732 </span>                :<span class="lineCov">          1 :             ctx-&gt;Texture.ObjectPlaneS[3] = params[3];</span>
+<span class="lineNum">     733 </span>                :            :          }
+<span class="lineNum">     734 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     735 </span>                :            :             /* Transform plane equation by the inverse modelview matrix */
+<span class="lineNum">     736 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     737 </span>                :<span class="lineNoCov">          0 :                gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">     738 </span>                :            :             }
+<span class="lineNum">     739 </span>                :<span class="lineNoCov">          0 :             gl_transform_vector( ctx-&gt;Texture.EyePlaneS, params,</span>
+<span class="lineNum">     740 </span>                :            :                                  ctx-&gt;ModelViewInv );
+<span class="lineNum">     741 </span>                :            :          }
+<span class="lineNum">     742 </span>                :            :          else {
+<span class="lineNum">     743 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     744 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     745 </span>                :            :          }
+<span class="lineNum">     746 </span>                :            :          break;
+<span class="lineNum">     747 </span>                :            :       case GL_T:
+<span class="lineNum">     748 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     749 </span>                :<span class="lineNoCov">          0 :             GLenum mode = (GLenum) (GLint) *params;</span>
+<span class="lineNum">     750 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (mode==GL_OBJECT_LINEAR ||</span>
+<span class="lineNum">     751 </span>                :<span class="lineNoCov">          0 :                 mode==GL_EYE_LINEAR ||</span>
+<span class="lineNum">     752 </span>                :            :                 mode==GL_SPHERE_MAP) {
+<span class="lineNum">     753 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.GenModeT = mode;</span>
+<span class="lineNum">     754 </span>                :            :             }
+<span class="lineNum">     755 </span>                :            :             else {
+<span class="lineNum">     756 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(param)&quot; );</span>
+<span class="lineNum">     757 </span>                :<span class="lineNoCov">          0 :                return;</span>
+<span class="lineNum">     758 </span>                :            :             }
+<span class="lineNum">     759 </span>                :            :          }
+<span class="lineNum">     760 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     761 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneT[0] = params[0];</span>
+<span class="lineNum">     762 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneT[1] = params[1];</span>
+<span class="lineNum">     763 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneT[2] = params[2];</span>
+<span class="lineNum">     764 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneT[3] = params[3];</span>
+<span class="lineNum">     765 </span>                :            :          }
+<span class="lineNum">     766 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     767 </span>                :            :             /* Transform plane equation by the inverse modelview matrix */
+<span class="lineNum">     768 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     769 </span>                :<span class="lineNoCov">          0 :                gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">     770 </span>                :            :             }
+<span class="lineNum">     771 </span>                :<span class="lineNoCov">          0 :             gl_transform_vector( ctx-&gt;Texture.EyePlaneT, params,</span>
+<span class="lineNum">     772 </span>                :            :                                  ctx-&gt;ModelViewInv );
+<span class="lineNum">     773 </span>                :            :          }
+<span class="lineNum">     774 </span>                :            :          else {
+<span class="lineNum">     775 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     776 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     777 </span>                :            :          }
+<span class="lineNum">     778 </span>                :            :          break;
+<span class="lineNum">     779 </span>                :            :       case GL_R:
+<span class="lineNum">     780 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     781 </span>                :<span class="lineNoCov">          0 :             GLenum mode = (GLenum) (GLint) *params;</span>
+<span class="lineNum">     782 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (mode==GL_OBJECT_LINEAR ||</span>
+<span class="lineNum">     783 </span>                :            :                 mode==GL_EYE_LINEAR) {
+<span class="lineNum">     784 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.GenModeR = mode;</span>
+<span class="lineNum">     785 </span>                :            :             }
+<span class="lineNum">     786 </span>                :            :             else {
+<span class="lineNum">     787 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(param)&quot; );</span>
+<span class="lineNum">     788 </span>                :<span class="lineNoCov">          0 :                return;</span>
+<span class="lineNum">     789 </span>                :            :             }
+<span class="lineNum">     790 </span>                :            :          }
+<span class="lineNum">     791 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     792 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneR[0] = params[0];</span>
+<span class="lineNum">     793 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneR[1] = params[1];</span>
+<span class="lineNum">     794 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneR[2] = params[2];</span>
+<span class="lineNum">     795 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneR[3] = params[3];</span>
+<span class="lineNum">     796 </span>                :            :          }
+<span class="lineNum">     797 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     798 </span>                :            :             /* Transform plane equation by the inverse modelview matrix */
+<span class="lineNum">     799 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     800 </span>                :<span class="lineNoCov">          0 :                gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">     801 </span>                :            :             }
+<span class="lineNum">     802 </span>                :<span class="lineNoCov">          0 :             gl_transform_vector( ctx-&gt;Texture.EyePlaneR, params,</span>
+<span class="lineNum">     803 </span>                :            :                                  ctx-&gt;ModelViewInv );
+<span class="lineNum">     804 </span>                :            :          }
+<span class="lineNum">     805 </span>                :            :          else {
+<span class="lineNum">     806 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     807 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     808 </span>                :            :          }
+<span class="lineNum">     809 </span>                :            :          break;
+<span class="lineNum">     810 </span>                :            :       case GL_Q:
+<span class="lineNum">     811 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     812 </span>                :<span class="lineNoCov">          0 :             GLenum mode = (GLenum) (GLint) *params;</span>
+<span class="lineNum">     813 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (mode==GL_OBJECT_LINEAR ||</span>
+<span class="lineNum">     814 </span>                :            :                 mode==GL_EYE_LINEAR) {
+<span class="lineNum">     815 </span>                :<span class="lineNoCov">          0 :                ctx-&gt;Texture.GenModeQ = mode;</span>
+<span class="lineNum">     816 </span>                :            :             }
+<span class="lineNum">     817 </span>                :            :             else {
+<span class="lineNum">     818 </span>                :<span class="lineNoCov">          0 :                gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(param)&quot; );</span>
+<span class="lineNum">     819 </span>                :<span class="lineNoCov">          0 :                return;</span>
+<span class="lineNum">     820 </span>                :            :             }
+<span class="lineNum">     821 </span>                :            :          }
+<span class="lineNum">     822 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     823 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneQ[0] = params[0];</span>
+<span class="lineNum">     824 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneQ[1] = params[1];</span>
+<span class="lineNum">     825 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneQ[2] = params[2];</span>
+<span class="lineNum">     826 </span>                :<span class="lineNoCov">          0 :             ctx-&gt;Texture.ObjectPlaneQ[3] = params[3];</span>
+<span class="lineNum">     827 </span>                :            :          }
+<span class="lineNum">     828 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     829 </span>                :            :             /* Transform plane equation by the inverse modelview matrix */
+<span class="lineNum">     830 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :             if (ctx-&gt;NewModelViewMatrix) {</span>
+<span class="lineNum">     831 </span>                :<span class="lineNoCov">          0 :                gl_analyze_modelview_matrix(ctx);</span>
+<span class="lineNum">     832 </span>                :            :             }
+<span class="lineNum">     833 </span>                :<span class="lineNoCov">          0 :             gl_transform_vector( ctx-&gt;Texture.EyePlaneQ, params,</span>
+<span class="lineNum">     834 </span>                :            :                                  ctx-&gt;ModelViewInv );
+<span class="lineNum">     835 </span>                :            :          }
+<span class="lineNum">     836 </span>                :            :          else {
+<span class="lineNum">     837 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     838 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     839 </span>                :            :          }
+<span class="lineNum">     840 </span>                :            :          break;
+<span class="lineNum">     841 </span>                :            :       default:
+<span class="lineNum">     842 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glTexGenfv(coord)&quot; );</span>
+<span class="lineNum">     843 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     844 </span>                :            :    }
+<span class="lineNum">     845 </span>                :            : 
+<span class="lineNum">     846 </span>                :<span class="lineCov">          2 :    ctx-&gt;NewState |= NEW_TEXTURING;</span>
+<span class="lineNum">     847 </span>                :            : }
+<span class="lineNum">     848 </span>                :            : 
+<a name="849"><span class="lineNum">     849 </span>                :            : </a>
+<span class="lineNum">     850 </span>                :            : 
+<span class="lineNum">     851 </span>                :<span class="lineNoCov">          0 : void gl_GetTexGendv( GLcontext *ctx,</span>
+<span class="lineNum">     852 </span>                :            :                      GLenum coord, GLenum pname, GLdouble *params )
+<span class="lineNum">     853 </span>                :            : {
+<span class="lineNum">     854 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     855 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetTexGendv&quot; );</span>
+<span class="lineNum">     856 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     857 </span>                :            :    }
+<span class="lineNum">     858 </span>                :            : 
+<span class="lineNum">     859 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch( coord ) {</span>
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 4 was not executed"> # </span>]
+<span class="lineNum">     860 </span>                :            :       case GL_S:
+<span class="lineNum">     861 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     862 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeS;</span>
+<span class="lineNum">     863 </span>                :            :          }
+<span class="lineNum">     864 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     865 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneS );</span>
+<span class="lineNum">     866 </span>                :            :          }
+<span class="lineNum">     867 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     868 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneS );</span>
+<span class="lineNum">     869 </span>                :            :          }
+<span class="lineNum">     870 </span>                :            :          else {
+<span class="lineNum">     871 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGendv(pname)&quot; );</span>
+<span class="lineNum">     872 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     873 </span>                :            :          }
+<span class="lineNum">     874 </span>                :            :          break;
+<span class="lineNum">     875 </span>                :            :       case GL_T:
+<span class="lineNum">     876 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     877 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeT;</span>
+<span class="lineNum">     878 </span>                :            :          }
+<span class="lineNum">     879 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     880 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneT );</span>
+<span class="lineNum">     881 </span>                :            :          }
+<span class="lineNum">     882 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     883 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneT );</span>
+<span class="lineNum">     884 </span>                :            :          }
+<span class="lineNum">     885 </span>                :            :          else {
+<span class="lineNum">     886 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGendv(pname)&quot; );</span>
+<span class="lineNum">     887 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     888 </span>                :            :          }
+<span class="lineNum">     889 </span>                :            :          break;
+<span class="lineNum">     890 </span>                :            :       case GL_R:
+<span class="lineNum">     891 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     892 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeR;</span>
+<span class="lineNum">     893 </span>                :            :          }
+<span class="lineNum">     894 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     895 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneR );</span>
+<span class="lineNum">     896 </span>                :            :          }
+<span class="lineNum">     897 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     898 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneR );</span>
+<span class="lineNum">     899 </span>                :            :          }
+<span class="lineNum">     900 </span>                :            :          else {
+<span class="lineNum">     901 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGendv(pname)&quot; );</span>
+<span class="lineNum">     902 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     903 </span>                :            :          }
+<span class="lineNum">     904 </span>                :            :          break;
+<span class="lineNum">     905 </span>                :            :       case GL_Q:
+<span class="lineNum">     906 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     907 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeQ;</span>
+<span class="lineNum">     908 </span>                :            :          }
+<span class="lineNum">     909 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     910 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneQ );</span>
+<span class="lineNum">     911 </span>                :            :          }
+<span class="lineNum">     912 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     913 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneQ );</span>
+<span class="lineNum">     914 </span>                :            :          }
+<span class="lineNum">     915 </span>                :            :          else {
+<span class="lineNum">     916 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGendv(pname)&quot; );</span>
+<span class="lineNum">     917 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     918 </span>                :            :          }
+<span class="lineNum">     919 </span>                :            :          break;
+<span class="lineNum">     920 </span>                :            :       default:
+<span class="lineNum">     921 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGendv(coord)&quot; );</span>
+<span class="lineNum">     922 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">     923 </span>                :            :    }
+<span class="lineNum">     924 </span>                :            : }
+<span class="lineNum">     925 </span>                :            : 
+<a name="926"><span class="lineNum">     926 </span>                :            : </a>
+<span class="lineNum">     927 </span>                :            : 
+<span class="lineNum">     928 </span>                :<span class="lineNoCov">          0 : void gl_GetTexGenfv( GLcontext *ctx,</span>
+<span class="lineNum">     929 </span>                :            :                      GLenum coord, GLenum pname, GLfloat *params )
+<span class="lineNum">     930 </span>                :            : {
+<span class="lineNum">     931 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">     932 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetTexGenfv&quot; );</span>
+<span class="lineNum">     933 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">     934 </span>                :            :    }
+<span class="lineNum">     935 </span>                :            : 
+<span class="lineNum">     936 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch( coord ) {</span>
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 4 was not executed"> # </span>]
+<span class="lineNum">     937 </span>                :            :       case GL_S:
+<span class="lineNum">     938 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     939 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeS;</span>
+<span class="lineNum">     940 </span>                :            :          }
+<span class="lineNum">     941 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     942 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneS );</span>
+<span class="lineNum">     943 </span>                :            :          }
+<span class="lineNum">     944 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     945 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneS );</span>
+<span class="lineNum">     946 </span>                :            :          }
+<span class="lineNum">     947 </span>                :            :          else {
+<span class="lineNum">     948 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     949 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     950 </span>                :            :          }
+<span class="lineNum">     951 </span>                :            :          break;
+<span class="lineNum">     952 </span>                :            :       case GL_T:
+<span class="lineNum">     953 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     954 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeT;</span>
+<span class="lineNum">     955 </span>                :            :          }
+<span class="lineNum">     956 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     957 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneT );</span>
+<span class="lineNum">     958 </span>                :            :          }
+<span class="lineNum">     959 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     960 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneT );</span>
+<span class="lineNum">     961 </span>                :            :          }
+<span class="lineNum">     962 </span>                :            :          else {
+<span class="lineNum">     963 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     964 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     965 </span>                :            :          }
+<span class="lineNum">     966 </span>                :            :          break;
+<span class="lineNum">     967 </span>                :            :       case GL_R:
+<span class="lineNum">     968 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     969 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeR;</span>
+<span class="lineNum">     970 </span>                :            :          }
+<span class="lineNum">     971 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     972 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneR );</span>
+<span class="lineNum">     973 </span>                :            :          }
+<span class="lineNum">     974 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     975 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneR );</span>
+<span class="lineNum">     976 </span>                :            :          }
+<span class="lineNum">     977 </span>                :            :          else {
+<span class="lineNum">     978 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     979 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     980 </span>                :            :          }
+<span class="lineNum">     981 </span>                :            :          break;
+<span class="lineNum">     982 </span>                :            :       case GL_Q:
+<span class="lineNum">     983 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">     984 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeQ;</span>
+<span class="lineNum">     985 </span>                :            :          }
+<span class="lineNum">     986 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">     987 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneQ );</span>
+<span class="lineNum">     988 </span>                :            :          }
+<span class="lineNum">     989 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">     990 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneQ );</span>
+<span class="lineNum">     991 </span>                :            :          }
+<span class="lineNum">     992 </span>                :            :          else {
+<span class="lineNum">     993 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGenfv(pname)&quot; );</span>
+<span class="lineNum">     994 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">     995 </span>                :            :          }
+<span class="lineNum">     996 </span>                :            :          break;
+<span class="lineNum">     997 </span>                :            :       default:
+<span class="lineNum">     998 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGenfv(coord)&quot; );</span>
+<span class="lineNum">     999 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">    1000 </span>                :            :    }
+<span class="lineNum">    1001 </span>                :            : }
+<span class="lineNum">    1002 </span>                :            : 
+<a name="1003"><span class="lineNum">    1003 </span>                :            : </a>
+<span class="lineNum">    1004 </span>                :            : 
+<span class="lineNum">    1005 </span>                :<span class="lineNoCov">          0 : void gl_GetTexGeniv( GLcontext *ctx,</span>
+<span class="lineNum">    1006 </span>                :            :                      GLenum coord, GLenum pname, GLint *params )
+<span class="lineNum">    1007 </span>                :            : {
+<span class="lineNum">    1008 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :    if (INSIDE_BEGIN_END(ctx)) {</span>
+<span class="lineNum">    1009 </span>                :<span class="lineNoCov">          0 :       gl_error( ctx, GL_INVALID_OPERATION, &quot;glGetTexGeniv&quot; );</span>
+<span class="lineNum">    1010 </span>                :<span class="lineNoCov">          0 :       return;</span>
+<span class="lineNum">    1011 </span>                :            :    }
+<span class="lineNum">    1012 </span>                :            : 
+<span class="lineNum">    1013 </span>  [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span><span class="branchNoExec" title="Branch 2 was not executed"> # </span><span class="branchNoExec" title="Branch 3 was not executed"> # </span> :<span class="lineNoCov">          0 :    switch( coord ) {</span>
+<span class="lineNum">         </span>            <span class="branchNoExec" title="Branch 4 was not executed"> # </span>]
+<span class="lineNum">    1014 </span>                :            :       case GL_S:
+<span class="lineNum">    1015 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">    1016 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeS;</span>
+<span class="lineNum">    1017 </span>                :            :          }
+<span class="lineNum">    1018 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">    1019 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneS );</span>
+<span class="lineNum">    1020 </span>                :            :          }
+<span class="lineNum">    1021 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">    1022 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneS );</span>
+<span class="lineNum">    1023 </span>                :            :          }
+<span class="lineNum">    1024 </span>                :            :          else {
+<span class="lineNum">    1025 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGeniv(pname)&quot; );</span>
+<span class="lineNum">    1026 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">    1027 </span>                :            :          }
+<span class="lineNum">    1028 </span>                :            :          break;
+<span class="lineNum">    1029 </span>                :            :       case GL_T:
+<span class="lineNum">    1030 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">    1031 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeT;</span>
+<span class="lineNum">    1032 </span>                :            :          }
+<span class="lineNum">    1033 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">    1034 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneT );</span>
+<span class="lineNum">    1035 </span>                :            :          }
+<span class="lineNum">    1036 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">    1037 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneT );</span>
+<span class="lineNum">    1038 </span>                :            :          }
+<span class="lineNum">    1039 </span>                :            :          else {
+<span class="lineNum">    1040 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGeniv(pname)&quot; );</span>
+<span class="lineNum">    1041 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">    1042 </span>                :            :          }
+<span class="lineNum">    1043 </span>                :            :          break;
+<span class="lineNum">    1044 </span>                :            :       case GL_R:
+<span class="lineNum">    1045 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">    1046 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeR;</span>
+<span class="lineNum">    1047 </span>                :            :          }
+<span class="lineNum">    1048 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">    1049 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneR );</span>
+<span class="lineNum">    1050 </span>                :            :          }
+<span class="lineNum">    1051 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">    1052 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneR );</span>
+<span class="lineNum">    1053 </span>                :            :          }
+<span class="lineNum">    1054 </span>                :            :          else {
+<span class="lineNum">    1055 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGeniv(pname)&quot; );</span>
+<span class="lineNum">    1056 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">    1057 </span>                :            :          }
+<span class="lineNum">    1058 </span>                :            :          break;
+<span class="lineNum">    1059 </span>                :            :       case GL_Q:
+<span class="lineNum">    1060 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          if (pname==GL_TEXTURE_GEN_MODE) {</span>
+<span class="lineNum">    1061 </span>                :<span class="lineNoCov">          0 :             params[0] = ctx-&gt;Texture.GenModeQ;</span>
+<span class="lineNum">    1062 </span>                :            :          }
+<span class="lineNum">    1063 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_OBJECT_PLANE) {</span>
+<span class="lineNum">    1064 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.ObjectPlaneQ );</span>
+<span class="lineNum">    1065 </span>                :            :          }
+<span class="lineNum">    1066 </span>        [<span class="branchNoExec" title="Branch 0 was not executed"> # </span><span class="branchNoExec" title="Branch 1 was not executed"> # </span>]:<span class="lineNoCov">          0 :          else if (pname==GL_EYE_PLANE) {</span>
+<span class="lineNum">    1067 </span>                :<span class="lineNoCov">          0 :             COPY_4V( params, ctx-&gt;Texture.EyePlaneQ );</span>
+<span class="lineNum">    1068 </span>                :            :          }
+<span class="lineNum">    1069 </span>                :            :          else {
+<span class="lineNum">    1070 </span>                :<span class="lineNoCov">          0 :             gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGeniv(pname)&quot; );</span>
+<span class="lineNum">    1071 </span>                :<span class="lineNoCov">          0 :             return;</span>
+<span class="lineNum">    1072 </span>                :            :          }
+<span class="lineNum">    1073 </span>                :            :          break;
+<span class="lineNum">    1074 </span>                :            :       default:
+<span class="lineNum">    1075 </span>                :<span class="lineNoCov">          0 :          gl_error( ctx, GL_INVALID_ENUM, &quot;glGetTexGeniv(coord)&quot; );</span>
+<span class="lineNum">    1076 </span>                :<span class="lineNoCov">          0 :          return;</span>
+<span class="lineNum">    1077 </span>                :            :    }
+<span class="lineNum">    1078 </span>                :            : }
+<span class="lineNum">    1079 </span>                :            : 
+<span class="lineNum">    1080 </span>                :            : 
+<span class="lineNum">    1081 </span>                :            : 
+<span class="lineNum">    1082 </span>                :            : /*
+<span class="lineNum">    1083 </span>                :            :  * This is called by gl_update_state() if the NEW_TEXTURING bit in
+<a name="1084"><span class="lineNum">    1084 </span>                :            :  * ctx-&gt;NewState is set.</a>
+<span class="lineNum">    1085 </span>                :            :  */
+<span class="lineNum">    1086 </span>                :<span class="lineCov">          2 : void gl_update_texture_state( GLcontext *ctx )</span>
+<span class="lineNum">    1087 </span>                :            : {
+<span class="lineNum">    1088 </span>                :            :    struct gl_texture_object *t;
+<span class="lineNum">    1089 </span>                :            : 
+<span class="lineNum">    1090 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    if (ctx-&gt;Texture.Enabled &amp; TEXTURE_3D)</span>
+<span class="lineNum">    1091 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Texture.Current = ctx-&gt;Texture.Current3D;</span>
+<span class="lineNum">    1092 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          2 :    else if (ctx-&gt;Texture.Enabled &amp; TEXTURE_2D)</span>
+<span class="lineNum">    1093 </span>                :<span class="lineNoCov">          0 :       ctx-&gt;Texture.Current = ctx-&gt;Texture.Current2D;</span>
+<span class="lineNum">    1094 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">          2 :    else if (ctx-&gt;Texture.Enabled &amp; TEXTURE_1D)</span>
+<span class="lineNum">    1095 </span>                :<span class="lineCov">          1 :       ctx-&gt;Texture.Current = ctx-&gt;Texture.Current1D;</span>
+<span class="lineNum">    1096 </span>                :            :    else
+<span class="lineNum">    1097 </span>                :<span class="lineCov">          1 :       ctx-&gt;Texture.Current = NULL;</span>
+<span class="lineNum">    1098 </span>                :            : 
+<span class="lineNum">    1099 </span>        [<span class="branchCov" title="Branch 0 was taken 6 times"> + </span><span class="branchCov" title="Branch 1 was taken 2 times"> + </span>]:<span class="lineCov">          8 :    for (t = ctx-&gt;Shared-&gt;TexObjectList; t; t = t-&gt;Next) {</span>
+<span class="lineNum">    1100 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchCov" title="Branch 1 was taken 5 times"> + </span>]:<span class="lineCov">          6 :       if (t-&gt;Dirty) {</span>
+<span class="lineNum">    1101 </span>                :<span class="lineCov">          1 :          gl_test_texture_object_completeness(t);</span>
+<span class="lineNum">    1102 </span>                :<span class="lineCov">          1 :          gl_set_texture_sampler(t);</span>
+<span class="lineNum">    1103 </span>                :<span class="lineCov">          1 :          t-&gt;Dirty = GL_FALSE;</span>
+<span class="lineNum">    1104 </span>                :            :       }
+<span class="lineNum">    1105 </span>                :            :    }
+<span class="lineNum">    1106 </span>                :<span class="lineCov">          2 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

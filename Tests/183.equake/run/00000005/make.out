@@ -1,0 +1,2 @@
+gcc -c -o quake.o            -O3    quake.c
+gcc     -O3    quake.o   -lm  -o equake

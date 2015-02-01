@@ -1,0 +1,189 @@
+        -:    0:Source:/home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/188.ammp/src/ammp.c
+        -:    0:Graph:ammp_parallel.gcno
+        -:    0:Data:ammp_parallel.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/* just the main routine of ammp 
+        -:    2:*  read_eval_do and eval are cut out into eval.c and
+        -:    3:* used there.
+        -:    4:*
+        -:    5:* this allows ammp to be called directly from a program
+        -:    6:* by making calls to eval or read_eval_do 
+        -:    7:*
+        -:    8:*  RWH 8/13/93  
+        -:    9:*/
+        -:   10:/* ammp.c
+        -:   11:* Another Molecular Mechanics Program
+        -:   12:*
+        -:   13:*  this essentially runs the intermediate code for 
+        -:   14:*  a molecular mechanics program
+        -:   15:*
+        -:   16:* instructions are of the form
+        -:   17:*  ident <parameters> ;
+        -:   18:*  # <stuff> ; is a comment
+        -:   19:*  most instructions can be nested, but NOT loop<if> and labels 
+        -:   20:*
+        -:   21:*  allowed idents
+        -:   22:*
+        -:   23:*	atom   - atom record
+        -:   24:*	bond   - bond record
+        -:   25:*       morse  - morse record
+        -:   26:*	angle  - angle record
+        -:   27:* 	torsion - torsion record
+        -:   28:*       hybrid  - hybrid (pyramid height) record
+        -:   29:*	abc    - angle bond correlation record
+        -:   30:*       velocity  - velocity record
+        -:   31:*	read <file>  open and read from file untill done
+        -:   32:*	output <file> <vers>  open and use for output file
+        -:   33:*	dump <atom,bond,angle,abc,torsion,hybrid,morse,pdb,variable,velocity,force> 
+        -:   34:*                         write out the results
+        -:   35:*	analyze ilow,ihigh  write out the errors in the current potential for atoms 
+        -:   36:*				ilow to ihigh. if ilow > ihigh ilow to ilow
+        -:   37:*	close  		close the current output file if not stdout
+        -:   38:*	steep  niter,toler   steepest descents
+        -:   39:*	bfgs  niter,toler  bfgs quasi newton 
+        -:   40:*	cngdel  niter,ncut,toler  conjugate del  
+        -:   41:*	trust   niter,dtoler,toler   trust optimizer
+        -:   42:*	echo <off>   echo to the user (turn off when dumping !!)
+        -:   43:*       use  < none,bond,angle,abc,torsion,nonbon,morse,restrain,tether,periodic,
+        -:   44:*              mmbond,mmangle,cangle>
+        -:   45:*               flag on potentials
+        -:   46:*       restrain    - restrain a distance 
+        -:   47:*	tether      - tether an atom to a positon
+        -:   48:*          tether serial fk x y z
+        -:   49:*          tether all fk x y z  do all of them
+        -:   50:*	tailor  qab   number q a b  - set the qab parameters of an atom
+        -:   51:*       tailor  exclude  number number  - add an interaction to the nonbon exclude list
+        -:   52:*       tailor  include number number  - delete an interaction from the nonbon exclude list
+        -:   53:*	setf name value  set a float into the variable store
+        -:   54:*       seti name value   set an int into the variable store
+        -:   55:*       loopi label init max delta  loop to label while init < max integer vers.
+        -:   56:*       loopf label init max delta  loop to label while init < max float vers.
+        -:   57:*       label:    
+        -:   58:*	monitor    find potential energy and kinetic energy, and calculate the forces
+        -:   59:*       v_maxwell  temperature,dx,dy,dz
+        -:   60:*	v_rescale   temperature
+        -:   61:*       verlet       nstep,dtime (dtime is in m/s = .01A/ps)
+        -:   62:*       pac          nstep,dtime (dtime is in m/s = .01A/ps)
+        -:   63:*       tpac          nstep,dtime,Temp (dtime in m/s = .01A/ps,1fs = .00001)
+        -:   64:*       hpac          nstep,dtime,Htarget (dtime in m/s = .01A/ps,1fs = .00001)
+        -:   65:*       pacpac       nstep,dtime (dtime is in m/s = .01A/ps)
+        -:   66:*	dipole first,last  calculate the dipole moment for atoms first to last
+        -:   67:*                          assumes sequential atom numbers...
+        -:   68:*	tgroup id serial1 serial2 serial3 serial4 base number
+        -:   69:*            define a tgroup( torsion by serial numbers) base = zeropoint
+        -:   70:*	     number == number of steps.  The group of atoms is everything bonded to 
+        -:   71:*	      serial3 that isn't serial 2.
+        -:   72:*	tsearch id id id id (up to 8  - terminated by 0 or ; ) 
+        -:   73:*             search the tgroups defined
+        -:   74:*
+        -:   75:* 	mompar  serial,chi,jaa  add electronegativity and self colomb to atom serial
+        -:   76:*	momadd  serial serial  adds atoms to the MOM stack( can just be called with one)
+        -:   77:*       mom   tq, niter   solves current mom stack for charges  
+        -:   78:*			tq = total charge, niter = number of iterations (20 default)
+        -:   79:*
+        -:   80:*
+        -:   81:*	math routines  see math.c
+        -:   82:*		add a b ;
+        -:   83:*		sub a b ;
+        -:   84:*		mul a b;
+        -:   85:*		div a b;
+        -:   86:*		nop a;  these routines can work with atomic parameters 
+        -:   87:*		mov a b;  variables, and imeadiate values.
+        -:   88:*		max a b;
+        -:   89:*		min a b;
+        -:   90:*		randf a ;
+        -:   91:*
+        -:   92:*	  serial a i atomid;  put the serial number or residue i, atom atomid
+        -:   93:*                   into a
+        -:   94:*	index a i;  put the serial number of the ith atom into a;
+        -:   95:*
+        -:   96:*        je a b label: ;   jump a == b
+        -:   97:*        jl a b label: ;   jump a < b
+        -:   98:*        jg a b label: ;   jump a > b
+        -:   99:*	jes a string label: ; dump to label if a->name == string
+        -:  100:*	jnes a string label: ; dump to label if a->name != string
+        -:  101:*           jumps are restricted to the current file
+        -:  102:*
+        -:  103:*	exit         - exit the routine - in case EOF is not defined
+        -:  104:*
+        -:  105:*
+        -:  106:*	others like fix,and... TBD
+        -:  107:*   first nonblank == '#' is a comment and the line is skipped 
+        -:  108:*/
+        -:  109:/*
+        -:  110:*  copyright 1992,1993 Robert W. Harrison
+        -:  111:*  
+        -:  112:*  This notice may not be removed
+        -:  113:*  This program may be copied for scientific use
+        -:  114:*  It may not be sold for profit without explicit
+        -:  115:*  permission of the author(s) who retain any
+        -:  116:*  commercial rights including the right to modify 
+        -:  117:*  this notice
+        -:  118:*/
+        -:  119:#define ANSI 1
+        -:  120:#define MAXTOKEN 10 
+        -:  121:#define TOKENLENGTH 80 
+        -:  122:/* misc includes - ANSI and some are just to be safe */
+        -:  123:#include <stdio.h>
+        -:  124:#include <ctype.h>
+        -:  125:#include <math.h>
+        -:  126:#include <string.h>
+        -:  127:#ifdef ANSI
+        -:  128:#include <stdlib.h>
+        -:  129:#endif
+        -:  130:#include "ammp.h"
+        -:  131://#include "variable.c"
+        -:  132:
+        -:  133:#include "box.c"
+        -:  134:#include "restrain.c"
+        -:  135:
+        -:  136:#include "anonbon.c"
+        -:  137:#include "atoms.c"
+        -:  138:#include "bonds.c"
+        -:  139:#include "angle.c"
+        -:  140:#include "hybrid.c"
+        -:  141:#include "torsion.c"
+        -:  142:#include "noel.c"
+        -:  143://#include "unonbon.c"
+        -:  144:#include "animate.c"
+        -:  145:#include "tailor.c"
+        -:  146:#include "optimist.c"
+        -:  147:#include "mom.c"
+        -:  148:#include "significance.c"
+        -:  149:#include "random.c"
+        -:  150:#include "tether.c"
+        -:  151:
+        -:  152:#include "monitor.c"
+        -:  153:#include "analyze.c"
+        -:  154:#include "eval.c"
+        -:  155:#include "gsdg.c"
+        -:  156:#include "math.c"
+        -:  157:#include <iostream>
+        -:  158:using namespace std;
+        -:  159:
+        -:  160:int i=0;
+function main called 1 returned 0% blocks executed 80%
+        1:  161:int main()
+        -:  162:{
+        -:  163:void read_eval_do(FILE *, FILE *);
+        -:  164:/* set some defaults */
+        1:  165:	set_f_variable( "mxdq",  .05);
+call    0 returned 100%
+        -:  166:/* mxcut of 6 requires NCLOSE == 100 */
+        -:  167:/* mxcut of 8 requires NCLOSE == 200 */
+        1:  168:	set_f_variable( "mxcut",  6.);
+call    0 returned 100%
+        1:  169:	set_i_variable( "nostep", 1);
+call    0 returned 100%
+        -:  170:/* read_eval_do is called this way so it can recurse */
+        1:  171:	read_eval_do( stdin,stdout);
+call    0 returned 0%
+    #####:  172:	return 0;
+function _GLOBAL__I__Z5v_boxPff called 1 returned 100% blocks executed 100%
+        3:  173:}
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+        -:  174:

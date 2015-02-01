@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test.info - 300.twolf/src/utils.c</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">300.twolf/src</a> - utils.c<span style="font-size: 80%;"> (source / <a href="utils.c.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntryHi">91.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2011-08-12</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryMed">75.0 %</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryLo">60.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">           Branch data     Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>                :            : #include &lt;stdio.h&gt;</a>
+<span class="lineNum">       2 </span>                :            : 
+<span class="lineNum">       3 </span>                :            : #ifndef UTILS_H
+<span class="lineNum">       4 </span>                :            : #include &quot;utils.h&quot;
+<span class="lineNum">       5 </span>                :            : #endif
+<span class="lineNum">       6 </span>                :            :  
+<span class="lineNum">       7 </span>                :            : #include &quot;main.h&quot;
+<span class="lineNum">       8 </span>                :            : #include &quot;standard.h&quot;
+<span class="lineNum">       9 </span>                :            : 
+<span class="lineNum">      10 </span>                :            : static char programName[LRECL];
+<span class="lineNum">      11 </span>                :            : static char progVersion[LRECL];
+<a name="12"><span class="lineNum">      12 </span>                :            : static char progDate[LRECL];</a>
+<span class="lineNum">      13 </span>                :            : 
+<span class="lineNum">      14 </span>                :<span class="lineCov">          1 : initProgram(name,version) </span>
+<span class="lineNum">      15 </span>                :            : char *name ;
+<span class="lineNum">      16 </span>                :            : char *version ;
+<span class="lineNum">      17 </span>                :            : {
+<span class="lineNum">      18 </span>                :            :     char    message[LRECL] ,
+<span class="lineNum">      19 </span>                :            :             *date ,
+<span class="lineNum">      20 </span>                :            :             *getCompileDate() ;
+<span class="lineNum">      21 </span>                :            : 
+<span class="lineNum">      22 </span>                :            :     int     i ;
+<span class="lineNum">      23 </span>                :            : 
+<span class="lineNum">      24 </span>                :<span class="lineCov">          1 :     sprintf(programName,&quot;%s&quot;,name);</span>
+<span class="lineNum">      25 </span>                :<span class="lineCov">          1 :     sprintf(progVersion,&quot;%s&quot;,version);</span>
+<span class="lineNum">      26 </span>                :            :      
+<span class="lineNum">      27 </span>        [<span class="branchCov" title="Branch 1 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 2 was not taken"> - </span>]:<span class="lineCov">          1 :     if ( date = getCompileDate() ){</span>
+<span class="lineNum">      28 </span>                :<span class="lineCov">          1 :         sprintf(progDate,&quot;%s&quot;,date);</span>
+<span class="lineNum">      29 </span>                :            :     } else {
+<span class="lineNum">      30 </span>                :<span class="lineNoCov">          0 :         sprintf(progDate,&quot;unknown&quot;) ;</span>
+<span class="lineNum">      31 </span>                :            :     }
+<span class="lineNum">      32 </span>                :            : 
+<span class="lineNum">      33 </span>                :<span class="lineCov">          1 :     fprintf(fpo,&quot;\n%s version:%s date:%s\n&quot;,programName,progVersion,progDate) ;</span>
+<span class="lineNum">      34 </span>                :<span class="lineCov">          1 :     fprintf(fpo,&quot;Standard Cell Placement and Global Routing Program\n&quot;);</span>
+<span class="lineNum">      35 </span>                :<span class="lineCov">          1 :     fprintf(fpo,&quot;Authors: Carl Sechen, Bill Swartz\n&quot;);</span>
+<span class="lineNum">      36 </span>                :<span class="lineCov">          1 :     fprintf(fpo,&quot;          Yale University\n&quot;);</span>
+<span class="lineNum">      37 </span>                :            : 
+<span class="lineNum">      38 </span>                :<span class="lineCov">          1 :     printf(&quot;\n%s version:%s date:%s\n&quot;,programName,progVersion,progDate) ;</span>
+<span class="lineNum">      39 </span>                :<span class="lineCov">          1 :     printf(&quot;Standard Cell Placement and Global Routing Program\n&quot;);</span>
+<span class="lineNum">      40 </span>                :<span class="lineCov">          1 :     printf(&quot;Authors: Carl Sechen, Bill Swartz\n&quot;);</span>
+<span class="lineNum">      41 </span>                :<span class="lineCov">          1 :     printf(&quot;         Yale University\n&quot;);</span>
+<span class="lineNum">      42 </span>                :            : 
+<span class="lineNum">      43 </span>                :<span class="lineCov">          1 :     safe_free(date) ;</span>
+<span class="lineNum">      44 </span>                :            : 
+<span class="lineNum">      45 </span>                :            :     /* inialize variables */
+<span class="lineNum">      46 </span>                :            : #if 0
+<span class="lineNum">      47 </span>                :            :     randomSeed  = time(0) ;
+<span class="lineNum">      48 </span>                :            : #endif
+<span class="lineNum">      49 </span>                :<span class="lineCov">          1 :     randomSeed  = 123456789 ;</span>
+<span class="lineNum">      50 </span>                :            : 
+<span class="lineNum">      51 </span>                :<span class="lineCov">          1 :     fixarray = (int *) NULL ;</span>
+<span class="lineNum">      52 </span>                :<span class="lineCov">          1 :     ffeeds = 0 ;</span>
+<span class="lineNum">      53 </span>        [<span class="branchCov" title="Branch 0 was taken 15 times"> + </span><span class="branchCov" title="Branch 1 was taken 1 time"> + </span>]:<span class="lineCov">         16 :     for( i = 1 ; i &lt;= 15 ; i++ ) {</span>
+<span class="lineNum">      54 </span>                :<span class="lineCov">         15 :         macspace[i] = -1.0 ;</span>
+<span class="lineNum">      55 </span>                :            :     }
+<span class="lineNum">      56 </span>                :<span class="lineCov">          1 :     costonly = 0 ;</span>
+<span class="lineNum">      57 </span>                :<span class="lineCov">          1 :     fdthrus = 0 ;</span>
+<span class="lineNum">      58 </span>                :<span class="lineCov">          1 :     doglobal = 0 ;</span>
+<span class="lineNum">      59 </span>                :<span class="lineCov">          1 :     cswaps = 0 ;</span>
+<span class="lineNum">      60 </span>                :            : 
+<span class="lineNum">      61 </span>                :<span class="lineCov">          1 :     imprange = -1.0 ;</span>
+<span class="lineNum">      62 </span>                :<span class="lineCov">          1 :     attprcel = 0 ;</span>
+<span class="lineNum">      63 </span>                :            : 
+<span class="lineNum">      64 </span>                :<span class="lineCov">          1 :     addFeeds = 0 ;</span>
+<span class="lineNum">      65 </span>                :<span class="lineCov">          1 :     fdWidth  = -1 ;</span>
+<span class="lineNum">      66 </span>                :<span class="lineCov">          1 :     rowSep = -1.0 ;</span>
+<span class="lineNum">      67 </span>                :<span class="lineCov">          1 :     indent = 1.0 ;</span>
+<span class="lineNum">      68 </span>                :<span class="lineCov">          1 :     numSegs = 0 ;</span>
+<span class="lineNum">      69 </span>                :<span class="lineCov">          1 :     resume_run = NO ;</span>
+<span class="lineNum">      70 </span>                :<span class="lineCov">          1 :     pin_layers_given = 0 ;</span>
+<span class="lineNum">      71 </span>                :<span class="lineCov">          1 :     no_feeds_side_nets = 0 ;</span>
+<span class="lineNum">      72 </span>                :<span class="lineCov">          1 :     no_net_normalize = 0 ;</span>
+<span class="lineNum">      73 </span>                :<span class="lineCov">          1 :     cost_scale_factor = 1.0 ;</span>
+<span class="lineNum">      74 </span>                :<span class="lineCov">          1 :     feedLayer = 0 ;</span>
+<span class="lineNum">      75 </span>                :<span class="lineCov">          1 :     tw_fast = 0 ;</span>
+<span class="lineNum">      76 </span>                :<span class="lineCov">          1 :     estimate_feeds = 1 ;</span>
+<span class="lineNum">      77 </span>                :<span class="lineCov">          1 :     connection_machine = 0 ;</span>
+<span class="lineNum">      78 </span>                :            : 
+<span class="lineNum">      79 </span>                :<span class="lineCov">          1 :     gate_array_special = FALSE ;</span>
+<span class="lineNum">      80 </span>                :            : #if 0
+<span class="lineNum">      81 </span>                :            :     randomSeed  = time(0) ;
+<span class="lineNum">      82 </span>                :            : #endif
+<span class="lineNum">      83 </span>                :<span class="lineCov">          1 :     randomSeed2 = 987654321;</span>
+<span class="lineNum">      84 </span>                :            : 
+<span class="lineNum">      85 </span>                :<span class="lineCov">          1 : } /* end initProgram */</span>
+<a name="86"><span class="lineNum">      86 </span>                :            :  </a>
+<span class="lineNum">      87 </span>                :            :     
+<span class="lineNum">      88 </span>                :<span class="lineNoCov">          0 : char *getProgName()</span>
+<span class="lineNum">      89 </span>                :            : {
+<span class="lineNum">      90 </span>                :            :  
+<span class="lineNum">      91 </span>                :<span class="lineNoCov">          0 :     return(strclone(programName));</span>
+<span class="lineNum">      92 </span>                :            : }
+<a name="93"><span class="lineNum">      93 </span>                :            : </a>
+<span class="lineNum">      94 </span>                :            : /* strclone - clone a string - user must free memory when done */
+<span class="lineNum">      95 </span>                :<span class="lineCov">          1 : char *strclone(str)</span>
+<span class="lineNum">      96 </span>                :            : char *str ;
+<span class="lineNum">      97 </span>                :            : {
+<span class="lineNum">      98 </span>                :            :     char *copy ;
+<span class="lineNum">      99 </span>                :            : 
+<span class="lineNum">     100 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :     if( str ){  /* first check for null pointer */</span>
+<span class="lineNum">     101 </span>        [<span class="branchCov" title="Branch 0 was taken 1 time"> + </span><span class="branchNoCov" title="Branch 1 was not taken"> - </span>]:<span class="lineCov">          1 :         if( *str ){  /* first check allow dereference */</span>
+<span class="lineNum">     102 </span>                :<span class="lineCov">          1 :             copy = (char *) safe_malloc(strlen(str)+1) ;</span>
+<span class="lineNum">     103 </span>                :<span class="lineCov">          1 :             sprintf(copy,&quot;%s&quot;,str) ;</span>
+<span class="lineNum">     104 </span>                :<span class="lineCov">          1 :             return(copy) ;</span>
+<span class="lineNum">     105 </span>                :            :         }
+<span class="lineNum">     106 </span>                :            :     }
+<span class="lineNum">     107 </span>                :<span class="lineCov">          1 :     return(NULL) ;</span>
+<span class="lineNum">     108 </span>                :            : 
+<a name="109"><span class="lineNum">     109 </span>                :            : } /* end strclone */</a>
+<span class="lineNum">     110 </span>                :            : 
+<span class="lineNum">     111 </span>                :<span class="lineCov">         18 : FILE *openFile(filename,readwrite,abort)</span>
+<span class="lineNum">     112 </span>                :            : char *filename ;
+<span class="lineNum">     113 </span>                :            : char *readwrite ;
+<span class="lineNum">     114 </span>                :            : int  abort ;
+<span class="lineNum">     115 </span>                :            : {
+<span class="lineNum">     116 </span>                :            : 
+<span class="lineNum">     117 </span>                :            :     FILE *fileptr ;
+<span class="lineNum">     118 </span>                :            : 
+<span class="lineNum">     119 </span>                :<span class="lineCov">         18 :     fileptr = fopen( filename, readwrite );</span>
+<span class="lineNum">     120 </span>                :            : 
+<span class="lineNum">     121 </span>        [<span class="branchNoCov" title="Branch 0 was not taken"> - </span><span class="branchCov" title="Branch 1 was taken 18 times"> + </span>]:<span class="lineCov">         18 :     if( !(fileptr) &amp;&amp; abort ){</span>
+<span class="lineNum">     122 </span>                :<span class="lineNoCov">          0 :         printf(&quot;could not open file %s\n&quot;,filename ) ;</span>
+<span class="lineNum">     123 </span>                :<span class="lineNoCov">          0 :         exit(TW_FAIL) ;</span>
+<span class="lineNum">     124 </span>                :            :     }
+<span class="lineNum">     125 </span>                :<span class="lineCov">         18 :     return( fileptr ) ;</span>
+<span class="lineNum">     126 </span>                :            : 
+<span class="lineNum">     127 </span>                :            : } /* end openFile */
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.9</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

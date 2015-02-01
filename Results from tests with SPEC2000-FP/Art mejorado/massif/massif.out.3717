@@ -1,0 +1,937 @@
+desc: (none)
+cmd: ../SPEC/art_opt -scanfile c756hel.in -trainfile1 a10.img -trainfile2 hc.img -stride 2 -startx 110 -starty 200 -endx 160 -endy 240 -objects 10
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1696544
+mem_heap_B=307200
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=1717575
+mem_heap_B=614400
+mem_heap_extra_B=3832
+mem_stacks_B=0
+heap_tree=detailed
+n3: 614400 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 305280 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 305280 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=3
+#-----------
+time=5101511
+mem_heap_B=1216320
+mem_heap_extra_B=3864
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=5235877
+mem_heap_B=12662976
+mem_heap_extra_B=27344
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=5442893
+mem_heap_B=12735296
+mem_heap_extra_B=63504
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=5633421
+mem_heap_B=12801856
+mem_heap_extra_B=96784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=5917757
+mem_heap_B=12901184
+mem_heap_extra_B=146448
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=6093629
+mem_heap_B=12962624
+mem_heap_extra_B=177168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=6269501
+mem_heap_B=13024064
+mem_heap_extra_B=207888
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=6546133
+mem_heap_B=13120704
+mem_heap_extra_B=256208
+mem_stacks_B=0
+heap_tree=detailed
+n5: 13120704 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 504384 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 504384 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 504384 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=11
+#-----------
+time=6883221
+mem_heap_B=13238464
+mem_heap_extra_B=315088
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=7220309
+mem_heap_B=13356224
+mem_heap_extra_B=373968
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=7557397
+mem_heap_B=13473984
+mem_heap_extra_B=432848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=7894485
+mem_heap_B=13591744
+mem_heap_extra_B=491728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=8231573
+mem_heap_B=13709504
+mem_heap_extra_B=550608
+mem_stacks_B=0
+heap_tree=detailed
+n5: 13709504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 1093184 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 1093184 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 1093184 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=16
+#-----------
+time=8568661
+mem_heap_B=13827264
+mem_heap_extra_B=609488
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=8905749
+mem_heap_B=13945024
+mem_heap_extra_B=668368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=9074293
+mem_heap_B=14003904
+mem_heap_extra_B=697808
+mem_stacks_B=0
+heap_tree=detailed
+n5: 14003904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 1387584 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 1387584 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 1387584 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=19
+#-----------
+time=9242837
+mem_heap_B=14062784
+mem_heap_extra_B=727248
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=9411381
+mem_heap_B=14121664
+mem_heap_extra_B=756688
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=9579925
+mem_heap_B=14180544
+mem_heap_extra_B=786128
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=9748469
+mem_heap_B=14239424
+mem_heap_extra_B=815568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=9917013
+mem_heap_B=14298304
+mem_heap_extra_B=845008
+mem_stacks_B=0
+heap_tree=detailed
+n5: 14298304 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 1681984 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 1681984 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 1681984 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=24
+#-----------
+time=10085557
+mem_heap_B=14357184
+mem_heap_extra_B=874448
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=10254101
+mem_heap_B=14416064
+mem_heap_extra_B=903888
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=10549053
+mem_heap_B=14519104
+mem_heap_extra_B=955408
+mem_stacks_B=0
+heap_tree=detailed
+n5: 14519104 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 1902784 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 1902784 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 1902784 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=27
+#-----------
+time=10717597
+mem_heap_B=14577984
+mem_heap_extra_B=984848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=10886141
+mem_heap_B=14636864
+mem_heap_extra_B=1014288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=11054685
+mem_heap_B=14695744
+mem_heap_extra_B=1043728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=11223229
+mem_heap_B=14754624
+mem_heap_extra_B=1073168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=11391773
+mem_heap_B=14813504
+mem_heap_extra_B=1102608
+mem_stacks_B=0
+heap_tree=detailed
+n5: 14813504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 2197184 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 2197184 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 2197184 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=32
+#-----------
+time=11602453
+mem_heap_B=14887104
+mem_heap_extra_B=1139408
+mem_stacks_B=0
+heap_tree=detailed
+n5: 14887104 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 2270784 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 2270784 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 2270784 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=33
+#-----------
+time=11770997
+mem_heap_B=14945984
+mem_heap_extra_B=1168848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=11939541
+mem_heap_B=15004864
+mem_heap_extra_B=1198288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=12108085
+mem_heap_B=15063744
+mem_heap_extra_B=1227728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=12276629
+mem_heap_B=15122624
+mem_heap_extra_B=1257168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=12445173
+mem_heap_B=15181504
+mem_heap_extra_B=1286608
+mem_stacks_B=0
+heap_tree=detailed
+n5: 15181504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 2565184 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 2565184 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 2565184 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=38
+#-----------
+time=12655853
+mem_heap_B=15255104
+mem_heap_extra_B=1323408
+mem_stacks_B=0
+heap_tree=detailed
+n5: 15255104 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 2638784 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 2638784 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 2638784 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=39
+#-----------
+time=12824397
+mem_heap_B=15313984
+mem_heap_extra_B=1352848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=12992941
+mem_heap_B=15372864
+mem_heap_extra_B=1382288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=13161485
+mem_heap_B=15431744
+mem_heap_extra_B=1411728
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=13330029
+mem_heap_B=15490624
+mem_heap_extra_B=1441168
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=13498573
+mem_heap_B=15549504
+mem_heap_extra_B=1470608
+mem_stacks_B=0
+heap_tree=detailed
+n5: 15549504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 2933184 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 2933184 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 2933184 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=44
+#-----------
+time=13709253
+mem_heap_B=15623104
+mem_heap_extra_B=1507408
+mem_stacks_B=0
+heap_tree=detailed
+n5: 15623104 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3006784 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3006784 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3006784 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 1920 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=45
+#-----------
+time=13877797
+mem_heap_B=15681984
+mem_heap_extra_B=1536848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=14046341
+mem_heap_B=15740864
+mem_heap_extra_B=1566288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=14364824
+mem_heap_B=15828960
+mem_heap_extra_B=1604264
+mem_stacks_B=0
+heap_tree=detailed
+n5: 15828960 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3200000 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3200000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3200000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 14560 in 3 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=48
+#-----------
+time=14680441
+mem_heap_B=16593104
+mem_heap_extra_B=1667376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=14848761
+mem_heap_B=16963408
+mem_heap_extra_B=1701040
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=14869801
+mem_heap_B=17009696
+mem_heap_extra_B=1705248
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=14890841
+mem_heap_B=17055984
+mem_heap_extra_B=1709456
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=14911881
+mem_heap_B=17102272
+mem_heap_extra_B=1713664
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=14932921
+mem_heap_B=17148560
+mem_heap_extra_B=1717872
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=14953961
+mem_heap_B=17194848
+mem_heap_extra_B=1722080
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=14975001
+mem_heap_B=17241136
+mem_heap_extra_B=1726288
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=14996041
+mem_heap_B=17287424
+mem_heap_extra_B=1730496
+mem_stacks_B=0
+heap_tree=detailed
+n7: 17287424 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3200000 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3200000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3200000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 694232 0x804D01E: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 694232 0x804D02D: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 84560 in 5 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=57
+#-----------
+time=15017081
+mem_heap_B=17333712
+mem_heap_extra_B=1734704
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=15038121
+mem_heap_B=17380000
+mem_heap_extra_B=1738912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=15059161
+mem_heap_B=17426288
+mem_heap_extra_B=1743120
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=15080201
+mem_heap_B=17472576
+mem_heap_extra_B=1747328
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=15101241
+mem_heap_B=17518864
+mem_heap_extra_B=1751536
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=15122281
+mem_heap_B=17565152
+mem_heap_extra_B=1755744
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=15143321
+mem_heap_B=17611440
+mem_heap_extra_B=1759952
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=15164361
+mem_heap_B=17657728
+mem_heap_extra_B=1764160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=3998352757
+mem_heap_B=17668960
+mem_heap_extra_B=1764280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=3998452830
+mem_heap_B=17668960
+mem_heap_extra_B=1764280
+mem_stacks_B=0
+heap_tree=peak
+n7: 17668960 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3200000 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3200000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3200000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D01E: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D02D: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 94560 in 5 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=67
+#-----------
+time=8180717693
+mem_heap_B=17658964
+mem_heap_extra_B=1764284
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=8183471086
+mem_heap_B=17659232
+mem_heap_extra_B=1764328
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=8189017181
+mem_heap_B=17659496
+mem_heap_extra_B=1764352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=8193968425
+mem_heap_B=17659600
+mem_heap_extra_B=1764368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=8198365841
+mem_heap_B=17659768
+mem_heap_extra_B=1764384
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=18832414628
+mem_heap_B=17660024
+mem_heap_extra_B=1764392
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=18836604703
+mem_heap_B=17660064
+mem_heap_extra_B=1764400
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=19265534276
+mem_heap_B=17660208
+mem_heap_extra_B=1764408
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=19276792814
+mem_heap_B=17660232
+mem_heap_extra_B=1764416
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=19404823363
+mem_heap_B=17660376
+mem_heap_extra_B=1764424
+mem_stacks_B=0
+heap_tree=detailed
+n7: 17660376 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3200000 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3200000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3200000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D01E: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D02D: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 85976 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=77
+#-----------
+time=19407801725
+mem_heap_B=17660400
+mem_heap_extra_B=1764432
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=28145478784
+mem_heap_B=17660544
+mem_heap_extra_B=1764440
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=28443969269
+mem_heap_B=17661080
+mem_heap_extra_B=1764456
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=80
+#-----------
+time=29187178231
+mem_heap_B=17661136
+mem_heap_extra_B=1764472
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=29191645463
+mem_heap_B=17661160
+mem_heap_extra_B=1764480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=37467298772
+mem_heap_B=17661304
+mem_heap_extra_B=1764488
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=83
+#-----------
+time=38004507455
+mem_heap_B=17661472
+mem_heap_extra_B=1764504
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=84
+#-----------
+time=38476294358
+mem_heap_B=17661640
+mem_heap_extra_B=1764520
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=85
+#-----------
+time=48018317495
+mem_heap_B=17661808
+mem_heap_extra_B=1764536
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=86
+#-----------
+time=48070714278
+mem_heap_B=17661976
+mem_heap_extra_B=1764552
+mem_stacks_B=0
+heap_tree=detailed
+n7: 17661976 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12000000 0x8049AFE: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 12000000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 12000000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 3200000 0x8049B49: init_net() (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n1: 3200000 0x804B02D: load_train(char*, int, int) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+   n0: 3200000 0x804CFAC: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D01E: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 880000 0x804D02D: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A914: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n1: 307200 0x804A956: loadimage(char*) (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+  n0: 307200 0x804CC8A: main (in /home/gabriel/Escritorio/SPEC_CPU2000_CD_2/benchspec/CFP2000/179.art/run/SPEC/art_opt)
+ n0: 87576 in 13 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=87
+#-----------
+time=48073849557
+mem_heap_B=17662000
+mem_heap_extra_B=1764560
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=88
+#-----------
+time=48434217689
+mem_heap_B=17662144
+mem_heap_extra_B=1764568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=89
+#-----------
+time=58063174022
+mem_heap_B=17662024
+mem_heap_extra_B=1764568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=90
+#-----------
+time=58063215785
+mem_heap_B=17659392
+mem_heap_extra_B=1764296
+mem_stacks_B=0
+heap_tree=empty
