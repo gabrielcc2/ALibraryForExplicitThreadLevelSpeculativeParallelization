@@ -1,0 +1,8 @@
+Notes:
+
+4 types of errors that might still exist in the loop speculator:
+- Non up-to-date values. This happens when the join fails, but it is not detected by the pthreads library.
+- An ocasional segmentation fault, most likely happening upon reinitialization of threads.
+- Dead-lock caused by incorrect use.
+- Dead-lock caused by faults in our library itself.
+
