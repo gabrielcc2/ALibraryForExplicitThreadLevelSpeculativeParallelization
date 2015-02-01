@@ -1,4 +1,4 @@
 # ALibraryForExplicitThreadLevelSpeculativeParallelization
 
 
-Additional information here: scholar.google.de/citations?user=roStdLMAAAAJ&hl=en&oi=ao
+Additional information here: http://scholar.google.de/citations?user=roStdLMAAAAJ&hl=en&oi=ao
